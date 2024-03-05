@@ -5,7 +5,7 @@ class Zsgc {
         this.baseUrl = baseUrl;
     }
 
-    list(current, pageSize) {
+    list(current, pageSize,selectCity=false) {
         return service({
             url: this.baseUrl + '/',
             method: 'get',

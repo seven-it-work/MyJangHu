@@ -1,6 +1,9 @@
 package com.seven.jhserver.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.IdUtil;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.seven.jhserver.entity.City;
 import com.seven.jhserver.vo.CityVo;
 import com.seven.jhserver.vo.PeopleVo;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import com.seven.jhserver.service.PeopleService;
 import com.seven.jhserver.entity.People;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Date;
 
 /**
  * <p>
@@ -36,7 +41,10 @@ public class PeopleController {
         if (pageSize == null) {
             pageSize = 10;
         }
-        Page<People> aPage = peopleService.page(new Page<>(current, pageSize));
+        Page<People> page = new Page<>(current, pageSize);
+        page.addOrder(new OrderItem().setColumn("create_time").setAsc(true));
+
+        Page<People> aPage = peopleService.page(page);
         Page<PeopleVo> voPage = new Page<>();
         BeanUtil.copyProperties(aPage, voPage);
         voPage.setRecords(aPage.getRecords().stream().map(item -> peopleService.toVo(item)).toList());
@@ -50,6 +58,9 @@ public class PeopleController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<Object> create(@RequestBody PeopleVo params) {
+        params.setId(IdUtil.fastSimpleUUID());
+        params.setCreateTime(new Date());
+        params.setUpdateTime(new Date());
         peopleService.save(peopleService.toEntity(params));
         return new ResponseEntity<>("created successfully", HttpStatus.OK);
     }
@@ -62,6 +73,7 @@ public class PeopleController {
 
     @PostMapping(value = "/update")
     public ResponseEntity<Object> update(@RequestBody PeopleVo params) {
+        params.setUpdateTime(new Date());
         peopleService.updateById(peopleService.toEntity(params));
         return new ResponseEntity<>("updated successfully", HttpStatus.OK);
     }

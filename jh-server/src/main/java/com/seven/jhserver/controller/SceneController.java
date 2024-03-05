@@ -1,6 +1,9 @@
 package com.seven.jhserver.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.IdUtil;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.seven.jhserver.entity.People;
 import com.seven.jhserver.vo.PeopleVo;
 import com.seven.jhserver.vo.SceneVo;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import com.seven.jhserver.service.SceneService;
 import com.seven.jhserver.entity.Scene;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Date;
 
 /**
  * <p>
@@ -36,7 +41,10 @@ public class SceneController {
         if (pageSize == null) {
             pageSize = 10;
         }
-        Page<Scene> aPage = sceneService.page(new Page<>(current, pageSize));
+        Page<Scene> page = new Page<>(current, pageSize);
+        page.addOrder(new OrderItem().setColumn("create_time").setAsc(true));
+
+        Page<Scene> aPage = sceneService.page(page);
         Page<SceneVo> voPage = new Page<>();
         BeanUtil.copyProperties(aPage, voPage);
         voPage.setRecords(aPage.getRecords().stream().map(item -> sceneService.toVo(item)).toList());
@@ -50,6 +58,9 @@ public class SceneController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<Object> create(@RequestBody SceneVo params) {
+        params.setId(IdUtil.fastSimpleUUID());
+        params.setCreateTime(new Date());
+        params.setUpdateTime(new Date());
         sceneService.save(sceneService.toEntity(params));
         return new ResponseEntity<>("created successfully", HttpStatus.OK);
     }
@@ -62,6 +73,7 @@ public class SceneController {
 
     @PostMapping(value = "/update")
     public ResponseEntity<Object> update(@RequestBody SceneVo params) {
+        params.setUpdateTime(new Date());
         sceneService.updateById(sceneService.toEntity(params));
         return new ResponseEntity<>("updated successfully", HttpStatus.OK);
     }

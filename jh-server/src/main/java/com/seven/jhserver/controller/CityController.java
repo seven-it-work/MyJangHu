@@ -1,6 +1,12 @@
 package com.seven.jhserver.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.seven.jhserver.vo.CityVo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
@@ -10,6 +16,10 @@ import org.springframework.http.ResponseEntity;
 import com.seven.jhserver.service.CityService;
 import com.seven.jhserver.entity.City;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -35,7 +45,10 @@ public class CityController {
         if (pageSize == null) {
             pageSize = 10;
         }
-        Page<City> aPage = cityService.page(new Page<>(current, pageSize));
+        Page<City> page = new Page<>(current, pageSize);
+        page.addOrder(new OrderItem().setColumn("create_time").setAsc(true));
+
+        Page<City> aPage = cityService.page(page);
         Page<CityVo> cityVoPage = new Page<>();
         BeanUtil.copyProperties(aPage, cityVoPage);
         cityVoPage.setRecords(aPage.getRecords().stream().map(item -> cityService.toVo(item)).toList());
@@ -47,8 +60,17 @@ public class CityController {
         return new ResponseEntity<>(cityService.toVo(cityService.getById(id)), HttpStatus.OK);
     }
 
+
+    @GetMapping(value = "/listAllCityByWordId/{id}")
+    public ResponseEntity<List<CityVo>> listAllCityByWordId(@PathVariable("id") String id) {
+        return new ResponseEntity<>(cityService.listAllCityByWordId(id), HttpStatus.OK);
+    }
+
     @PostMapping(value = "/create")
     public ResponseEntity<Object> create(@RequestBody CityVo params) {
+        params.setId(IdUtil.fastSimpleUUID());
+        params.setCreateTime(new Date());
+        params.setUpdateTime(new Date());
         cityService.save(cityService.toEntity(params));
         return new ResponseEntity<>("created successfully", HttpStatus.OK);
     }
@@ -61,6 +83,7 @@ public class CityController {
 
     @PostMapping(value = "/update")
     public ResponseEntity<Object> update(@RequestBody CityVo params) {
+        params.setUpdateTime(new Date());
         cityService.updateById(cityService.toEntity(params));
         return new ResponseEntity<>("updated successfully", HttpStatus.OK);
     }

@@ -3,6 +3,10 @@ package com.seven.jhserver.vo;
 import cn.hutool.core.util.IdUtil;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 /**
  * <p>
  *
@@ -19,4 +23,7 @@ public class WorldVo {
     private String name = "";
     private String description = "";
     private String entryCityId = "";
+    private Date createTime;
+    private Date updateTime;
+    private List<CityVo> cityVoList = new ArrayList<>();
 }

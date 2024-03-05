@@ -6,6 +6,7 @@ import com.seven.jhserver.entity.enums.SexEnum;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,6 +29,8 @@ public class PeopleVo {
     private String currentSceneId="";
     private List<String> interactionIdList = new ArrayList<>();
     private PeopleTypeEnum peopleType=PeopleTypeEnum.AI_PEOPLE;
+    private Date createTime;
+    private Date updateTime;
 
     public String getName() {
         return xing + ming;

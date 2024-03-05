@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.seven.jhserver.vo.SceneVo;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -26,7 +27,7 @@ import java.util.Optional;
 public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements SceneService {
 
     @Override
-    public SceneVo toVo(Scene data) {
+    public SceneVo toVo(Scene data, Map<String,Boolean> condition) {
         SceneVo temp = new SceneVo();
         BeanUtil.copyProperties(data, temp, true);
         temp.setFixedPeopleIdList(JSONUtil.toList(data.getFixedPeopleIdList(), String.class));
@@ -35,7 +36,7 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
     }
 
     @Override
-    public Scene toEntity(SceneVo data) {
+    public Scene toEntity(SceneVo data, Map<String,Boolean> condition) {
         Scene temp = new Scene();
         BeanUtil.copyProperties(data, temp, true);
         temp.setFixedPeopleIdList(JSONUtil.toJsonStr(data.getFixedPeopleIdList()));

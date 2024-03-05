@@ -4,6 +4,8 @@ import cn.hutool.core.util.IdUtil;
 import jdk.jfr.Description;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * <p>
  *
@@ -20,4 +22,6 @@ public class CityVo {
     private String description = "";
     private String[][] matrixMap = new String[][]{};
     private String enterSceneId = "";
+    private Date createTime;
+    private Date updateTime;
 }

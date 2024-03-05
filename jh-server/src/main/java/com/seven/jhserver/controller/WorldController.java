@@ -1,6 +1,9 @@
 package com.seven.jhserver.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.IdUtil;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.seven.jhserver.entity.Scene;
 import com.seven.jhserver.vo.SceneVo;
 import com.seven.jhserver.vo.WorldVo;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import com.seven.jhserver.service.WorldService;
 import com.seven.jhserver.entity.World;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Date;
+import java.util.Map;
 
 /**
  * <p>
@@ -29,17 +35,22 @@ public class WorldController {
     private WorldService worldService;
 
     @GetMapping(value = "/")
-    public ResponseEntity<Page<WorldVo>> list(@RequestParam(required = false) Integer current, @RequestParam(required = false) Integer pageSize) {
+    public ResponseEntity<Page<WorldVo>> list(@RequestParam(required = false) Integer current,
+                                              @RequestParam(required = false) Integer pageSize,
+                                              @RequestParam(required = false) boolean selectCity) {
         if (current == null) {
             current = 1;
         }
         if (pageSize == null) {
             pageSize = 10;
         }
-        Page<World> aPage = worldService.page(new Page<>(current, pageSize));
+        Page<World> page = new Page<>(current, pageSize);
+        page.addOrder(new OrderItem().setColumn("create_time").setAsc(true));
+
+        Page<World> aPage = worldService.page(page);
         Page<WorldVo> voPage = new Page<>();
         BeanUtil.copyProperties(aPage, voPage);
-        voPage.setRecords(aPage.getRecords().stream().map(item -> worldService.toVo(item)).toList());
+        voPage.setRecords(aPage.getRecords().stream().map(item -> worldService.toVo(item, Map.of("selectCity", selectCity))).toList());
         return new ResponseEntity<>(voPage, HttpStatus.OK);
     }
 
@@ -50,6 +61,9 @@ public class WorldController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<Object> create(@RequestBody WorldVo params) {
+        params.setId(IdUtil.fastSimpleUUID());
+        params.setCreateTime(new Date());
+        params.setUpdateTime(new Date());
         worldService.save(worldService.toEntity(params));
         return new ResponseEntity<>("created successfully", HttpStatus.OK);
     }
@@ -62,6 +76,7 @@ public class WorldController {
 
     @PostMapping(value = "/update")
     public ResponseEntity<Object> update(@RequestBody WorldVo params) {
+        params.setUpdateTime(new Date());
         worldService.updateById(worldService.toEntity(params));
         return new ResponseEntity<>("updated successfully", HttpStatus.OK);
     }

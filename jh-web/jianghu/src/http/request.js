@@ -10,7 +10,7 @@ const service = axios.create({
 service.interceptors.request.use(
     config => {
         // 添加请求头等前置处理
-        config.headers['Authorization'] = 'Bearer' + ' ' + localStorage.getItem('token')
+        // config.headers['Authorization'] = 'Bearer' + ' ' + localStorage.getItem('token')
         return config
     },
     error => {
@@ -24,8 +24,8 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     response => {
         // 响应后处理
-        if (response.status === 200 && response.data.code === 200) {
-            return Promise.resolve(response.data.data)
+        if (response.status === 200) {
+            return Promise.resolve(response.data)
         } else {
             return Promise.reject(response.data)
         }

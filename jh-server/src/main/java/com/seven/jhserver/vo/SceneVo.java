@@ -4,6 +4,7 @@ import cn.hutool.core.util.IdUtil;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,5 +25,7 @@ public class SceneVo {
     private String remark="";
     private List<String> fixedPeopleIdList = new ArrayList<>();
     private List<String> peopleIdList = new ArrayList<>();
+    private Date createTime;
+    private Date updateTime;
 
 }
