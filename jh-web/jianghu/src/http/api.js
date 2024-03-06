@@ -39,10 +39,11 @@ class Zsgc {
         })
     }
 
-    getById(id) {
+    getById(id, selectCity = false) {
         return service({
             url: this.baseUrl + '/' + id,
             method: 'get',
+            params: {selectCity}
         })
     }
 }
