@@ -5,7 +5,7 @@ class Zsgc {
         this.baseUrl = baseUrl;
     }
 
-    list(current, pageSize,selectCity=false) {
+    list(current, pageSize) {
         return service({
             url: this.baseUrl + '/',
             method: 'get',
@@ -39,11 +39,10 @@ class Zsgc {
         })
     }
 
-    getById(id, selectCity = false) {
+    getById(id) {
         return service({
             url: this.baseUrl + '/' + id,
             method: 'get',
-            params: {selectCity}
         })
     }
 }
@@ -52,6 +51,27 @@ class World extends Zsgc {
 
     constructor() {
         super('/world');
+    }
+
+
+    list(current, pageSize, selectCity = false) {
+        return service({
+            url: this.baseUrl + '/',
+            method: 'get',
+            params: {
+                pageSize,
+                current,
+                selectCity
+            }
+        })
+    }
+
+    getById(id, selectCity = false) {
+        return service({
+            url: this.baseUrl + '/' + id,
+            method: 'get',
+            params: {selectCity}
+        })
     }
 }
 class City extends Zsgc {

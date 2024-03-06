@@ -34,6 +34,11 @@ export default {
           ellipsis: true,
         },
         {
+          title: '是否默认进入',
+          dataIndex: 'isDefaultEntryCity',
+          key: 'isDefaultEntryCity',
+        },
+        {
           title: '地图大小',
           dataIndex: 'mapSize',
           key: 'mapSize',
@@ -62,6 +67,7 @@ export default {
         matrixMap: [[]],
         x: -1,
         y: -1,
+        isDefaultEntryCity: false,
       },
       labelCol: {
         style: {
@@ -81,8 +87,12 @@ export default {
           this.worldObj = res1
           this.worldObj.cityIdAndObj = {};
           this.datasource.forEach(item => {
+            if (this.worldObj.entryCityId && item.id === this.worldObj.entryCityId) {
+              item.isDefaultEntryCity = true;
+            }
             this.worldObj.cityIdAndObj[item.id] = item;
           })
+          console.log(this.datasource)
         })
       })
     },
@@ -100,6 +110,7 @@ export default {
 
       if (record && record.id && !record.isError) {
         this.addForm = {
+          ...record,
           id: record.id,
           wordId: this.$route.params.id,
           name: record.name,
@@ -146,6 +157,9 @@ export default {
       }
       this.addForm.matrixMap = matrixMap;
       if (this.addForm.id) {
+        if (this.addForm.isDefaultEntryCity) {
+          this.worldObj.entryCityId = this.addForm.id;
+        }
         city.update(this.addForm).then(async () => {
           if (this.addForm.x >= 0 && this.addForm.y >= 0) {
             this.worldObj.matrixMap[this.addForm.x][this.addForm.y] = this.addForm.id;
@@ -158,6 +172,9 @@ export default {
         city.add(this.addForm).then(async (res) => {
           if (this.addForm.x >= 0 && this.addForm.y >= 0) {
             this.worldObj.matrixMap[this.addForm.x][this.addForm.y] = res;
+            if (this.addForm.isDefaultEntryCity) {
+              this.worldObj.entryCityId = res;
+            }
             await world.update(this.worldObj)
           }
           this.queryCityList()
@@ -166,17 +183,20 @@ export default {
       }
     },
     deleteCity(record) {
-      let updateWorldObj = false
+      let updateWorldCityIdList = []
       for (let i = 0; i < this.worldObj.matrixMap.length; i++) {
         for (let j = 0; j < this.worldObj.matrixMap[i].length; j++) {
           if (record.id === this.worldObj.matrixMap[i][j]) {
-            updateWorldObj = true;
+            updateWorldCityIdList.push(this.worldObj.matrixMap[i][j])
             this.worldObj.matrixMap[i][j] = ''
           }
         }
       }
       city.delete(record.id).then(async () => {
-        if (updateWorldObj) {
+        if (updateWorldCityIdList.length > 0) {
+          if (updateWorldCityIdList.includes(this.worldObj.entryCityId)) {
+            this.worldObj.entryCityId = ''
+          }
           await world.update(this.worldObj)
         }
         this.queryCityList()
@@ -215,6 +235,7 @@ export default {
       const record = this.datasource.filter(item => item.id === this.addForm.id)[0]
       if (record) {
         this.addForm = {
+          ...record,
           id: record.id,
           wordId: this.$route.params.id,
           name: record.name,
@@ -242,8 +263,11 @@ export default {
       }
     },
     deleteMap(row, col) {
+      if (this.worldObj.matrixMap[row][col] === this.worldObj.entryCityId) {
+        this.worldObj.entryCityId = ''
+      }
       this.worldObj.matrixMap[row][col] = "";
-      world.update(this.worldObj)
+      world.update(this.worldObj).then(() => this.queryCityList())
     }
   },
   created() {
@@ -273,6 +297,11 @@ export default {
             <a-button @click="editorCity({record})">编辑</a-button>
             <a-button style="color: red" @click="deleteCity(record)">删除</a-button>
           </template>
+          <template v-else-if="column.dataIndex === 'isDefaultEntryCity'">
+            <span :style="record.isDefaultEntryCity?{color:'red'}:''">{{
+                record.isDefaultEntryCity ? '是' : '否'
+              }}</span>
+          </template>
         </template>
       </a-table>
     </a-col>
@@ -293,7 +322,7 @@ export default {
                   <a-button v-if="value.id" @click="deleteMap(row - 1, col - 1)">删除地图引用</a-button>
                   <a-button v-if="!value.isError" style="color: red" @click="deleteCity(value)">删除城市</a-button>
                 </template>
-                <div class="td-info">
+                <div :style="value.isDefaultEntryCity?{color:'red'}:''" class="td-info">
                   {{ value.name }}
                 </div>
               </a-popover>
@@ -323,6 +352,12 @@ export default {
       <a-form-item label="id">
         <a-input v-model:value="addForm.id" disabled/>
       </a-form-item>
+      <a-form-item label="worldId">
+        <a-input v-model:value="addForm.wordId" disabled/>
+      </a-form-item>
+      <a-form-item label="是否默认进入">
+        <a-switch v-model:checked="addForm.isDefaultEntryCity" checked-children="是" un-checked-children="否"/>
+      </a-form-item>
       <a-form-item label="名称">
         <a-input v-model:value="addForm.name"/>
       </a-form-item>
@@ -330,7 +365,7 @@ export default {
         <a-input v-model:value="addForm.description"/>
       </a-form-item>
       <a-form-item label="进入的默认地图id">
-
+        <!--        todo -->
       </a-form-item>
       <a-form-item :rules="[{ required: true, message: '请输入尺寸!' }]" label="尺寸" name="dimensions">
         <span class="ant-form-text">长</span>

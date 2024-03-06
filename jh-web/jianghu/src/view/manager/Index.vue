@@ -12,6 +12,9 @@
             <a-button @click="editorWorld(record)">编辑</a-button>
             <a-button @click="deleteWorld(record)" style="color: red">删除</a-button>
           </template>
+          <template v-else-if="column.dataIndex === 'entryCityId'">
+            <span>{{ (record.cityVoList.filter(item => item.id === record.entryCityId)[0] || {name: record.entryCityId}).name }}</span>
+          </template>
         </template>
       </a-table>
       <a-drawer :width="500" title="添加世界" placement="top" :open="open" @close="closeDrawer">
@@ -32,12 +35,16 @@
           </a-form-item>
           <a-form-item label="进入的默认地图id">
             <a-select
-                v-model:value="selectCity"
-                style="width: 100%"
-                placeholder="选择进入的默认地图id"
-                :options="cityList"
+                ref="select"
+                v-model:value="addForm.entryCityId"
                 @change="changeCity"
-            ></a-select>
+                placeholder="选择进入的默认城市id"
+            >
+              <a-select-option v-for="item in addForm.cityVoList" :key="item.id" :value="item.id">{{
+                  item.name
+                }}
+              </a-select-option>
+            </a-select>
           </a-form-item>
           <a-form-item label="尺寸" name="dimensions" :rules="[{ required: true, message: '请输入尺寸!' }]">
             <span class="ant-form-text">长</span>
@@ -56,7 +63,7 @@
 </template>
 
 <script>
-import {city, world} from "@/http/api.js"
+import {world} from "@/http/api.js"
 
 export default {
   name: "Index",
@@ -81,7 +88,7 @@ export default {
           ellipsis: true,
         },
         {
-          title: '进入时的城市id',
+          title: '进入时的城市',
           dataIndex: 'entryCityId',
           key: 'entryCityId',
         },
@@ -113,10 +120,9 @@ export default {
         entryCityId: '',
         length: 0,
         width: 0,
-        matrixMap: [[]]
+        matrixMap: [[]],
+        cityVoList: [],
       },
-      //   private String[][] matrixMap = new String[][]{};
-      cityList: [],
       selectCity: ""
     }
   },
@@ -129,6 +135,7 @@ export default {
     },
     editorWorld(record) {
       this.addForm = {
+        ...record,
         id: record.id,
         name: record.name,
         description: record.description,
@@ -137,6 +144,7 @@ export default {
         width: record.matrixMap[0].length,
         matrixMap: record.matrixMap
       }
+      console.log(this.addForm)
       this.openMethod()
     },
     deleteWorld(record) {
@@ -146,7 +154,6 @@ export default {
     },
     openMethod() {
       this.open = true;
-      this.queryCityList()
     },
     changeCity(value) {
       console.log(value)
@@ -220,14 +227,6 @@ export default {
         this.dataSource = res.records
       })
     },
-    queryCityList() {
-      if (!this.addForm.id) {
-        return
-      }
-      city.listAllCityByWordId(this.addForm.id).then(res => {
-        console.log(res)
-      })
-    }
   }
 }
 </script>
