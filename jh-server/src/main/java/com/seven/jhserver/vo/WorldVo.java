@@ -3,9 +3,7 @@ package com.seven.jhserver.vo;
 import cn.hutool.core.util.IdUtil;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -25,5 +23,6 @@ public class WorldVo {
     private String entryCityId = "";
     private Date createTime;
     private Date updateTime;
+    // 当前地图拥有的city （可能不在地图中）
     private List<CityVo> cityVoList = new ArrayList<>();
 }

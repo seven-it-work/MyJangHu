@@ -55,8 +55,8 @@ public class WorldController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<WorldVo> getById(@PathVariable("id") String id) {
-        return new ResponseEntity<>(worldService.toVo(worldService.getById(id)), HttpStatus.OK);
+    public ResponseEntity<WorldVo> getById(@PathVariable("id") String id, @RequestParam("selectCity") boolean selectCity) {
+        return new ResponseEntity<>(worldService.toVo(worldService.getById(id), Map.of("selectCity", selectCity)), HttpStatus.OK);
     }
 
     @PostMapping(value = "/create")

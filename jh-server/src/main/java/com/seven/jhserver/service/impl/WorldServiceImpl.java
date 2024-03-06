@@ -2,6 +2,7 @@ package com.seven.jhserver.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.seven.jhserver.entity.Scene;
 import com.seven.jhserver.entity.World;
@@ -14,6 +15,7 @@ import com.seven.jhserver.vo.WorldVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Map;
 
 /**

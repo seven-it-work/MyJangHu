@@ -72,7 +72,7 @@ public class CityController {
         params.setCreateTime(new Date());
         params.setUpdateTime(new Date());
         cityService.save(cityService.toEntity(params));
-        return new ResponseEntity<>("created successfully", HttpStatus.OK);
+        return new ResponseEntity<>(params.getId(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/delete/{id}")
