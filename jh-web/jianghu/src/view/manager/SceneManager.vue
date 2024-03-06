@@ -126,11 +126,11 @@ export default {
     doAddOrUpdate() {
       let needUpdateObj = false
       if (this.addForm.id) {
+        if (this.addForm.x >= 0 && this.addForm.y >= 0) {
+          this.cityObj.matrixMap[this.addForm.x][this.addForm.y] = this.addForm.id;
+          needUpdateObj = true
+        }
         if (this.addForm.isDefaultEntry) {
-          if (this.addForm.x >= 0 && this.addForm.y >= 0) {
-            this.cityObj.matrixMap[this.addForm.x][this.addForm.y] = this.addForm.id;
-            needUpdateObj = true
-          }
           if (this.cityObj.matrixMap.flatMap(item => item).includes(this.addForm.id)) {
             this.cityObj.enterSceneId = this.addForm.id;
             needUpdateObj = true
@@ -210,33 +210,19 @@ export default {
       };
     },
     selectSceneChange() {
-      //     const record = this.datasource.filter(item => item.id === this.addForm.id)[0]
-      //     if (record) {
-      //       this.addForm = {
-      //         ...record,
-      //         id: record.id,
-      //         wordId: this.$route.params.id,
-      //         name: record.name,
-      //         description: record.description,
-      //         length: record.matrixMap.length,
-      //         width: record.matrixMap[0].length,
-      //         matrixMap: record.matrixMap,
-      //         x: this.addForm.x,
-      //         y: this.addForm.y,
-      //       }
-      //     } else {
-      //       this.addForm = {
-      //         id: '',
-      //         wordId: this.$route.params.id,
-      //         name: '',
-      //         description: '',
-      //         length: 1,
-      //         width: 1,
-      //         matrixMap: [[]],
-      //         x: this.addForm.x,
-      //         y: this.addForm.y,
-      //       }
-      //     }
+      const record = this.datasource.filter(item => item.id === this.addForm.id)[0]
+      if (record) {
+        this.addForm = {
+          ...this.addForm,
+          ...record,
+        }
+      } else {
+        this.addForm = {
+          ...this.baseForm,
+          x: this.addForm.x,
+          y: this.addForm.y,
+        }
+      }
     },
     deleteMap(row, col) {
       if (this.cityObj.matrixMap[row][col] === this.cityObj.enterSceneId) {
