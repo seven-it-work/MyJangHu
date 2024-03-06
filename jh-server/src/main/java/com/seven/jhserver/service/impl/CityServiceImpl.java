@@ -35,7 +35,7 @@ public class CityServiceImpl extends ServiceImpl<CityMapper, City> implements Ci
             return new ArrayList<>();
         }
         LambdaQueryWrapper<City> qw = new LambdaQueryWrapper<>();
-        qw.eq(City::getWordId, id);
+        qw.eq(City::getWorldId, id);
         return this.list(qw).stream().map(this::toVo).toList();
     }
 

@@ -17,7 +17,7 @@ import java.util.Date;
 @Data
 public class CityVo {
     private String id = IdUtil.fastSimpleUUID();
-    private String wordId = "";
+    private String worldId = "";
     private String name = "";
     private String description = "";
     private String[][] matrixMap = new String[][]{};

@@ -20,7 +20,7 @@ public class City implements Serializable {
 
     private static final long serialVersionUID = 1L;
     private String id;
-    private String wordId;
+    private String worldId;
     private String name;
     private String description;
     private String matrixMap;
