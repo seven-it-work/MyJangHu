@@ -71,12 +71,12 @@ public class SceneController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<Object> create(@RequestBody SceneVo params) {
+    public ResponseEntity<String> create(@RequestBody SceneVo params) {
         params.setId(IdUtil.fastSimpleUUID());
         params.setCreateTime(new Date());
         params.setUpdateTime(new Date());
         sceneService.save(sceneService.toEntity(params));
-        return new ResponseEntity<>("created successfully", HttpStatus.OK);
+        return new ResponseEntity<>(params.getId(), HttpStatus.OK);
     }
 
     @PostMapping(value = "/delete/{id}")

@@ -1,5 +1,6 @@
 <script>
 import {city, scene} from "@/http/api.js";
+import {message} from "ant-design-vue";
 
 export default {
   name: "SceneManager",
@@ -45,11 +46,6 @@ export default {
           dataIndex: 'isDefaultEntry',
           key: 'isDefaultEntry',
         },
-        {
-          title: '地图大小',
-          dataIndex: 'mapSize',
-          key: 'mapSize',
-        },
         // todo 人物管理
         {
           title: '操作',
@@ -59,17 +55,18 @@ export default {
       ],
       datasource: [],
       open: false,
+      baseForm: {
+        id: '',
+        cityId: this.$route.params.id,
+        name: '',
+        description: '',
+        remark: '',
+        x: -1,
+        y: -1,
+        isDefaultEntry: false,
+      },
       addForm: {
-        //       id: '',
-        //       wordId: this.$route.params.id,
-        //       name: '',
-        //       description: '',
-        //       length: 1,
-        //       width: 1,
-        //       matrixMap: [[]],
-        //       x: -1,
-        //       y: -1,
-        //       isDefaultEntry: false,
+        ...this.baseForm
       },
       labelCol: {
         style: {
@@ -140,62 +137,50 @@ export default {
     //     this.openMethod()
     //   },
     openMethod() {
+      this.addForm = {...this.baseForm}
       this.open = true;
     },
     doAddOrUpdate() {
-      //     const matrixMap = []
-      //     for (let i = 0; i < this.addForm.length; i++) {
-      //       const tempList = []
-      //       for (let j = 0; j < this.addForm.width; j++) {
-      //         if (this.addForm.matrixMap[i] && this.addForm.matrixMap[i][j]) {
-      //           tempList.push(this.addForm.matrixMap[i][j])
-      //         } else {
-      //           tempList.push('')
-      //         }
-      //       }
-      //       matrixMap.push(tempList)
-      //     }
-      //     this.addForm.matrixMap = matrixMap;
-      //     let needUpdatecityObj = false
-      //     if (this.addForm.id) {
-      //       if (this.addForm.isDefaultEntry) {
-      //         if (this.cityObj.matrixMap.flatMap(item => item).includes(this.addForm.id)) {
-      //           this.cityObj.enterSceneId = this.addForm.id;
-      //           needUpdatecityObj = true
-      //         } else {
-      //           message.warn({
-      //             content: "城市必须挂载在地图上才能 勾选 是否默认进入"
-      //           })
-      //         }
-      //       }
-      //       city.update(this.addForm).then(async () => {
-      //         if (this.addForm.x >= 0 && this.addForm.y >= 0) {
-      //           this.cityObj.matrixMap[this.addForm.x][this.addForm.y] = this.addForm.id;
-      //           needUpdatecityObj = true
-      //         }
-      //         if (needUpdatecityObj) {
-      //           await world.update(this.cityObj)
-      //         }
-      //         this.querySceneList()
-      //         this.closeDrawer()
-      //       })
-      //     } else {
-      //       city.add(this.addForm).then(async (res) => {
-      //         if (this.addForm.isDefaultEntry) {
-      //           this.cityObj.enterSceneId = res;
-      //           needUpdatecityObj = true
-      //         }
-      //         if (this.addForm.x >= 0 && this.addForm.y >= 0) {
-      //           this.cityObj.matrixMap[this.addForm.x][this.addForm.y] = res;
-      //           needUpdatecityObj = true
-      //         }
-      //         if (needUpdatecityObj) {
-      //           await world.update(this.cityObj)
-      //         }
-      //         this.querySceneList()
-      //         this.closeDrawer()
-      //       })
-      //     }
+      let needUpdateObj = false
+      if (this.addForm.id) {
+        if (this.addForm.isDefaultEntry) {
+          if (this.cityObj.matrixMap.flatMap(item => item).includes(this.addForm.id)) {
+            this.cityObj.enterSceneId = this.addForm.id;
+            needUpdateObj = true
+          } else {
+            message.warn({
+              content: "场景必须挂载在地图上才能 勾选 是否默认进入"
+            })
+          }
+        }
+        scene.update(this.addForm).then(async () => {
+          if (needUpdateObj) {
+            await city.update(this.cityObj)
+          }
+          this.querySceneList()
+          this.closeDrawer()
+        })
+      } else {
+        scene.add(this.addForm).then(async (res) => {
+          if (this.addForm.isDefaultEntry) {
+            if (this.addForm.isDefaultEntry) {
+              if (this.cityObj.matrixMap.flatMap(item => item).includes(res)) {
+                this.cityObj.enterSceneId = res;
+                needUpdateObj = true
+              } else {
+                message.warn({
+                  content: "场景必须挂载在地图上才能 勾选 是否默认进入"
+                })
+              }
+            }
+          }
+          if (needUpdateObj) {
+            await city.update(this.cityObj)
+          }
+          this.querySceneList()
+          this.closeDrawer()
+        })
+      }
     },
     //   deleteCity(record) {
     //     let updateWorldCityIdList = []
@@ -218,18 +203,8 @@ export default {
     //     })
     //   },
     closeDrawer() {
+      this.addForm = {...this.baseForm}
       this.open = false
-      //     this.addForm = {
-      //       id: '',
-      //       wordId: this.$route.params.id,
-      //       name: '',
-      //       description: '',
-      //       length: 1,
-      //       width: 1,
-      //       matrixMap: [[]],
-      //       x: -1,
-      //       y: -1,
-      //     }
     },
     //   getCityObj(row, col) {
     //     const id = this.cityObj.matrixMap[row][col];
@@ -301,19 +276,16 @@ export default {
     <a-col :span="12">
       <a-table :columns="columns" :data-source="datasource">
         <template #bodyCell="{ column, text, record }">
-          <template v-if="column.dataIndex === 'mapSize'">
-            <span>{{ record.matrixMap.length }}*{{ record.matrixMap[0].length }}</span>
-          </template>
-          <template v-else-if="column.dataIndex === 'options'">
+          <template v-if="column.dataIndex === 'options'">
             <!--              <a-button @click="go2City(record)">进入城市</a-button>-->
             <!--              <a-button @click="editorCity({record})">编辑</a-button>-->
             <!--              <a-button style="color: red" @click="deleteCity(record)">删除</a-button>-->
           </template>
-          <!--            <template v-else-if="column.dataIndex === 'isDefaultEntry'">-->
-          <!--              <span :style="record.isDefaultEntry?{color:'red'}:''">{{-->
-          <!--                  record.isDefaultEntry ? '是' : '否'-->
-          <!--                }}</span>-->
-          <!--            </template>-->
+          <template v-else-if="column.dataIndex === 'isDefaultEntry'">
+                        <span :style="record.isDefaultEntry?{color:'red'}:''">{{
+                            record.isDefaultEntry ? '是' : '否'
+                          }}</span>
+          </template>
         </template>
       </a-table>
     </a-col>
@@ -376,15 +348,8 @@ export default {
       <a-form-item label="描述">
         <a-input v-model:value="addForm.description"/>
       </a-form-item>
-      <a-form-item :rules="[{ required: true, message: '请输入尺寸!' }]" label="尺寸" name="dimensions">
-        <span class="ant-form-text">长</span>
-        <a-form-item label="长" name="col" no-style>
-          <a-input-number v-model:value="addForm.length" :max="100" :min="1"/>
-        </a-form-item>
-        <span class="ant-form-text">宽</span>
-        <a-form-item label="宽" name="row" no-style>
-          <a-input-number v-model:value="addForm.width" :max="100" :min="1"/>
-        </a-form-item>
+      <a-form-item label="备注">
+        <a-input v-model:value="addForm.remark"/>
       </a-form-item>
     </a-form>
   </a-drawer>
