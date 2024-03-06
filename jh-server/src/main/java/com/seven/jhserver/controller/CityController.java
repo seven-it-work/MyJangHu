@@ -61,9 +61,9 @@ public class CityController {
     }
 
 
-    @GetMapping(value = "/listAllCityByWordId/{id}")
+    @GetMapping(value = "/listAllCityByWorldId/{id}")
     public ResponseEntity<List<CityVo>> listAllCityByWordId(@PathVariable("id") String id) {
-        return new ResponseEntity<>(cityService.listAllCityByWordId(id), HttpStatus.OK);
+        return new ResponseEntity<>(cityService.listAllCityByWorldId(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "/create")

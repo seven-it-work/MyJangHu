@@ -38,7 +38,7 @@ public class WorldServiceImpl extends ServiceImpl<WorldMapper, World> implements
         temp.setMatrixMap(BusinessUtils.toMap(data.getMatrixMap()));
         if (MapUtil.isNotEmpty(condition)) {
             if (condition.get("selectCity")) {
-                temp.setCityVoList(cityService.listAllCityByWordId(temp.getId()));
+                temp.setCityVoList(cityService.listAllCityByWorldId(temp.getId()));
             }
         }
         return temp;

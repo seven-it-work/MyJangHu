@@ -30,9 +30,9 @@ export default {
           ellipsis: true,
         },
         {
-          title: 'wordId',
-          dataIndex: 'wordId',
-          key: 'wordId',
+          title: 'worldId',
+          dataIndex: 'worldId',
+          key: 'worldId',
           ellipsis: true,
         },
         {
@@ -60,7 +60,7 @@ export default {
       open: false,
       addForm: {
         id: '',
-        wordId: this.$route.params.id,
+        worldId: this.$route.params.id,
         name: '',
         description: '',
         enterSceneId: '',
@@ -83,7 +83,7 @@ export default {
   },
   methods: {
     queryCityList() {
-      city.listAllCityByWordId(this.$route.params.id).then(res => {
+      city.listAllCityByWorldId(this.$route.params.id).then(res => {
         this.datasource = res
         world.getById(this.$route.params.id).then(res1 => {
           this.worldObj = res1
@@ -97,8 +97,8 @@ export default {
         })
       })
     },
-    go2City() {
-      // todo
+    go2City(record) {
+      this.$router.push('/sceneManager/' + record.id)
     },
     editorCity({row, col, record}) {
       if (row || row === 0) {
@@ -113,7 +113,7 @@ export default {
         this.addForm = {
           ...record,
           id: record.id,
-          wordId: this.$route.params.id,
+          worldId: this.$route.params.id,
           name: record.name,
           description: record.description,
           enterSceneId: record.enterSceneId,
@@ -126,7 +126,7 @@ export default {
       } else {
         this.addForm = {
           id: '',
-          wordId: this.$route.params.id,
+          worldId: this.$route.params.id,
           name: '',
           description: '',
           enterSceneId: '',
@@ -222,7 +222,7 @@ export default {
       this.open = false
       this.addForm = {
         id: '',
-        wordId: this.$route.params.id,
+        worldId: this.$route.params.id,
         name: '',
         description: '',
         enterSceneId: '',
@@ -253,7 +253,7 @@ export default {
         this.addForm = {
           ...record,
           id: record.id,
-          wordId: this.$route.params.id,
+          worldId: this.$route.params.id,
           name: record.name,
           description: record.description,
           enterSceneId: record.enterSceneId,
@@ -266,7 +266,7 @@ export default {
       } else {
         this.addForm = {
           id: '',
-          wordId: this.$route.params.id,
+          worldId: this.$route.params.id,
           name: '',
           description: '',
           enterSceneId: '',
@@ -369,7 +369,7 @@ export default {
         <a-input v-model:value="addForm.id" disabled/>
       </a-form-item>
       <a-form-item label="worldId">
-        <a-input v-model:value="addForm.wordId" disabled/>
+        <a-input v-model:value="addForm.worldId" disabled/>
       </a-form-item>
       <a-form-item label="是否默认进入">
         <a-switch v-model:checked="addForm.isDefaultEntryCity" checked-children="是" un-checked-children="否"/>

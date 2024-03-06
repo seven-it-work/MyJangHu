@@ -80,9 +80,23 @@ class City extends Zsgc {
         super('/city');
     }
 
-    listAllCityByWordId(id) {
+    listAllCityByWorldId(id) {
         return service({
-            url: this.baseUrl + '/listAllCityByWordId/' + id,
+            url: this.baseUrl + '/listAllCityByWorldId/' + id,
+            method: 'get',
+        })
+    }
+}
+
+class Scene extends Zsgc {
+
+    constructor() {
+        super('/scene');
+    }
+
+    listAllByCityId(id) {
+        return service({
+            url: this.baseUrl + '/listAllByCityId/' + id,
             method: 'get',
         })
     }
@@ -90,5 +104,6 @@ class City extends Zsgc {
 
 export const world = new World();
 export const city = new City();
+export const scene = new Scene();
 
 

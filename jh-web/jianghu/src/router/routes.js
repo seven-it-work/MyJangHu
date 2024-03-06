@@ -12,6 +12,12 @@ const routes = [
         title: '城市管理',
         component: () => import('@/view/manager/CityManager.vue'),
     },
+    {
+        path: '/sceneManager/:id',
+        name: 'sceneManager',
+        title: '场景管理',
+        component: () => import('@/view/manager/SceneManager.vue'),
+    },
 
 ]
 export default routes
