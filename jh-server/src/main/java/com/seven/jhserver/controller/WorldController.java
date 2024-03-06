@@ -16,6 +16,7 @@ import com.seven.jhserver.entity.World;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,6 +58,12 @@ public class WorldController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<WorldVo> getById(@PathVariable("id") String id, @RequestParam("selectCity") boolean selectCity) {
         return new ResponseEntity<>(worldService.toVo(worldService.getById(id), Map.of("selectCity", selectCity)), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/listByIds")
+    public ResponseEntity<List<WorldVo>> listByIds(@RequestBody List<String> idList) {
+        List<WorldVo> list = worldService.listByIds(idList).stream().map(entity -> worldService.toVo(entity)).toList();
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @PostMapping(value = "/create")

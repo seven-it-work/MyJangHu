@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.seven.jhserver.vo.CityVo;
+import com.seven.jhserver.vo.PeopleVo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -54,6 +55,15 @@ public class CityController {
         cityVoPage.setRecords(aPage.getRecords().stream().map(item -> cityService.toVo(item)).toList());
         return new ResponseEntity<>(cityVoPage, HttpStatus.OK);
     }
+
+
+
+    @PostMapping(value = "/listByIds")
+    public ResponseEntity<List<CityVo>> listByIds(@RequestBody List<String> idList) {
+        List<CityVo> list = cityService.listByIds(idList).stream().map(entity -> cityService.toVo(entity)).toList();
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<CityVo> getById(@PathVariable("id") String id) {

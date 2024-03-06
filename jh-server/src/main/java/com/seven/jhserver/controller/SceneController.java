@@ -8,6 +8,7 @@ import com.seven.jhserver.entity.People;
 import com.seven.jhserver.vo.CityVo;
 import com.seven.jhserver.vo.PeopleVo;
 import com.seven.jhserver.vo.SceneVo;
+import com.seven.jhserver.vo.WorldVo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -56,6 +57,12 @@ public class SceneController {
         return new ResponseEntity<>(voPage, HttpStatus.OK);
     }
 
+
+    @PostMapping(value = "/listByIds")
+    public ResponseEntity<List<SceneVo>> listByIds(@RequestBody List<String> idList) {
+        List<SceneVo> list = sceneService.listByIds(idList).stream().map(entity -> sceneService.toVo(entity)).toList();
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 
     @GetMapping(value = "/listAllByCityId/{id}")
     public ResponseEntity<List<SceneVo>> listAllByCityId(@PathVariable("id") String id) {

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.seven.jhserver.entity.City;
 import com.seven.jhserver.vo.CityVo;
 import com.seven.jhserver.vo.PeopleVo;
+import com.seven.jhserver.vo.SceneVo;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -16,6 +17,7 @@ import com.seven.jhserver.entity.People;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -50,6 +52,14 @@ public class PeopleController {
         voPage.setRecords(aPage.getRecords().stream().map(item -> peopleService.toVo(item)).toList());
         return new ResponseEntity<>(voPage, HttpStatus.OK);
     }
+
+
+    @PostMapping(value = "/listByIds")
+    public ResponseEntity<List<PeopleVo>> listByIds(@RequestBody List<String> idList) {
+        List<PeopleVo> list = peopleService.listByIds(idList).stream().map(entity -> peopleService.toVo(entity)).toList();
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<PeopleVo> getById(@PathVariable("id") String id) {
