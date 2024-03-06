@@ -37,7 +37,6 @@
             <a-select
                 ref="select"
                 v-model:value="addForm.entryCityId"
-                @change="changeCity"
                 placeholder="选择进入的默认城市id"
             >
               <a-select-option v-for="item in addForm.cityVoList" :key="item.id" :value="item.id">{{
@@ -123,7 +122,6 @@ export default {
         matrixMap: [[]],
         cityVoList: [],
       },
-      selectCity: ""
     }
   },
   created() {
@@ -144,7 +142,6 @@ export default {
         width: record.matrixMap[0].length,
         matrixMap: record.matrixMap
       }
-      console.log(this.addForm)
       this.openMethod()
     },
     deleteWorld(record) {
@@ -154,9 +151,6 @@ export default {
     },
     openMethod() {
       this.open = true;
-    },
-    changeCity(value) {
-      console.log(value)
     },
     closeDrawer() {
       this.open = false

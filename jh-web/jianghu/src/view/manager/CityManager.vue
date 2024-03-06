@@ -1,6 +1,8 @@
 <script>
 import {city, world} from "@/http/api.js";
 
+import {message} from 'ant-design-vue'
+
 export default {
   name: "CityManager",
   data() {
@@ -92,7 +94,6 @@ export default {
             }
             this.worldObj.cityIdAndObj[item.id] = item;
           })
-          console.log(this.datasource)
         })
       })
     },
@@ -156,13 +157,24 @@ export default {
         matrixMap.push(tempList)
       }
       this.addForm.matrixMap = matrixMap;
+      let needUpdateWorldObj = false
       if (this.addForm.id) {
         if (this.addForm.isDefaultEntryCity) {
-          this.worldObj.entryCityId = this.addForm.id;
+          if (this.worldObj.matrixMap.flatMap(item => item).includes(this.addForm.id)) {
+            this.worldObj.entryCityId = this.addForm.id;
+            needUpdateWorldObj = true
+          } else {
+            message.warn({
+              content: "城市必须挂载在地图上才能 勾选 是否默认进入"
+            })
+          }
         }
         city.update(this.addForm).then(async () => {
           if (this.addForm.x >= 0 && this.addForm.y >= 0) {
             this.worldObj.matrixMap[this.addForm.x][this.addForm.y] = this.addForm.id;
+            needUpdateWorldObj = true
+          }
+          if (needUpdateWorldObj) {
             await world.update(this.worldObj)
           }
           this.queryCityList()
@@ -170,11 +182,15 @@ export default {
         })
       } else {
         city.add(this.addForm).then(async (res) => {
+          if (this.addForm.isDefaultEntryCity) {
+            this.worldObj.entryCityId = res;
+            needUpdateWorldObj = true
+          }
           if (this.addForm.x >= 0 && this.addForm.y >= 0) {
             this.worldObj.matrixMap[this.addForm.x][this.addForm.y] = res;
-            if (this.addForm.isDefaultEntryCity) {
-              this.worldObj.entryCityId = res;
-            }
+            needUpdateWorldObj = true
+          }
+          if (needUpdateWorldObj) {
             await world.update(this.worldObj)
           }
           this.queryCityList()
