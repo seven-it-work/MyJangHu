@@ -171,26 +171,26 @@ export default {
         })
       }
     },
-    //   deleteCity(record) {
-    //     let updateWorldCityIdList = []
-    //     for (let i = 0; i < this.cityObj.matrixMap.length; i++) {
-    //       for (let j = 0; j < this.cityObj.matrixMap[i].length; j++) {
-    //         if (record.id === this.cityObj.matrixMap[i][j]) {
-    //           updateWorldCityIdList.push(this.cityObj.matrixMap[i][j])
-    //           this.cityObj.matrixMap[i][j] = ''
-    //         }
-    //       }
-    //     }
-    //     city.delete(record.id).then(async () => {
-    //       if (updateWorldCityIdList.length > 0) {
-    //         if (updateWorldCityIdList.includes(this.cityObj.enterSceneId)) {
-    //           this.cityObj.enterSceneId = ''
-    //         }
-    //         await world.update(this.cityObj)
-    //       }
-    //       this.querySceneList()
-    //     })
-    //   },
+    deleteScene(record) {
+      let updateWorldCityIdList = []
+      for (let i = 0; i < this.cityObj.matrixMap.length; i++) {
+        for (let j = 0; j < this.cityObj.matrixMap[i].length; j++) {
+          if (record.id === this.cityObj.matrixMap[i][j]) {
+            updateWorldCityIdList.push(this.cityObj.matrixMap[i][j])
+            this.cityObj.matrixMap[i][j] = ''
+          }
+        }
+      }
+      scene.delete(record.id).then(async () => {
+        if (updateWorldCityIdList.length > 0) {
+          if (updateWorldCityIdList.includes(this.cityObj.enterSceneId)) {
+            this.cityObj.enterSceneId = ''
+          }
+          await city.update(this.cityObj)
+        }
+        this.querySceneList()
+      })
+    },
     closeDrawer() {
       this.addForm = {...this.baseForm}
       this.open = false
@@ -238,13 +238,13 @@ export default {
       //       }
       //     }
     },
-    //   deleteMap(row, col) {
-    //     if (this.cityObj.matrixMap[row][col] === this.cityObj.enterSceneId) {
-    //       this.cityObj.enterSceneId = ''
-    //     }
-    //     this.cityObj.matrixMap[row][col] = "";
-    //     world.update(this.cityObj).then(() => this.querySceneList())
-    //   }
+    deleteMap(row, col) {
+      if (this.cityObj.matrixMap[row][col] === this.cityObj.enterSceneId) {
+        this.cityObj.enterSceneId = ''
+      }
+      this.cityObj.matrixMap[row][col] = "";
+      city.update(this.cityObj).then(() => this.querySceneList())
+    }
   },
   created() {
     this.addForm = {...this.baseForm}
@@ -269,7 +269,7 @@ export default {
           <template v-if="column.dataIndex === 'options'">
             <!--              <a-button @click="go2City(record)">进入城市</a-button>-->
             <a-button @click="editorScene({record})">编辑</a-button>
-            <!--              <a-button style="color: red" @click="deleteCity(record)">删除</a-button>-->
+            <a-button style="color: red" @click="deleteScene(record)">删除</a-button>
           </template>
           <template v-else-if="column.dataIndex === 'isDefaultEntry'">
                         <span :style="record.isDefaultEntry?{color:'red'}:''">{{
@@ -293,8 +293,8 @@ export default {
                 <template #content>
                   <!--                  <a-button v-if="!value.isError">进入场景</a-button>-->
                   <a-button @click="editorScene({row:row - 1,col:col - 1})">编辑</a-button>
-                  <!--                  <a-button v-if="value.id" @click="deleteMap(row - 1, col - 1)">删除地图引用</a-button>-->
-                  <!--                  <a-button v-if="!value.isError" style="color: red" @click="deleteCity(value)">删除场景</a-button>-->
+                  <a-button v-if="value.id" @click="deleteMap(row - 1, col - 1)">删除地图引用</a-button>
+                  <a-button v-if="!value.isError" style="color: red" @click="deleteScene(value)">删除场景</a-button>
                 </template>
                 <div :style="value.isDefaultEntry?{color:'red'}:''" class="td-info">
                   {{ value.name }}
