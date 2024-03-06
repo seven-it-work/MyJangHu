@@ -30,7 +30,7 @@ import java.util.*;
  */
 @Service
 public class CityServiceImpl extends ServiceImpl<CityMapper, City> implements CityService {
-    public List<CityVo> listAllCityByWordId(@PathVariable("id") String id) {
+    public List<CityVo> listAllCityByWorldId(@PathVariable("id") String id) {
         if (StrUtil.isBlank(id)) {
             return new ArrayList<>();
         }

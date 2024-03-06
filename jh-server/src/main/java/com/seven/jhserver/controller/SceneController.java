@@ -2,8 +2,10 @@ package com.seven.jhserver.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.seven.jhserver.entity.People;
+import com.seven.jhserver.vo.CityVo;
 import com.seven.jhserver.vo.PeopleVo;
 import com.seven.jhserver.vo.SceneVo;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +17,14 @@ import com.seven.jhserver.service.SceneService;
 import com.seven.jhserver.entity.Scene;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author seven
@@ -49,6 +54,15 @@ public class SceneController {
         BeanUtil.copyProperties(aPage, voPage);
         voPage.setRecords(aPage.getRecords().stream().map(item -> sceneService.toVo(item)).toList());
         return new ResponseEntity<>(voPage, HttpStatus.OK);
+    }
+
+
+    @GetMapping(value = "/listAllByCityId/{id}")
+    public ResponseEntity<List<SceneVo>> listAllByCityId(@PathVariable("id") String id) {
+        if (StrUtil.isBlank(id)) {
+            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(sceneService.listAllByCityId(id), HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")

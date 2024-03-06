@@ -1,7 +1,10 @@
 package com.seven.jhserver.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.seven.jhserver.entity.City;
 import com.seven.jhserver.entity.People;
 import com.seven.jhserver.entity.Scene;
 import com.seven.jhserver.entity.enums.PeopleTypeEnum;
@@ -12,6 +15,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.seven.jhserver.vo.SceneVo;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -42,5 +47,15 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
         temp.setFixedPeopleIdList(JSONUtil.toJsonStr(data.getFixedPeopleIdList()));
         temp.setPeopleIdList(JSONUtil.toJsonStr(data.getPeopleIdList()));
         return temp;
+    }
+
+    @Override
+    public List<SceneVo> listAllByCityId(String cityId) {
+        if (StrUtil.isBlank(cityId)) {
+            return new ArrayList<>();
+        }
+        LambdaQueryWrapper<Scene> qw = new LambdaQueryWrapper<>();
+        qw.eq(Scene::getCityId, cityId);
+        return this.list(qw).stream().map(this::toVo).toList();
     }
 }

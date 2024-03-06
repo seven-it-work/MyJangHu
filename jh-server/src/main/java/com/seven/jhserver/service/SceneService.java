@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.seven.jhserver.service.convert.Convert;
 import com.seven.jhserver.vo.SceneVo;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -15,4 +17,5 @@ import com.seven.jhserver.vo.SceneVo;
  */
 public interface SceneService extends IService<Scene>, Convert<Scene, SceneVo> {
 
+    List<SceneVo> listAllByCityId(String cityId);
 }

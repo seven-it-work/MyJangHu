@@ -22,5 +22,5 @@ import java.util.List;
  * @since 2024-03-04
  */
 public interface CityService extends IService<City>, Convert<City, CityVo> {
-    public List<CityVo> listAllCityByWordId( String id);
+    public List<CityVo> listAllCityByWorldId( String id);
 }
