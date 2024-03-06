@@ -1,5 +1,5 @@
 <script>
-import {city, world} from "@/http/api.js";
+import {city, scene, world} from "@/http/api.js";
 
 import {message} from 'ant-design-vue'
 
@@ -71,6 +71,7 @@ export default {
         y: -1,
         isDefaultEntryCity: false,
       },
+      sceneList: [],
       labelCol: {
         style: {
           width: '150px',
@@ -123,6 +124,10 @@ export default {
           x: this.addForm.x,
           y: this.addForm.y,
         }
+        const sceneIdList = record.matrixMap.flatMap(item => item).filter(item => item)
+        scene.listByIds(sceneIdList).then(res => {
+          this.sceneList = res
+        })
       } else {
         this.addForm = {
           id: '',
@@ -381,7 +386,12 @@ export default {
         <a-input v-model:value="addForm.description"/>
       </a-form-item>
       <a-form-item label="进入的默认地图id">
-        <!--        todo -->
+        <a-select
+            ref="select"
+            v-model:value="addForm.enterSceneId"
+        >
+          <a-select-option v-for="item in sceneList" :key="item.id" :value="item.id">{{ item.name }}</a-select-option>
+        </a-select>
       </a-form-item>
       <a-form-item :rules="[{ required: true, message: '请输入尺寸!' }]" label="尺寸" name="dimensions">
         <span class="ant-form-text">长</span>

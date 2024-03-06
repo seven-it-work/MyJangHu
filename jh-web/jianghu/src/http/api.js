@@ -45,6 +45,14 @@ class Zsgc {
             method: 'get',
         })
     }
+
+    listByIds(idList) {
+        return service({
+            url: this.baseUrl + '/listByIds',
+            method: 'post',
+            data: idList
+        })
+    }
 }
 
 class World extends Zsgc {
@@ -74,6 +82,7 @@ class World extends Zsgc {
         })
     }
 }
+
 class City extends Zsgc {
 
     constructor() {

@@ -85,7 +85,6 @@ export default {
         city.getById(this.$route.params.id).then(res1 => {
           this.cityObj = res1
           this.cityObj.sceneIdAndObj = {};
-          console.log(this.cityObj)
           this.datasource.forEach(item => {
             if (this.cityObj.enterSceneId && item.id === this.cityObj.enterSceneId) {
               item.isDefaultEntry = true;
@@ -95,9 +94,6 @@ export default {
         })
       })
     },
-    //   go2City() {
-    //     // todo
-    //   },
     editorScene({row, col, record}) {
       if (row || row === 0) {
         if (col || col === 0) {
@@ -253,7 +249,6 @@ export default {
       <a-table :columns="columns" :data-source="datasource">
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'options'">
-            <!--              <a-button @click="go2City(record)">进入城市</a-button>-->
             <a-button @click="editorScene({record})">编辑</a-button>
             <a-button style="color: red" @click="deleteScene(record)">删除</a-button>
           </template>
@@ -277,7 +272,6 @@ export default {
               <a-popover :title="value.name">
                 <div style="display:none;">{{ value = getSceneObj(row - 1, col - 1) }}</div>
                 <template #content>
-                  <!--                  <a-button v-if="!value.isError">进入场景</a-button>-->
                   <a-button @click="editorScene({row:row - 1,col:col - 1})">编辑</a-button>
                   <a-button v-if="value.id" @click="deleteMap(row - 1, col - 1)">删除地图引用</a-button>
                   <a-button v-if="!value.isError" style="color: red" @click="deleteScene(value)">删除场景</a-button>
