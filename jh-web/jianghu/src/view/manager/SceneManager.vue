@@ -1,6 +1,7 @@
 <script>
 import {city, scene} from "@/http/api.js";
 import {message} from "ant-design-vue";
+import {getClan} from "random_chinese_fantasy_names";
 
 export default {
   name: "SceneManager",
@@ -226,7 +227,11 @@ export default {
       }
       this.cityObj.matrixMap[row][col] = "";
       city.update(this.cityObj).then(() => this.querySceneList())
-    }
+    },
+    randomCreate() {
+      const location = getClan(1)[0];
+      this.addForm.name = location
+    },
   },
   created() {
     this.addForm = {...this.baseForm}
@@ -290,6 +295,7 @@ export default {
   <a-drawer :open="open" :width="500" placement="top" title="添加世界" @close="closeDrawer">
     <template #extra>
       <a-button style="margin-right: 8px" @click="closeDrawer">取消</a-button>
+      <a-button style="margin-right: 8px" @click="randomCreate">随机生成</a-button>
       <a-button type="primary" @click="doAddOrUpdate">提交</a-button>
     </template>
     <a-form :label-col="labelCol" :model="addForm" :wrapper-col="wrapperCol"

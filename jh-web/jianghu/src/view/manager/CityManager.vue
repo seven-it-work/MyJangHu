@@ -2,6 +2,8 @@
 import {city, scene, world} from "@/http/api.js";
 
 import {message} from 'ant-design-vue'
+import {getLocation} from "random_chinese_fantasy_names";
+import {randomUtil} from "@/random.js";
 
 export default {
   name: "CityManager",
@@ -125,9 +127,11 @@ export default {
           y: this.addForm.y,
         }
         const sceneIdList = record.matrixMap.flatMap(item => item).filter(item => item)
-        scene.listByIds(sceneIdList).then(res => {
-          this.sceneList = res
-        })
+        if (sceneIdList && sceneIdList.length > 0) {
+          scene.listByIds(sceneIdList).then(res => {
+            this.sceneList = res
+          })
+        }
       } else {
         this.addForm = {
           id: '',
@@ -289,7 +293,13 @@ export default {
       }
       this.worldObj.matrixMap[row][col] = "";
       world.update(this.worldObj).then(() => this.queryCityList())
-    }
+    },
+    randomCreate() {
+      const location = getLocation(1)[0];
+      this.addForm.name = location.name
+      this.addForm.width = randomUtil.integer({min: 1, max: 100})
+      this.addForm.length = randomUtil.integer({min: 1, max: 100})
+    },
   },
   created() {
     this.queryCityList()
@@ -326,7 +336,7 @@ export default {
         </template>
       </a-table>
     </a-col>
-    <a-col :span="12">
+    <a-col :span="12" style="overflow: scroll;">
       <a-row id="points">
         <table cellspacing="30">
           <tbody>
@@ -338,7 +348,7 @@ export default {
               <a-popover :title="value.name">
                 <div style="display:none;">{{ value = getCityObj(row - 1, col - 1) }}</div>
                 <template #content>
-                  <a-button v-if="!value.isError">进入城市</a-button>
+                  <a-button v-if="!value.isError" @click="go2City(value)">进入城市</a-button>
                   <a-button @click="editorCity({row:row - 1,col:col - 1})">编辑</a-button>
                   <a-button v-if="value.id" @click="deleteMap(row - 1, col - 1)">删除地图引用</a-button>
                   <a-button v-if="!value.isError" style="color: red" @click="deleteCity(value)">删除城市</a-button>
@@ -357,6 +367,7 @@ export default {
   <a-drawer :open="open" :width="500" placement="top" title="添加世界" @close="closeDrawer">
     <template #extra>
       <a-button style="margin-right: 8px" @click="closeDrawer">取消</a-button>
+      <a-button style="margin-right: 8px" @click="randomCreate">随机生成</a-button>
       <a-button type="primary" @click="doAddOrUpdate">提交</a-button>
     </template>
     <a-form :label-col="labelCol" :model="addForm" :wrapper-col="wrapperCol"

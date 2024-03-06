@@ -13,13 +13,16 @@
             <a-button @click="deleteWorld(record)" style="color: red">删除</a-button>
           </template>
           <template v-else-if="column.dataIndex === 'entryCityId'">
-            <span>{{ (record.cityVoList.filter(item => item.id === record.entryCityId)[0] || {name: record.entryCityId}).name }}</span>
+            <span>{{
+                (record.cityVoList.filter(item => item.id === record.entryCityId)[0] || {name: record.entryCityId}).name
+              }}</span>
           </template>
         </template>
       </a-table>
       <a-drawer :width="500" title="添加世界" placement="top" :open="open" @close="closeDrawer">
         <template #extra>
           <a-button style="margin-right: 8px" @click="closeDrawer">取消</a-button>
+          <a-button style="margin-right: 8px" @click="randomCreate">随机生成</a-button>
           <a-button type="primary" @click="doAddOrUpdate">提交</a-button>
         </template>
         <a-form :model="addForm" layout="horizontal" :label-col="labelCol"
@@ -63,6 +66,8 @@
 
 <script>
 import {world} from "@/http/api.js"
+import {randomUtil} from "@/random.js";
+import {getZone} from "random_chinese_fantasy_names";
 
 export default {
   name: "Index",
@@ -128,6 +133,12 @@ export default {
     this.listWorld()
   },
   methods: {
+    randomCreate() {
+      const location = getZone(1)[0]
+      this.addForm.name = location.name
+      this.addForm.width = randomUtil.integer({min: 1, max: 100})
+      this.addForm.length = randomUtil.integer({min: 1, max: 100})
+    },
     go2World(record) {
       this.$router.push('/cityManager/' + record.id)
     },
