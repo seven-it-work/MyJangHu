@@ -98,52 +98,39 @@ export default {
     //   go2City() {
     //     // todo
     //   },
-    //   editorCity({row, col, record}) {
-    //     if (row || row === 0) {
-    //       if (col || col === 0) {
-    //         record = this.getCityObj(row, col)
-    //         this.addForm.x = row;
-    //         this.addForm.y = col;
-    //       }
-    //     }
-    //
-    //     if (record && record.id && !record.isError) {
-    //       this.addForm = {
-    //         ...record,
-    //         id: record.id,
-    //         wordId: this.$route.params.id,
-    //         name: record.name,
-    //         description: record.description,
-    //         length: record.matrixMap.length,
-    //         width: record.matrixMap[0].length,
-    //         matrixMap: record.matrixMap,
-    //         x: this.addForm.x,
-    //         y: this.addForm.y,
-    //       }
-    //     } else {
-    //       this.addForm = {
-    //         id: '',
-    //         wordId: this.$route.params.id,
-    //         name: '',
-    //         description: '',
-    //         length: 1,
-    //         width: 1,
-    //         matrixMap: [[]],
-    //         x: this.addForm.x,
-    //         y: this.addForm.y,
-    //       }
-    //     }
-    //
-    //     this.openMethod()
-    //   },
+    editorScene({row, col, record}) {
+      if (row || row === 0) {
+        if (col || col === 0) {
+          record = this.getSceneObj(row, col)
+          this.addForm.x = row;
+          this.addForm.y = col;
+        }
+      }
+      if (record && record.id && !record.isError) {
+        this.addForm = {
+          ...this.addForm,
+          ...record,
+        }
+      } else {
+        this.addForm = {
+          ...this.baseForm,
+          x: this.addForm.x,
+          y: this.addForm.y,
+        }
+      }
+      this.openMethod()
+    },
     openMethod() {
-      this.addForm = {...this.baseForm}
       this.open = true;
     },
     doAddOrUpdate() {
       let needUpdateObj = false
       if (this.addForm.id) {
         if (this.addForm.isDefaultEntry) {
+          if (this.addForm.x >= 0 && this.addForm.y >= 0) {
+            this.cityObj.matrixMap[this.addForm.x][this.addForm.y] = this.addForm.id;
+            needUpdateObj = true
+          }
           if (this.cityObj.matrixMap.flatMap(item => item).includes(this.addForm.id)) {
             this.cityObj.enterSceneId = this.addForm.id;
             needUpdateObj = true
@@ -162,16 +149,18 @@ export default {
         })
       } else {
         scene.add(this.addForm).then(async (res) => {
+          if (this.addForm.x >= 0 && this.addForm.y >= 0) {
+            this.cityObj.matrixMap[this.addForm.x][this.addForm.y] = res;
+            needUpdateObj = true
+          }
           if (this.addForm.isDefaultEntry) {
-            if (this.addForm.isDefaultEntry) {
-              if (this.cityObj.matrixMap.flatMap(item => item).includes(res)) {
-                this.cityObj.enterSceneId = res;
-                needUpdateObj = true
-              } else {
-                message.warn({
-                  content: "场景必须挂载在地图上才能 勾选 是否默认进入"
-                })
-              }
+            if (this.cityObj.matrixMap.flatMap(item => item).includes(res)) {
+              this.cityObj.enterSceneId = res;
+              needUpdateObj = true
+            } else {
+              message.warn({
+                content: "场景必须挂载在地图上才能 勾选 是否默认进入"
+              })
             }
           }
           if (needUpdateObj) {
@@ -206,20 +195,20 @@ export default {
       this.addForm = {...this.baseForm}
       this.open = false
     },
-    //   getCityObj(row, col) {
-    //     const id = this.cityObj.matrixMap[row][col];
-    //     if (id) {
-    //       const obj = this.cityObj.sceneIdAndObj[id];
-    //       if (obj) {
-    //         return obj
-    //       }
-    //     }
-    //     return {
-    //       id,
-    //       name: id,
-    //       isError: true
-    //     };
-    //   },
+    getSceneObj(row, col) {
+      const id = this.cityObj.matrixMap[row][col];
+      if (id) {
+        const obj = this.cityObj.sceneIdAndObj[id];
+        if (obj) {
+          return obj
+        }
+      }
+      return {
+        id,
+        name: id,
+        isError: true
+      };
+    },
     selectSceneChange() {
       //     const record = this.datasource.filter(item => item.id === this.addForm.id)[0]
       //     if (record) {
@@ -258,6 +247,7 @@ export default {
     //   }
   },
   created() {
+    this.addForm = {...this.baseForm}
     this.querySceneList()
   },
 }
@@ -278,7 +268,7 @@ export default {
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'options'">
             <!--              <a-button @click="go2City(record)">进入城市</a-button>-->
-            <!--              <a-button @click="editorCity({record})">编辑</a-button>-->
+            <a-button @click="editorScene({record})">编辑</a-button>
             <!--              <a-button style="color: red" @click="deleteCity(record)">删除</a-button>-->
           </template>
           <template v-else-if="column.dataIndex === 'isDefaultEntry'">
@@ -290,31 +280,31 @@ export default {
       </a-table>
     </a-col>
     <a-col :span="12">
-      <!--      <a-row id="points">-->
-      <!--        <table cellspacing="30">-->
-      <!--          <tbody>-->
-      <!--          <tr v-for="row in cityObj.matrixMap.length" :key="row">-->
-      <!--            <td v-for="col in cityObj.matrixMap[0].length"-->
-      <!--                :id="getCityObj(row - 1,col - 1).id"-->
-      <!--                :key="col">-->
-      <!--              <div style="display:none;">{{ value = getCityObj(row - 1, col - 1) }}</div>-->
-      <!--              <a-popover :title="value.name">-->
-      <!--                <div style="display:none;">{{ value = getCityObj(row - 1, col - 1) }}</div>-->
-      <!--                <template #content>-->
-      <!--                  <a-button v-if="!value.isError">进入城市</a-button>-->
-      <!--                  <a-button @click="editorCity({row:row - 1,col:col - 1})">编辑</a-button>-->
-      <!--                  <a-button v-if="value.id" @click="deleteMap(row - 1, col - 1)">删除地图引用</a-button>-->
-      <!--                  <a-button v-if="!value.isError" style="color: red" @click="deleteCity(value)">删除城市</a-button>-->
-      <!--                </template>-->
-      <!--                <div :style="value.isDefaultEntry?{color:'red'}:''" class="td-info">-->
-      <!--                  {{ value.name }}-->
-      <!--                </div>-->
-      <!--              </a-popover>-->
-      <!--            </td>-->
-      <!--          </tr>-->
-      <!--          </tbody>-->
-      <!--        </table>-->
-      <!--      </a-row>-->
+      <a-row id="points">
+        <table cellspacing="30">
+          <tbody>
+          <tr v-for="row in cityObj.matrixMap.length" :key="row">
+            <td v-for="col in cityObj.matrixMap[0].length"
+                :id="getSceneObj(row - 1,col - 1).id"
+                :key="col">
+              <div style="display:none;">{{ value = getSceneObj(row - 1, col - 1) }}</div>
+              <a-popover :title="value.name">
+                <div style="display:none;">{{ value = getSceneObj(row - 1, col - 1) }}</div>
+                <template #content>
+                  <!--                  <a-button v-if="!value.isError">进入场景</a-button>-->
+                  <a-button @click="editorScene({row:row - 1,col:col - 1})">编辑</a-button>
+                  <!--                  <a-button v-if="value.id" @click="deleteMap(row - 1, col - 1)">删除地图引用</a-button>-->
+                  <!--                  <a-button v-if="!value.isError" style="color: red" @click="deleteCity(value)">删除场景</a-button>-->
+                </template>
+                <div :style="value.isDefaultEntry?{color:'red'}:''" class="td-info">
+                  {{ value.name }}
+                </div>
+              </a-popover>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </a-row>
     </a-col>
   </a-row>
   <a-drawer :open="open" :width="500" placement="top" title="添加世界" @close="closeDrawer">
