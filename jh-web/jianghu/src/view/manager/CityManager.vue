@@ -297,8 +297,8 @@ export default {
     randomCreate() {
       const location = getLocation(1)[0];
       this.addForm.name = location.name
-      this.addForm.width = randomUtil.integer({min: 1, max: 100})
-      this.addForm.length = randomUtil.integer({min: 1, max: 100})
+      this.addForm.width = randomUtil.integer({min: 1, max: 10})
+      this.addForm.length = randomUtil.integer({min: 1, max: 10})
     },
   },
   created() {
@@ -336,7 +336,7 @@ export default {
         </template>
       </a-table>
     </a-col>
-    <a-col :span="12" style="overflow: scroll;">
+    <a-col :span="12" class="table-info">
       <a-row id="points">
         <table cellspacing="30">
           <tbody>
@@ -419,26 +419,4 @@ export default {
 </template>
 
 <style scoped>
-#points td {
-  border: black 1px solid;
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  max-width: 50px;
-  max-height: 50px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.td-info {
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  max-width: 50px;
-  max-height: 50px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
 </style>

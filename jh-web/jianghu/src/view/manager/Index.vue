@@ -136,8 +136,8 @@ export default {
     randomCreate() {
       const location = getZone(1)[0]
       this.addForm.name = location.name
-      this.addForm.width = randomUtil.integer({min: 1, max: 100})
-      this.addForm.length = randomUtil.integer({min: 1, max: 100})
+      this.addForm.width = randomUtil.integer({min: 1, max: 10})
+      this.addForm.length = randomUtil.integer({min: 1, max: 10})
     },
     go2World(record) {
       this.$router.push('/cityManager/' + record.id)
@@ -190,7 +190,7 @@ export default {
       }
       return world.update({
         id: this.addForm.id,
-        wordId: this.addForm.wordId,
+        worldId: this.addForm.worldId,
         name: this.addForm.name,
         description: this.addForm.description,
         matrixMap: matrixMap,
@@ -208,7 +208,7 @@ export default {
       }
       return world.add({
         id: this.addForm.id,
-        wordId: this.addForm.wordId,
+        worldId: this.addForm.worldId,
         name: this.addForm.name,
         description: this.addForm.description,
         matrixMap: matrixMap,

@@ -92,13 +92,22 @@ export default {
             }
             this.cityObj.sceneIdAndObj[item.id] = item;
           })
+          this.cityObj.matrixMap.flatMap(item => item).forEach(item => {
+            if (!this.cityObj.sceneIdAndObj[item]) {
+              this.cityObj.sceneIdAndObj[item] = {
+                id: item,
+                name: item,
+                isError: true
+              }
+            }
+          })
         })
       })
     },
     editorScene({row, col, record}) {
       if (row || row === 0) {
         if (col || col === 0) {
-          record = this.getSceneObj(row, col)
+          record = this.cityObj.sceneIdAndObj[this.cityObj.matrixMap[row][col]]
           this.addForm.x = row;
           this.addForm.y = col;
         }
@@ -192,20 +201,6 @@ export default {
       this.addForm = {...this.baseForm}
       this.open = false
     },
-    getSceneObj(row, col) {
-      const id = this.cityObj.matrixMap[row][col];
-      if (id) {
-        const obj = this.cityObj.sceneIdAndObj[id];
-        if (obj) {
-          return obj
-        }
-      }
-      return {
-        id,
-        name: id,
-        isError: true
-      };
-    },
     selectSceneChange() {
       const record = this.datasource.filter(item => item.id === this.addForm.id)[0]
       if (record) {
@@ -243,7 +238,7 @@ export default {
 <template>
   <a-row>
     <a-col :span="12">
-      <router-link :to='`/cityManager/${cityObj.wordId}`'>当前城市：{{ cityObj.name }}</router-link>
+      <router-link :to='`/cityManager/${cityObj.worldId}`'>当前城市：{{ cityObj.name }}</router-link>
     </a-col>
     <a-col :span="12">
       <a-button @click="openMethod">添加场景</a-button>
@@ -265,24 +260,28 @@ export default {
         </template>
       </a-table>
     </a-col>
-    <a-col :span="12">
+    <a-col :span="12" class="table-info">
       <a-row id="points">
         <table cellspacing="30">
           <tbody>
           <tr v-for="row in cityObj.matrixMap.length" :key="row">
             <td v-for="col in cityObj.matrixMap[0].length"
-                :id="getSceneObj(row - 1,col - 1).id"
+                :id="cityObj.sceneIdAndObj[cityObj.matrixMap[row - 1][col - 1]].id"
                 :key="col">
-              <div style="display:none;">{{ value = getSceneObj(row - 1, col - 1) }}</div>
-              <a-popover :title="value.name">
-                <div style="display:none;">{{ value = getSceneObj(row - 1, col - 1) }}</div>
+              <a-popover :title="cityObj.sceneIdAndObj[cityObj.matrixMap[row - 1][col - 1]].name">
                 <template #content>
-                  <a-button @click="editorScene({row:row - 1,col:col - 1})">编辑</a-button>
-                  <a-button v-if="value.id" @click="deleteMap(row - 1, col - 1)">删除地图引用</a-button>
-                  <a-button v-if="!value.isError" style="color: red" @click="deleteScene(value)">删除场景</a-button>
+                  <a-button @click="editorScene({row:row-1,col:col-1})">编辑</a-button>
+                  <a-button v-if="cityObj.sceneIdAndObj[cityObj.matrixMap[row - 1][col - 1]].id"
+                            @click="deleteMap(row - 1, col - 1)">删除地图引用
+                  </a-button>
+                  <a-button v-if="!cityObj.sceneIdAndObj[cityObj.matrixMap[row - 1][col - 1]].isError"
+                            style="color: red"
+                            @click="deleteScene(cityObj.sceneIdAndObj[cityObj.matrixMap[row - 1][col - 1]])">删除场景
+                  </a-button>
                 </template>
-                <div :style="value.isDefaultEntry?{color:'red'}:''" class="td-info">
-                  {{ value.name }}
+                <div :style="cityObj.sceneIdAndObj[cityObj.matrixMap[row - 1][col - 1]].isDefaultEntry?{color:'red'}:''"
+                     class="td-info">
+                  {{ cityObj.sceneIdAndObj[cityObj.matrixMap[row - 1][col - 1]].name }}
                 </div>
               </a-popover>
             </td>
@@ -332,26 +331,4 @@ export default {
 </template>
 
 <style scoped>
-#points td {
-  border: black 1px solid;
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  max-width: 50px;
-  max-height: 50px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.td-info {
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  max-width: 50px;
-  max-height: 50px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
 </style>
