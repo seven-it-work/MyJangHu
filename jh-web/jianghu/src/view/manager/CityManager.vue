@@ -101,7 +101,7 @@ export default {
       })
     },
     go2City(record) {
-      this.$router.push('/sceneManager/' + record.id)
+      this.$router.push({name: 'sceneManager', params: {id: record.id}})
     },
     editorCity({row, col, record}) {
       if (row || row === 0) {
@@ -310,7 +310,7 @@ export default {
 <template>
   <a-row>
     <a-col :span="12">
-      <router-link to="/">当前世界：{{ worldObj.name }}</router-link>
+      <router-link :to="{name:'manager'}">当前世界：{{ worldObj.name }}</router-link>
     </a-col>
     <a-col :span="12">
       <a-button @click="openMethod">添加城市</a-button>

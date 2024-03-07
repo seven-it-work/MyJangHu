@@ -19,6 +19,46 @@
           </template>
         </template>
       </a-table>
+      <div style="overflow-x:scroll;position: relative">
+        <a-popover v-for="item in dataSource" :key="item.id" trigger="click">
+          <template #content>
+            <div>
+              <span style="margin-right: 5px">x</span>
+              <a-input-number v-model:value="item.leftValue" :max="1587" :min="1" :step="item.leftValueStep"
+                              style="width: 150px">
+                <template #addonAfter>
+                  <a-select v-model:value="item.leftValueStep" style="width: 70px">
+                    <a-select-option value="1">1</a-select-option>
+                    <a-select-option value="5">5</a-select-option>
+                    <a-select-option value="10">10</a-select-option>
+                    <a-select-option value="100">100</a-select-option>
+                  </a-select>
+                </template>
+              </a-input-number>
+            </div>
+            <div>
+              <span style="margin-right: 5px">y</span>
+              <a-input-number v-model:value="item.topValue" :max="1123" :min="1" :step="item.topValueStep"
+                              style="width: 150px">
+                <template #addonAfter>
+                  <a-select v-model:value="item.topValueStep" style="width: 70px">
+                    <a-select-option value="1">1</a-select-option>
+                    <a-select-option value="5">5</a-select-option>
+                    <a-select-option value="10">10</a-select-option>
+                    <a-select-option value="100">100</a-select-option>
+                  </a-select>
+                </template>
+              </a-input-number>
+            </div>
+            <div>
+              <a-button type="primary" @click="updateLeftAndTop(item)">保存</a-button>
+              <a-button @click="cancelLeftAntTop(item)">还原</a-button>
+            </div>
+          </template>
+          <div :style="{position: 'absolute',left:item.leftValue+'px',top: item.topValue+'px'}">{{ item.name }}</div>
+        </a-popover>
+        <img :src="worldPng" alt="1">
+      </div>
       <a-drawer :width="500" title="添加世界" placement="top" :open="open" @close="closeDrawer">
         <template #extra>
           <a-button style="margin-right: 8px" @click="closeDrawer">取消</a-button>
@@ -53,9 +93,19 @@
             <a-form-item name="col" no-style label="长">
               <a-input-number v-model:value="addForm.length" :min="1" :max="100"/>
             </a-form-item>
-            <span class="ant-form-text">宽</span>
+            <span class="ant-form-text" style="margin-left: 10px">宽</span>
             <a-form-item name="row" no-style label="宽">
               <a-input-number v-model:value="addForm.width" :min="1" :max="100"/>
+            </a-form-item>
+          </a-form-item>
+          <a-form-item :rules="[{ required: true, message: '请输入尺寸!' }]" label="地图坐标" name="dimensions">
+            <span class="ant-form-text">x</span>
+            <a-form-item label="x" name="col" no-style>
+              <a-input-number v-model:value="addForm.leftValue" :max="1587" :min="1"/>
+            </a-form-item>
+            <span class="ant-form-text" style="margin-left: 10px">y</span>
+            <a-form-item label="y" name="row" no-style>
+              <a-input-number v-model:value="addForm.topValue" :max="1123" :min="1"/>
             </a-form-item>
           </a-form-item>
         </a-form>
@@ -68,11 +118,13 @@
 import {world} from "@/http/api.js"
 import {randomUtil} from "@/random.js";
 import {getZone} from "random_chinese_fantasy_names";
+import worldPng from "@/assets/world/world.jpeg"
 
 export default {
-  name: "Index",
+  name: "WorldManager",
   data() {
     return {
+      worldPng,
       columns: [
         {
           title: 'id',
@@ -117,7 +169,7 @@ export default {
         span: 14,
       },
       open: false,
-      addForm: {
+      baseForm: {
         id: '',
         name: '',
         description: '',
@@ -126,13 +178,27 @@ export default {
         width: 0,
         matrixMap: [[]],
         cityVoList: [],
+        leftValue: 0,
+        topValue: 0
       },
+      addForm: {},
     }
   },
   created() {
+    this.addForm = {...this.baseForm}
     this.listWorld()
   },
   methods: {
+    updateLeftAndTop(item) {
+      world.update(item).then(res => {
+        item.leftValueTemp = item.leftValue
+        item.topValueTemp = item.topValue
+      })
+    },
+    cancelLeftAntTop(item) {
+      item.leftValue = item.leftValueTemp
+      item.topValue = item.topValueTemp
+    },
     randomCreate() {
       const location = getZone(1)[0]
       this.addForm.name = location.name
@@ -140,18 +206,13 @@ export default {
       this.addForm.length = randomUtil.integer({min: 1, max: 10})
     },
     go2World(record) {
-      this.$router.push('/cityManager/' + record.id)
+      this.$router.push({name: 'cityManager', params: {id: record.id}})
     },
     editorWorld(record) {
       this.addForm = {
         ...record,
-        id: record.id,
-        name: record.name,
-        description: record.description,
-        entryCityId: record.entryCityId,
         length: record.matrixMap.length,
         width: record.matrixMap[0].length,
-        matrixMap: record.matrixMap
       }
       this.openMethod()
     },
@@ -166,13 +227,7 @@ export default {
     closeDrawer() {
       this.open = false
       this.addForm = {
-        id: '',
-        name: '',
-        description: '',
-        entryCityId: '',
-        length: 0,
-        width: 0,
-        matrixMap: [[]]
+        ...this.baseForm,
       }
     },
     doUpdate() {
@@ -189,12 +244,8 @@ export default {
         matrixMap.push(tempList)
       }
       return world.update({
-        id: this.addForm.id,
-        worldId: this.addForm.worldId,
-        name: this.addForm.name,
-        description: this.addForm.description,
+        ...this.addForm,
         matrixMap: matrixMap,
-        entryCityId: this.addForm.entryCityId
       })
     },
     doAdd() {
@@ -207,12 +258,8 @@ export default {
         matrixMap.push(tempList)
       }
       return world.add({
-        id: this.addForm.id,
-        worldId: this.addForm.worldId,
-        name: this.addForm.name,
-        description: this.addForm.description,
+        ...this.addForm,
         matrixMap: matrixMap,
-        entryCityId: this.addForm.entryCityId
       })
     },
     doAddOrUpdate() {
@@ -230,6 +277,12 @@ export default {
     listWorld() {
       world.list(1, 10, true).then(res => {
         this.dataSource = res.records
+        this.dataSource.forEach(item => {
+          item.leftValueTemp = item.leftValue
+          item.topValueTemp = item.topValue
+          item.topValueStep = 1
+          item.leftValueStep = 1
+        })
       })
     },
   }

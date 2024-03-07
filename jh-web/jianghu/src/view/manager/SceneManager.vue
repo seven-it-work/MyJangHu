@@ -238,7 +238,10 @@ export default {
 <template>
   <a-row>
     <a-col :span="12">
-      <router-link :to='`/cityManager/${cityObj.worldId}`'>当前城市：{{ cityObj.name }}</router-link>
+      <router-link :to="{name: 'cityManager', params: {id: cityObj.worldId || '1'}}">当前城市：{{
+          cityObj.name
+        }}
+      </router-link>
     </a-col>
     <a-col :span="12">
       <a-button @click="openMethod">添加场景</a-button>
