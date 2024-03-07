@@ -25,4 +25,6 @@ public class WorldVo {
     private Date updateTime;
     // 当前地图拥有的city （可能不在地图中）
     private List<CityVo> cityVoList = new ArrayList<>();
+    private Integer leftValue;
+    private Integer topValue;
 }

@@ -26,4 +26,6 @@ public class World implements Serializable {
     private String entryCityId;
     private Date createTime;
     private Date updateTime;
+    private Integer leftValue;
+    private Integer topValue;
 }
