@@ -46,7 +46,10 @@ public class WorldController {
             pageSize = 10;
         }
         Page<World> page = new Page<>(current, pageSize);
-        page.addOrder(new OrderItem().setColumn("create_time").setAsc(true));
+        OrderItem orderItem = new OrderItem();
+        orderItem.setColumn("create_time");
+        orderItem .setAsc(true);
+        page.addOrder(orderItem);
 
         Page<World> aPage = worldService.page(page);
         Page<WorldVo> voPage = new Page<>();

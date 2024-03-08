@@ -9,7 +9,17 @@
     <remote-repository>
       <option name="id" value="central" />
       <option name="name" value="Central Repository" />
+      <option name="url" value="https://maven.aliyun.com/repository/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
       <option name="url" value="http://maven.aliyun.com/nexus/content/repositories/central/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="artifactory-thirdparty-maven" />
+      <option name="name" value="artifactory-thirdparty-maven" />
+      <option name="url" value="http://dg.artifact.huawei.com/artifactory/thirdparty/" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="central" />
@@ -17,9 +27,49 @@
       <option name="url" value="https://repo1.maven.org/maven2" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="cbu-central" />
+      <option name="name" value="cbu-central" />
+      <option name="url" value="https://maven.cloudartifact.lfg.dragon.tools.huawei.com/artifactory/cbu-maven-public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="huawei-central-maven" />
+      <option name="name" value="huawei-central-maven" />
+      <option name="url" value="http://cmc.centralrepo.rnd.huawei.com/maven/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
+      <option name="url" value="https://cmc.centralrepo.rnd.huawei.com/artifactory/maven-central-repo/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="cbu-central" />
+      <option name="name" value="cbu-central" />
+      <option name="url" value="http://cmc.centralrepo.rnd.huawei.com/maven/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="central" />
+      <option name="name" value="Central Repository" />
+      <option name="url" value="http://cmc.centralrepo.rnd.huawei.com/maven/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="centralrepo" />
+      <option name="name" value="centralrepo" />
+      <option name="url" value="http://cmc.centralrepo.rnd.huawei.com/maven/" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="jboss.community" />
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="artifactory-maven" />
+      <option name="name" value="artifactory-maven" />
+      <option name="url" value="http://dg.artifact.huawei.com/artifactory/maven-local-group/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="centralrepo" />
+      <option name="name" value="centralrepo" />
+      <option name="url" value="https://cmc.centralrepo.rnd.huawei.com/maven/" />
     </remote-repository>
   </component>
 </project>

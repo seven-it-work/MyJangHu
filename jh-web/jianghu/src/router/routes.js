@@ -8,9 +8,22 @@ const routes = [
     {
         path: '/game',
         name: 'game',
-        title: '管理',
-        component: () => import('@/view/game/Game.vue'),
-        children: []
+        title: '游戏',
+        redirect: {name: 'gameWorld'},
+        children: [
+            {
+                path: 'gameWorld',
+                name: 'gameWorld',
+                title: '世界页',
+                component: () => import('@/view/game/Game.vue'),
+            },
+            {
+                path: '/gameCity/:id',
+                name: 'gameCity',
+                title: '城市页',
+                component: () => import('@/view/game/GameCity.vue'),
+            },
+        ]
     },
     {
         path: '/manager',

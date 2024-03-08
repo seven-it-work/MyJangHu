@@ -47,7 +47,10 @@ public class CityController {
             pageSize = 10;
         }
         Page<City> page = new Page<>(current, pageSize);
-        page.addOrder(new OrderItem().setColumn("create_time").setAsc(true));
+        OrderItem orderItem = new OrderItem();
+        orderItem.setColumn("create_time");
+        orderItem .setAsc(true);
+        page.addOrder(orderItem);
 
         Page<City> aPage = cityService.page(page);
         Page<CityVo> cityVoPage = new Page<>();

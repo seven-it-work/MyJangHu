@@ -44,7 +44,10 @@ public class PeopleController {
             pageSize = 10;
         }
         Page<People> page = new Page<>(current, pageSize);
-        page.addOrder(new OrderItem().setColumn("create_time").setAsc(true));
+        OrderItem orderItem = new OrderItem();
+        orderItem.setColumn("create_time");
+        orderItem .setAsc(true);
+        page.addOrder(orderItem);
 
         Page<People> aPage = peopleService.page(page);
         Page<PeopleVo> voPage = new Page<>();
