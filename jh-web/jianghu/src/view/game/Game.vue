@@ -1,6 +1,7 @@
 <script>
-import {world} from "@/http/api.js";
-import worldPng from "@/assets/world/world.jpeg"
+import {people, world} from "@/http/api.js";
+import worldPng from "@/assets/world/world.svg"
+import Cookies from "js-cookie";
 
 export default {
   name: "Game",
@@ -16,11 +17,15 @@ export default {
   methods: {
     getWorldObj() {
       world.list(1, 999).then(res => {
-        this.allWorldList=res.records
+        this.allWorldList = res.records
       })
     },
-    go2World(item){
+    go2World(item) {
       this.$router.push({name: 'gameCity', params: {id: item.id}})
+      people.getById(Cookies.get("peopleId")).then(res => {
+        res.currentWorldId = item.id;
+        people.update(res)
+      })
     }
   },
 }

@@ -118,7 +118,7 @@
 import {world} from "@/http/api.js"
 import {randomUtil} from "@/random.js";
 import {getZone} from "random_chinese_fantasy_names";
-import worldPng from "@/assets/world/world.jpeg"
+import worldPng from "@/assets/world/world.svg"
 
 export default {
   name: "WorldManager",

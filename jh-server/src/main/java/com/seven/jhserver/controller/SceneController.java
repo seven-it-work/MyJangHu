@@ -1,6 +1,7 @@
 package com.seven.jhserver.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
@@ -50,7 +51,7 @@ public class SceneController {
         Page<Scene> page = new Page<>(current, pageSize);
         OrderItem orderItem = new OrderItem();
         orderItem.setColumn("create_time");
-        orderItem .setAsc(true);
+        orderItem.setAsc(true);
         page.addOrder(orderItem);
 
         Page<Scene> aPage = sceneService.page(page);
@@ -63,6 +64,9 @@ public class SceneController {
 
     @PostMapping(value = "/listByIds")
     public ResponseEntity<List<SceneVo>> listByIds(@RequestBody List<String> idList) {
+        if (CollectionUtil.isEmpty(idList)) {
+            return new ResponseEntity<>(Collections.EMPTY_LIST, HttpStatus.OK);
+        }
         List<SceneVo> list = sceneService.listByIds(idList).stream().map(entity -> sceneService.toVo(entity)).toList();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }

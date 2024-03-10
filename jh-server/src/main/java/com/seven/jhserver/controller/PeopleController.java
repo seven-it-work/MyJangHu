@@ -18,10 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author seven
@@ -46,7 +47,7 @@ public class PeopleController {
         Page<People> page = new Page<>(current, pageSize);
         OrderItem orderItem = new OrderItem();
         orderItem.setColumn("create_time");
-        orderItem .setAsc(true);
+        orderItem.setAsc(true);
         page.addOrder(orderItem);
 
         Page<People> aPage = peopleService.page(page);
@@ -65,8 +66,8 @@ public class PeopleController {
 
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<PeopleVo> getById(@PathVariable("id") String id) {
-        return new ResponseEntity<>(peopleService.toVo(peopleService.getById(id)), HttpStatus.OK);
+    public ResponseEntity<PeopleVo> getById(@PathVariable("id") String id, @RequestParam(value = "currentPlaceObj",required = false) boolean currentPlaceObj) {
+        return new ResponseEntity<>(peopleService.toVo(peopleService.getById(id), Map.of("currentPlaceObj", currentPlaceObj)), HttpStatus.OK);
     }
 
     @PostMapping(value = "/create")
