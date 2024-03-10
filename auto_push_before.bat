@@ -9,3 +9,5 @@ git fetch --all
 git merge origin/main
 
 pause
+
+exit
