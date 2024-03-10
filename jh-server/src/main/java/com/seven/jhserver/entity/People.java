@@ -8,7 +8,7 @@ import java.sql.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author seven
@@ -30,4 +30,5 @@ public class People implements Serializable {
     private String peopleType;
     private Date createTime;
     private Date updateTime;
+    private Boolean showAble = false;
 }

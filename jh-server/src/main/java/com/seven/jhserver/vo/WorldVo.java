@@ -27,4 +27,5 @@ public class WorldVo {
     private List<CityVo> cityVoList = new ArrayList<>();
     private Integer leftValue;
     private Integer topValue;
+    private Boolean showAble = false;
 }

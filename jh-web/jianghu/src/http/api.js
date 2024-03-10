@@ -111,8 +111,18 @@ class Scene extends Zsgc {
     }
 }
 
+
+class People extends Zsgc {
+
+    constructor() {
+        super('/people');
+    }
+}
+
+
 export const world = new World();
 export const city = new City();
 export const scene = new Scene();
+export const people = new People();
 
 
