@@ -48,7 +48,10 @@ public class SceneController {
             pageSize = 10;
         }
         Page<Scene> page = new Page<>(current, pageSize);
-        page.addOrder(new OrderItem().setColumn("create_time").setAsc(true));
+        OrderItem orderItem = new OrderItem();
+        orderItem.setColumn("create_time");
+        orderItem .setAsc(true);
+        page.addOrder(orderItem);
 
         Page<Scene> aPage = sceneService.page(page);
         Page<SceneVo> voPage = new Page<>();
