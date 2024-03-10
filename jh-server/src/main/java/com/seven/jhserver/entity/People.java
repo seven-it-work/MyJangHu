@@ -26,6 +26,8 @@ public class People implements Serializable {
     private String description;
     private String remark;
     private String currentSceneId;
+    private String currentWorldId;
+    private String currentCityId;
     private String interactionIdList;
     private String peopleType;
     private Date createTime;

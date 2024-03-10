@@ -1,9 +1,10 @@
 <script>
 import Cookies from "js-cookie";
+import Header from "@/view/game/Header.vue";
 
 export default {
   name: "index",
-  components: {},
+  components: {Header},
   methods: {
     checkIsLogin() {
       const peopleId = Cookies.get("peopleId");
@@ -14,15 +15,14 @@ export default {
       }
     }
   },
-
   created() {
     this.checkIsLogin()
-  }
+  },
 }
 </script>
 
 <template>
-  <div>头</div>
+  <Header></Header>
   <router-view></router-view>
 </template>
 

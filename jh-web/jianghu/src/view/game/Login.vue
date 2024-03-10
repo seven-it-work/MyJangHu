@@ -12,7 +12,7 @@ export default {
   methods: {
     getPeople() {
       people.getById(Cookies.get("peopleId")).then(res => {
-        Cookies.set("peopleObj", res, {
+        Cookies.set("peopleObj", JSON.stringify(res), {
           expires: 30,
         });
       })
