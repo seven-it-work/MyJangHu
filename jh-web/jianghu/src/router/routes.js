@@ -5,7 +5,7 @@ const routes = [
         title: '首页',
         children: [
             {
-                path: '',
+                path: '/',
                 name: 'index',
                 title: '首页',
             },

@@ -1,5 +1,6 @@
 <script setup>
 import Header from "@/view/Header.vue";
+
 </script>
 
 <template>

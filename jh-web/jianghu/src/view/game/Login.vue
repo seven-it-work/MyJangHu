@@ -1,20 +1,36 @@
 <script>
 import Cookies from "js-cookie";
-import {people} from "@/http/api.js";
+import {city, people, scene, world} from "@/http/api.js";
 
 export default {
   name: "Login",
   data() {
     return {
-      isLogin: false
+      isLogin: false,
+      peopleObj: {}
     }
   },
   methods: {
     getPeople() {
-      people.getById(Cookies.get("peopleId")).then(res => {
-        Cookies.set("peopleObj", JSON.stringify(res), {
-          expires: 30,
-        });
+      return people.getById(Cookies.get("peopleId")).then(async (peopleData) => {
+        const peopleObj = peopleData;
+        if (peopleObj.currentWorldId) {
+          await world.getById(peopleObj.currentWorldId).then(res => {
+            peopleObj.currentWorld = res
+          })
+        }
+        if (peopleObj.currentCityId) {
+          await city.getById(peopleObj.currentCityId).then(res => {
+            peopleObj.currentCity = res
+          })
+        }
+        if (peopleObj.currentSceneId) {
+          await scene.getById(peopleObj.currentSceneId).then(res => {
+            peopleObj.currentScene = res
+          })
+        }
+        this.peopleObj = peopleObj;
+        this.$store.commit('updatePeople', peopleData)
       })
     },
     login() {
@@ -29,11 +45,21 @@ export default {
       const peopleId = Cookies.get("peopleId");
       this.isLogin = !!peopleId
       if (this.isLogin) {
-        this.getPeople()
+        this.getPeople().then(()=>{
+          this.playGame()
+        })
+      } else {
+        this.$router.push({name: 'login'})
       }
     },
     playGame() {
-      this.$router.push({name: 'gameWorld'})
+       if (this.peopleObj.currentCity && this.peopleObj.currentCity.id) {
+        this.$router.push({name: 'gameScene', params: {id: this.peopleObj.currentCity.id}})
+      } else if (this.peopleObj.currentWorld && this.peopleObj.currentWorld.id){
+        this.$router.push({name: 'gameCity', params: {id: this.peopleObj.currentWorld.id}})
+      } else {
+        this.$router.push({name: 'gameWorld'})
+      }
     },
   },
   created() {

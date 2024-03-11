@@ -7,12 +7,7 @@ export default {
   components: {Header},
   methods: {
     checkIsLogin() {
-      const peopleId = Cookies.get("peopleId");
-      if (!peopleId) {
-        this.$router.push({name: "login"})
-      } else {
-        this.$router.push({name: "gameWorld"})
-      }
+      this.$router.push({name: "login"})
     }
   },
   created() {
