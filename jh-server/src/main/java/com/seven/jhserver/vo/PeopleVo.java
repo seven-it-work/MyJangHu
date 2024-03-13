@@ -22,7 +22,7 @@ public class PeopleVo {
     private String id = IdUtil.fastSimpleUUID();
     private String xing = "";
     private String ming = "";
-    private SexEnum sex = SexEnum.MAN;
+    private String sex = SexEnum.MAN.name();
     private String description = "";
     private String remark = "";
     private String currentSceneId = "";
@@ -32,7 +32,7 @@ public class PeopleVo {
     private String currentCityId = "";
     private CityVo currentCity;
     private List<String> interactionIdList = new ArrayList<>();
-    private PeopleTypeEnum peopleType = PeopleTypeEnum.AI_PEOPLE;
+    private String peopleType = PeopleTypeEnum.AI_PEOPLE.name();
     private Date createTime;
     private Date updateTime;
 

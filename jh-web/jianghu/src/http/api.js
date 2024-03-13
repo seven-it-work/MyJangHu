@@ -117,6 +117,18 @@ class People extends Zsgc {
     constructor() {
         super('/people');
     }
+
+    list(current, pageSize, params) {
+        return service({
+            url: this.baseUrl + '/',
+            method: 'get',
+            params: {
+                pageSize,
+                current,
+                ...params
+            }
+        })
+    }
 }
 
 

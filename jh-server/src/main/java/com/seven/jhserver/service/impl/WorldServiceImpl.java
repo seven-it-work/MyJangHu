@@ -33,6 +33,9 @@ public class WorldServiceImpl extends ServiceImpl<WorldMapper, World> implements
 
     @Override
     public WorldVo toVo(World data, Map<String, Boolean> condition) {
+        if (data == null) {
+            return null;
+        }
         WorldVo temp = new WorldVo();
         BeanUtil.copyProperties(data, temp, true);
         temp.setMatrixMap(BusinessUtils.toMap(data.getMatrixMap()));
@@ -46,6 +49,9 @@ public class WorldServiceImpl extends ServiceImpl<WorldMapper, World> implements
 
     @Override
     public World toEntity(WorldVo data, Map<String, Boolean> condition) {
+        if (data == null) {
+            return null;
+        }
         World temp = new World();
         BeanUtil.copyProperties(data, temp, true);
         temp.setMatrixMap(JSONUtil.toJsonStr(data.getMatrixMap()));

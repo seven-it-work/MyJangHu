@@ -33,6 +33,9 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
 
     @Override
     public SceneVo toVo(Scene data, Map<String,Boolean> condition) {
+        if (data == null) {
+            return null;
+        }
         SceneVo temp = new SceneVo();
         BeanUtil.copyProperties(data, temp, true);
         temp.setFixedPeopleIdList(JSONUtil.toList(data.getFixedPeopleIdList(), String.class));
@@ -42,6 +45,10 @@ public class SceneServiceImpl extends ServiceImpl<SceneMapper, Scene> implements
 
     @Override
     public Scene toEntity(SceneVo data, Map<String,Boolean> condition) {
+
+        if (data == null) {
+            return null;
+        }
         Scene temp = new Scene();
         BeanUtil.copyProperties(data, temp, true);
         temp.setFixedPeopleIdList(JSONUtil.toJsonStr(data.getFixedPeopleIdList()));

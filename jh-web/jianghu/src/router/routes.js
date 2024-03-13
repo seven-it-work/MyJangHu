@@ -54,16 +54,22 @@ const routes = [
                         component: () => import('@/view/manager/WorldManager.vue'),
                     },
                     {
-                        path: 'cityManager/:id',
+                        path: 'cityManager/:worldId',
                         name: 'cityManager',
                         title: '城市管理',
                         component: () => import('@/view/manager/CityManager.vue'),
                     },
                     {
-                        path: 'sceneManager/:id',
+                        path: 'sceneManager/:worldId/:cityId',
                         name: 'sceneManager',
                         title: '场景管理',
                         component: () => import('@/view/manager/SceneManager.vue'),
+                    },
+                    {
+                        path: 'peopleManager/:worldId/:cityId/:sceneId',
+                        name: 'peopleManager',
+                        title: '场景管理',
+                        component: () => import('@/view/manager/PeopleManager.vue'),
                     },
                 ]
             },

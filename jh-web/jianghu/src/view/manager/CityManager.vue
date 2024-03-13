@@ -62,7 +62,7 @@ export default {
       open: false,
       addForm: {
         id: '',
-        worldId: this.$route.params.id,
+        worldId: this.$route.params.worldId,
         name: '',
         description: '',
         enterSceneId: '',
@@ -86,9 +86,9 @@ export default {
   },
   methods: {
     queryCityList() {
-      city.listAllCityByWorldId(this.$route.params.id).then(res => {
+      city.listAllCityByWorldId(this.$route.params.worldId).then(res => {
         this.datasource = res
-        world.getById(this.$route.params.id).then(res1 => {
+        world.getById(this.$route.params.worldId).then(res1 => {
           this.worldObj = res1
           this.worldObj.cityIdAndObj = {};
           this.datasource.forEach(item => {
@@ -101,7 +101,7 @@ export default {
       })
     },
     go2City(record) {
-      this.$router.push({name: 'sceneManager', params: {id: record.id}})
+      this.$router.push({name: 'sceneManager', params: {worldId:this.$route.params.worldId,cityId: record.id}})
     },
     editorCity({row, col, record}) {
       if (row || row === 0) {
@@ -116,7 +116,7 @@ export default {
         this.addForm = {
           ...record,
           id: record.id,
-          worldId: this.$route.params.id,
+          worldId: this.$route.params.worldId,
           name: record.name,
           description: record.description,
           enterSceneId: record.enterSceneId,
@@ -135,7 +135,7 @@ export default {
       } else {
         this.addForm = {
           id: '',
-          worldId: this.$route.params.id,
+          worldId: this.$route.params.worldId,
           name: '',
           description: '',
           enterSceneId: '',
@@ -231,7 +231,7 @@ export default {
       this.open = false
       this.addForm = {
         id: '',
-        worldId: this.$route.params.id,
+        worldId: this.$route.params.worldId,
         name: '',
         description: '',
         enterSceneId: '',
@@ -262,7 +262,7 @@ export default {
         this.addForm = {
           ...record,
           id: record.id,
-          worldId: this.$route.params.id,
+          worldId: this.$route.params.worldId,
           name: record.name,
           description: record.description,
           enterSceneId: record.enterSceneId,
@@ -275,7 +275,7 @@ export default {
       } else {
         this.addForm = {
           id: '',
-          worldId: this.$route.params.id,
+          worldId: this.$route.params.worldId,
           name: '',
           description: '',
           enterSceneId: '',
@@ -310,7 +310,7 @@ export default {
 <template>
   <a-row>
     <a-col :span="12">
-      <router-link :to="{name:'manager'}">当前世界：{{ worldObj.name }}</router-link>
+      <router-link :to="{name:'worldManager'}">当前世界：{{ worldObj.name }}</router-link>
     </a-col>
     <a-col :span="12">
       <a-button @click="openMethod">添加城市</a-button>

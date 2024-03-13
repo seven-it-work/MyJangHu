@@ -206,7 +206,7 @@ export default {
       this.addForm.length = randomUtil.integer({min: 1, max: 10})
     },
     go2World(record) {
-      this.$router.push({name: 'cityManager', params: {id: record.id}})
+      this.$router.push({name: 'cityManager', params: {worldId: record.id}})
     },
     editorWorld(record) {
       this.addForm = {

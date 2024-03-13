@@ -41,6 +41,9 @@ public class CityServiceImpl extends ServiceImpl<CityMapper, City> implements Ci
 
     @Override
     public CityVo toVo(City data, Map<String, Boolean> condition) {
+        if (data == null) {
+            return null;
+        }
         CityVo cityVo = new CityVo();
         BeanUtil.copyProperties(data, cityVo, true);
         cityVo.setMatrixMap(BusinessUtils.toMap(data.getMatrixMap()));
@@ -49,6 +52,9 @@ public class CityServiceImpl extends ServiceImpl<CityMapper, City> implements Ci
 
     @Override
     public City toEntity(CityVo data, Map<String, Boolean> condition) {
+        if (data == null) {
+            return null;
+        }
         City city = new City();
         BeanUtil.copyProperties(data, city, true);
         city.setMatrixMap(JSONUtil.toJsonStr(Optional.ofNullable(data.getMatrixMap()).orElse(new String[][]{})));

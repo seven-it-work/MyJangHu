@@ -58,7 +58,7 @@ export default {
       open: false,
       baseForm: {
         id: '',
-        cityId: this.$route.params.id,
+        cityId: this.$route.params.cityId,
         name: '',
         description: '',
         remark: '',
@@ -81,9 +81,9 @@ export default {
   },
   methods: {
     querySceneList() {
-      scene.listAllByCityId(this.$route.params.id).then(res => {
+      scene.listAllByCityId(this.$route.params.cityId).then(res => {
         this.datasource = res
-        city.getById(this.$route.params.id).then(res1 => {
+        city.getById(this.$route.params.cityId).then(res1 => {
           this.cityObj = res1
           this.cityObj.sceneIdAndObj = {};
           this.datasource.forEach(item => {
@@ -227,6 +227,9 @@ export default {
       const location = getClan(1)[0];
       this.addForm.name = location
     },
+    got2PeopleManager(record) {
+      this.$router.push({name: 'peopleManager', params: {worldId:this.$route.params.worldId,cityId:this.$route.params.cityId,sceneId: record.id}})
+    },
   },
   created() {
     this.addForm = {...this.baseForm}
@@ -238,7 +241,7 @@ export default {
 <template>
   <a-row>
     <a-col :span="12">
-      <router-link :to="{name: 'cityManager', params: {id: cityObj.worldId || '1'}}">当前城市：{{
+      <router-link :to="{name: 'cityManager', params: {worldId: cityObj.worldId || '1'}}">当前城市：{{
           cityObj.name
         }}
       </router-link>
@@ -252,6 +255,7 @@ export default {
       <a-table :columns="columns" :data-source="datasource">
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'options'">
+            <a-button @click="got2PeopleManager(record)">管理场景</a-button>
             <a-button @click="editorScene({record})">编辑</a-button>
             <a-button style="color: red" @click="deleteScene(record)">删除</a-button>
           </template>
