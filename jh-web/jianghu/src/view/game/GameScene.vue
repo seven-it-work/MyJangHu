@@ -1,28 +1,96 @@
 <script>
 import {city, people, scene} from "@/http/api.js";
 import {mapState} from "vuex";
-import {cloneDeep} from "lodash";
+import ChatBox from "@/components/ChatBox.vue";
 
 export default {
   name: "GameScene",
+  components: {ChatBox},
   data() {
     return {
+      componentsData: {},
       cityObj: {
         matrixMapObj: [[]]
       },
       peopleList: [],
+      peopleInteractionList: []
     }
   },
   computed: {
     ...mapState({
       peopleObj: state => state.peopleObj,
-    })
+    }),
   },
   created() {
     this.getCityById()
     this.listCurrentScenePeople(this.peopleObj.currentSceneId)
   },
   methods: {
+    interactionClick(interaction) {
+      console.log(interaction)
+      // todo 调用后台 请求相关 type 和 数据对象
+      this.componentsData = {
+        type: 'ChatBox',
+        visible: true,
+        dataNowId: "1",
+        data: [
+          {
+            id: "1",
+            nextId: "2",
+            peopleObj: {id: '1', name: "测试"},
+            message: "好好好",
+            selectItem: []
+          },
+          {
+            id: "2",
+            nextId: "3",
+            peopleObj: {id: '2', name: "测试2"},
+            message: "对地段",
+            selectItem: []
+          },
+          {
+            id: "3",
+            nextId: "4",
+            peopleObj: {id: '1', name: "测试2"},
+            message: "",
+            // selectItem 也是事件对象
+            selectItem: [
+              {
+                id: 'jg',
+                name: '交谈',
+              }
+            ]
+          },
+          {
+            id: "4",
+            nextId: "",
+            peopleObj: {id: '2', name: "测试2"},
+            message: "去吧",
+          },
+        ]
+      }
+      this.componentsData.dataNowObj = this.componentsData.data.filter(item => item.id === this.componentsData.dataNowId)[0]
+      if (!this.componentsData.dataNowObj) {
+        this.componentsData.visible = false
+      }
+    },
+    getPeopleInteractionList(peopleItem) {
+      if (peopleItem) {
+        if (peopleItem.id === this.peopleObj.id) {
+          peopleItem.interactionList = [{
+            name: '自己'
+          }]
+        } else if (!peopleItem.interactionList) {
+          const interactionList = [{
+            name: '交谈',
+          }]
+          peopleItem.interactionList = interactionList
+        }
+        this.peopleInteractionList = peopleItem.interactionList
+      } else {
+        this.peopleInteractionList = []
+      }
+    },
     movePlace(item) {
       this.peopleObj.currentSceneId = item.id
       this.peopleObj.currentScene = item
@@ -71,9 +139,17 @@ export default {
 <template>
   <a-row>
     <a-col v-for="peopleItem in peopleList" :key="peopleItem.id">
-      <a-avatar :size="{ xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 }">
-        {{peopleItem.name}}
-      </a-avatar>
+      <a-popover trigger="click" @click="getPeopleInteractionList(peopleItem)">
+        <template #content>
+          <a-button v-for="interaction in peopleInteractionList" :key="interaction"
+                    @click="interactionClick(interaction)">
+            {{ interaction.name }}
+          </a-button>
+        </template>
+        <a-avatar :size="{ xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 }">
+          {{ peopleItem.name }}
+        </a-avatar>
+      </a-popover>
     </a-col>
   </a-row>
   <a-row id="points" v-if="cityObj.matrixMapObj && cityObj.matrixMapObj.length">
@@ -101,6 +177,7 @@ export default {
       </tbody>
     </table>
   </a-row>
+  <ChatBox v-if="componentsData.type==='ChatBox'" :components-data="componentsData"></ChatBox>
 </template>
 
 <style scoped>
