@@ -45,18 +45,20 @@ export default {
       const peopleId = Cookies.get("peopleId");
       this.isLogin = !!peopleId
       if (this.isLogin) {
+        console.log("登录了，当前用户id",peopleId)
         this.getPeople().then(()=>{
           this.playGame()
         })
       } else {
-        this.$router.push({name: 'login'})
+        console.log("没有登录")
+        // this.$router.push({name: 'login'})
       }
     },
     playGame() {
        if (this.peopleObj.currentCity && this.peopleObj.currentCity.id) {
-        this.$router.push({name: 'gameScene', params: {id: this.peopleObj.currentCity.id}})
+        this.$router.push({name: 'gameScene', params: {worldId:this.peopleObj.currentWorld.id,cityId: this.peopleObj.currentCity.id}})
       } else if (this.peopleObj.currentWorld && this.peopleObj.currentWorld.id){
-        this.$router.push({name: 'gameCity', params: {id: this.peopleObj.currentWorld.id}})
+        this.$router.push({name: 'gameCity', params: {worldId: this.peopleObj.currentWorld.id}})
       } else {
         this.$router.push({name: 'gameWorld'})
       }
@@ -70,6 +72,7 @@ export default {
 
 <template>
   <div>
+<!--    todo 通过user email 来查询用 再查询people-->
     <a-button v-if="!isLogin" @click="login">登录</a-button>
     <a-button v-else @click="playGame">进入游戏</a-button>
   </div>

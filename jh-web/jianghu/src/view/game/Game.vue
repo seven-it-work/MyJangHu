@@ -21,7 +21,7 @@ export default {
       })
     },
     go2World(item) {
-      this.$router.push({name: 'gameCity', params: {id: item.id}})
+      this.$router.push({name: 'gameCity', params: {worldId: item.id}})
       people.getById(Cookies.get("peopleId")).then(res => {
         res.currentWorldId = item.id;
         people.update(res)

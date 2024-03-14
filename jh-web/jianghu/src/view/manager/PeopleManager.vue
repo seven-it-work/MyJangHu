@@ -482,7 +482,6 @@ export default {
       return people.list(this.pagination.current, this.pagination.pageSize, params)
     },
     handleClick({key}) {
-      console.log(this.currentTag)
       return this.listPeople(key).then(res => {
         this.pagination.total = res.total
         this.pagination.current = res.current

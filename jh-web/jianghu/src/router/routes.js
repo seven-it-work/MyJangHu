@@ -28,13 +28,13 @@ const routes = [
                         component: () => import('@/view/game/Game.vue'),
                     },
                     {
-                        path: '/gameCity/:id',
+                        path: '/gameCity/:worldId',
                         name: 'gameCity',
                         title: '城市页',
                         component: () => import('@/view/game/GameCity.vue'),
                     },
                     {
-                        path: '/gameScene/:id',
+                        path: '/gameScene/:worldId/:cityId',
                         name: 'gameScene',
                         title: '场景页',
                         component: () => import('@/view/game/GameScene.vue'),

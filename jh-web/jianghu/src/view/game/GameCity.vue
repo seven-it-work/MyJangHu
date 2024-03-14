@@ -16,14 +16,14 @@ export default {
   },
   methods: {
     go2City(item) {
-      this.$router.push({name: 'gameScene', params: {id: item.id}})
+      this.$router.push({name: 'gameScene', params: {worldId:this.$route.params.worldId,cityId: item.id}})
       people.getById(Cookies.get("peopleId")).then(res => {
         res.currentCityId = item.id;
         people.update(res)
       })
     },
     getWorldById() {
-      world.getById(this.$route.params.id, true).then(res => {
+      world.getById(this.$route.params.worldId, true).then(res => {
         this.worldObj = res;
         const cityVoMap = {}
         this.worldObj.cityVoList.forEach(item => cityVoMap[item.id] = item);
