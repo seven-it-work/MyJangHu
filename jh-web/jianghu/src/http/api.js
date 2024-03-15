@@ -1,7 +1,10 @@
 import service from "@/http/request.js";
+import {BaseApi} from "@/http/baseApi.js";
 
-class Zsgc {
+
+class Zsgc extends BaseApi{
     constructor(baseUrl) {
+        super();
         this.baseUrl = baseUrl;
     }
 
