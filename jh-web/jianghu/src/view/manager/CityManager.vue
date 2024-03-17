@@ -85,6 +85,9 @@ export default {
     }
   },
   methods: {
+    listAll() {
+      city.list(1, 9999);
+    },
     queryCityList() {
       city.listAllCityByWorldId(this.$route.params.worldId).then(res => {
         this.datasource = res
@@ -309,11 +312,14 @@ export default {
 
 <template>
   <a-row>
-    <a-col :span="12">
+    <a-col >
       <router-link :to="{name:'worldManager'}">当前世界：{{ worldObj.name }}</router-link>
     </a-col>
-    <a-col :span="12">
+    <a-col >
       <a-button @click="openMethod">添加城市</a-button>
+    </a-col>
+    <a-col>
+      <a-button @click="listAll">查看所有</a-button>
     </a-col>
   </a-row>
   <a-row>

@@ -1,12 +1,16 @@
 <template>
   <a-row>
-    <a-col :span="12">
+    <a-col>
       <router-link :to="{name: 'sceneManager', params: {worldId:$route.params.worldId,cityId:$route.params.cityId}}">
         当前场景：{{ sceneObj.name }}
       </router-link>
     </a-col>
-    <a-col :span="12">
+    <a-col>
       <a-button @click="toBePeople({})">添加人物</a-button>
+    </a-col>
+
+    <a-col>
+      <a-button @click="listAll">查看所有</a-button>
     </a-col>
   </a-row>
   <a-row>
@@ -375,6 +379,9 @@ export default {
     }
   },
   methods: {
+    listAll() {
+      people.list(1, 9999)
+    },
     changeWorldId(id) {
       this.addForm.currentWorldId = id
       this.addForm.currentCityId = ''

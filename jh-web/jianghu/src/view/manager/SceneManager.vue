@@ -80,6 +80,9 @@ export default {
     }
   },
   methods: {
+    listAll() {
+      scene.list(1, 9999);
+    },
     querySceneList() {
       scene.listAllByCityId(this.$route.params.cityId).then(res => {
         this.datasource = res
@@ -240,14 +243,17 @@ export default {
 
 <template>
   <a-row>
-    <a-col :span="12">
+    <a-col >
       <router-link :to="{name: 'cityManager', params: {worldId: cityObj.worldId || '1'}}">当前城市：{{
           cityObj.name
         }}
       </router-link>
     </a-col>
-    <a-col :span="12">
+    <a-col >
       <a-button @click="openMethod">添加场景</a-button>
+    </a-col>
+    <a-col>
+      <a-button @click="listAll">查看所有</a-button>
     </a-col>
   </a-row>
   <a-row>

@@ -1,7 +1,14 @@
 <template>
   <div>
     <div>
-      <a-button @click="openMethod">添加世界</a-button>
+      <a-row>
+        <a-col>
+          <a-button @click="openMethod">添加世界</a-button>
+        </a-col>
+        <a-col>
+          <a-button @click="listAll">查看所有</a-button>
+        </a-col>
+      </a-row>
       <a-table :dataSource="dataSource" :columns="columns">
         <template #bodyCell="{ column, text, record }">
           <template v-if="column.dataIndex === 'mapSize'">
@@ -189,6 +196,9 @@ export default {
     this.listWorld()
   },
   methods: {
+    listAll() {
+      world.list(1, 9999);
+    },
     updateLeftAndTop(item) {
       world.update(item).then(res => {
         item.leftValueTemp = item.leftValue
