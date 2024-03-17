@@ -4,6 +4,7 @@ import worldDb from "@/http/db/worldDb.js";
 import peopleDb from "@/http/db/peopleDb.js";
 import cityDb from "@/http/db/cityDb.js";
 import sceneDb from "@/http/db/sceneDb.js";
+import {cloneDeep} from "lodash";
 
 class LocalApi extends BaseApi {
     constructor(allDataList) {
@@ -15,7 +16,15 @@ class LocalApi extends BaseApi {
         return super.list(current, pageSize).then(() => {
             const totalPages = Math.ceil(this.allDataList.length / pageSize);
             const startIndex = (current - 1) * pageSize;
-            return this.allDataList.slice(startIndex, startIndex + pageSize);
+            const records = cloneDeep(this.allDataList.slice(startIndex, startIndex + pageSize));
+            const result = {
+                "records": records,
+                "total": this.allDataList.length,
+                "size": pageSize,
+                "current": current,
+                "pages": totalPages
+            }
+            return result
         });
     }
 

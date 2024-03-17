@@ -511,7 +511,6 @@ export default {
       })
     },
     handleMenuClick(key, record) {
-      debugger
       if (key + "" === "1") {
         record.peopleType = 'FIXED_PEOPLE'
         record.currentSceneId = this.$route.params.sceneId;

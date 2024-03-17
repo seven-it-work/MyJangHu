@@ -110,7 +110,6 @@ export default {
     },
     getCityById() {
       city.getById(this.$route.params.cityId).then(res => {
-        debugger
         this.cityObj = res;
         const sceneVoMap = {}
         const sceneIds = this.cityObj.matrixMap.flatMap(item => item).filter(item => !!item);
