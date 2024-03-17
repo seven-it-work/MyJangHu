@@ -1,23 +1,26 @@
 <script>
+import {MyMode} from '@/assets/lib/dungeon/template-mod.es.js'
+
 export default {
   name: "Header",
-  data(){
-    return{
-      urlInterval:null,
-      currentUrl:''
+  components: {MyMode},
+  data() {
+    return {
+      urlInterval: null,
+      currentUrl: ''
     }
   },
-  methods:{
-    reload(){
+  methods: {
+    reload() {
       console.log("刷新")
       window.location.reload()
     }
   },
   mounted() {
-    if (this.urlInterval){
+    if (this.urlInterval) {
       clearInterval(this.urlInterval)
     }
-   this.urlInterval= setInterval(() => {
+    this.urlInterval = setInterval(() => {
       this.currentUrl = window.location.href;
     }, 1000);
   }
@@ -25,7 +28,10 @@ export default {
 </script>
 
 <template>
-  <div>{{currentUrl}}<a-button @click="reload">刷新</a-button></div>
+  <my-mode></my-mode>
+  <div>{{ currentUrl }}
+    <a-button @click="reload">刷新</a-button>
+  </div>
   <span style="margin-left: 10px">
     <router-link to="/">首页</router-link>
   </span>
