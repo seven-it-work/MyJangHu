@@ -1,5 +1,5 @@
 <script>
-import {people, world} from "@/http/localApi.js";
+import {people, world} from "@/http/api.js";
 import worldPng from "@/assets/world/world.svg"
 import Cookies from "js-cookie";
 

@@ -1,5 +1,5 @@
 <script>
-import {city, people, scene} from "@/http/localApi.js";
+import {city, people, scene} from "@/http/api.js";
 import {mapState} from "vuex";
 import ChatBox from "@/components/ChatBox.vue";
 

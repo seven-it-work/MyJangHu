@@ -1,5 +1,5 @@
 <script>
-import {city, scene, world} from "@/http/api.js";
+import {city, scene, world} from "@/http/serveApi.js";
 
 import {message} from 'ant-design-vue'
 import {getLocation} from "random_chinese_fantasy_names";

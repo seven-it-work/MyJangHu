@@ -1,5 +1,5 @@
 <script>
-import {city, scene} from "@/http/api.js";
+import {city, scene} from "@/http/serveApi.js";
 import {message} from "ant-design-vue";
 import {getClan} from "random_chinese_fantasy_names";
 

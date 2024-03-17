@@ -227,7 +227,7 @@
 </template>
 
 <script>
-import {city, people, scene, world} from "@/http/api.js";
+import {city, people, scene, world} from "@/http/serveApi.js";
 import {getName} from "random_chinese_fantasy_names";
 import {randomUtil} from "@/random.js";
 import {DeleteOutlined, DownOutlined, FormOutlined} from '@ant-design/icons-vue';
