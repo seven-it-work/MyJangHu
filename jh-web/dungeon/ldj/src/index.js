@@ -1,3 +1,12 @@
 import MyMode from './TemplateMod.vue';
 
-export { MyMode };
+
+const modCore = {
+    db: {
+        world: [],
+        city: [],
+        people: [],
+    },
+}
+
+export default modCore

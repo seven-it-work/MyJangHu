@@ -1,7 +1,3 @@
-import worldDb from "@/http/db/worldDb.js";
-
-
-console.log(222,worldDb)
 export class BaseApi {
 
     list(current, pageSize) {

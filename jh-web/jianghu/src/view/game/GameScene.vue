@@ -1,5 +1,5 @@
 <script>
-import {city, people, scene} from "@/http/api.js";
+import {city, people, scene} from "@/http/localApi.js";
 import {mapState} from "vuex";
 import ChatBox from "@/components/ChatBox.vue";
 
@@ -110,6 +110,7 @@ export default {
     },
     getCityById() {
       city.getById(this.$route.params.cityId).then(res => {
+        debugger
         this.cityObj = res;
         const sceneVoMap = {}
         const sceneIds = this.cityObj.matrixMap.flatMap(item => item).filter(item => !!item);
