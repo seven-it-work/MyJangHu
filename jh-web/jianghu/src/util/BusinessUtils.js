@@ -1,8 +1,8 @@
-import loginPeople from "@/vuex/loginPeople.js";
+import store from "@/vuex/store.js";
 import {city, people, scene, world} from "@/http/api.js";
 
 export const updateCurrentPeople = (updateData) => {
-    if (updateData.id !== loginPeople.state.peopleObj.id) {
+    if (updateData.id !== store.state.peopleObj.id) {
         return
     }
    return  people.update(updateData).then(()=>{
@@ -23,7 +23,7 @@ export const updateCurrentPeople = (updateData) => {
                    peopleObj.currentScene = res
                })
            }
-           loginPeople.state.peopleObj=peopleObj
+           store.state.peopleObj=peopleObj
        })
     })
 }
