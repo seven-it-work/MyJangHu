@@ -1,6 +1,7 @@
 <script>
 import {people, world} from "@/http/api.js";
 import Cookies from "js-cookie";
+import {updateCurrentPeople} from "@/util/BusinessUtils.js";
 
 export default {
   name: "GameCity",
@@ -16,10 +17,12 @@ export default {
   },
   methods: {
     go2City(item) {
-      this.$router.push({name: 'gameScene', params: {worldId:this.$route.params.worldId,cityId: item.id}})
       people.getById(Cookies.get("peopleId")).then(res => {
-        res.currentCityId = item.id;
-        people.update(res)
+        res.currentCityId = item.id
+        res.currentSceneId = ''
+        updateCurrentPeople(res).then(() => {
+          this.$router.push({name: 'gameScene', params: {worldId: this.$route.params.worldId, cityId: item.id}})
+        })
       })
     },
     getWorldById() {
