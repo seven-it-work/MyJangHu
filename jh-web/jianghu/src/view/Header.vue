@@ -1,9 +1,8 @@
 <script>
-import {MyMode} from '@/assets/lib/dungeon/template-mod.es.js'
 
 export default {
   name: "Header",
-  components: {MyMode},
+  components: {},
   data() {
     return {
       urlInterval: null,
@@ -28,7 +27,6 @@ export default {
 </script>
 
 <template>
-  <my-mode></my-mode>
   <div>{{ currentUrl }}
     <a-button @click="reload">刷新</a-button>
   </div>

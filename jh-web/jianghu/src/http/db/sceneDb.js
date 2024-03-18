@@ -1,6 +1,7 @@
-import {dynamicImport} from "@/util/Utils.js";
-
-const sceneDb = [{
+import modManager from "@/mod/index.js";
+const modDb=Object.values(modManager).flatMap(mod=>mod.db.scene)
+const sceneDb = [
+    ...modDb,{
     "cityId": "2b49df45da8245758ab798e2c8f50ecb",
     "id": "4b7553ce68d34978bf3c55d1f17ab7c3",
     "name": "游身堂",

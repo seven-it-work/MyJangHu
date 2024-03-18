@@ -1,4 +1,4 @@
-import {city as cityApi, people as peopleApi, scene as sceneApi, world as worldApi} from "@/http/localApi.js";
+import {city as cityApi, people as peopleApi, scene as sceneApi, world as worldApi} from "@/http/serveApi.js";
 
 export const people = peopleApi
 export const world = worldApi

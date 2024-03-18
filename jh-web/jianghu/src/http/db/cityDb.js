@@ -1,6 +1,8 @@
-import {dynamicImport} from "@/util/Utils.js";
+import modManager from "@/mod/index.js";
 
-const cityDb = [{
+const modDb=Object.values(modManager).flatMap(mod=>mod.db.city)
+
+const cityDb = [...modDb,{
     "id": "d974949c5d8647d29b67e29833c3bc9e",
     "worldId": "c66c5a3267e7485592506cebb52cfca1",
     "name": "广泊",

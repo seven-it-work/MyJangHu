@@ -1,6 +1,8 @@
-import {dynamicImport} from "@/util/Utils.js";
+import modManager from "@/mod/index.js";
 
-const peopleDb = [{
+const modDb=Object.values(modManager).flatMap(mod=>mod.db.people)
+const peopleDb = [
+    ...modDb,{
     "id": "123",
     "xing": "李",
     "ming": "大力",

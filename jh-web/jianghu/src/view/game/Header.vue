@@ -29,7 +29,9 @@ export default {
     <span v-if="peopleObj.currentWorldId" style="margin-right: 10px">{{ peopleObj.currentWorld?.name }}</span>
     <span v-if="peopleObj.currentCityId" style="margin-right: 10px">->{{ peopleObj.currentCity?.name }}</span>
     <span v-if="peopleObj.currentSceneId" style="margin-right: 10px">->{{ peopleObj.currentScene?.name }}</span>
-    <div>地图</div>
+    <div>
+      <router-link :to="{name:'gameWorld'}" >世界地图</router-link>
+    </div>
   </div>
 </template>
 

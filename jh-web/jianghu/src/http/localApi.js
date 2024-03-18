@@ -43,6 +43,7 @@ class LocalApi extends BaseApi {
 
     update(data) {
         return super.update(data).then(() => {
+            debugger
             const findData = this.allDataList.filter(item => item.id === data.id)[0];
             if (findData) {
                 Object.assign(findData, data);
@@ -52,13 +53,13 @@ class LocalApi extends BaseApi {
 
     getById(id) {
         return super.getById(id).then(() => {
-            return this.allDataList.filter(item => item.id === id)[0];
+            return cloneDeep(this.allDataList.filter(item => item.id === id)[0]);
         })
     }
 
     listByIds(idList) {
         return super.listByIds(idList).then(() => {
-            return this.allDataList.filter(item => idList.includes(item.id));
+            return cloneDeep(this.allDataList.filter(item => idList.includes(item.id)));
         })
     }
 }

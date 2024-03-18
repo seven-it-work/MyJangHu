@@ -1,4 +1,3 @@
-import {dynamicImport} from "@/util/Utils.js";
 import modManager from "@/mod/index.js";
 
 const modDb=Object.values(modManager).flatMap(mod=>mod.db.world)
