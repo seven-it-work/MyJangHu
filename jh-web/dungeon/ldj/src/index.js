@@ -1,9 +1,10 @@
 import MyMode from './TemplateMod.vue';
+import worldDb from "./db/worldDb.js";
 
 
 const modCore = {
     db: {
-        world: [],
+        world: worldDb,
         city: [],
         people: [],
     },

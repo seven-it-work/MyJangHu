@@ -25,3 +25,4 @@ dist-ssr
 
 *.umd.js
 *.es.js
+src/dungeon
