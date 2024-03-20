@@ -8,10 +8,14 @@ const store = createStore({
             fightData:{
                 currentPartner: [],
                 enemy: [],
-            }
+            },
+            chatIdMap:[],
         }
     },
     mutations: {
+        updateChatIdMap(state, chatIdMap) {
+            state.chatIdMap = chatIdMap;
+        },
         updatePeople(state, people) {
             state.peopleObj = people;
         },

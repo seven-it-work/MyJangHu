@@ -13,6 +13,7 @@
     "@antv/x6": "^2.1.2",
     "@antv/x6-vue-shape": "^2.1.2",
     "@types/node": "^20.11.24",
+    "@vueup/vue-quill": "^1.2.0",
     "ant-design-vue": "^4.1.2",
     "axios": "^1.6.7",
     "chance": "^1.1.11",

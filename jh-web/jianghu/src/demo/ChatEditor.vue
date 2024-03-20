@@ -1,11 +1,12 @@
 <template>
-  <div style="width: 100%;height: 100%">
+  <div>
     <a-card @dblclick="edit"
             style="border: hsl(212, 90%, 90%) 1px solid;height: 100%"
             :title="nodeData.title"
-            :bodyStyle="{margin:0,padding:0,textOverflow: 'ellipsis'}"
+            :bodyStyle="{margin:0,padding:0,textOverflow: 'ellipsis',overflow:'hidden'}"
             :head-style="{margin:0,padding:0,textOverflow: 'ellipsis',minHeight:'20px'}">
-      <p>{{ nodeData.context }}</p>
+      <div v-html="nodeData.context"
+           style="text-overflow: ellipsis;height: 100px;width: 100%;overflow: hidden;white-space: nowrap;"></div>
     </a-card>
     <a-drawer
         :width="'50%'"
@@ -23,7 +24,29 @@
             </a-select-option>
           </a-select>
         </a-form-item>
-        <component :is="formComponet" :node-data="nodeData"></component>
+        <a-form-item label="说话人">
+          <a-select v-model:value="nodeData.type" :disabled="nodeData.typeDisable">
+            <a-select-option :value="'other'">
+              他人
+            </a-select-option>
+            <a-select-option :value="'me'">
+              自己
+            </a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item label="人" v-if="nodeData.type==='other'">
+          <a-select v-model:value="nodeData.peopleObj.id" @change="changePeopleObj" :disabled="nodeData.typeDisable">
+            <a-select-option v-for="item in peopleList" :key="item.id" :value="item.id">
+              {{ item.name }}
+            </a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item label="改变人物" v-if="nodeData.typeDisable">
+          <!--          todo 点击后 弹窗，并改变同层的所有人物 信息-->
+          <a-button>改变人物</a-button>
+        </a-form-item>
+        <ChatForm :node-data="nodeData"></ChatForm>
+        <!--                <component :is="formComponet" :node-data="nodeData"></component>-->
         <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
           <a-button type="primary">确定</a-button>
           <a-button style="margin-left: 10px" @click="creatNext">创建下一个</a-button>
@@ -36,6 +59,8 @@
 <script>
 import {randomUtil} from "@/random.js";
 import modManager from "@/mod/index.js";
+import ChatForm from "@/demo/ChatForm.vue";
+import {mapState} from "vuex";
 
 const formList = Object.values(modManager).map(item => item.components).filter(item => item).flatMap(item => Object.values(item.chat))
 let formKeyMap = {}
@@ -48,10 +73,14 @@ Object.values(modManager).map(item => item.components).filter(item => item).map(
 const CORE_CHAT_DEFAULT = formKeyMap['CORE_CHAT_DEFAULT'].component
 export default {
   name: "ChatEditor",
-  components: {},
-  inject: ['getNode', 'getGraph'],
+  components: {ChatForm},
+  inject: ['getNode', 'getGraph', '$api'],
+  ...mapState({
+    chatIdMap: state => state.chatIdMap,
+  }),
   data() {
     return {
+      peopleList: [],
       formComponet: CORE_CHAT_DEFAULT,
       formList,
       nodeData: {
@@ -66,15 +95,22 @@ export default {
         },
       },
       wrapperCol: {
-        span: 14,
+        span: 24,
       },
     }
   },
   mounted() {
     const node = this.getNode()
     this.nodeData = node.data.nodeData
+
+    this.$api.people.list(1, 999).then(res => {
+      this.peopleList = res.records
+    })
   },
   methods: {
+    changePeopleObj(data) {
+      this.nodeData.peopleObj = this.peopleList.filter(item => item.id === data)[0]
+    },
     changeComponent() {
       this.formComponet = (formKeyMap[this.nodeData.componentKey] || {}).component || CORE_CHAT_DEFAULT
     },
@@ -85,7 +121,7 @@ export default {
         id: randomUtil.guid(),
         componentKey: 'CORE_CHAT_DEFAULT',
         peopleObj: {},
-        type: 'received',
+        type: 'other',
         title: '',
         context: '',
         nextIdList: [],
