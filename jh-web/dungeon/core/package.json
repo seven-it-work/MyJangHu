@@ -1,5 +1,5 @@
 {
-  "name": "my-component-library",
+  "name": "core",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,10 +10,13 @@
   },
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",
+    "@antv/x6": "^2.1.2",
+    "@antv/x6-vue-shape": "^2.1.2",
     "@types/node": "^20.11.24",
     "ant-design-vue": "^4.1.2",
     "axios": "^1.6.7",
     "chance": "^1.1.11",
+    "date-fns": "^3.6.0",
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
     "random_chinese_fantasy_names": "^0.1.18",
@@ -23,6 +26,9 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
-    "vite": "^5.1.6"
+    "@vitejs/plugin-vue-jsx": "^3.1.0",
+    "less": "^4.2.0",
+    "less-loader": "^12.2.0",
+    "vite": "^5.1.4"
   }
 }
