@@ -1,5 +1,5 @@
 <script setup>
-import templateMod from "./TemplateMod.vue";
+import TemplateMod from "./TemplateMod.vue";
 </script>
 
 <template>

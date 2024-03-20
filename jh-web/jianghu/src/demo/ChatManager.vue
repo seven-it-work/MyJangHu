@@ -85,6 +85,7 @@ export default {
       },
     });
     const data1 = {
+      componentKey:'CORE_CHAT_DEFAULT',
       id: randomUtil.guid(),
       peopleObj: {},
       type: 'send',
@@ -108,6 +109,7 @@ export default {
       y: 60,
       data:{
         nodeData: {
+          componentKey:'CORE_CHAT_DEFAULT',
           id: randomUtil.guid(),
           peopleObj: {},
           type: 'received',

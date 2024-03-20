@@ -1,7 +1,12 @@
 import {dynamicImport} from "@/util/Utils.js";
-import worldDb from "@/http/db/worldDb.js";
 
 const modList = [
+    {
+        name: 'core',
+        showName: 'core',
+        jsUrl: '../dungeon/core/src/index',
+        cssUrl: '../dungeon/core/src/style.css',
+    },
     {
         name: 'ldj',
         showName: '鹿鼎记',

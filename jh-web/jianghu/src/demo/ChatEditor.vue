@@ -16,12 +16,14 @@
         @close="closeEdit"
     >
       <a-form :model="nodeData" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-item label="标题">
-          <a-input v-model:value="nodeData.title" />
+        <a-form-item label="组件">
+          <a-select v-model:value="nodeData.componentKey" @change="changeComponent">
+            <a-select-option v-for="item in formList" :key="item" :value="item.key">
+              {{ item.name }}
+            </a-select-option>
+          </a-select>
         </a-form-item>
-        <a-form-item label="人">
-          <a-input v-model:value="nodeData.title" />
-        </a-form-item>
+        <component :is="formComponet" :node-data="nodeData"></component>
         <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
           <a-button type="primary">确定</a-button>
           <a-button style="margin-left: 10px" @click="creatNext">创建下一个</a-button>
@@ -33,25 +35,39 @@
 
 <script>
 import {randomUtil} from "@/random.js";
+import modManager from "@/mod/index.js";
 
+const formList = Object.values(modManager).map(item => item.components).filter(item => item).flatMap(item => Object.values(item.chat))
+let formKeyMap = {}
+Object.values(modManager).map(item => item.components).filter(item => item).map(item => item.chat).forEach(item => {
+  formKeyMap = {
+    ...formKeyMap,
+    ...item
+  }
+})
+const CORE_CHAT_DEFAULT = formKeyMap['CORE_CHAT_DEFAULT'].component
 export default {
   name: "ChatEditor",
-  inject: ['getNode','getGraph'],
+  components: {},
+  inject: ['getNode', 'getGraph'],
   data() {
     return {
-      labelCol : {
+      formComponet: CORE_CHAT_DEFAULT,
+      formList,
+      nodeData: {
+        componentKey: 'CORE_CHAT_DEFAULT',
+        title: '',
+        context: '',
+      },
+      editing: false,
+      labelCol: {
         style: {
           width: '150px',
         },
       },
-      wrapperCol : {
+      wrapperCol: {
         span: 14,
       },
-      nodeData: {
-        title: '',
-        context: ''
-      },
-      editing: false,
     }
   },
   mounted() {
@@ -59,22 +75,27 @@ export default {
     this.nodeData = node.data.nodeData
   },
   methods: {
-    creatNext(){
+    changeComponent() {
+      this.formComponet = (formKeyMap[this.nodeData.componentKey] || {}).component || CORE_CHAT_DEFAULT
+    },
+    creatNext() {
       const graph = this.getGraph()
       const node = this.getNode();
-      graph.options.customData.addNextNode(node,graph.addNode({
+      const newNodeData = {
+        id: randomUtil.guid(),
+        componentKey: 'CORE_CHAT_DEFAULT',
+        peopleObj: {},
+        type: 'received',
+        title: '',
+        context: '',
+        nextIdList: [],
+      }
+      graph.options.customData.addNextNode(node, graph.addNode({
         shape: 'custom-vue-node',
         x: 100,
         y: 60,
-        data:{
-          nodeData: {
-            id: randomUtil.guid(),
-            peopleObj: {},
-            type: 'received',
-            title: '',
-            context: '',
-            nextIdList:[],
-          }
+        data: {
+          nodeData: newNodeData
         },
         anchorPoints: [[0.5, 0.5]]
       }))
@@ -84,7 +105,7 @@ export default {
     },
     edit() {
       this.editing = true
-    }
+    },
   },
 }
 </script>

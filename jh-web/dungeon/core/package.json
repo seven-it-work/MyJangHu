@@ -1,0 +1,28 @@
+{
+  "name": "my-component-library",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
+    "@types/node": "^20.11.24",
+    "ant-design-vue": "^4.1.2",
+    "axios": "^1.6.7",
+    "chance": "^1.1.11",
+    "js-cookie": "^3.0.5",
+    "lodash": "^4.17.21",
+    "random_chinese_fantasy_names": "^0.1.18",
+    "vue": "^3.4.19",
+    "vue-router": "^4.3.0",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "vite": "^5.1.6"
+  }
+}
