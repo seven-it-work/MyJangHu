@@ -6,8 +6,9 @@ import ChatManager from "@/demo/ChatManager.vue";
 </script>
 
 <template>
-  <Header></Header>
-  <ChatManager></ChatManager>
+    <Header></Header>
+  <X6Demo></X6Demo>
+<!--  <ChatManager></ChatManager>-->
 <!--  <router-view></router-view>-->
 </template>
 

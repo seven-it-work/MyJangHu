@@ -11,6 +11,9 @@
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.1",
     "@antv/x6": "^2.1.2",
+    "@antv/x6-plugin-dnd": "^2.1.1",
+    "@antv/x6-plugin-snapline": "^2.1.2",
+    "@antv/x6-plugin-stencil": "^2.1.5",
     "@antv/x6-vue-shape": "^2.1.2",
     "@types/node": "^20.11.24",
     "@vueup/vue-quill": "^1.2.0",

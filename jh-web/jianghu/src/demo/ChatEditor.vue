@@ -137,7 +137,6 @@ export default {
       this.changePeopleForm.peopleObj = this.peopleList.filter(item => item.id === data)[0]
     },
     changePeopleOk() {
-      console.log(this.nodeData.preId,this.chatIdMap)
       // 同级赋值
       const pre=this.chatIdMap[this.nodeData.preId]
       if (pre){

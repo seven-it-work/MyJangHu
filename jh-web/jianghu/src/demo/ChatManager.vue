@@ -1,6 +1,19 @@
 <template>
   <div style="max-height: 1000px">
     <a-button @click="preview">预览</a-button>
+    <a-row>
+      <a-col :span="22">
+        <a-textarea :allowClear="true" :autosize="{ minRows: 3, maxRows: 3 }" v-model:value="dataJson"></a-textarea>
+      </a-col>
+      <a-col :span="2">
+        <div>
+          <a-button @click="importData">导入</a-button>
+        </div>
+        <div>
+          <a-button @click="exportData">导出</a-button>
+        </div>
+      </a-col>
+    </a-row>
     <div id="chatManager"></div>
     <TeleportContainer/>
   </div>
@@ -21,6 +34,20 @@ export default {
   name: "ChatManager",
   components: {ChatComponent, TeleportContainer},
   methods: {
+    importData() {
+      // todo加入提示 将清空所有画布，请自己备份数据
+      this.graph.clearCells()
+    },
+    exportData() {
+      this.chatData.messageData = this.chatData.nodeData.map(item => item.data.nodeData)
+      const jsonData = {
+        history: this.chatData.history,
+        messageData: this.chatData.messageData,
+        nowMessageId: this.chatData.nowMessageId,
+      }
+      this.dataJson = JSON.stringify(jsonData)
+      console.log(this.dataJson)
+    },
     preview() {
       this.chatData.messageData = this.chatData.nodeData.map(item => item.data.nodeData)
       this.chatData.nowMessageId = this.chatData.messageData[0].id
@@ -29,7 +56,10 @@ export default {
   },
   data() {
     return {
+      graph: {},
+      root: {},
       chatIdMap: {},
+      dataJson: "{\"history\":[],\"messageData\":[{\"componentKey\":\"CORE_CHAT_DEFAULT\",\"id\":\"91a9a231-7823-5f01-9d48-0f50dafa8eab\",\"peopleObj\":{},\"type\":\"other\",\"title\":\"123\",\"context\":\"<p>家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家</p><p><br></p><p>伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙</p><p>家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙</p>\",\"nextIdList\":[\"c828f430-f224-5fbe-9a34-6383f61a7b99\"]},{\"componentKey\":\"CORE_CHAT_DEFAULT\",\"id\":\"c828f430-f224-5fbe-9a34-6383f61a7b99\",\"peopleObj\":{},\"type\":\"other\",\"title\":\"好\",\"context\":\"家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙\",\"nextIdList\":[],\"typeDisable\":false,\"preId\":\"91a9a231-7823-5f01-9d48-0f50dafa8eab\"}],\"nowMessageId\":\"\"}",
       chatData: {
         history: [],
         nodeData: [],
@@ -129,24 +159,26 @@ export default {
     })
     this.chatIdMap[root.data.nodeData.id] = root.data.nodeData
     this.chatData.nodeData.push(root)
+    this.graph = graph
+    this.root = root
     // todo 删除下面调试内容
-    graph.options.customData.addNextNode(root, graph.addNode({
-      shape: 'custom-vue-node',
-      x: 100,
-      y: 60,
-      data: {
-        nodeData: {
-          componentKey: 'CORE_CHAT_DEFAULT',
-          id: randomUtil.guid(),
-          peopleObj: {},
-          type: 'other',
-          title: '好',
-          context: '家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙',
-          nextIdList: [],
-        }
-      },
-      anchorPoints: [[0.5, 0.5]]
-    }))
+    // graph.options.customData.addNextNode(root, graph.addNode({
+    //   shape: 'custom-vue-node',
+    //   x: 100,
+    //   y: 60,
+    //   data: {
+    //     nodeData: {
+    //       componentKey: 'CORE_CHAT_DEFAULT',
+    //       id: randomUtil.guid(),
+    //       peopleObj: {},
+    //       type: 'other',
+    //       title: '好',
+    //       context: '家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙',
+    //       nextIdList: [],
+    //     }
+    //   },
+    //   anchorPoints: [[0.5, 0.5]]
+    // }))
   },
 }
 </script>
