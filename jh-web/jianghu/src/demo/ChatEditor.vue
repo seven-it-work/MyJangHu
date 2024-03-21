@@ -42,8 +42,7 @@
           </a-select>
         </a-form-item>
         <a-form-item label="改变人物" v-if="nodeData.typeDisable">
-          <!--          todo 点击后 弹窗，并改变同层的所有人物 信息-->
-          <a-button>改变人物</a-button>
+          <a-button @click="changePeopleOpen">改变人物</a-button>
         </a-form-item>
         <ChatForm :node-data="nodeData"></ChatForm>
         <!--                <component :is="formComponet" :node-data="nodeData"></component>-->
@@ -53,6 +52,28 @@
         </a-form-item>
       </a-form>
     </a-drawer>
+    <a-modal v-model:open="changePeople" @cancel="changePeopleCancel" @ok="changePeopleOk">
+      <a-form :model="changePeople" :label-col="{style: {width: '50px',}}" :wrapper-col="wrapperCol">
+        <a-form-item label="说话人">
+          <a-select v-model:value="changePeopleForm.type" :disabled="changePeopleForm.typeDisable">
+            <a-select-option :value="'other'">
+              他人
+            </a-select-option>
+            <a-select-option :value="'me'">
+              自己
+            </a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item label="人" v-if="changePeopleForm.type==='other'">
+          <a-select v-model:value="changePeopleForm.peopleObj.id" @change="changePeopleObjChange"
+                    :disabled="changePeopleForm.typeDisable">
+            <a-select-option v-for="item in peopleList" :key="item.id" :value="item.id">
+              {{ item.name }}
+            </a-select-option>
+          </a-select>
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </div>
 </template>
 
@@ -75,11 +96,15 @@ export default {
   name: "ChatEditor",
   components: {ChatForm},
   inject: ['getNode', 'getGraph', '$api'],
+  computed:{
   ...mapState({
-    chatIdMap: state => state.chatIdMap,
-  }),
+      chatIdMap: state => state.chatIdMap,
+    }),
+  },
   data() {
     return {
+      changePeopleForm: {peopleObj: {}},
+      changePeople: false,
       peopleList: [],
       formComponet: CORE_CHAT_DEFAULT,
       formList,
@@ -108,6 +133,29 @@ export default {
     })
   },
   methods: {
+    changePeopleObjChange(data) {
+      this.changePeopleForm.peopleObj = this.peopleList.filter(item => item.id === data)[0]
+    },
+    changePeopleOk() {
+      console.log(this.nodeData.preId,this.chatIdMap)
+      // 同级赋值
+      const pre=this.chatIdMap[this.nodeData.preId]
+      if (pre){
+        pre.nextIdList.map(id=>this.chatIdMap[id]).forEach(item=>{
+          item.type=this.changePeopleForm.type
+          item.peopleObj=this.changePeopleForm.peopleObj
+        })
+      }
+      this.changePeopleCancel()
+    },
+    changePeopleCancel() {
+      this.changePeople = false
+    },
+    changePeopleOpen() {
+      this.changePeople = true
+      this.changePeopleForm.type = this.nodeData.type
+      this.changePeopleForm.peopleObj = this.nodeData.peopleObj
+    },
     changePeopleObj(data) {
       this.nodeData.peopleObj = this.peopleList.filter(item => item.id === data)[0]
     },

@@ -67,7 +67,9 @@ export default {
           }
           preNode.data.nodeData.nextIdList.push(nextNode.data.nodeData.id)
           this.chatIdMap[nextNode.data.nodeData.id] = nextNode.data.nodeData
-
+          // 设置父节点
+          nextNode.data.nodeData.preId = preNode.data.nodeData.id
+          this.$store.commit('updateChatIdMap', this.chatIdMap)
           graph.addEdge({
             attrs: {
               line: {
@@ -107,7 +109,7 @@ export default {
         ],
       },
     });
-    const data1 = {
+    const rootData = {
       componentKey: 'CORE_CHAT_DEFAULT',
       id: randomUtil.guid(),
       peopleObj: {},
@@ -116,17 +118,19 @@ export default {
       context: '<p>家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家</p><p><br></p><p>伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙</p><p>家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙</p>',
       nextIdList: [],
     }
-    const node1 = graph.addNode({
+    const root = graph.addNode({
       shape: 'custom-vue-node',
       x: 100,
       y: 60,
       data: {
-        nodeData: data1
+        nodeData: rootData
       },
       anchorPoints: [[0.5, 0.5]]
     })
-    this.chatData.nodeData.push(node1)
-    graph.options.customData.addNextNode(node1, graph.addNode({
+    this.chatIdMap[root.data.nodeData.id] = root.data.nodeData
+    this.chatData.nodeData.push(root)
+    // todo 删除下面调试内容
+    graph.options.customData.addNextNode(root, graph.addNode({
       shape: 'custom-vue-node',
       x: 100,
       y: 60,
