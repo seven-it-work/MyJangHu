@@ -14,8 +14,15 @@
         </div>
       </a-col>
     </a-row>
-    <div id="chatManager"></div>
-    <TeleportContainer/>
+    <a-row>
+      <a-col :span="4">
+        <div id="chatStencil"></div>
+      </a-col>
+      <a-col :span="20">
+        <div id="chatManager"></div>
+        <TeleportContainer/>
+      </a-col>
+    </a-row>
   </div>
   <ChatComponent v-model:open="open" :chat-data="chatData"></ChatComponent>
 </template>
@@ -27,6 +34,7 @@ import {register, getTeleport} from '@antv/x6-vue-shape'
 import {randomUtil} from "@/random.js";
 import ChatComponent from "@/demo/ChatComponent.vue";
 import {mapState} from "vuex";
+import {Stencil} from "@antv/x6-plugin-stencil";
 
 const TeleportContainer = getTeleport()
 
@@ -75,6 +83,30 @@ export default {
       width: 100,
       height: 100,
       component: ChatEditor,
+      ports: {
+        groups: {
+          in: {
+            position: 'left',
+            attrs: {
+              circle: {
+                magnet: true,
+                stroke: '#8f8f8f',
+                r: 5,
+              },
+            },
+          },
+          out: {
+            position: 'right',
+            attrs: {
+              circle: {
+                magnet: true,
+                stroke: '#8f8f8f',
+                r: 5,
+              },
+            },
+          },
+        },
+      },
     })
 
     const graph = new Graph({
@@ -138,47 +170,82 @@ export default {
           },
         ],
       },
-    });
-    const rootData = {
-      componentKey: 'CORE_CHAT_DEFAULT',
-      id: randomUtil.guid(),
-      peopleObj: {},
-      type: 'other',
-      title: '123',
-      context: '<p>家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家</p><p><br></p><p>伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙</p><p>家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙</p>',
-      nextIdList: [],
-    }
-    const root = graph.addNode({
-      shape: 'custom-vue-node',
-      x: 100,
-      y: 60,
-      data: {
-        nodeData: rootData
+
+      connecting: {
+        snap: true,
+        allowBlank: false,
+        allowLoop: false,
+        allowNode: false,
+        highlight: true,
+
+        createEdge() {
+          return this.createEdge({
+            connector: 'smooth',
+            attrs: {
+              line: {
+                stroke: '#8f8f8f',
+                strokeWidth: 1,
+              },
+            },
+          })
+        },
+
+        validateMagnet({magnet}) {
+          return magnet.getAttribute('port-group') !== 'in'
+        },
+
+        validateConnection({sourceMagnet, targetMagnet}) {
+          // 只能从输出链接桩创建连接
+          if (!sourceMagnet ||
+              sourceMagnet.getAttribute('port-group') === 'in') {
+            return false
+          }
+
+          // 只能连接到输入链接桩
+          if (!targetMagnet ||
+              targetMagnet.getAttribute('port-group') !== 'in') {
+            return false
+          }
+          return true
+        },
       },
-      anchorPoints: [[0.5, 0.5]]
-    })
-    this.chatIdMap[root.data.nodeData.id] = root.data.nodeData
-    this.chatData.nodeData.push(root)
+    });
     this.graph = graph
-    this.root = root
-    // todo 删除下面调试内容
-    // graph.options.customData.addNextNode(root, graph.addNode({
-    //   shape: 'custom-vue-node',
-    //   x: 100,
-    //   y: 60,
-    //   data: {
-    //     nodeData: {
-    //       componentKey: 'CORE_CHAT_DEFAULT',
-    //       id: randomUtil.guid(),
-    //       peopleObj: {},
-    //       type: 'other',
-    //       title: '好',
-    //       context: '家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙',
-    //       nextIdList: [],
-    //     }
-    //   },
-    //   anchorPoints: [[0.5, 0.5]]
-    // }))
+
+    const stencil = new Stencil({
+      target: graph,
+      groups: [
+        {
+          name: '核心组件',
+        },
+      ],
+    })
+
+
+    document.getElementById("chatStencil").appendChild(stencil.container)
+    stencil.load([
+      graph.createNode({
+        shape: 'custom-vue-node',
+        x: 100,
+        y: 60,
+        data: {
+          nodeData:  {
+            componentKey: 'CORE_CHAT_DEFAULT',
+            id: randomUtil.guid(),
+            peopleObj: {},
+            type: '',
+            title: '',
+            context: '',
+            nextIdList: [],
+          }
+        },
+        ports: [
+          {id: 'in-1', group: 'in'},
+          {id: 'out-1', group: 'out'},
+        ],
+        tools: ['button-remove'],
+      })
+    ], '核心组件')
   },
 }
 </script>
