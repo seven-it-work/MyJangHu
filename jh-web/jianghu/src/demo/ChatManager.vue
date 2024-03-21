@@ -24,17 +24,18 @@
       </a-col>
     </a-row>
   </div>
-  <ChatComponent v-model:open="open" :chat-data="chatData"></ChatComponent>
+  <!--  <ChatComponent v-model:open="open" :chat-data="[]"></ChatComponent>-->
 </template>
 
 <script>
 import ChatEditor from "@/demo/ChatEditor.vue";
-import {Graph} from '@antv/x6'
+import {Cell, Graph} from '@antv/x6'
 import {register, getTeleport} from '@antv/x6-vue-shape'
 import {randomUtil} from "@/random.js";
 import ChatComponent from "@/demo/ChatComponent.vue";
 import {mapState} from "vuex";
 import {Stencil} from "@antv/x6-plugin-stencil";
+import {edgeMateData, graphMateData} from "@/demo/graphMateData.js";
 
 const TeleportContainer = getTeleport()
 
@@ -43,37 +44,27 @@ export default {
   components: {ChatComponent, TeleportContainer},
   methods: {
     importData() {
-      // todo加入提示 将清空所有画布，请自己备份数据
-      this.graph.clearCells()
+      this.graph.parseJSON(JSON.parse(this.dataJson)).forEach(cell=>this.graph.addCell(cell))
+      const edges = this.graph.getEdges();
+      edges.forEach(edge=>{
+        this.edgeConnected(edge.getSourceNode(),edge.getTargetNode())
+      })
     },
     exportData() {
-      this.chatData.messageData = this.chatData.nodeData.map(item => item.data.nodeData)
-      const jsonData = {
-        history: this.chatData.history,
-        messageData: this.chatData.messageData,
-        nowMessageId: this.chatData.nowMessageId,
-      }
-      this.dataJson = JSON.stringify(jsonData)
-      console.log(this.dataJson)
+      this.dataJson = JSON.stringify(this.graph.toJSON())
     },
     preview() {
-      this.chatData.messageData = this.chatData.nodeData.map(item => item.data.nodeData)
-      this.chatData.nowMessageId = this.chatData.messageData[0].id
       this.open = true;
+    },
+    nodeAdded(node){
+    },
+    edgeConnected(sourceNode,targetNode){
     }
   },
   data() {
     return {
       graph: {},
-      root: {},
-      chatIdMap: {},
-      dataJson: "{\"history\":[],\"messageData\":[{\"componentKey\":\"CORE_CHAT_DEFAULT\",\"id\":\"91a9a231-7823-5f01-9d48-0f50dafa8eab\",\"peopleObj\":{},\"type\":\"other\",\"title\":\"123\",\"context\":\"<p>家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家</p><p><br></p><p>伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙</p><p>家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙</p>\",\"nextIdList\":[\"c828f430-f224-5fbe-9a34-6383f61a7b99\"]},{\"componentKey\":\"CORE_CHAT_DEFAULT\",\"id\":\"c828f430-f224-5fbe-9a34-6383f61a7b99\",\"peopleObj\":{},\"type\":\"other\",\"title\":\"好\",\"context\":\"家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙家伙\",\"nextIdList\":[],\"typeDisable\":false,\"preId\":\"91a9a231-7823-5f01-9d48-0f50dafa8eab\"}],\"nowMessageId\":\"\"}",
-      chatData: {
-        history: [],
-        nodeData: [],
-        messageData: [],
-        nowMessageId: "",
-      },
+      dataJson: "{\"cells\":[{\"position\":{\"x\":60,\"y\":60},\"size\":{\"width\":100,\"height\":100},\"view\":\"vue-shape-view\",\"shape\":\"custom-vue-node\",\"ports\":{\"groups\":{\"in\":{\"position\":\"left\",\"attrs\":{\"circle\":{\"magnet\":true,\"stroke\":\"#8f8f8f\",\"r\":5}}},\"out\":{\"position\":\"right\",\"attrs\":{\"circle\":{\"magnet\":true,\"stroke\":\"#8f8f8f\",\"r\":5}}}},\"items\":[{\"id\":\"in-1\",\"group\":\"in\"},{\"id\":\"out-1\",\"group\":\"out\"}]},\"id\":\"f39f7a47-f1fb-4d4c-9c2b-88fb9ff374d3\",\"isNode\":true,\"data\":{\"componentKey\":\"CORE_CHAT_DEFAULT\",\"peopleObj\":{},\"type\":\"\",\"title\":\"\",\"context\":\"\",\"nextIdList\":[]},\"zIndex\":1,\"tools\":{\"items\":[\"button-remove\"]}},{\"position\":{\"x\":260,\"y\":60},\"size\":{\"width\":100,\"height\":100},\"view\":\"vue-shape-view\",\"shape\":\"custom-vue-node\",\"ports\":{\"groups\":{\"in\":{\"position\":\"left\",\"attrs\":{\"circle\":{\"magnet\":true,\"stroke\":\"#8f8f8f\",\"r\":5}}},\"out\":{\"position\":\"right\",\"attrs\":{\"circle\":{\"magnet\":true,\"stroke\":\"#8f8f8f\",\"r\":5}}}},\"items\":[{\"id\":\"in-1\",\"group\":\"in\"},{\"id\":\"out-1\",\"group\":\"out\"}]},\"id\":\"dcbf75c4-489f-4050-9693-1be56a14e5a8\",\"isNode\":true,\"data\":{\"componentKey\":\"CORE_CHAT_DEFAULT\",\"peopleObj\":{},\"type\":\"\",\"title\":\"\",\"context\":\"\",\"nextIdList\":[]},\"tools\":{\"items\":[\"button-remove\"]},\"zIndex\":2},{\"shape\":\"edge\",\"attrs\":{\"line\":{\"stroke\":\"#8f8f8f\",\"strokeWidth\":1}},\"id\":\"55d0c419-0c88-4177-abff-b174016403d5\",\"connector\":\"smooth\",\"source\":{\"cell\":\"f39f7a47-f1fb-4d4c-9c2b-88fb9ff374d3\",\"port\":\"out-1\"},\"target\":{\"cell\":\"dcbf75c4-489f-4050-9693-1be56a14e5a8\",\"port\":\"in-1\"},\"zIndex\":3}]}",
       open: false,
     }
   },
@@ -109,44 +100,8 @@ export default {
       },
     })
 
+
     const graph = new Graph({
-      customData: {
-        delNode: (node) => {
-          // 如果有下游不允许删除
-        },
-        addNextNode: (preNode, nextNode) => {
-          this.chatData.nodeData.push(nextNode)
-          const nextIdList = preNode.data.nodeData.nextIdList
-          if (nextIdList.length > 0) {
-            const peerData = this.chatIdMap[nextIdList[0]]
-            // 判断同级的type必须一致，人员必须一致
-            nextNode.data.nodeData.type = peerData.type
-            nextNode.data.nodeData.peopleObj = peerData.peopleObj
-            peerData.typeDisable = true
-            nextNode.data.nodeData.typeDisable = true
-          } else {
-            nextNode.data.nodeData.typeDisable = false
-          }
-          preNode.data.nodeData.nextIdList.push(nextNode.data.nodeData.id)
-          this.chatIdMap[nextNode.data.nodeData.id] = nextNode.data.nodeData
-          // 设置父节点
-          nextNode.data.nodeData.preId = preNode.data.nodeData.id
-          this.$store.commit('updateChatIdMap', this.chatIdMap)
-          graph.addEdge({
-            attrs: {
-              line: {
-                stroke: '#8f8f8f',
-                strokeWidth: 1,
-              },
-            },
-            connector: {
-              name: 'smooth',
-            },
-            source: preNode,
-            target: nextNode,
-          })
-        }
-      },
       container: document.getElementById('chatManager'),
       width: 800,
       height: 600,
@@ -179,15 +134,7 @@ export default {
         highlight: true,
 
         createEdge() {
-          return this.createEdge({
-            connector: 'smooth',
-            attrs: {
-              line: {
-                stroke: '#8f8f8f',
-                strokeWidth: 1,
-              },
-            },
-          })
+          return this.createEdge(edgeMateData)
         },
 
         validateMagnet({magnet}) {
@@ -210,8 +157,40 @@ export default {
         },
       },
     });
-    this.graph = graph
+    graph.on('node:added', ({node}) => {
+      this.nodeAdded(node)
+    })
+    graph.on('edge:connected', ({edge}) => {
+      this.edgeConnected(edge.getSourceNode(),edge.getTargetNode())
+    })
+    graph.on('edge:removed', ({edge, index, options}) => {
+    })
+    graph.on('edge:mouseenter', ({cell}) => {
+      cell.addTools([
+        {
+          name: 'target-arrowhead',
+          args: {
+            attrs: {
+              fill: 'red',
+            },
+          },
+        },
+        {
+          name: 'button-remove',
+          args: {distance: -40},
+        },
+      ])
+    })
+    graph.on('edge:mouseleave', ({cell}) => {
+      cell.removeTools()
+    })
+    graph.fromJSON({
+      cells: [],
+      nodes: [],
+      edges: [],
+    })
 
+    this.graph = graph
     const stencil = new Stencil({
       target: graph,
       groups: [
@@ -221,30 +200,11 @@ export default {
       ],
     })
 
+    stencil.container.getElementsByClassName("x6-widget-stencil-title")[0].innerHTML = '组件'
 
     document.getElementById("chatStencil").appendChild(stencil.container)
     stencil.load([
-      graph.createNode({
-        shape: 'custom-vue-node',
-        x: 100,
-        y: 60,
-        data: {
-          nodeData:  {
-            componentKey: 'CORE_CHAT_DEFAULT',
-            id: randomUtil.guid(),
-            peopleObj: {},
-            type: '',
-            title: '',
-            context: '',
-            nextIdList: [],
-          }
-        },
-        ports: [
-          {id: 'in-1', group: 'in'},
-          {id: 'out-1', group: 'out'},
-        ],
-        tools: ['button-remove'],
-      })
+      graph.createNode(graphMateData)
     ], '核心组件')
   },
 }

@@ -1,9 +1,11 @@
 <template>
+  {{nodeData}}
   <a-form-item label="标题">
     <a-input v-model:value="nodeData.title"/>
   </a-form-item>
 
   <a-form-item label="描述">
+<!--    todo 双向绑定有bug-->
     <QuillEditor v-model:content="nodeData.context" contentType="html" :options="options" style="height: 300px"></QuillEditor>
   </a-form-item>
 </template>

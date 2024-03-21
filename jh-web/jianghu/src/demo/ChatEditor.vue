@@ -25,7 +25,7 @@
           </a-select>
         </a-form-item>
         <a-form-item label="说话人">
-          <a-select v-model:value="nodeData.type" :disabled="nodeData.typeDisable">
+          <a-select v-model:value="nodeData.type" :disabled="typeDisable">
             <a-select-option :value="'other'">
               他人
             </a-select-option>
@@ -35,27 +35,28 @@
           </a-select>
         </a-form-item>
         <a-form-item label="人" v-if="nodeData.type==='other'">
-          <a-select v-model:value="nodeData.peopleObj.id" @change="changePeopleObj" :disabled="nodeData.typeDisable">
+          <a-select v-model:value="nodeData.peopleObj.id" @change="changePeopleObj" :disabled="typeDisable">
             <a-select-option v-for="item in peopleList" :key="item.id" :value="item.id">
               {{ item.name }}
             </a-select-option>
           </a-select>
         </a-form-item>
-        <a-form-item label="改变人物" v-if="nodeData.typeDisable">
+        <a-form-item label="改变人物" v-if="typeDisable">
           <a-button @click="changePeopleOpen">改变人物</a-button>
         </a-form-item>
-        <ChatForm :node-data="nodeData"></ChatForm>
+        <ChatForm v-model:node-data="nodeData"></ChatForm>
         <!--                <component :is="formComponet" :node-data="nodeData"></component>-->
         <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-          <a-button type="primary">确定</a-button>
+          <a-button type="primary" @click="closeEdit">确定</a-button>
           <a-button style="margin-left: 10px" @click="creatNext">创建下一个</a-button>
+          <a-button style="margin-left: 10px" @click="reset">重置</a-button>
         </a-form-item>
       </a-form>
     </a-drawer>
     <a-modal v-model:open="changePeople" @cancel="changePeopleCancel" @ok="changePeopleOk">
       <a-form :model="changePeople" :label-col="{style: {width: '50px',}}" :wrapper-col="wrapperCol">
         <a-form-item label="说话人">
-          <a-select v-model:value="changePeopleForm.type" :disabled="changePeopleForm.typeDisable">
+          <a-select v-model:value="changePeopleForm.type">
             <a-select-option :value="'other'">
               他人
             </a-select-option>
@@ -65,8 +66,7 @@
           </a-select>
         </a-form-item>
         <a-form-item label="人" v-if="changePeopleForm.type==='other'">
-          <a-select v-model:value="changePeopleForm.peopleObj.id" @change="changePeopleObjChange"
-                    :disabled="changePeopleForm.typeDisable">
+          <a-select v-model:value="changePeopleForm.peopleObj.id" @change="changePeopleObjChange">
             <a-select-option v-for="item in peopleList" :key="item.id" :value="item.id">
               {{ item.name }}
             </a-select-option>
@@ -78,10 +78,10 @@
 </template>
 
 <script>
-import {randomUtil} from "@/random.js";
 import modManager from "@/mod/index.js";
 import ChatForm from "@/demo/ChatForm.vue";
-import {mapState} from "vuex";
+import {cloneDeep} from "lodash";
+import {edgeMateData, graphMateData} from "@/demo/graphMateData.js";
 
 const formList = Object.values(modManager).map(item => item.components).filter(item => item).flatMap(item => Object.values(item.chat))
 let formKeyMap = {}
@@ -96,23 +96,17 @@ export default {
   name: "ChatEditor",
   components: {ChatForm},
   inject: ['getNode', 'getGraph', '$api'],
-  computed:{
-  ...mapState({
-      chatIdMap: state => state.chatIdMap,
-    }),
-  },
+  computed: {},
   data() {
     return {
+      nodeData: {},
+      layerNodes: [],
+      typeDisable: false,
       changePeopleForm: {peopleObj: {}},
       changePeople: false,
       peopleList: [],
       formComponet: CORE_CHAT_DEFAULT,
       formList,
-      nodeData: {
-        componentKey: 'CORE_CHAT_DEFAULT',
-        title: '',
-        context: '',
-      },
       editing: false,
       labelCol: {
         style: {
@@ -125,30 +119,33 @@ export default {
     }
   },
   mounted() {
-    const node = this.getNode()
-    this.nodeData = node.data.nodeData
-
+    this.nodeData = cloneDeep(this.getNode().data)
+  },
+  created() {
     this.$api.people.list(1, 999).then(res => {
       this.peopleList = res.records
     })
   },
   methods: {
+    reset() {
+      this.nodeData = cloneDeep(this.getNode().data)
+    },
     changePeopleObjChange(data) {
       this.changePeopleForm.peopleObj = this.peopleList.filter(item => item.id === data)[0]
     },
     changePeopleOk() {
       // 同级赋值
-      const pre=this.chatIdMap[this.nodeData.preId]
-      if (pre){
-        pre.nextIdList.map(id=>this.chatIdMap[id]).forEach(item=>{
-          item.type=this.changePeopleForm.type
-          item.peopleObj=this.changePeopleForm.peopleObj
+      if (this.layerNodes.length > 0) {
+        this.layerNodes.forEach(node => {
+          node.data.type = this.changePeopleForm.type
+          node.data.peopleObj = this.changePeopleForm.peopleObj
         })
       }
       this.changePeopleCancel()
     },
     changePeopleCancel() {
       this.changePeople = false
+      this.nodeData = cloneDeep(this.getNode().data)
     },
     changePeopleOpen() {
       this.changePeople = true
@@ -163,30 +160,29 @@ export default {
     },
     creatNext() {
       const graph = this.getGraph()
-      const node = this.getNode();
-      const newNodeData = {
-        id: randomUtil.guid(),
-        componentKey: 'CORE_CHAT_DEFAULT',
-        peopleObj: {},
-        type: 'other',
-        title: '',
-        context: '',
-        nextIdList: [],
-      }
-      graph.options.customData.addNextNode(node, graph.addNode({
-        shape: 'custom-vue-node',
-        x: 100,
-        y: 60,
-        data: {
-          nodeData: newNodeData
-        },
-        anchorPoints: [[0.5, 0.5]]
-      }))
+      const target = graph.addNode(graphMateData)
+      graph.addEdge({
+        ...edgeMateData,
+        source: this.getNode(),
+        target: target,
+      })
     },
     closeEdit() {
+      this.getNode().data = this.nodeData
       this.editing = false
     },
     edit() {
+      const graph = this.getGraph()
+      const node = this.getNode()
+      this.nodeData = cloneDeep(this.getNode().data)
+      const preNodeList = graph.getNeighbors(node, {incoming: true})
+      if (preNodeList && preNodeList.length > 0) {
+        const nextNodeList = graph.getNeighbors(preNodeList[0], {outgoing: true})
+        if (nextNodeList.length > 1) {
+          this.layerNodes = nextNodeList
+          this.typeDisable = true
+        }
+      }
       this.editing = true
     },
   },
