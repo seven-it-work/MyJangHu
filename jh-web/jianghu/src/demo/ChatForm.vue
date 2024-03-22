@@ -1,12 +1,9 @@
 <template>
-  {{nodeData}}
   <a-form-item label="标题">
     <a-input v-model:value="nodeData.title"/>
   </a-form-item>
-
   <a-form-item label="描述">
-<!--    todo 双向绑定有bug-->
-    <QuillEditor v-model:content="nodeData.context" contentType="html" :options="options" style="height: 300px"></QuillEditor>
+    <QuillEditor ref="QuillEditor" v-model:content="nodeData.context" contentType="html" :options="options" style="height: 300px"></QuillEditor>
   </a-form-item>
 </template>
 
@@ -20,6 +17,16 @@ export default {
   inject: ['$api'],
   props: {
     nodeData: {},
+  },
+  watch:{
+    "nodeData.context":{
+      handler(val){
+        // QuillEditor双向绑定有bug，无法清空 采用监听清空
+        if (!val){
+          this.$refs.QuillEditor.setContents(val)
+        }
+      }
+    }
   },
   data() {
     return {
