@@ -23,6 +23,3 @@ dist-ssr
 *.sln
 *.sw?
 
-*.umd.js
-*.es.js
-src/dungeon

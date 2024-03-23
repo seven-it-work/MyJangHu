@@ -166,6 +166,14 @@ export default {
         source: this.getNode(),
         target: target,
       })
+
+      // 获取targetNode的同层数据
+      const nextNodeList = graph.getNeighbors(this.getNode(), {outgoing: true})
+      if (nextNodeList.length > 1) {
+        const node = nextNodeList[0]
+        target.data.type = node.data.type
+        target.data.peopleObj = node.data.peopleObj
+      }
     },
     closeEdit() {
       this.getNode().data = this.nodeData
