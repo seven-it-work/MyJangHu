@@ -4,13 +4,13 @@ const modList = [
     {
         name: 'core',
         showName: 'core',
-        jsUrl: '../mod/core/core-mod.es.js',
+        jsUrl: '../dungeon/core/core-mod.es.js',
         cssUrl: '',
     },
     {
         name: 'ldj',
         showName: '鹿鼎记',
-        jsUrl: '../mod/ldj/ldj-mod.es.js',
+        jsUrl: '../dungeon/ldj/ldj-mod.es.js',
         cssUrl: '',
     }
 ]
