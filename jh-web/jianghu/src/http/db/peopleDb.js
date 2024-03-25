@@ -17,7 +17,23 @@ const peopleDb = [
     "peopleType": "AI_PEOPLE",
     "createTime": 1710000000000,
     "updateTime": 1710000000000
-}]
+},
+    {
+        "id": "333",
+        "xing": "王",
+        "ming": "老五",
+        "name": "王老五",
+        "sex": "MAN",
+        "description": "",
+        "remark": "",
+        "currentSceneId": "774e54a1c93049648038517c8094cb71",
+        "currentWorldId": "c66c5a3267e7485592506cebb52cfca1",
+        "currentCityId": "37817475185b4defb405e629c35a4898",
+        "interactionIdList": [],
+        "peopleType": "AI_PEOPLE",
+        "createTime": 1710000000000,
+        "updateTime": 1710000000000
+    }]
 
 
 export default peopleDb

@@ -18,7 +18,6 @@ export const graphMateData = {
         type: '',
         title: '',
         context: '',
-        nextIdList: [],
     },
     ports: [
         {id: 'in-1', group: 'in'},

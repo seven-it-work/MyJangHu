@@ -32,9 +32,6 @@ export default {
 
 <template>
   <div>
-    <Fighting ></Fighting>
-  </div>
-  <div>
     玩家名称：{{ peopleObj.name }}
     <span v-if="peopleObj.currentWorldId" style="margin-right: 10px">当前所在地：</span>
     <span v-if="peopleObj.currentWorldId" style="margin-right: 10px">{{ peopleObj.currentWorld?.name }}</span>

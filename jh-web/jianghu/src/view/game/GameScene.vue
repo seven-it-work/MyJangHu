@@ -27,52 +27,64 @@ export default {
   },
   methods: {
     interactionClick(interaction) {
-      console.log(interaction)
-      // todo 调用后台 请求相关 type 和 数据对象
-      this.componentsData = {
-        type: 'ChatBox',
-        visible: true,
-        dataNowId: "1",
-        data: [
-          {
-            id: "1",
-            nextId: "2",
-            peopleObj: {id: '1', name: "测试"},
-            message: "好好好",
-            selectItem: []
-          },
-          {
-            id: "2",
-            nextId: "3",
-            peopleObj: {id: '2', name: "测试2"},
-            message: "对地段",
-            selectItem: []
-          },
-          {
-            id: "3",
-            nextId: "4",
-            peopleObj: {id: '1', name: "测试2"},
-            message: "",
-            // selectItem 也是事件对象
-            selectItem: [
-              {
-                id: 'jg',
-                name: '交谈',
-              }
-            ]
-          },
-          {
-            id: "4",
-            nextId: "",
-            peopleObj: {id: '2', name: "测试2"},
-            message: "去吧",
-          },
-        ]
+      switch (interaction.key){
+        case 'conversation':
+          break
+        case 'attack':
+          break
+        case 'inquiring':
+          break
+        case 'dealing':
+          break
+        default:
+            break
       }
-      this.componentsData.dataNowObj = this.componentsData.data.filter(item => item.id === this.componentsData.dataNowId)[0]
-      if (!this.componentsData.dataNowObj) {
-        this.componentsData.visible = false
-      }
+      // console.log(interaction)
+      // // todo 调用后台 请求相关 type 和 数据对象
+      // this.componentsData = {
+      //   type: 'ChatBox',
+      //   visible: true,
+      //   dataNowId: "1",
+      //   data: [
+      //     {
+      //       id: "1",
+      //       nextId: "2",
+      //       peopleObj: {id: '1', name: "测试"},
+      //       message: "好好好",
+      //       selectItem: []
+      //     },
+      //     {
+      //       id: "2",
+      //       nextId: "3",
+      //       peopleObj: {id: '2', name: "测试2"},
+      //       message: "对地段",
+      //       selectItem: []
+      //     },
+      //     {
+      //       id: "3",
+      //       nextId: "4",
+      //       peopleObj: {id: '1', name: "测试2"},
+      //       message: "",
+      //       // selectItem 也是事件对象
+      //       selectItem: [
+      //         {
+      //           id: 'jg',
+      //           name: '交谈',
+      //         }
+      //       ]
+      //     },
+      //     {
+      //       id: "4",
+      //       nextId: "",
+      //       peopleObj: {id: '2', name: "测试2"},
+      //       message: "去吧",
+      //     },
+      //   ]
+      // }
+      // this.componentsData.dataNowObj = this.componentsData.data.filter(item => item.id === this.componentsData.dataNowId)[0]
+      // if (!this.componentsData.dataNowObj) {
+      //   this.componentsData.visible = false
+      // }
     },
     getPeopleInteractionList(peopleItem) {
       if (peopleItem) {
@@ -81,8 +93,22 @@ export default {
             name: '自己'
           }]
         } else if (!peopleItem.interactionList) {
+          /**
+           * 交谈包含辱骂、赞美
+           * @type {[{name: string},{name: string}]}
+           */
           const interactionList = [{
             name: '交谈',
+            key: "conversation",
+          }, {
+            name: '袭击',
+            key: "attack",
+          }, {
+            name: '打听',
+            key: "inquiring",
+          }, {
+            name: '交易',
+            key: "dealing",
           }]
           peopleItem.interactionList = interactionList
         }
@@ -177,7 +203,7 @@ export default {
       </tbody>
     </table>
   </a-row>
-  <ChatBox v-if="componentsData.type==='ChatBox'" :components-data="componentsData"></ChatBox>
+  <!--  <ChatBox v-if="componentsData.type==='ChatBox'" :components-data="componentsData"></ChatBox>-->
 </template>
 
 <style scoped>

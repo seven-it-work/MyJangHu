@@ -43,7 +43,6 @@ class LocalApi extends BaseApi {
 
     update(data) {
         return super.update(data).then(() => {
-            debugger
             const findData = this.allDataList.filter(item => item.id === data.id)[0];
             if (findData) {
                 Object.assign(findData, data);
