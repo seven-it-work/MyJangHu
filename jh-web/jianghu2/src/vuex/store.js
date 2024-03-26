@@ -1,7 +1,7 @@
 import {createStore} from 'vuex'
-import mapDb from "@/vuex/mapDb.js";
-import x6Node from "@/vuex/x6Node.js";
-import x6Edge from "@/vuex/x6Edge.js";
+import mapDb from "@/vuex/db/mapDb.js";
+import x6Node from "@/vuex/db/x6Node.js";
+import x6Edge from "@/vuex/db/x6Edge.js";
 
 // 创建一个新的 store 实例
 const store = createStore({

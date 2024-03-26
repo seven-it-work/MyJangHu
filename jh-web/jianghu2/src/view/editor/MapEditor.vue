@@ -18,7 +18,7 @@
   <a-row>
     <a-tabs>
       <a-tab-pane key="map" tab="地图">
-        <MapTab :change-hook="mapChangeHook" :map-list="mapList"></MapTab>
+        <MapTab2 v-model:dataList="mapList"></MapTab2>
       </a-tab-pane>
       <a-tab-pane key="scenarioNode" tab="场景节点">
         <a-table></a-table>
@@ -127,16 +127,14 @@
 
 <script>
 import {mapAPi} from "@/http/api.js";
-import MapTab from "@/view/editor/map/MapTab.vue";
+import MapTab2 from "@/view/editor/tab/MapTab2.vue";
 
 export default {
   name: "MapEditor",
-  components: {MapTab},
+  components: {MapTab2},
   props: ['currentMapObj'],
   methods: {
-    mapChangeHook() {
-      this.listAllMap()
-    },
+
     changeCurrentMapObj(id) {
       const currentMapObj = this.mapList.filter(item => item.id === id)[0]
       this.$emit('update:currentMapObj', currentMapObj)
