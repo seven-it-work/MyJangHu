@@ -1,1 +1,1 @@
-export default {"7a6cccf2-9505-515b-ab17-71722d70a086":{"name":"1","high":1,"wide":1,"id":"7a6cccf2-9505-515b-ab17-71722d70a086","dataMap":[["163496ba-2c05-4f2a-b9a1-44bcc7d3f511"]]},"cc9d24b8-68ff-5693-9b51-5ff996b773dc":{"id":"cc9d24b8-68ff-5693-9b51-5ff996b773dc","name":"2","high":2,"wide":2,"description":"","remark":"","dataMap":[["7b1ba404-f832-4117-9abe-454a2db2bf3b","582b39b1-eedd-403c-b2a9-6dee8a86a8c7"],["e3e878ce-d70a-4eff-9c1d-21c9d0ebeab9","a1e1cf2d-6aa4-41ad-8ab5-9c19fa8ffc12"]]}}
+export default {}
