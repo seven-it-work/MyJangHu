@@ -1,4 +1,5 @@
 <template>
+  <a-button>保存</a-button>
   <div ref="container" style="width: 100%;height: 100%"></div>
 </template>
 
@@ -197,6 +198,42 @@ const port_connect_map = {
 
 export default {
   name: "MapX6",
+  props: {
+    currentMapObj: {}
+  },
+  watch: {
+    currentMapObj: {
+      handler() {
+        this.graph.clearCells()
+        // 数据准备
+        const wide = this.currentMapObj.wide;
+        const high = this.currentMapObj.high;
+        const gridLayout = new GridLayout({
+          type: 'grid',
+          width: wide * 100,
+          height: high * 90,
+          rows: high,
+          cols: wide,
+        })
+        const data = {
+          nodes: [],
+          edges: [],
+        }
+        // 先渲染空画布
+        for (let i = 0; i < high; i++) {
+          for (let j = 0; j < wide; j++) {
+            if (this.currentMapObj.dataMap && this.currentMapObj.dataMap[i] && this.currentMapObj.dataMap[i][j] && this.currentMapObj.dataMap[i][j].id) {
+              data.nodes.push(this.currentMapObj.dataMap[i][j])
+            } else {
+              data.nodes.push(nodeOptions)
+            }
+          }
+        }
+        const model = gridLayout.layout(data)
+        this.graph.fromJSON(model)
+      }
+    }
+  },
   data() {
     return {
       graph: undefined,
@@ -209,9 +246,10 @@ export default {
   },
 
   methods: {
+    editMode(){
+    },
     init() {
-      console.log(this.mapDb)
-      const graph = new Graph({
+      this.graph = new Graph({
         container: this.$refs.container,
         grid: true,
         interacting: {
@@ -274,47 +312,6 @@ export default {
         autoResize: true,
         mousewheel: true
       })
-      const wide = 3;
-      const high = 3;
-      const gridLayout = new GridLayout({
-        type: 'grid',
-        width: wide * 100,
-        height: high * 90,
-        rows: high,
-        cols: wide,
-      })
-
-      // 数据准备
-      const data = {
-        nodes: [],
-        edges: [],
-      }
-      data.nodes.push(nodeOptions)
-      for (let i = 0; i < high; i++) {
-        for (let j = 0; j < wide; j++) {
-          data.nodes.push({
-            width: nodeOptions.width,
-            height: nodeOptions.height,
-            attrs: {
-              body: {
-                strokeDasharray: '10',
-                stroke: '#BABABAFF'
-              },
-              label: {
-                fill: '#ffffff',
-              },
-            },
-            shape: 'rect',
-            label: i + "-" + j,
-          })
-        }
-      }
-
-
-      const model = gridLayout.layout(data)
-      graph.fromJSON(model)
-
-      this.graph = graph
     },
   },
   created() {

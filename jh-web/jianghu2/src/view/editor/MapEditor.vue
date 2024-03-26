@@ -4,7 +4,7 @@
       <a-row justify="start">
         <a-col>当前地图：</a-col>
         <a-col :span="12">
-          <a-select style="width: 100%;" v-model:value="currentMapObj.id" @change="changeCurrentMapObj">
+          <a-select style="width: 100%;"  @change="changeCurrentMapObj">
             <a-select-option v-for="item in mapList" :key="item.id" :value="item.id">
               {{ item.name }}
             </a-select-option>
@@ -132,16 +132,15 @@ import MapTab from "@/view/editor/map/MapTab.vue";
 export default {
   name: "MapEditor",
   components: {MapTab},
+  props: ['currentMapObj'],
   methods: {
     mapChangeHook() {
       this.listAllMap()
     },
     changeCurrentMapObj(id) {
-      this.currentMapObj = this.mapList.filter(item => item.id === id)[0]
-      // 改变mapX6
+      const currentMapObj = this.mapList.filter(item => item.id === id)[0]
+      this.$emit('update:currentMapObj', currentMapObj)
     },
-
-
     listAllMap() {
       this.mapList = mapAPi.listAll()
     },
@@ -152,14 +151,6 @@ export default {
   data() {
     return {
       mapList: [],
-      currentMapObj: {
-        id: '',
-        name: '',
-        high: 0,
-        wide: 0,
-        description: '',
-        remark: '',
-      },
     }
   },
 }

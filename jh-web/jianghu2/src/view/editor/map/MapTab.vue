@@ -5,24 +5,25 @@
   <a-table :data-source="mapList" :columns="mapColumns">
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'action'">
-        <a-button style="color: red" @click="doDelete(record)">删除</a-button>
         <a-button @click="doUpdate(record)">更新</a-button>
+        <a-button style="color: red" @click="doDelete(record)">删除</a-button>
       </template>
     </template>
   </a-table>
   <a-drawer v-model:open="open" width="50%">
-    <MapForm ref="mapForm" :isAdd="isAdd" :submit-after="submitAfter"></MapForm>
+    <MapForm ref="mapForm" :isAdd="isAdd" :submit-after="submitAfter" @cancel="closeDrawer"></MapForm>
   </a-drawer>
 </template>
 
 <script>
 import {mapAPi} from "@/http/localApi.js";
 import MapForm from "@/view/editor/component/MapForm.vue";
+import {cloneDeep} from "lodash";
 
 export default {
   name: "MapTab",
-  props:{
-    mapList:[],
+  props: {
+    mapList: [],
     changeHook: {
       type: Function,
       default: () => {
@@ -32,22 +33,24 @@ export default {
   components: {MapForm},
   methods: {
     submitAfter() {
-      this.open = false
       this.changeHook()
+      this.closeDrawer()
+    },
+    closeDrawer() {
+      this.open = false
     },
     openDrawer(isAdd) {
       this.open = true;
       this.isAdd = isAdd || false
     },
     doUpdate(item) {
-      this.$refs.mapForm.$data.mapForm = item
       this.openDrawer(false)
+      setTimeout(() => this.$refs.mapForm.$data.mapForm = cloneDeep(item), 200)
     },
     doDelete(item) {
       mapAPi.delete(item.id)
       this.changeHook();
     },
-
   },
   data() {
     return {

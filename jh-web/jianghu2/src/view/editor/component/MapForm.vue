@@ -28,7 +28,7 @@
     </a-form-item>
     <a-form-item>
       <a-button type="primary" @click="doUpdateOrAdd">确定</a-button>
-      <a-button style="margin-left: 10px">取消</a-button>
+      <a-button style="margin-left: 10px" @click="cancel">取消</a-button>
     </a-form-item>
   </a-form>
 </template>
@@ -47,7 +47,26 @@ export default {
     }
   },
   methods: {
+    cancel() {
+      this.mapForm = {
+        ...this.baseMapForm
+      }
+      this.$emit('cancel')
+    },
     doUpdateOrAdd() {
+      const dataMap = []
+      for (let i = 0; i < this.mapForm.high; i++) {
+        const tempDataMap = []
+        for (let j = 0; j < this.mapForm.wide; j++) {
+          if (this.mapForm.dataMap && this.mapForm.dataMap[i] && this.mapForm.dataMap[i][j]) {
+            // 存在不覆盖
+          } else {
+            tempDataMap.push({})
+          }
+        }
+        dataMap.push(tempDataMap)
+      }
+      this.mapForm.dataMap = dataMap;
       if (this.isAdd) {
         mapAPi.add(this.mapForm)
       } else {
