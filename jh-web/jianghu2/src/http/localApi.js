@@ -2,7 +2,7 @@ import {BaseApi} from "@/http/baseApi.js";
 import store from "@/vuex/store.js";
 import {cloneDeep} from "lodash";
 import {randomUtil} from "@/random.js";
-import x6Edge from "@/vuex/db/x6Edge.js";
+import x6Edge from "@/vuex/x6Edge.js";
 
 const isDebug = true
 

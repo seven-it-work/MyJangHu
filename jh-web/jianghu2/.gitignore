@@ -25,3 +25,7 @@ dist-ssr
 
 *.umd.js
 *.es.js
+
+x6Node.js
+x6Edge.js
+mapDb.js
