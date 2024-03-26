@@ -1,24 +1,7 @@
 <template>
   <a-row>
     <a-col :span="12">
-      <a-row style="height: 50%;">
-        <MapX6 :currentMapObj="currentMapObj"></MapX6>
-      </a-row>
-      <a-row style="height: 50%;overflow: scroll">
-        <a-form>
-          <a-form-item label="地图名称：">
-            <a-input></a-input>
-          </a-form-item>
-          <a-form-item label="描述：">
-            <a-input></a-input>
-          </a-form-item>
-          <a-form-item>
-            <a-button>修改</a-button>
-          </a-form-item>
-        </a-form>
-        <a-divider></a-divider>
-        <div>场景内对象</div>
-      </a-row>
+      <MapX6 :current-map-obj="currentMapObj"></MapX6>
     </a-col>
     <a-col :span="12">
       <a-tabs>

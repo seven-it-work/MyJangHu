@@ -61,7 +61,7 @@ export default {
           if (this.mapForm.dataMap && this.mapForm.dataMap[i] && this.mapForm.dataMap[i][j]) {
             // 存在不覆盖
           } else {
-            tempDataMap.push({})
+            tempDataMap.push("")
           }
         }
         dataMap.push(tempDataMap)

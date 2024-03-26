@@ -1,12 +1,30 @@
 <template>
-  <a-button>保存</a-button>
-  <div ref="container" style="width: 100%;height: 100%"></div>
+  <a-row style="height: 50%;">
+    <a-button @click="saveMap">保存</a-button>
+    <div ref="container" style="width: 100%;height: 100%"></div>
+  </a-row>
+  <a-row style="height: 50%;overflow: scroll">
+    <a-form>
+      <a-form-item label="地图名称：">
+        <a-input v-model:value="updateForm.name"></a-input>
+      </a-form-item>
+      <a-form-item label="描述：">
+        <a-input v-model:value="updateForm.description"></a-input>
+      </a-form-item>
+      <a-form-item>
+        <a-button @click="update">修改</a-button>
+      </a-form-item>
+    </a-form>
+    <a-divider></a-divider>
+    <div>场景内对象</div>
+  </a-row>
 </template>
 
 <script>
 import {Graph} from '@antv/x6'
 import {GridLayout} from '@antv/layout'
 import {mapState} from "vuex";
+import {mapAPi, x6NodeApi} from "@/http/localApi.js";
 
 Graph.registerNode(
     'custom-node-width-port',
@@ -148,7 +166,8 @@ const nodeOptions = {
       stroke: 'transparent',
     },
     label: {
-      fill: '#ffffff',
+      text: "",
+      fill: '#000000',
     },
   },
   ports: {
@@ -222,10 +241,14 @@ export default {
         // 先渲染空画布
         for (let i = 0; i < high; i++) {
           for (let j = 0; j < wide; j++) {
-            if (this.currentMapObj.dataMap && this.currentMapObj.dataMap[i] && this.currentMapObj.dataMap[i][j] && this.currentMapObj.dataMap[i][j].id) {
-              data.nodes.push(this.currentMapObj.dataMap[i][j])
+            console.log(this.currentMapObj)
+            if (this.currentMapObj.dataMap && this.currentMapObj.dataMap[i] && this.currentMapObj.dataMap[i][j]) {
+              const x6NodeId = this.currentMapObj.dataMap[i][j]
+              const node = x6NodeApi.getById(x6NodeId);
+              node.attrs.body.stroke = null
+              data.nodes.push(node)
             } else {
-              data.nodes.push(nodeOptions)
+              data.nodes.push({...nodeOptions, data: {i, j}})
             }
           }
         }
@@ -237,6 +260,12 @@ export default {
   data() {
     return {
       graph: undefined,
+      currentNode: undefined,
+      updateForm: {
+        id: '',
+        name: '',
+        description: '',
+      },
     }
   },
   computed: {
@@ -244,14 +273,41 @@ export default {
       mapDb: state => state.mapDb,
     }),
   },
-
   methods: {
-    editMode(){
+    update() {
+      this.currentNode.data.name = this.updateForm.name
+      this.currentNode.data.description = this.updateForm.description
+      this.currentNode.attr('label/text', this.updateForm.name)
+      x6NodeApi.saveOrUpdate(this.currentNode)
+      // 更新地图的中存的id
+      if (this.currentNode.data.name) {
+        const i = this.currentNode.data.i
+        const j = this.currentNode.data.j
+        this.currentMapObj.dataMap[i][j] = this.currentNode.id
+        mapAPi.update(this.currentMapObj)
+      }
+    },
+    saveMap() {
+      const nodes = this.graph.getNodes();
+      console.log(nodes)
     },
     init() {
       this.graph = new Graph({
         container: this.$refs.container,
         grid: true,
+        highlighting: {
+          // 当链接桩可以被链接时，在链接桩外围渲染一个 2px 宽的红色矩形框
+          magnetAvailable: {
+            name: 'stroke',
+            args: {
+              padding: 4,
+              attrs: {
+                'stroke-width': 2,
+                stroke: 'red',
+              }
+            },
+          },
+        },
         interacting: {
           nodeMovable: false
         },
@@ -311,6 +367,20 @@ export default {
         panning: true,
         autoResize: true,
         mousewheel: true
+      })
+      // 监听器
+      this.graph.on("node:click", ({node}) => {
+        // 点击后，边框变红
+        if (this.currentNode) {
+          this.currentNode.attr('body/stroke', null)
+        }
+        node.attr('body/stroke', "red")
+        this.currentNode = node
+        if (this.currentNode && this.currentNode.data) {
+          this.updateForm.id = this.currentNode.data.id
+          this.updateForm.name = this.currentNode.data.name
+          this.updateForm.description = this.currentNode.data.description
+        }
       })
     },
   },

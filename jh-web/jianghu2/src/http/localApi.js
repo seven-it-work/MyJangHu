@@ -2,7 +2,10 @@ import {BaseApi} from "@/http/baseApi.js";
 import store from "@/vuex/store.js";
 import {cloneDeep} from "lodash";
 import {randomUtil} from "@/random.js";
- const isDebug = true
+import x6Edge from "@/vuex/db/x6Edge.js";
+
+const isDebug = true
+
 class BaseLocalApi extends BaseApi {
 
     dbMap = {}
@@ -27,7 +30,7 @@ class BaseLocalApi extends BaseApi {
     add(data) {
         data.id = randomUtil.guid();
         this.dbMap[data.id] = data
-        if (isDebug){
+        if (isDebug) {
             console.log(`模块${this.constructor.name}。序列化对象↓↓↓↓↓↓↓↓↓↓`);
             console.log(`export default ${JSON.stringify(this.dbMap)}`)
             console.log(`模块${this.constructor.name}。↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑`)
@@ -36,7 +39,7 @@ class BaseLocalApi extends BaseApi {
 
     delete(id) {
         delete this.dbMap[id]
-        if (isDebug){
+        if (isDebug) {
             console.log(`模块${this.constructor.name}。序列化对象↓↓↓↓↓↓↓↓↓↓`);
             console.log(`export default ${JSON.stringify(this.dbMap)}`)
             console.log(`模块${this.constructor.name}。↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑`)
@@ -45,7 +48,7 @@ class BaseLocalApi extends BaseApi {
 
     update(data) {
         this.dbMap[data.id] = data
-        if (isDebug){
+        if (isDebug) {
             console.log(`模块${this.constructor.name} 序列化对象↓↓↓↓↓↓↓↓↓↓`);
             console.log(`export default ${JSON.stringify(this.dbMap)}`)
             console.log(`模块${this.constructor.name} ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑`)
@@ -69,3 +72,31 @@ class MapApi extends BaseLocalApi {
 }
 
 export const mapAPi = new MapApi()
+
+class X6NodeApi extends BaseLocalApi {
+
+    constructor() {
+        super(store.state.x6Node);
+    }
+
+    saveOrUpdate(node) {
+        node.id = node.id || randomUtil.guid();
+        this.update(node)
+    }
+}
+
+export const x6NodeApi = new X6NodeApi()
+
+class X6EdgeApi extends BaseLocalApi {
+
+    constructor() {
+        super(store.state.x6Edge);
+    }
+
+    saveOrUpdate(node) {
+        node.id = node.id || randomUtil.guid();
+        this.update(node)
+    }
+}
+
+export const x6EdgeApi = new X6EdgeApi()
