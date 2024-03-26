@@ -97,6 +97,10 @@ class X6EdgeApi extends BaseLocalApi {
         node.id = node.id || randomUtil.guid();
         this.update(node)
     }
+
+    getByMapId(mapId) {
+        return this.listAll().filter(item => item.data.mapId === mapId);
+    }
 }
 
 export const x6EdgeApi = new X6EdgeApi()
