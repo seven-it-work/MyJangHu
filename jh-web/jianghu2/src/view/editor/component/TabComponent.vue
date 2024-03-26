@@ -12,7 +12,7 @@
   </a-table>
   <a-drawer v-model:open="open" width="50%">
     <FormComponent ref="form" :isAdd="isAdd" :submit-after="submitAfter" @cancel="closeDrawer" :api="api"
-                   :base-form-data="baseFormData">
+                   :base-form-data="baseFormData" :submit-before="submitBefore">
       <template v-slot:formData="{formData}">
         <slot name="formData" :formData="formData"></slot>
       </template>
@@ -35,7 +35,13 @@ export default {
       type: Function,
       default: () => {
       }
-    }
+    },
+    submitBefore: {
+      type: Function,
+      default (formData){
+        return formData
+      }
+    },
   },
   components: {FormComponent,},
   methods: {

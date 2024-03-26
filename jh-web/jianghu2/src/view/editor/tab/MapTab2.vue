@@ -1,5 +1,5 @@
 <template>
-  <TabComponent :api="mapAPi" :columns="columns" :dataList="dataList" :change-hook="changeHook" :base-form-data="baseFormData">
+  <TabComponent :submit-before="submitBefore" :api="mapAPi" :columns="columns" :dataList="dataList" :change-hook="changeHook" :base-form-data="baseFormData">
     <template v-slot:formData="{formData}">
       <a-form-item label="名称">
         <a-input v-model:value="formData.name"></a-input>
@@ -39,6 +39,22 @@ export default {
     dataList: []
   },
   methods: {
+    submitBefore(formData){
+      const dataMap = []
+      for (let i = 0; i < formData.high; i++) {
+        const tempDataMap = []
+        for (let j = 0; j < formData.wide; j++) {
+          if (formData.dataMap && formData.dataMap[i] && formData.dataMap[i][j]) {
+            // 存在不覆盖
+          } else {
+            tempDataMap.push("")
+          }
+        }
+        dataMap.push(tempDataMap)
+      }
+      formData.dataMap = dataMap;
+      return formData;
+    },
     changeHook() {
       this.listAllMap()
     },

@@ -23,7 +23,13 @@ export default {
       type: Function,
       default: () => {
       }
-    }
+    },
+    submitBefore: {
+      type: Function,
+      default(formData) {
+        return formData
+      }
+    },
   },
   methods: {
     cancel() {
@@ -33,19 +39,7 @@ export default {
       this.$emit('cancel')
     },
     doUpdateOrAdd() {
-      const dataMap = []
-      for (let i = 0; i < this.formData.high; i++) {
-        const tempDataMap = []
-        for (let j = 0; j < this.formData.wide; j++) {
-          if (this.formData.dataMap && this.formData.dataMap[i] && this.formData.dataMap[i][j]) {
-            // 存在不覆盖
-          } else {
-            tempDataMap.push("")
-          }
-        }
-        dataMap.push(tempDataMap)
-      }
-      this.formData.dataMap = dataMap;
+      this.formData = this.submitBefore(this.formData) || this.formData
       if (this.isAdd) {
         this.api.add(this.formData)
       } else {

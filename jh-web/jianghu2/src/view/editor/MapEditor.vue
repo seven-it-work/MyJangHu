@@ -4,7 +4,7 @@
       <a-row justify="start">
         <a-col>当前地图：</a-col>
         <a-col :span="12">
-          <a-select style="width: 100%;"  @change="changeCurrentMapObj">
+          <a-select style="width: 100%;" @change="changeCurrentMapObj">
             <a-select-option v-for="item in mapList" :key="item.id" :value="item.id">
               {{ item.name }}
             </a-select-option>
@@ -21,26 +21,7 @@
         <MapTab2 v-model:dataList="mapList"></MapTab2>
       </a-tab-pane>
       <a-tab-pane key="scenarioNode" tab="场景节点">
-        <a-table></a-table>
-        <a-row>
-          <a-col>
-            <a-button>互动编辑</a-button>
-          </a-col>
-          <a-col>
-            <a-button>更新数据</a-button>
-          </a-col>
-          <a-col>
-            <a-button>删除数据</a-button>
-          </a-col>
-        </a-row>
-        <a-row>
-          <div>场景id</div>
-          <div>场景名称</div>
-          <div>进入触发</div>
-          <div>立刻触发</div>
-          <div>描述</div>
-          <div>备注</div>
-        </a-row>
+        <ScenarioNodeTab :current-map-obj="currentMapObj" :change-hook="scenarioChangeHook"></ScenarioNodeTab>
       </a-tab-pane>
       <a-tab-pane key="pathway" tab="路径">
         <a-table></a-table>
@@ -128,13 +109,19 @@
 <script>
 import {mapAPi} from "@/http/api.js";
 import MapTab2 from "@/view/editor/tab/MapTab2.vue";
+import ScenarioNodeTab from "@/view/editor/tab/ScenarioNodeTab.vue";
+import {cloneDeep} from "lodash";
 
 export default {
   name: "MapEditor",
-  components: {MapTab2},
+  components: {ScenarioNodeTab, MapTab2},
   props: ['currentMapObj'],
   methods: {
-
+    scenarioChangeHook() {
+      console.log("触发")
+      this.currentMapObj.time=new Date()
+      this.$emit('update:currentMapObj', cloneDeep(this.currentMapObj))
+    },
     changeCurrentMapObj(id) {
       const currentMapObj = this.mapList.filter(item => item.id === id)[0]
       this.$emit('update:currentMapObj', currentMapObj)

@@ -222,6 +222,7 @@ export default {
   watch: {
     currentMapObj: {
       handler() {
+        this.justClear=true
         this.graph.clearCells()
         this.updateGraph()
       }
@@ -236,12 +237,8 @@ export default {
         name: '',
         description: '',
       },
+      justClear:false,
     }
-  },
-  computed: {
-    ...mapState({
-      mapDb: state => state.mapDb,
-    }),
   },
   methods: {
     updateGraph() {
@@ -279,6 +276,8 @@ export default {
       data.edges.push(...x6EdgeApi.getByMapId(this.currentMapObj.id))
       const model = gridLayout.layout(data)
       this.graph.fromJSON(model)
+
+      this.justClear=false
     },
     update() {
       this.currentNode.data.id = this.currentNode.id
@@ -414,7 +413,7 @@ export default {
         }
       })
       this.graph.on("edge:removed", ({edge}) => {
-        if (edge.target.cell) {
+        if (edge.target.cell && !this.justClear) {
           x6EdgeApi.delete(edge.id)
         }
       })
