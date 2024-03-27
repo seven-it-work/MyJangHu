@@ -1,4 +1,5 @@
 <template>
+  <div><a-button @click="()=>this.$router.go(-1)">返回</a-button></div>
   <a-row>
     <a-col>
       <router-link :to="{name: 'sceneManager', params: {worldId:$route.params.worldId,cityId:$route.params.cityId}}">
@@ -31,8 +32,9 @@
                 :description="item.description"
             >
               <template #title>
-                <!-- todo 跳转到人物详情-->
-                <a href="#">{{ item.name }}</a>
+                <router-link :to="{name: 'peopleDetail', params: {peopleId:item.id}}">
+                  {{ item.name }}
+                </router-link>
               </template>
               <template #avatar>
                 <!--头像-->
@@ -231,7 +233,7 @@
 </template>
 
 <script>
-import {city, people, scene, world} from "@/http/serveApi.js";
+import {city, people, scene, world} from "@/http/api.js";
 import {getName} from "random_chinese_fantasy_names";
 import {randomUtil} from "@/random.js";
 import {DeleteOutlined, DownOutlined, FormOutlined} from '@ant-design/icons-vue';

@@ -1,5 +1,5 @@
 <script>
-import {city, scene} from "@/http/serveApi.js";
+import {city, scene} from "@/http/api.js";
 import {message} from "ant-design-vue";
 import {getClan} from "random_chinese_fantasy_names";
 
@@ -242,6 +242,7 @@ export default {
 </script>
 
 <template>
+  <div><a-button @click="()=>this.$router.go(-1)">返回</a-button></div>
   <a-row>
     <a-col >
       <router-link :to="{name: 'cityManager', params: {worldId: cityObj.worldId || '1'}}">当前城市：{{

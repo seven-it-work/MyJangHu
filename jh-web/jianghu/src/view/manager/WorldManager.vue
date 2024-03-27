@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div><a-button @click="()=>this.$router.go(-1)">返回</a-button></div>
     <div>
       <a-row>
         <a-col>
@@ -122,7 +123,7 @@
 </template>
 
 <script>
-import {world} from "@/http/serveApi.js"
+import {world} from "@/http/api.js"
 import {randomUtil} from "@/random.js";
 import {getZone} from "random_chinese_fantasy_names";
 import worldPng from "@/assets/world/world.svg"

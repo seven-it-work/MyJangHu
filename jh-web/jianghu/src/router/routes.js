@@ -68,8 +68,14 @@ const routes = [
                     {
                         path: 'peopleManager/:worldId/:cityId/:sceneId',
                         name: 'peopleManager',
-                        title: '场景管理',
+                        title: '人员管理',
                         component: () => import('@/view/manager/PeopleManager.vue'),
+                    },
+                    {
+                        path: 'peopleDetail/:peopleId',
+                        name: 'peopleDetail',
+                        title: '人员详情',
+                        component: () => import('@/view/manager/PeopleDetail.vue'),
                     },
                 ]
             },

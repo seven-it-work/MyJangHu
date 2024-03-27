@@ -5,6 +5,9 @@ import peopleDb from "@/http/db/peopleDb.js";
 import cityDb from "@/http/db/cityDb.js";
 import sceneDb from "@/http/db/sceneDb.js";
 import {cloneDeep} from "lodash";
+import service from "@/http/request.js";
+
+const isDebug = true
 
 class LocalApi extends BaseApi {
     constructor(allDataList) {
@@ -32,12 +35,22 @@ class LocalApi extends BaseApi {
         return super.add(data).then(() => {
             data.id = randomUtil.guid()
             this.allDataList.push(data)
+            if (isDebug) {
+                console.log(`模块${this.constructor.name}。序列化对象↓↓↓↓↓↓↓↓↓↓`);
+                console.log(`export default ${JSON.stringify(this.allDataList)}`)
+                console.log(`模块${this.constructor.name}。↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑`)
+            }
         })
     }
 
     delete(id) {
         return super.delete(id).then(() => {
             this.allDataList = this.allDataList.filter(item => item.id !== id);
+            if (isDebug) {
+                console.log(`模块${this.constructor.name}。序列化对象↓↓↓↓↓↓↓↓↓↓`);
+                console.log(`export default ${JSON.stringify(this.allDataList)}`)
+                console.log(`模块${this.constructor.name}。↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑`)
+            }
         })
     }
 
@@ -46,6 +59,11 @@ class LocalApi extends BaseApi {
             const findData = this.allDataList.filter(item => item.id === data.id)[0];
             if (findData) {
                 Object.assign(findData, data);
+                if (isDebug) {
+                    console.log(`模块${this.constructor.name}。序列化对象↓↓↓↓↓↓↓↓↓↓`);
+                    console.log(`export default ${JSON.stringify(this.allDataList)}`)
+                    console.log(`模块${this.constructor.name}。↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑`)
+                }
             }
         })
     }
@@ -61,6 +79,12 @@ class LocalApi extends BaseApi {
             return cloneDeep(this.allDataList.filter(item => idList.includes(item.id)));
         })
     }
+
+    listALl() {
+        return Promise.resolve().then(() => {
+            return this.allDataList
+        })
+    }
 }
 
 class People extends LocalApi {
@@ -70,9 +94,19 @@ class World extends LocalApi {
 }
 
 class City extends LocalApi {
+    listAllCityByWorldId(id) {
+        return this.listALl().then(res => {
+            return res.filter(item => item.worldId === id)
+        })
+    }
 }
 
 class Scene extends LocalApi {
+    listAllByCityId(id) {
+        return this.listALl().then(res => {
+            return res.filter(item => item.cityId === id)
+        })
+    }
 }
 
 export const people = new People(peopleDb)
