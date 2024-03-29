@@ -2,7 +2,7 @@
 import Header from "@/view/Header.vue";
 import X6Demo from "@/demo/X6Demo.vue";
 import ChatManager from "@/demo/ChatManager.vue";
-
+import test from "@/view/game2/test"
 </script>
 
 <template>
