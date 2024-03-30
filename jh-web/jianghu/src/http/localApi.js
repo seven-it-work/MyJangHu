@@ -5,7 +5,6 @@ import peopleDb from "@/http/db/peopleDb.js";
 import cityDb from "@/http/db/cityDb.js";
 import sceneDb from "@/http/db/sceneDb.js";
 import {cloneDeep} from "lodash";
-import service from "@/http/request.js";
 
 const isDebug = true
 

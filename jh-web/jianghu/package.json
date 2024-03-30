@@ -23,6 +23,7 @@
     "axios": "^1.6.7",
     "chance": "^1.1.11",
     "date-fns": "^3.6.0",
+    "dayjs": "^1.11.10",
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
     "random_chinese_fantasy_names": "^0.1.18",
