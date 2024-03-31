@@ -62,6 +62,8 @@ const run = () => {
 }
 
 export default {
-    systemTimeObj, run,
+    systemTimeObj,
+    run,
     stop,
+    context,
 }

@@ -10,7 +10,7 @@ const peopleDb = [
     "sex": "WOMAN",
     "description": "",
     "remark": "",
-    "currentSceneId": "",
+    "currentSceneId": "3685e62d482e46feb7b911f5f659dc24",
     "currentWorldId": "c66c5a3267e7485592506cebb52cfca1",
     "currentCityId": "37817475185b4defb405e629c35a4898",
     "interactionIdList": [],
