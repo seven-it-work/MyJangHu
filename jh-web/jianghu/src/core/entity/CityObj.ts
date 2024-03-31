@@ -2,6 +2,7 @@ import {city} from "../../http/api";
 import {WorldObj} from "./WorldObj";
 import {CoreContext} from "./CoreContext";
 import {ProbabilisticActuators} from "../ProbabilisticActuators";
+import {SceneObj} from "./SceneObj";
 
 export interface CityInterface {
     description: string;
@@ -10,6 +11,7 @@ export interface CityInterface {
     name: string;
     worldId: string;
     worldObj: WorldObj;
+    sceneObjList: SceneObj[];
 }
 
 export class CityObj implements CityInterface {
@@ -19,12 +21,14 @@ export class CityObj implements CityInterface {
     name: string;
     worldId: string;
     worldObj: WorldObj;
+    sceneObjList: SceneObj[] = [];
 
 
     constructor(data: CityInterface) {
         Object.assign(this, data);
     }
-    doSomething(context:CoreContext){
+
+    doSomething(context: CoreContext) {
 
     }
 }

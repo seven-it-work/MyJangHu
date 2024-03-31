@@ -16,9 +16,9 @@ export interface SceneInterface {
     cityObj: CityObj;
     remark: string;
     fixedPeopleIdList: string[];
-    fixedPeopleObjList: PeopleObj[];
+    fixedPeopleObjList: Map<string, PeopleObj>;
     peopleIdList: string[];
-    peopleObjList: PeopleObj[];
+    peopleObjList: Map<string, PeopleObj>;
 
     currentLingLiValue: number;
     maxLingLiValue: number;
@@ -44,9 +44,9 @@ export class SceneObj implements SceneInterface {
     cityObj: CityObj;
     remark: string;
     fixedPeopleIdList: string[];
-    fixedPeopleObjList: PeopleObj[];
+    fixedPeopleObjList: Map<string, PeopleObj> = new Map();
     peopleIdList: string[];
-    peopleObjList: PeopleObj[];
+    peopleObjList: Map<string, PeopleObj> = new Map();
 
     currentLingLiValue: number;
     maxLingLiValue: number;
@@ -63,6 +63,16 @@ export class SceneObj implements SceneInterface {
 
     constructor(data: SceneInterface) {
         Object.assign(this, data);
+    }
+
+    peopleMoveOut(people: PeopleObj) {
+        this.peopleObjList.delete(people.id)
+        people.currentSceneObj = undefined;
+    }
+
+    peopleMoveIn(people: PeopleObj) {
+        this.peopleObjList.set(people.id, people)
+        people.currentSceneObj = this;
     }
 
     doSomething(context: CoreContext) {
@@ -106,7 +116,6 @@ export const sceneMap: Map<string, SceneObj> = new Map()
 
 const res = await scene.listALl()
 res.forEach((data: any) => {
-    console.log(data)
     const obj = new SceneObj(data);
     sceneMap.set(obj.id, obj);
 })

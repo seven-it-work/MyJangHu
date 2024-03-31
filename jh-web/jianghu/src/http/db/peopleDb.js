@@ -7,7 +7,7 @@ const peopleDb = [
     "xing": "李",
     "ming": "大力",
     "name": "李大力",
-    "sex": "MAN",
+    "sex": "WOMAN",
     "description": "",
     "remark": "",
     "currentSceneId": "",
