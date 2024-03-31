@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    // 关闭严格模式
+    "strict": false,
+    // 可能还需要关闭严格模式下的各个子选项，如果只想关闭部分严格检查
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "strictFunctionTypes": false,
+    "strictBindCallApply": false,
+    "strictPropertyInitialization": false,
+    "noImplicitThis": false,
+    "alwaysStrict": false,
+
+    "target": "esnext",
+    "module": "esnext",
+    "jsx": "preserve", // Vue 3.x
+    "experimentalDecorators": true, // Vue 2.x
+    "emitDecoratorMetadata": true, // Vue 2.x
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "baseUrl": ".", // 设置相对路径的基础目录
+    "paths": {
+      "@/*": ["src/*"] // 将 "@" 解析为 "src/" 目录及其子目录
+    },
+    "types": ["vite/client", "vue"] // 添加Vue类型声明
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "exclude": ["node_modules"]
+}
