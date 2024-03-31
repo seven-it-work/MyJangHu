@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "moduleResolution": "node",
     // 关闭严格模式
     "strict": false,
     // 可能还需要关闭严格模式下的各个子选项，如果只想关闭部分严格检查
@@ -10,7 +11,6 @@
     "strictPropertyInitialization": false,
     "noImplicitThis": false,
     "alwaysStrict": false,
-
     "target": "esnext",
     "module": "esnext",
     "jsx": "preserve", // Vue 3.x

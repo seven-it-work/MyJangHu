@@ -1,5 +1,7 @@
 import {city} from "../../http/api";
 import {WorldObj} from "./WorldObj";
+import {CoreContext} from "./CoreContext";
+import {ProbabilisticActuators} from "../ProbabilisticActuators";
 
 export interface CityInterface {
     description: string;
@@ -21,6 +23,9 @@ export class CityObj implements CityInterface {
 
     constructor(data: CityInterface) {
         Object.assign(this, data);
+    }
+    doSomething(context:CoreContext){
+
     }
 }
 

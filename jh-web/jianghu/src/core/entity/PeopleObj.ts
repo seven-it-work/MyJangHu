@@ -1,4 +1,6 @@
 import {people, world} from "../../http/api";
+import {CoreContext} from "./CoreContext";
+import {ProbabilisticActuators} from "../ProbabilisticActuators";
 
 export interface PeopleInterface {
     description: string;
@@ -14,6 +16,77 @@ export class PeopleObj implements PeopleInterface {
 
     constructor(data: PeopleInterface) {
         Object.assign(this, data);
+    }
+
+    performSocializing() {
+        ProbabilisticActuators.run([
+            {
+                weight: 10, action: () => {
+                    // 什么都不做
+                }
+            },
+            {
+                weight: 30, action: () => {
+                    // 问候
+                }
+            },
+            {
+                weight: 20, action: () => {
+                    // 讨好
+                }
+            },
+            {
+                weight: 20, action: () => {
+                    // 辱骂
+                }
+            },
+            {
+                weight: 10, action: () => {
+                    // 表白
+                }
+            },
+            {
+                weight: 10, action: () => {
+                    // 分手
+                }
+            },
+            {
+                weight: 10, action: () => {
+                    // 求婚
+                }
+            },
+            {
+                weight: 10, action: () => {
+                    // 离婚
+                }
+            },
+        ])
+    }
+
+    doSomething(context: CoreContext) {
+        ProbabilisticActuators.run([
+            {
+                weight: 10, action: () => {
+                    // 社交
+                    this.performSocializing()
+                }
+            },
+            {
+                weight: 10, action: () => {
+                    // 打工挣钱
+                }
+            },
+            {
+                weight: 10, action: () => {
+                    // 休息
+                }
+            },
+            {
+                weight: 10, action: () => {
+                    // 吸收灵气
+                }
+            },
+        ])
     }
 }
 

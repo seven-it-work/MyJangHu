@@ -1,4 +1,5 @@
 import {world} from "../../http/api";
+import {CoreContext} from "./CoreContext";
 
 
 export interface WorldInterface {
@@ -15,6 +16,9 @@ export class WorldObj implements WorldInterface {
 
     constructor(data:WorldInterface) {
         Object.assign(this, data);
+    }
+    doSomething(context:CoreContext){
+
     }
 }
 
