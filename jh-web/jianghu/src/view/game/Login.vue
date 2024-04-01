@@ -1,17 +1,25 @@
 <script>
 import Cookies from "js-cookie";
 import {city, people, scene, world} from "@/http/api.js";
+import {mapState} from "vuex";
 
 export default {
   name: "Login",
   data() {
     return {
       isLogin: false,
-      peopleObj: {}
     }
+  },
+  computed: {
+    ...mapState({
+      coreContext: state => state.coreContext,
+    })
   },
   methods: {
     getPeople() {
+      this.coreContext.currentPeople = this.coreContext.peopleMap.get(Cookies.get("peopleId"))
+      this.$store.commit('updateContext', this.coreContext)
+
       return people.getById(Cookies.get("peopleId")).then(async (peopleData) => {
         const peopleObj = peopleData;
         if (peopleObj.currentWorldId) {
@@ -29,7 +37,6 @@ export default {
             peopleObj.currentScene = res
           })
         }
-        this.peopleObj = peopleObj;
         this.$store.commit('updatePeople', peopleData)
       })
     },
@@ -45,8 +52,8 @@ export default {
       const peopleId = Cookies.get("peopleId");
       this.isLogin = !!peopleId
       if (this.isLogin) {
-        console.log("登录了，当前用户id",peopleId)
-        this.getPeople().then(()=>{
+        console.log("登录了，当前用户id", peopleId)
+        this.getPeople().then(() => {
           this.playGame()
         })
       } else {
@@ -55,10 +62,17 @@ export default {
       }
     },
     playGame() {
-       if (this.peopleObj.currentCity && this.peopleObj.currentCity.id) {
-        this.$router.push({name: 'gameScene', params: {worldId:this.peopleObj.currentWorld.id,cityId: this.peopleObj.currentCity.id}})
-      } else if (this.peopleObj.currentWorld && this.peopleObj.currentWorld.id){
-        this.$router.push({name: 'gameCity', params: {worldId: this.peopleObj.currentWorld.id}})
+      const currentPeople = this.coreContext?.currentPeople;
+      if (!currentPeople){
+        return
+      }
+      if (currentPeople.currentCityObj && currentPeople.currentCityObj.id) {
+        this.$router.push({
+          name: 'gameScene',
+          params: {worldId: currentPeople.currentWorldObj.id, cityId: currentPeople.currentCityObj.id}
+        })
+      } else if (currentPeople.currentWorldObj && currentPeople.currentWorldObj.id) {
+        this.$router.push({name: 'gameCity', params: {worldId: currentPeople.currentWorldObj.id}})
       } else {
         this.$router.push({name: 'gameWorld'})
       }
@@ -72,7 +86,7 @@ export default {
 
 <template>
   <div>
-<!--    todo 通过user email 来查询用 再查询people-->
+    <!--    todo 通过user email 来查询用 再查询people-->
     <a-button v-if="!isLogin" @click="login">登录</a-button>
     <a-button v-else @click="playGame">进入游戏</a-button>
   </div>

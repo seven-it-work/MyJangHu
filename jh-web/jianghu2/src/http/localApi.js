@@ -1,5 +1,5 @@
 import {BaseApi} from "@/http/baseApi.js";
-import store from "@/vuex/store.js";
+import store from "@/vuex/store";
 import {cloneDeep} from "lodash";
 import {randomUtil} from "@/random.js";
 

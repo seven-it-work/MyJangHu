@@ -4,7 +4,7 @@ import App from './App.vue'
 import Antd from 'ant-design-vue';
 // import 'ant-design-vue/dist/antd.css';
 import router from "@/router/index.js";
-import store from "@/vuex/store.js";
+import store from "@/vuex/store";
 
 
 const app = createApp(App)

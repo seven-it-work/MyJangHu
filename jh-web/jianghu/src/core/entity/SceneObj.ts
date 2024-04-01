@@ -10,7 +10,6 @@ export interface SceneInterface {
     description: string;
     id: string;
     name: string;
-    worldId: string;
     worldObj: WorldObj;
     cityId: string;
     cityObj: CityObj;
@@ -38,7 +37,6 @@ export class SceneObj implements SceneInterface {
     description: string;
     id: string;
     name: string;
-    worldId: string;
     worldObj: WorldObj;
     cityId: string;
     cityObj: CityObj;
@@ -68,11 +66,15 @@ export class SceneObj implements SceneInterface {
     peopleMoveOut(people: PeopleObj) {
         this.peopleObjList.delete(people.id)
         people.currentSceneObj = undefined;
+        people.currentCityObj = undefined;
+        people.currentWorldObj = undefined;
     }
 
     peopleMoveIn(people: PeopleObj) {
         this.peopleObjList.set(people.id, people)
         people.currentSceneObj = this;
+        people.currentCityObj = this.cityObj;
+        people.currentWorldObj = this.worldObj;
     }
 
     doSomething(context: CoreContext) {

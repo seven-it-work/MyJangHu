@@ -1,4 +1,4 @@
-import store from "@/vuex/store.js";
+import store from "@/vuex/store";
 import {city, people, scene, world} from "@/http/api.js";
 
 export const updateCurrentPeople = (updateData) => {

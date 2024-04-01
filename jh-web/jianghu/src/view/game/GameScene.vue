@@ -1,5 +1,4 @@
 <script>
-import {city, people, scene} from "@/http/api.js";
 import {mapState} from "vuex";
 import ChatBox from "@/components/ChatBox.vue";
 
@@ -9,25 +8,33 @@ export default {
   data() {
     return {
       componentsData: {},
-      cityObj: {
-        matrixMapObj: [[]]
-      },
+      cityObj: {},
       peopleList: [],
       peopleInteractionList: []
     }
   },
   computed: {
     ...mapState({
-      peopleObj: state => state.peopleObj,
+      currentPeople: state => state.coreContext.currentPeople,
+      coreContext: state => state.coreContext,
     }),
+  },
+  watch: {
+    coreContext: {
+      handler() {
+        console.log("11111")
+        this.listCurrentScenePeople(this.currentPeople?.currentSceneId)
+      },
+      deep: true
+    }
   },
   created() {
     this.getCityById()
-    this.listCurrentScenePeople(this.peopleObj.currentSceneId)
+    this.listCurrentScenePeople(this.currentPeople?.currentSceneId)
   },
   methods: {
     interactionClick(interaction) {
-      switch (interaction.key){
+      switch (interaction.key) {
         case 'conversation':
           break
         case 'attack':
@@ -37,58 +44,12 @@ export default {
         case 'dealing':
           break
         default:
-            break
+          break
       }
-      // console.log(interaction)
-      // // todo 调用后台 请求相关 type 和 数据对象
-      // this.componentsData = {
-      //   type: 'ChatBox',
-      //   visible: true,
-      //   dataNowId: "1",
-      //   data: [
-      //     {
-      //       id: "1",
-      //       nextId: "2",
-      //       peopleObj: {id: '1', name: "测试"},
-      //       message: "好好好",
-      //       selectItem: []
-      //     },
-      //     {
-      //       id: "2",
-      //       nextId: "3",
-      //       peopleObj: {id: '2', name: "测试2"},
-      //       message: "对地段",
-      //       selectItem: []
-      //     },
-      //     {
-      //       id: "3",
-      //       nextId: "4",
-      //       peopleObj: {id: '1', name: "测试2"},
-      //       message: "",
-      //       // selectItem 也是事件对象
-      //       selectItem: [
-      //         {
-      //           id: 'jg',
-      //           name: '交谈',
-      //         }
-      //       ]
-      //     },
-      //     {
-      //       id: "4",
-      //       nextId: "",
-      //       peopleObj: {id: '2', name: "测试2"},
-      //       message: "去吧",
-      //     },
-      //   ]
-      // }
-      // this.componentsData.dataNowObj = this.componentsData.data.filter(item => item.id === this.componentsData.dataNowId)[0]
-      // if (!this.componentsData.dataNowObj) {
-      //   this.componentsData.visible = false
-      // }
     },
     getPeopleInteractionList(peopleItem) {
       if (peopleItem) {
-        if (peopleItem.id === this.peopleObj.id) {
+        if (peopleItem.id === this.currentPeople.id) {
           peopleItem.interactionList = [{
             name: '自己'
           }]
@@ -118,45 +79,22 @@ export default {
       }
     },
     movePlace(item) {
-      this.peopleObj.currentSceneId = item.id
-      this.peopleObj.currentScene = item
-      people.update(this.peopleObj).then(() => {
-        this.listCurrentScenePeople(item.id)
-      })
+      if (!item) {
+        return
+      }
+      this.currentPeople?.currentSceneObj?.peopleMoveOut(this.currentPeople);
+      item.peopleMoveIn(this.currentPeople)
     },
     listCurrentScenePeople(sceneId) {
       if (sceneId) {
-        people.list(1, 100, {
-          currentPlaceObj: true,
-          currentSceneId: sceneId
-        }).then(res => {
-          this.peopleList = res.records
-        })
+        this.peopleList = Array.from(this.coreContext.sceneMap.get(sceneId)?.peopleObjList?.values())
       }
     },
+    getMatrixMapObj(row, col) {
+      return this.coreContext.sceneMap.get(this.cityObj.matrixMap[row - 1][col - 1])
+    },
     getCityById() {
-      city.getById(this.$route.params.cityId).then(res => {
-        this.cityObj = res;
-        const sceneVoMap = {}
-        const sceneIds = this.cityObj.matrixMap.flatMap(item => item).filter(item => !!item);
-        scene.listByIds(sceneIds).then(res => {
-          (res || []).forEach(item => sceneVoMap[item.id] = item)
-          const matrixMapObj = []
-          this.cityObj.matrixMap.forEach(list => {
-            const temp = []
-            list.forEach(item => {
-              const sceneVoMapElement = sceneVoMap[item];
-              if (sceneVoMapElement && sceneVoMapElement.name) {
-                temp.push(sceneVoMapElement)
-              } else {
-                temp.push({})
-              }
-            })
-            matrixMapObj.push(temp)
-          })
-          this.cityObj.matrixMapObj = matrixMapObj
-        })
-      })
+      this.cityObj = this.coreContext.cityMap.get(this.$route.params.cityId)
     }
   },
 }
@@ -178,22 +116,22 @@ export default {
       </a-popover>
     </a-col>
   </a-row>
-  <a-row id="points" v-if="cityObj.matrixMapObj && cityObj.matrixMapObj.length">
+  <a-row id="points" v-if="cityObj?.matrixMap && cityObj?.matrixMap.length">
     <table cellspacing="30">
       <tbody>
-      <tr v-for="row in cityObj.matrixMapObj.length" :key="row">
-        <td v-for="col in cityObj.matrixMapObj[0].length"
-            :id="cityObj.matrixMapObj[row - 1][col - 1].id"
+      <tr v-for="row in cityObj.matrixMap.length" :key="row">
+        <td v-for="col in cityObj.matrixMap[0].length"
+            :id="cityObj.matrixMap[row - 1][col - 1]"
             :key="col">
-          <a-popover v-if="cityObj.matrixMapObj[row - 1][col - 1].name"
-                     :title="cityObj.matrixMapObj[row - 1][col - 1].name"
+          <a-popover v-if="getMatrixMapObj(row,col)?.name"
+                     :title="getMatrixMapObj(row,col)?.name"
                      disabled>
             <template #content>
-              <a-button @click="movePlace(cityObj.matrixMapObj[row - 1][col - 1])">移动到此</a-button>
+              <a-button @click="movePlace(getMatrixMapObj(row,col))">移动到此</a-button>
             </template>
             <div class="td-info"
-                 :style="peopleObj.currentSceneId===cityObj.matrixMapObj[row - 1][col - 1].id?{background:'red'}:{}">
-              {{ cityObj.matrixMapObj[row - 1][col - 1].name }}
+                 :style="(cityObj.matrixMap[row - 1][col - 1] && currentPeople?.currentSceneObj?.id===cityObj.matrixMap[row - 1][col - 1])?{background:'red'}:{}">
+              {{ getMatrixMapObj(row, col)?.name }}
             </div>
           </a-popover>
           <div v-else class="td-info">

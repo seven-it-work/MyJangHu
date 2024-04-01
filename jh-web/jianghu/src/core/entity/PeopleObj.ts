@@ -25,6 +25,10 @@ export interface PeopleInterface {
     currentSceneId: string;
     interactionIdList: string;
     peopleType: string;
+    currentCityObj: CityObj;
+    currentCityId: string;
+    currentWorldObj: WorldObj;
+    currentWorldId: string;
 }
 
 export class PeopleObj implements PeopleInterface {
@@ -38,6 +42,10 @@ export class PeopleObj implements PeopleInterface {
     remark: string;
     currentSceneObj: SceneObj;
     currentSceneId: string;
+    currentCityObj: CityObj;
+    currentCityId: string;
+    currentWorldObj: WorldObj;
+    currentWorldId: string;
     interactionIdList: string;
     peopleType: string;
 
@@ -47,7 +55,6 @@ export class PeopleObj implements PeopleInterface {
 
     constructor(data: PeopleInterface) {
         Object.assign(this, data);
-        console.log(this)
     }
 
     executePerformSocializing(context: CoreContext) {
@@ -99,39 +106,36 @@ export class PeopleObj implements PeopleInterface {
         if (this.peopleType !== 'AI_PEOPLE') {
             return
         }
+        const moveScene = (sceneObjList: SceneObj[]) => {
+            const newSceneObj: SceneObj = randomList.randomFormList(sceneObjList)
+            // 原来去掉
+            if (this.currentSceneObj) {
+                this.currentSceneObj.peopleMoveOut(this)
+            }
+            if (newSceneObj) {
+                newSceneObj.peopleMoveIn(this)
+            }
+        }
         ProbabilisticActuators.run([
             {
                 weight: 30, action: () => {
                     // 当前城市移动(改变节点)
-                    const sceneObj = this.currentSceneObj;
-                    const newSceneObj: SceneObj = randomList.randomFormList(sceneObj.cityObj.sceneObjList)
-                    // 原来去掉
-                    sceneObj.peopleMoveOut(this)
-                    newSceneObj.peopleMoveIn(this)
+                    moveScene(this.currentCityObj?.sceneObjList)
                 }
             },
             {
                 weight: 20, action: () => {
                     // 当前世界移动(改变城市)
-                    const sceneObj = this.currentSceneObj;
-                    const worldObj = sceneObj.cityObj.worldObj;
-                    const newCityObj: CityObj = randomList.randomFormList(worldObj.cityObjList)
-                    const newSceneObj = randomList.randomFormList(newCityObj.sceneObjList);
-                    // 原来去掉
-                    sceneObj.peopleMoveOut(this)
-                    newSceneObj.peopleMoveIn(this)
+                    const newCityObj: CityObj = randomList.randomFormList(this.currentWorldObj?.cityObjList)
+                    moveScene(newCityObj?.sceneObjList)
                 }
             },
             {
                 weight: 10, action: () => {
                     // 当前世界移动(改变世界)
-                    const sceneObj = this.currentSceneObj;
                     const newWorldObj: WorldObj = randomList.randomFormList(Array.from(context.worldMap.values()))
-                    const newCityObj: CityObj = randomList.randomFormList(newWorldObj.cityObjList)
-                    const newSceneObj = randomList.randomFormList(newCityObj.sceneObjList);
-                    // 原来去掉
-                    sceneObj.peopleMoveOut(this)
-                    newSceneObj.peopleMoveIn(this)
+                    const newCityObj: CityObj = randomList.randomFormList(newWorldObj?.cityObjList)
+                    moveScene(newCityObj?.sceneObjList)
                 }
             },
         ])

@@ -5,6 +5,7 @@ import {peopleMap} from "./entity/PeopleObj";
 import {ProbabilisticActuators} from "./ProbabilisticActuators";
 import {SystemTimeObj} from "./entity/SystemTimeObj";
 import {CoreContext} from "./entity/CoreContext";
+import store from "@/vuex/store";
 
 worldMap.forEach((v, k) => {
 })
@@ -17,13 +18,10 @@ cityMap.forEach((v, k) => {
 
 })
 sceneMap.forEach((v, k) => {
-    v.worldObj = worldMap.get(v.worldId);
     v.cityObj = cityMap.get(v.cityId);
+    v.worldObj = worldMap.get(v.cityObj.worldId);
     v.fixedPeopleIdList?.map(id => peopleMap.get(id)).forEach(value => {
         v.fixedPeopleObjList.set(value.id, value)
-    })
-    v.peopleIdList?.map(id => peopleMap.get(id)).forEach(value => {
-        v.peopleObjList.set(value.id, value)
     })
     v.cityObj.sceneObjList.push(v)
 })
@@ -31,6 +29,13 @@ sceneMap.forEach((v, k) => {
 
 peopleMap.forEach((v, k) => {
     v.currentSceneObj = sceneMap.get(v.currentSceneId);
+    v.currentCityObj = cityMap.get(v.currentCityId);
+    v.currentWorldObj = worldMap.get(v.currentWorldId);
+    if (v.peopleType==='AI_PEOPLE'){
+        if (v.currentSceneObj){
+            v.currentSceneObj.peopleMoveIn(v)
+        }
+    }
 })
 
 const systemTimeObj = new SystemTimeObj(new Date().getTime());
@@ -41,7 +46,8 @@ const context: CoreContext = {
     worldMap,
     cityMap,
     sceneMap,
-    peopleMap
+    peopleMap,
+    time: new Date().getTime(),
 }
 
 let interval
@@ -58,6 +64,7 @@ const run = () => {
         cityMap.forEach((v) => v.doSomething(context))
         sceneMap.forEach((v) => v.doSomething(context))
         peopleMap.forEach((v) => v.doSomething(context))
+        // store.commit('updateContext', context)
     }, 5000)
 }
 
