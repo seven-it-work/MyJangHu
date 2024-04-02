@@ -46,21 +46,29 @@ export class SceneObj implements SceneInterface {
     peopleIdList: string[];
     peopleObjList: Map<string, PeopleObj> = new Map();
 
-    currentLingLiValue: number;
-    maxLingLiValue: number;
-    produceLingLiValue: number;
+    currentLingLiValue: number = 10;
+    maxLingLiValue: number = 10;
+    produceLingLiValue: number = 1;
 
-    currentSilverValue: number;
-    maxSilverValue: number;
-    produceSilverValue: number;
+    currentSilverValue: number = 10;
+    maxSilverValue: number = 10;
+    produceSilverValue: number = 1;
 
-    currentGoldValue: number;
-    maxGoldValue: number;
-    produceGoldValue: number;
+    currentGoldValue: number = 10;
+    maxGoldValue: number = 10;
+    produceGoldValue: number = 1;
 
 
     constructor(data: SceneInterface) {
         Object.assign(this, data);
+    }
+
+    consumeLingLi(value: number): number {
+        if (this.currentLingLiValue < value) {
+            value = this.currentLingLiValue
+        }
+        this.currentLingLiValue -= value;
+        return value
     }
 
     peopleMoveOut(people: PeopleObj) {

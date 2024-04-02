@@ -29,6 +29,9 @@ export interface PeopleInterface {
     currentCityId: string;
     currentWorldObj: WorldObj;
     currentWorldId: string;
+    eventProcessingTime: number;
+    lingLi: number;
+    gainLingLiSpeed: number;// 每次获取量
 }
 
 export class PeopleObj implements PeopleInterface {
@@ -41,13 +44,24 @@ export class PeopleObj implements PeopleInterface {
     sex: SexType;
     remark: string;
     currentSceneObj: SceneObj;
-    currentSceneId: string;
+    private _currentSceneId: string;
     currentCityObj: CityObj;
-    currentCityId: string;
+    private _currentCityId: string;
     currentWorldObj: WorldObj;
-    currentWorldId: string;
+    private _currentWorldId: string;
     interactionIdList: string;
     peopleType: string;
+    eventProcessingTime: number;
+
+    lingLi: number = 0;
+    gainLingLiSpeed: number = 1;// 每次获取量
+
+    processingEfficiency(context: CoreContext) {
+        if (this.eventProcessingTime) {
+            return Math.max(1, (context.systemTimeObj.gameTime - this.eventProcessingTime) / (1000 * 500))
+        }
+        return 0;
+    }
 
     getName(): string {
         return this.xing + this.ming
@@ -102,12 +116,21 @@ export class PeopleObj implements PeopleInterface {
         ])
     }
 
+    executeLingLiPower(context: CoreContext) {
+        const gainLingLi = this.currentSceneObj?.consumeLingLi(this.processingEfficiency(context) * this.gainLingLiSpeed)
+        // console.log(`${this.currentSceneObj?.name} 获取${gainLingLi}`)
+        this.lingLi += gainLingLi
+    }
+
     executeMove(context: CoreContext) {
-        if (this.peopleType !== 'AI_PEOPLE') {
+        // if (this.peopleType !== 'AI_PEOPLE') {
+        if (this.peopleType !== '1') {
             return
         }
         const moveScene = (sceneObjList: SceneObj[]) => {
             const newSceneObj: SceneObj = randomList.randomFormList(sceneObjList)
+            // 重置
+            this.eventProcessingTime = context.systemTimeObj.gameTime
             // 原来去掉
             if (this.currentSceneObj) {
                 this.currentSceneObj.peopleMoveOut(this)
@@ -149,7 +172,7 @@ export class PeopleObj implements PeopleInterface {
                 }
             },
             {
-                weight: 10, action: () => {
+                weight: 5, action: () => {
                     // 移动
                     this.executeMove(context)
                 }
@@ -173,9 +196,34 @@ export class PeopleObj implements PeopleInterface {
             {
                 weight: 20, action: () => {
                     // 吸收灵气
+                    this.executeLingLiPower(context)
                 }
             },
         ])
+    }
+
+    get currentSceneId(): string {
+        return this.currentSceneObj?.id || this._currentSceneId;
+    }
+
+    get currentCityId(): string {
+        return this.currentCityObj?.id || this._currentCityId;
+    }
+
+    get currentWorldId(): string {
+        return this.currentWorldObj?.id || this._currentWorldId;
+    }
+
+    set currentSceneId(value: string) {
+        this._currentSceneId = value;
+    }
+
+    set currentCityId(value: string) {
+        this._currentCityId = value;
+    }
+
+    set currentWorldId(value: string) {
+        this._currentWorldId = value;
     }
 }
 

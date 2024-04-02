@@ -22,7 +22,6 @@ export default {
   watch: {
     coreContext: {
       handler() {
-        console.log("11111")
         this.listCurrentScenePeople(this.currentPeople?.currentSceneId)
       },
       deep: true
