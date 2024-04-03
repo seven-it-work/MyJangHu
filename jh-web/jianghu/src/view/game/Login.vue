@@ -66,6 +66,9 @@ export default {
       if (!currentPeople){
         return
       }
+      if (currentPeople.currentSceneObj){
+        currentPeople.currentSceneObj.peopleMoveIn(currentPeople)
+      }
       if (currentPeople.currentCityObj && currentPeople.currentCityObj.id) {
         this.$router.push({
           name: 'gameScene',

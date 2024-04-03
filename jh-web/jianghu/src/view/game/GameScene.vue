@@ -1,12 +1,14 @@
 <script>
 import {mapState} from "vuex";
 import ChatBox from "@/components/ChatBox.vue";
+import i18nUtils from "@/i18n/I18nUtils.js";
 
 export default {
   name: "GameScene",
   components: {ChatBox},
   data() {
     return {
+      i18nUtils,
       componentsData: {},
       cityObj: {},
       peopleList: [],
@@ -103,11 +105,22 @@ export default {
   <a-row>
     <a-col v-for="peopleItem in peopleList" :key="peopleItem.id">
       <a-popover trigger="click" @click="getPeopleInteractionList(peopleItem)">
+        <template #title>
+          <span v-if="peopleItem.currentlyProgress">（{{ i18nUtils.getI18n(peopleItem.currentlyProgress)}}）</span>
+        </template>
         <template #content>
-          <a-button v-for="interaction in peopleInteractionList" :key="interaction"
-                    @click="interactionClick(interaction)">
-            {{ interaction.name }}
-          </a-button>
+          <a-row>
+            <a-col :span="12">
+              灵力：{{peopleItem.lingLi || 0}}
+            </a-col>
+            <a-col :span="12">
+              <div v-for="interaction in peopleInteractionList" :key="interaction">
+                <a-button @click="interactionClick(interaction)">
+                  {{ interaction.name }}
+                </a-button>
+              </div>
+            </a-col>
+          </a-row>
         </template>
         <a-avatar :size="{ xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 }">
           {{ peopleItem.name }}

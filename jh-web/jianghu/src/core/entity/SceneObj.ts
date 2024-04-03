@@ -72,6 +72,7 @@ export class SceneObj implements SceneInterface {
     }
 
     peopleMoveOut(people: PeopleObj) {
+        console.log(`${people.getName()}离开了${this.worldObj.name}=>${this.cityObj.name}=>${this.name}`)
         this.peopleObjList.delete(people.id)
         people.currentSceneObj = undefined;
         people.currentCityObj = undefined;
@@ -79,6 +80,7 @@ export class SceneObj implements SceneInterface {
     }
 
     peopleMoveIn(people: PeopleObj) {
+        console.log(`${people.getName()}进入了${this.worldObj.name}=>${this.cityObj.name}=>${this.name}`)
         this.peopleObjList.set(people.id, people)
         people.currentSceneObj = this;
         people.currentCityObj = this.cityObj;

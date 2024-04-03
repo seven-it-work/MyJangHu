@@ -1,11 +1,14 @@
 <script>
-import {people, world} from "@/http/api.js";
 import worldPng from "@/assets/world/world.svg"
-import Cookies from "js-cookie";
-import {updateCurrentPeople} from "@/util/BusinessUtils.js";
+import {mapState} from "vuex";
 
 export default {
   name: "Game",
+  computed: {
+    ...mapState({
+      coreContext: state => state.coreContext,
+    }),
+  },
   data() {
     return {
       worldPng,
@@ -17,18 +20,10 @@ export default {
   },
   methods: {
     getWorldObj() {
-      world.list(1, 999).then(res => {
-        this.allWorldList = res.records
-      })
+      this.allWorldList = Array.from(this.coreContext.worldMap.values())
     },
     go2World(item) {
-      people.getById(Cookies.get("peopleId")).then(res => {
-        res.currentWorldId = item.id;
-        res.currentCityId=''
-        res.currentSceneId=''
-        updateCurrentPeople(res).then(()=>
-            this.$router.push({name: 'gameCity', params: {worldId: item.id}}))
-      })
+      this.$router.push({name: 'gameCity', params: {worldId: item.id}})
     }
   },
 }

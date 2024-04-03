@@ -1,50 +1,38 @@
 <script>
-import {people, world} from "@/http/api.js";
-import Cookies from "js-cookie";
-import {updateCurrentPeople} from "@/util/BusinessUtils.js";
+import {mapState} from "vuex";
+import {randomList, randomUtil} from "@/random.js";
 
 export default {
   name: "GameCity",
   data() {
     return {
-      worldObj: {
-        matrixMapObj: [[]]
-      },
+      worldObj: {},
     }
   },
   created() {
     this.getWorldById()
   },
+  computed: {
+    ...mapState({
+      coreContext: state => state.coreContext,
+    }),
+  },
   methods: {
+    getCityObj(row, col) {
+      const id = this.worldObj.matrixMap[row - 1][col - 1];
+      if (id) {
+        return this.coreContext.cityMap.get(id);
+      }
+      return undefined
+    },
     go2City(item) {
-      people.getById(Cookies.get("peopleId")).then(res => {
-        res.currentCityId = item.id
-        res.currentSceneId = ''
-        updateCurrentPeople(res).then(() => {
-          this.$router.push({name: 'gameScene', params: {worldId: this.$route.params.worldId, cityId: item.id}})
-        })
-      })
+      const sceneObj = randomList.randomFormList(item?.sceneObjList)
+      this.coreContext.currentPeople?.currentSceneObj?.peopleMoveOut(this.coreContext.currentPeople)
+      sceneObj?.peopleMoveIn(this.coreContext.currentPeople)
+      this.$router.push({name: 'gameScene', params: {worldId: this.$route.params.worldId, cityId: item.id}})
     },
     getWorldById() {
-      world.getById(this.$route.params.worldId, true).then(res => {
-        this.worldObj = res;
-        const cityVoMap = {}
-        this.worldObj.cityVoList.forEach(item => cityVoMap[item.id] = item);
-        const matrixMapObj = []
-        this.worldObj.matrixMap.forEach(list => {
-          const temp = []
-          list.forEach(item => {
-            const cityVoMapElement = cityVoMap[item];
-            if (cityVoMapElement && cityVoMapElement.name) {
-              temp.push(cityVoMapElement)
-            } else {
-              temp.push({})
-            }
-          })
-          matrixMapObj.push(temp)
-        })
-        this.worldObj.matrixMapObj = matrixMapObj
-      })
+      this.worldObj = this.coreContext.worldMap.get(this.$route.params.worldId);
     }
   },
 }
@@ -54,17 +42,17 @@ export default {
   <a-row id="points">
     <table cellspacing="30">
       <tbody>
-      <tr v-for="row in worldObj.matrixMapObj.length" :key="row">
-        <td v-for="col in worldObj.matrixMapObj[0].length"
-            :id="worldObj.matrixMapObj[row - 1][col - 1].id"
+      <tr v-for="row in worldObj?.matrixMap.length" :key="row">
+        <td v-for="col in worldObj?.matrixMap[0].length"
+            :id="worldObj?.matrixMap[row - 1][col - 1]"
             :key="col">
-          <a-popover v-if="worldObj.matrixMapObj[row - 1][col - 1].name"
-                     :title="worldObj.matrixMapObj[row - 1][col - 1].name">
+          <a-popover v-if="getCityObj(row,col)?.name"
+                     :title="getCityObj(row,col)?.name">
             <template #content>
-              <a-button @click="go2City(worldObj.matrixMapObj[row - 1][col - 1])">进入城市</a-button>
+              <a-button @click="go2City(getCityObj(row,col))">进入城市</a-button>
             </template>
             <div class="td-info">
-              {{ worldObj.matrixMapObj[row - 1][col - 1].name }}
+              {{ getCityObj(row, col)?.name }}
             </div>
           </a-popover>
           <div v-else class="td-info">

@@ -32,6 +32,7 @@ export interface PeopleInterface {
     eventProcessingTime: number;
     lingLi: number;
     gainLingLiSpeed: number;// 每次获取量
+    currentlyProgress: 'gainLingLi' | 'gainGold' | undefined;
 }
 
 export class PeopleObj implements PeopleInterface {
@@ -55,10 +56,11 @@ export class PeopleObj implements PeopleInterface {
 
     lingLi: number = 0;
     gainLingLiSpeed: number = 1;// 每次获取量
+    currentlyProgress: 'gainLingLi' | 'gainGold' | undefined;
 
     processingEfficiency(context: CoreContext) {
         if (this.eventProcessingTime) {
-            return Math.max(1, (context.systemTimeObj.gameTime - this.eventProcessingTime) / (1000 * 500))
+            return Math.min(1, (context.systemTimeObj.gameTime - this.eventProcessingTime) / (1000 * 500))
         }
         return 0;
     }
@@ -117,25 +119,29 @@ export class PeopleObj implements PeopleInterface {
     }
 
     executeLingLiPower(context: CoreContext) {
+        if (this.currentlyProgress !== 'gainLingLi') {
+            // 重置
+            this.eventProcessingTime = context.systemTimeObj.gameTime
+            this.currentlyProgress = 'gainLingLi'
+        }
         const gainLingLi = this.currentSceneObj?.consumeLingLi(this.processingEfficiency(context) * this.gainLingLiSpeed)
-        // console.log(`${this.currentSceneObj?.name} 获取${gainLingLi}`)
+        console.log(`${this.getName()} 获取${gainLingLi}`)
         this.lingLi += gainLingLi
     }
 
     executeMove(context: CoreContext) {
-        // if (this.peopleType !== 'AI_PEOPLE') {
-        if (this.peopleType !== '1') {
-            return
-        }
         const moveScene = (sceneObjList: SceneObj[]) => {
             const newSceneObj: SceneObj = randomList.randomFormList(sceneObjList)
-            // 重置
-            this.eventProcessingTime = context.systemTimeObj.gameTime
-            // 原来去掉
-            if (this.currentSceneObj) {
-                this.currentSceneObj.peopleMoveOut(this)
-            }
             if (newSceneObj) {
+                if (newSceneObj.id === this.currentSceneObj.id) {
+                    // 相同地点不移动
+                    return
+                }
+                this.currentlyProgress = undefined
+                // 原来去掉
+                if (this.currentSceneObj) {
+                    this.currentSceneObj.peopleMoveOut(this)
+                }
                 newSceneObj.peopleMoveIn(this)
             }
         }
@@ -165,10 +171,14 @@ export class PeopleObj implements PeopleInterface {
     }
 
     doSomething(context: CoreContext) {
+        if (this.peopleType !== 'AI_PEOPLE') {
+            // if (this.peopleType !== '1') {
+            return
+        }
         ProbabilisticActuators.run([
             {
                 weight: 10, action: () => {
-                    // 什么都不做
+                    // 什么都不做(保持现状)
                 }
             },
             {
@@ -189,12 +199,12 @@ export class PeopleObj implements PeopleInterface {
                 }
             },
             {
-                weight: 20, action: () => {
-                    // 休息
+                weight: 10, action: () => {
+                    // 休息 todo 生命比率越低 改了越高，最高占比值50
                 }
             },
             {
-                weight: 20, action: () => {
+                weight: 200, action: () => {
                     // 吸收灵气
                     this.executeLingLiPower(context)
                 }
