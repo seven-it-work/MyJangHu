@@ -74,6 +74,14 @@ export class PeopleObj implements PeopleInterface {
     }
 
     executePerformSocializing(context: CoreContext) {
+        const sceneObj = context.sceneMap.get(this.currentSceneObj?.id);
+        if (!sceneObj) {
+            return
+        }
+        const peopleObj: PeopleObj = randomList.randomFormList(Array.from(sceneObj.peopleObjList.values()).filter(item => item.id !== this.id))
+        if (!peopleObj) {
+            return;
+        }
         ProbabilisticActuators.run([
             {
                 weight: 10, action: () => {
@@ -83,36 +91,43 @@ export class PeopleObj implements PeopleInterface {
             {
                 weight: 30, action: () => {
                     // 问候
+                    console.log(`${this.getName()}向${peopleObj.getName()}进行问候`)
                 }
             },
             {
                 weight: 20, action: () => {
                     // 讨好
+                    console.log(`${this.getName()}向${peopleObj.getName()}进行讨好`)
                 }
             },
             {
                 weight: 20, action: () => {
                     // 辱骂
+                    console.log(`${this.getName()}向${peopleObj.getName()}进行辱骂`)
                 }
             },
             {
                 weight: 10, action: () => {
                     // 表白
+                    console.log(`${this.getName()}向${peopleObj.getName()}进行表白`)
                 }
             },
             {
                 weight: 10, action: () => {
                     // 分手
+                    console.log(`${this.getName()}向${peopleObj.getName()}提出分手`)
                 }
             },
             {
                 weight: 10, action: () => {
                     // 求婚
+                    console.log(`${this.getName()}向${peopleObj.getName()}求婚`)
                 }
             },
             {
                 weight: 10, action: () => {
                     // 离婚
+                    console.log(`${this.getName()}向${peopleObj.getName()}提出离婚`)
                 }
             },
         ])
@@ -188,7 +203,7 @@ export class PeopleObj implements PeopleInterface {
                 }
             },
             {
-                weight: 10, action: () => {
+                weight: 100, action: () => {
                     // 社交
                     this.executePerformSocializing(context)
                 }
@@ -204,7 +219,7 @@ export class PeopleObj implements PeopleInterface {
                 }
             },
             {
-                weight: 200, action: () => {
+                weight: 20, action: () => {
                     // 吸收灵气
                     this.executeLingLiPower(context)
                 }
