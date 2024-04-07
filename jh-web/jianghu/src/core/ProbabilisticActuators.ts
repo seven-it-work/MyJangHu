@@ -15,7 +15,7 @@ export class ProbabilisticActuators {
         }
         const sum = probabilisticActuators.map(item => item.weight).reduce((a, b) => a + b, 0);
         let tempSum = 0;
-        const random = randomUtil.integer({min: 0, max: sum})
+        const random = randomUtil.integer({min: 1, max: sum})
         for (let i = 0; i < probabilisticActuators.length; i++) {
             const temp = probabilisticActuators[i];
             tempSum += temp.weight;

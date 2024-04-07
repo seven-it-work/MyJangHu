@@ -7,6 +7,8 @@ import {SystemTimeObj} from "./entity/SystemTimeObj";
 import {CoreContext} from "./entity/CoreContext";
 import store from "@/vuex/store";
 
+const speeding=100
+
 worldMap.forEach((v, k) => {
 })
 
@@ -65,7 +67,7 @@ const run = () => {
         sceneMap.forEach((v) => v.doSomething(context))
         peopleMap.forEach((v) => v.doSomething(context))
         // store.commit('updateContext', context)
-    }, 5000)
+    }, speeding)
 }
 
 export default {
