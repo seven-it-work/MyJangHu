@@ -104,7 +104,7 @@ export default {
 <template>
   <a-row>
     <a-col v-for="peopleItem in peopleList" :key="peopleItem.id">
-      <a-popover trigger="click" @click="getPeopleInteractionList(peopleItem)">
+      <a-popover placement="topLeft" trigger="click" @click="getPeopleInteractionList(peopleItem)">
         <template #title>
           <span v-if="peopleItem.currentlyProgress">（{{ i18nUtils.getI18n(peopleItem.currentlyProgress)}}）</span>
         </template>

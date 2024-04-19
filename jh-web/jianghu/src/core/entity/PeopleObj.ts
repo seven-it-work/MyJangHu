@@ -72,6 +72,16 @@ export class PeopleObj implements PeopleInterface {
     id: string;
     xing: string;
     ming: string;
+    private _name: string;
+
+    set name(value: string) {
+        this._name = value;
+    }
+
+    get name(): string {
+        return this.xing + this.ming;
+    }
+
     sex: SexType;
     remark: string;
     currentSceneObj: SceneObj;
@@ -82,16 +92,18 @@ export class PeopleObj implements PeopleInterface {
     private _currentWorldId: string;
     interactionIdList: string;
     peopleType: string = "AI_PEOPLE";
-    eventProcessingTime: number;
+    eventProcessingTime: number;// 事件执行持续时间
 
     lingLi: number = 0;
     gainLingLiSpeed: number = 1;// 每次获取量
     currentlyProgress: 'gainLingLi' | 'gainGold' | undefined;
 
     pregnant: PeopleObj;
-    numberOfPregnancies: number = 0;
-    timeOfPregnancy: number;
-    birthDay: number;
+    numberOfPregnancies: number = 0;// 怀孕次数
+    timeOfPregnancy: number;// 怀孕时间
+    birthDay: number;// 出生时间
+    father: PeopleObj;
+    mother: PeopleObj;
 
     isPregnant() {
         return !!this.pregnant
@@ -132,12 +144,12 @@ export class PeopleObj implements PeopleInterface {
         }
     }
 
-    changeRelationShipType(target: PeopleObj, targetRelationshipType: RelationshipType, isUpdateTarget: boolean = true) {
+    changeRelationShipType(target: PeopleObj, targetRelationshipType: RelationshipType, isUpdateTarget: boolean = true, relationshipValue = 0) {
         let relationship: Relationship = this.relationShipMap.get(target.id);
         if (!relationship) {
             relationship = {
                 relationship: targetRelationshipType,
-                relationshipValue: 0
+                relationshipValue: relationshipValue
             }
         }
         relationship.relationship = targetRelationshipType
@@ -145,7 +157,7 @@ export class PeopleObj implements PeopleInterface {
 
         const relationPair = getRelationPair(targetRelationshipType);
         if (isUpdateTarget) {
-            target.changeRelationShipType(this, relationPair, false);
+            target.changeRelationShipType(this, relationPair, false, relationship.relationshipValue);
         }
     }
 
@@ -173,8 +185,8 @@ export class PeopleObj implements PeopleInterface {
                 {
                     weight: this.numberOfPregnancies, action: () => {
                         pregnantPeople.pregnant = undefined;
-                        debugger
                         console.log(`${pregnantPeople.getName()}流产了`)
+                        // todo 丢失有概率母亲死亡
                     },
                 },
                 {
@@ -200,7 +212,6 @@ export class PeopleObj implements PeopleInterface {
                 },
                 {
                     weight: 1, action: () => {
-                        debugger
                         const peopleObj = new PeopleObj();
                         peopleObj.id = randomUtil.guid();
                         peopleObj.sex = randomList.randomFormList([SexType.MAN, SexType.WOMAN])
@@ -210,6 +221,8 @@ export class PeopleObj implements PeopleInterface {
                             familyName: father.xing
                         })[0]
                         peopleObj.ming = name.substring(father.xing.length)
+                        peopleObj.father = father
+                        peopleObj.mother = pregnantPeople
 
                         pregnantPeople.timeOfPregnancy = core.systemTimeObj.gameTime;
                         pregnantPeople.pregnant = peopleObj;
@@ -253,14 +266,34 @@ export class PeopleObj implements PeopleInterface {
             },
             {
                 weight: 10, action: () => {
+                    if (!relationship){
+                        return
+                    }
                     const isPregnant = this.isPregnant() || peopleObj.isPregnant()
                     let baseValue = 1;
                     if (isPregnant) {
                         // baseValue越大越不愿意
-                        baseValue = 3;
+                        baseValue+= 3;
+                    }
+                    if (this.isNextOfKin(peopleObj)){
+                        baseValue+= 3;
                     }
                     // 运动
-                    if (this.isHusbandAndWife(peopleObj)) {
+                    if (this.isNextOfKin(peopleObj)) {
+                        ProbabilisticActuators.run([
+                            {
+                                weight: 400 * baseValue, action: () => {
+                                }
+                            },
+                            {
+                                weight: relationship.relationshipValue, action: () => {
+                                    // 愿意
+                                    debugger
+                                    this.doMakeLove(peopleObj, "近亲")
+                                }
+                            },
+                        ])
+                    } else  if (this.isHusbandAndWife(peopleObj)) {
                         ProbabilisticActuators.run([
                             {
                                 weight: 60 * baseValue * baseValue * baseValue, action: () => {
@@ -299,7 +332,7 @@ export class PeopleObj implements PeopleInterface {
                                 }
                             },
                         ])
-                    } else {
+                    } else{
                         ProbabilisticActuators.run([
                             {
                                 weight: 250 * baseValue, action: () => {
@@ -658,13 +691,54 @@ export class PeopleObj implements PeopleInterface {
         return false;
     }
 
+    private isNextOfKin(peopleObj: PeopleObj) {
+        if (this.id === peopleObj.mother?.id) {
+            return true
+        }
+        if (this.id === peopleObj.father?.id) {
+            return true
+        }
+        if (this.mother?.id === peopleObj.id) {
+            return true
+        }
+        if (this.father?.id === peopleObj.id) {
+            return true
+        }
+        if (this.mother?.id === peopleObj.mother?.id) {
+            return true
+        }
+        if (this.father?.id === peopleObj.father?.id) {
+            return true
+        }
+        if (this.father?.father?.id === peopleObj.father?.father?.id) {
+            return true
+        }
+        if (this.father?.mother?.id === peopleObj.father?.mother?.id) {
+            return true
+        }
+        if (this.mother?.mother?.id === peopleObj.mother?.mother?.id) {
+            return true
+        }
+        if (this.mother?.father?.id === peopleObj.mother?.father?.id) {
+            return true
+        }
+        return false
+    }
+
     private baseCheck(context: CoreContext) {
         if (this.isPregnant()) {
             // 怀胎十月
             console.log(formatTime(dayjs(context.systemTimeObj.gameTime)))
             if (context.systemTimeObj.gameTime - this.timeOfPregnancy > 1000 * 60 * 60 * 24 * 30 * 10) {
+                // 生产
+                const child = this.pregnant;
+                this.pregnant = undefined
+                child.birthDay = context.systemTimeObj.gameTime;
                 debugger
-                // todo 生产
+                this.changeRelationShipType(child, RelationshipType.KID, true, 300)
+                child.father.changeRelationShipType(child, RelationshipType.KID, true, 150)
+                context.peopleMap.set(child.id, child)
+                this.currentSceneObj.peopleMoveIn(child)
             }
         }
     }
