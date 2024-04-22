@@ -83,7 +83,7 @@ export default {
     },
     setCurrentMessageData(nodeData) {
       this.chatData.history.push(this.currentNodeObj)
-      console.log(this.chatData.history)
+      // console.log(this.chatData.history)
       this.currentNodeObj = nodeData
     },
     confirm() {
@@ -95,13 +95,13 @@ export default {
       const nextNodeIds = this.currentNodeObj.nextNodeIds;
       const nodeMap = this.chatData.nodeMap
       if (!nextNodeIds) {
-        console.log("没有下一个")
+        // console.log("没有下一个")
         this.cancel()
         return
       }
       if (nextNodeIds.length <= 0) {
         // 没了
-        console.log("没了")
+        // console.log("没了")
         this.cancel()
         return
       } else if (nextNodeIds.length === 1) {
@@ -118,7 +118,7 @@ export default {
           this.setCurrentMessageData(nodeMap[randomList.randomFormList(nextNodeIds)])
         } else {
           // 有错误
-          console.log(nextNode)
+          // console.log(nextNode)
         }
       }
     },

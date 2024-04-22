@@ -464,7 +464,7 @@ export default {
       this.disableList = disableList
     },
     handleTableChange(pag, filters, sorter) {
-      console.log(pag, filters, sorter)
+      // console.log(pag, filters, sorter)
     },
     listPeople(view = 'SCENE') {
       const params = {

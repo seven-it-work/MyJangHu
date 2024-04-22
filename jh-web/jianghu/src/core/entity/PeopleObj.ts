@@ -23,6 +23,7 @@ export interface PeopleInterface {
     xing: string;
     ming: string;
     sex: SexType;
+
     remark: string;
     currentSceneObj: SceneObj;
     currentSceneId: string;
@@ -37,6 +38,7 @@ export interface PeopleInterface {
     gainLingLiSpeed: number;// 每次获取量
     currentlyProgress: 'gainLingLi' | 'gainGold' | undefined;
     relationShipMap: Map<string, Relationship>;
+    birthDay: number;// 出生时间
 }
 
 export enum RelationshipType {
@@ -82,6 +84,10 @@ export class PeopleObj implements PeopleInterface {
         return this.xing + this.ming;
     }
 
+    get age(): number {
+        return dayjs(core.systemTimeObj.gameTime).diff(dayjs(this.birthDay), 'year');
+    }
+
     sex: SexType;
     remark: string;
     currentSceneObj: SceneObj;
@@ -99,11 +105,12 @@ export class PeopleObj implements PeopleInterface {
     currentlyProgress: 'gainLingLi' | 'gainGold' | undefined;
 
     pregnant: PeopleObj;
-    numberOfPregnancies: number = 0;// 怀孕次数
+    numberOfPregnancies: number = 0;// 怀孕次数 todo 最多怀孕次数
     timeOfPregnancy: number;// 怀孕时间
     birthDay: number;// 出生时间
     father: PeopleObj;
     mother: PeopleObj;
+    private dystociaCheckTimes: number = 0;// 难产检查计数器
 
     isPregnant() {
         return !!this.pregnant
@@ -139,7 +146,7 @@ export class PeopleObj implements PeopleInterface {
         relationship.relationshipValue = Math.max(Math.min(relationship.relationshipValue + addValue, 300), -200)
         this.relationShipMap.set(target.id, relationship)
         if (isUpdateTarget) {
-            console.log(`${this.getName()}(${this.sex})和${target.getName()}(${target.sex})关系增加${addValue}，当前关系值${relationship.relationshipValue}`)
+            // console.log(`${this.getName()}(${this.sex})和${target.getName()}(${target.sex})关系增加${addValue}，当前关系值${relationship.relationshipValue}`)
             target.changeRelationShip(addValue, this, false)
         }
     }
@@ -161,6 +168,16 @@ export class PeopleObj implements PeopleInterface {
         }
     }
 
+    getSexStr() {
+        if (this.sex === 'MAN') {
+            return '男'
+        }
+        if (this.sex === 'WOMAN') {
+            return '女'
+        }
+        return '未知'
+    }
+
     listAllHusbandAndWife(): Map<string, Relationship> {
         const resultMap = new Map()
         this.relationShipMap.forEach((v, id) => {
@@ -172,7 +189,7 @@ export class PeopleObj implements PeopleInterface {
     }
 
     doMakeLove(target: PeopleObj, type: string) {
-        console.log(`${this.getName()}(${this.sex})和${target.getName()}(${target.sex})进行运动。关系类型:${type}`)
+        // console.log(`${this.getName()}(${this.sex})和${target.getName()}(${target.sex})进行运动。关系类型:${type}`)
         let pregnantPeople: PeopleObj
         if (this.isPregnant()) {
             pregnantPeople = this;
@@ -181,19 +198,7 @@ export class PeopleObj implements PeopleInterface {
         }
         if (pregnantPeople) {
             // 概率丢失
-            ProbabilisticActuators.run([
-                {
-                    weight: this.numberOfPregnancies, action: () => {
-                        pregnantPeople.pregnant = undefined;
-                        console.log(`${pregnantPeople.getName()}流产了`)
-                        // todo 丢失有概率母亲死亡
-                    },
-                },
-                {
-                    weight: 5, action: () => {
-                    },
-                },
-            ])
+            this.dystocia(50, pregnantPeople)
         } else if ((this.sex === SexType.MAN && target.sex === SexType.WOMAN) ||
             (this.sex === SexType.WOMAN && target.sex === SexType.MAN)) {
             let father
@@ -207,7 +212,7 @@ export class PeopleObj implements PeopleInterface {
             // 概率有kid
             ProbabilisticActuators.run([
                 {
-                    weight: this.numberOfPregnancies, action: () => {
+                    weight: this.numberOfPregnancies * 2, action: () => {
                     },
                 },
                 {
@@ -227,7 +232,8 @@ export class PeopleObj implements PeopleInterface {
                         pregnantPeople.timeOfPregnancy = core.systemTimeObj.gameTime;
                         pregnantPeople.pregnant = peopleObj;
                         pregnantPeople.numberOfPregnancies += 1;
-                        console.log(`${pregnantPeople.getName()}怀孕了`)
+                        this.dystociaCheckTimes = 0;
+                        // // console.log(`${pregnantPeople.getName()}怀孕了`)
                     },
                 },
             ])
@@ -266,19 +272,22 @@ export class PeopleObj implements PeopleInterface {
             },
             {
                 weight: 10, action: () => {
-                    if (!relationship){
+                    // 运动 14岁才能运动
+                    if (this.age < 14 || peopleObj.age < 14) {
+                        return;
+                    }
+                    if (!relationship) {
                         return
                     }
                     const isPregnant = this.isPregnant() || peopleObj.isPregnant()
                     let baseValue = 1;
                     if (isPregnant) {
                         // baseValue越大越不愿意
-                        baseValue+= 3;
+                        baseValue += 10;
                     }
-                    if (this.isNextOfKin(peopleObj)){
-                        baseValue+= 3;
+                    if (this.isNextOfKin(peopleObj)) {
+                        baseValue += 5;
                     }
-                    // 运动
                     if (this.isNextOfKin(peopleObj)) {
                         ProbabilisticActuators.run([
                             {
@@ -288,12 +297,11 @@ export class PeopleObj implements PeopleInterface {
                             {
                                 weight: relationship.relationshipValue, action: () => {
                                     // 愿意
-                                    debugger
                                     this.doMakeLove(peopleObj, "近亲")
                                 }
                             },
                         ])
-                    } else  if (this.isHusbandAndWife(peopleObj)) {
+                    } else if (this.isHusbandAndWife(peopleObj)) {
                         ProbabilisticActuators.run([
                             {
                                 weight: 60 * baseValue * baseValue * baseValue, action: () => {
@@ -332,7 +340,7 @@ export class PeopleObj implements PeopleInterface {
                                 }
                             },
                         ])
-                    } else{
+                    } else {
                         ProbabilisticActuators.run([
                             {
                                 weight: 250 * baseValue, action: () => {
@@ -351,7 +359,7 @@ export class PeopleObj implements PeopleInterface {
             {
                 weight: 30, action: () => {
                     // 问候
-                    console.log(`${this.getName()}向${peopleObj.getName()}进行问候`)
+                    // // console.log(`${this.getName()}向${peopleObj.getName()}进行问候`)
                     const value: number = randomUtil.integer({min: -1, max: 500})
                     this.changeRelationShip(value, peopleObj)
                 }
@@ -359,7 +367,7 @@ export class PeopleObj implements PeopleInterface {
             {
                 weight: 20, action: () => {
                     // 讨好
-                    console.log(`${this.getName()}向${peopleObj.getName()}进行讨好`)
+                    // // console.log(`${this.getName()}向${peopleObj.getName()}进行讨好`)
                     const value: number = randomUtil.integer({min: -2, max: 10})
                     this.changeRelationShip(value, peopleObj)
                 }
@@ -367,7 +375,7 @@ export class PeopleObj implements PeopleInterface {
             {
                 weight: 10, action: () => {
                     // 辱骂
-                    console.log(`${this.getName()}向${peopleObj.getName()}进行辱骂`)
+                    // console.log(`${this.getName()}向${peopleObj.getName()}进行辱骂`)
                     const value: number = randomUtil.integer({min: -6, max: 1})
                     this.changeRelationShip(value, peopleObj)
                 }
@@ -375,8 +383,12 @@ export class PeopleObj implements PeopleInterface {
             {
                 weight: 10, action: () => {
                     // 表白，如果是情侣+关系，不是查看是否达到60 不是-- 是概率成功
+                    if (this.age < 12 || peopleObj.age < 12) {
+                        // 12岁才能表白
+                        return;
+                    }
                     if (relationship) {
-                        console.log(`${this.getName()}向${peopleObj.getName()}进行表白，当前关系值${relationship.relationshipValue}`)
+                        // console.log(`${this.getName()}向${peopleObj.getName()}进行表白，当前关系值${relationship.relationshipValue}`)
                         if (this.isHusbandAndWife(peopleObj)) {
                             const value: number = randomUtil.integer({min: -1, max: 10})
                             this.changeRelationShip(value, peopleObj)
@@ -399,7 +411,7 @@ export class PeopleObj implements PeopleInterface {
                                         } else {
                                             this.changeRelationShipType(peopleObj, RelationshipType.BOY_FRIEND)
                                         }
-                                        console.log(`${this.getName()}(${this.sex})和${peopleObj.getName()}(${peopleObj.sex})成为情侣`)
+                                        // console.log(`${this.getName()}(${this.sex})和${peopleObj.getName()}(${peopleObj.sex})成为情侣`)
                                     }
                                 },
                             ])
@@ -427,10 +439,14 @@ export class PeopleObj implements PeopleInterface {
             },
             {
                 weight: 10, action: () => {
+                    if (this.age < 12 || peopleObj.age < 12) {
+                        // 12岁才能表白
+                        return;
+                    }
                     // 分手
                     if (relationship) {
                         if (this.isLover(peopleObj)) {
-                            console.log(`${this.getName()}向${peopleObj.getName()}提出分手`)
+                            // console.log(`${this.getName()}向${peopleObj.getName()}提出分手`)
                             // 概率成功
                             ProbabilisticActuators.run([
                                 {
@@ -438,7 +454,7 @@ export class PeopleObj implements PeopleInterface {
                                         const value: number = randomUtil.integer({min: -20, max: 1})
                                         this.changeRelationShip(value, peopleObj)
                                         this.changeRelationShipType(peopleObj, RelationshipType.STRANGER)
-                                        console.log(`${this.getName()}(${this.sex})和${peopleObj.getName()}(${peopleObj.sex})分手了`)
+                                        // console.log(`${this.getName()}(${this.sex})和${peopleObj.getName()}(${peopleObj.sex})分手了`)
                                     }
                                 },
                                 {
@@ -458,9 +474,13 @@ export class PeopleObj implements PeopleInterface {
             {
                 weight: 10, action: () => {
                     // 求婚
+                    if (this.age < 16 || peopleObj.age < 16) {
+                        // 16岁才能结婚
+                        return;
+                    }
                     if (relationship) {
                         if (this.isLover(peopleObj)) {
-                            console.log(`${this.getName()}向${peopleObj.getName()}求婚`)
+                            // console.log(`${this.getName()}向${peopleObj.getName()}求婚`)
                             if (this.isHusbandAndWife(peopleObj)) {
                                 const value: number = randomUtil.integer({min: -1, max: 20})
                                 this.changeRelationShip(value, peopleObj)
@@ -481,7 +501,7 @@ export class PeopleObj implements PeopleInterface {
                                             } else {
                                                 this.changeRelationShipType(peopleObj, RelationshipType.HUSBAND)
                                             }
-                                            console.log(`${this.getName()}(${this.sex})和${peopleObj.getName()}(${peopleObj.sex})成为夫妻`)
+                                            // console.log(`${this.getName()}(${this.sex})和${peopleObj.getName()}(${peopleObj.sex})成为夫妻`)
                                         }
                                     },
                                 ])
@@ -511,10 +531,14 @@ export class PeopleObj implements PeopleInterface {
             },
             {
                 weight: 10, action: () => {
+                    if (this.age < 16 || peopleObj.age < 16) {
+                        // 16岁才能结婚
+                        return;
+                    }
                     // 离婚
                     if (relationship) {
                         if (this.isHusbandAndWife(peopleObj)) {
-                            console.log(`${this.getName()}向${peopleObj.getName()}提出离婚`)
+                            // console.log(`${this.getName()}向${peopleObj.getName()}提出离婚`)
                             // 概率成功
                             ProbabilisticActuators.run([
                                 {
@@ -522,7 +546,7 @@ export class PeopleObj implements PeopleInterface {
                                         const value: number = randomUtil.integer({min: -40, max: 1})
                                         this.changeRelationShip(value, peopleObj)
                                         this.changeRelationShipType(peopleObj, RelationshipType.STRANGER)
-                                        console.log(`${this.getName()}(${this.sex})和${peopleObj.getName()}(${peopleObj.sex})离婚了`)
+                                        // console.log(`${this.getName()}(${this.sex})和${peopleObj.getName()}(${peopleObj.sex})离婚了`)
                                     }
                                 },
                                 {
@@ -549,7 +573,7 @@ export class PeopleObj implements PeopleInterface {
             this.currentlyProgress = 'gainLingLi'
         }
         const gainLingLi = this.currentSceneObj?.consumeLingLi(this.processingEfficiency(context) * this.gainLingLiSpeed)
-        console.log(`${this.getName()} 获取${gainLingLi}`)
+        // console.log(`${this.getName()} 获取${gainLingLi}`)
         this.lingLi += gainLingLi
     }
 
@@ -615,18 +639,28 @@ export class PeopleObj implements PeopleInterface {
             {
                 weight: 0, action: () => {
                     // 移动
-                    this.executeMove(context)
+                    // 3岁才能移动
+                    if (this.age >= 3) {
+                        this.executeMove(context)
+                    }
                 }
             },
             {
                 weight: 20, action: () => {
                     // 社交
-                    this.executePerformSocializing(context)
+                    // 4岁才能社交
+                    if (this.age >= 4) {
+                        this.executePerformSocializing(context)
+                    }
                 }
             },
             {
                 weight: 20, action: () => {
                     // 打工挣钱
+                    // 12岁才能打工
+                    if (this.age >= 12) {
+                        this.executePerformSocializing(context)
+                    }
                 }
             },
             {
@@ -728,19 +762,53 @@ export class PeopleObj implements PeopleInterface {
     private baseCheck(context: CoreContext) {
         if (this.isPregnant()) {
             // 怀胎十月
-            console.log(formatTime(dayjs(context.systemTimeObj.gameTime)))
             if (context.systemTimeObj.gameTime - this.timeOfPregnancy > 1000 * 60 * 60 * 24 * 30 * 10) {
                 // 生产
                 const child = this.pregnant;
                 this.pregnant = undefined
                 child.birthDay = context.systemTimeObj.gameTime;
-                debugger
                 this.changeRelationShipType(child, RelationshipType.KID, true, 300)
                 child.father.changeRelationShipType(child, RelationshipType.KID, true, 150)
                 context.peopleMap.set(child.id, child)
                 this.currentSceneObj.peopleMoveIn(child)
+            } else if (context.systemTimeObj.gameTime - this.timeOfPregnancy > 1000 * 60 * 60 * 24 * 30 * 3) {
+                // 3个月后才可能难产
+                this.dystociaCheckTimes++
+                ProbabilisticActuators.run([
+                    {
+                        weight: this.dystociaCheckTimes, action: () => {
+                        },
+                    },
+                    {
+                        weight: 1, action: () => {
+                            // 近亲有概率
+                            if (this.pregnant.father.isNextOfKin(this.pregnant.mother)) {
+                                this.dystocia(500, this)
+                            } else {
+                                this.dystocia(this.age-18, this)
+                            }
+                        },
+                    },
+                ])
+
             }
         }
+    }
+
+    private dystocia(probabilityOfIncrease: number, pregnantPeople: PeopleObj) {
+        ProbabilisticActuators.run([
+            {
+                weight: (this.numberOfPregnancies * 15) + probabilityOfIncrease, action: () => {
+                    pregnantPeople.pregnant = undefined;
+                    // console.log(`${pregnantPeople.getName()}流产了`)
+                    // todo 丢失有概率母亲死亡
+                },
+            },
+            {
+                weight: 50, action: () => {
+                },
+            },
+        ])
     }
 }
 

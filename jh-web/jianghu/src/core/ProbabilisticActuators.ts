@@ -26,6 +26,6 @@ export class ProbabilisticActuators {
                 return;
             }
         }
-        console.log(`执行失败sum=${sum};random=${random};probabilisticActuators=${probabilisticActuators}`)
+        // console.log(`执行失败sum=${sum};random=${random};probabilisticActuators=${probabilisticActuators}`)
     }
 }

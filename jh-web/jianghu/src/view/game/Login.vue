@@ -52,12 +52,12 @@ export default {
       const peopleId = Cookies.get("peopleId");
       this.isLogin = !!peopleId
       if (this.isLogin) {
-        console.log("登录了，当前用户id", peopleId)
+        // console.log("登录了，当前用户id", peopleId)
         this.getPeople().then(() => {
           this.playGame()
         })
       } else {
-        console.log("没有登录")
+        // console.log("没有登录")
         // this.$router.push({name: 'login'})
       }
     },

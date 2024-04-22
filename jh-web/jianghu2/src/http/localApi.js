@@ -30,27 +30,27 @@ class BaseLocalApi extends BaseApi {
         data.id = randomUtil.guid();
         this.dbMap[data.id] = data
         if (isDebug) {
-            console.log(`模块${this.constructor.name}。序列化对象↓↓↓↓↓↓↓↓↓↓`);
-            console.log(`export default ${JSON.stringify(this.dbMap)}`)
-            console.log(`模块${this.constructor.name}。↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑`)
+            // console.log(`模块${this.constructor.name}。序列化对象↓↓↓↓↓↓↓↓↓↓`);
+            // console.log(`export default ${JSON.stringify(this.dbMap)}`)
+            // console.log(`模块${this.constructor.name}。↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑`)
         }
     }
 
     delete(id) {
         delete this.dbMap[id]
         if (isDebug) {
-            console.log(`模块${this.constructor.name}。序列化对象↓↓↓↓↓↓↓↓↓↓`);
-            console.log(`export default ${JSON.stringify(this.dbMap)}`)
-            console.log(`模块${this.constructor.name}。↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑`)
+            // console.log(`模块${this.constructor.name}。序列化对象↓↓↓↓↓↓↓↓↓↓`);
+            // console.log(`export default ${JSON.stringify(this.dbMap)}`)
+            // console.log(`模块${this.constructor.name}。↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑`)
         }
     }
 
     update(data) {
         this.dbMap[data.id] = data
         if (isDebug) {
-            console.log(`模块${this.constructor.name} 序列化对象↓↓↓↓↓↓↓↓↓↓`);
-            console.log(`export default ${JSON.stringify(this.dbMap)}`)
-            console.log(`模块${this.constructor.name} ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑`)
+            // console.log(`模块${this.constructor.name} 序列化对象↓↓↓↓↓↓↓↓↓↓`);
+            // console.log(`export default ${JSON.stringify(this.dbMap)}`)
+            // console.log(`模块${this.constructor.name} ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑`)
         }
     }
 

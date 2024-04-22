@@ -118,7 +118,7 @@ export default {
   props: ['currentMapObj'],
   methods: {
     scenarioChangeHook() {
-      console.log("触发")
+      // console.log("触发")
       this.currentMapObj.time=new Date()
       this.$emit('update:currentMapObj', cloneDeep(this.currentMapObj))
     },

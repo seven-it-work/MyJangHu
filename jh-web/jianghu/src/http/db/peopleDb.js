@@ -16,7 +16,8 @@ const peopleDb = [
     "interactionIdList": [],
     "peopleType": "PLAYER",
     "createTime": 1710000000000,
-    "updateTime": 1710000000000
+    "updateTime": 1710000000000,
+        birthDay: 893238634695,
 },
     {
         "id": "333",
@@ -32,7 +33,8 @@ const peopleDb = [
         "interactionIdList": [],
         "peopleType": "AI_PEOPLE",
         "createTime": 1710000000000,
-        "updateTime": 1710000000000
+        "updateTime": 1710000000000,
+        birthDay: 793238634695,
     }]
 
 

@@ -7,7 +7,7 @@ export default {
   components: {Header},
   methods: {
     checkIsLogin() {
-      console.log("检查登录")
+      // console.log("检查登录")
       this.$router.push({name: "login"})
     }
   },

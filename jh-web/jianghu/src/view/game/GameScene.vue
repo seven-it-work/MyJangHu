@@ -111,7 +111,12 @@ export default {
         <template #content>
           <a-row>
             <a-col :span="12">
-              灵力：{{peopleItem.lingLi || 0}}
+              <div>年龄：{{peopleItem.age || 0}}</div>
+              <div>性别：{{peopleItem.getSexStr()}}</div>
+              <div>灵力：{{peopleItem.lingLi || 0}}</div>
+              <div>父亲：{{peopleItem.father?.name || '无'}}</div>
+              <div>母亲：{{peopleItem.mother?.name || '无'}}</div>
+
             </a-col>
             <a-col :span="12">
               <div v-for="interaction in peopleInteractionList" :key="interaction">

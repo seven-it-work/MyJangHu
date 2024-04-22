@@ -11,7 +11,7 @@ export default {
   },
   methods: {
     reload() {
-      console.log("刷新")
+      // console.log("刷新")
       window.location.reload()
     }
   },

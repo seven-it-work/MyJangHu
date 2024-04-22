@@ -20,7 +20,7 @@
     const iframeSrc = 'http://localhost:5173';
     if (window.location.href.includes(iframeSrc)) {
         // 不展示
-        console.log('不展示');
+        // console.log('不展示');
     } else {
         const showIframe = document.createElement('div');
         showIframe.innerHTML = `
@@ -50,7 +50,7 @@
             .appendChild(showIframe);
         document.addEventListener('keydown', function (event) {
             if (event.ctrlKey && event.key === 'q') {
-                console.log("隐藏");
+                // console.log("隐藏");
                 document.getElementById('showMain').style.display = 'none';
                 document.getElementById('hide').style.display = 'none';
                 document.getElementById('show').style.display = '';
@@ -66,7 +66,7 @@
                         document.getElementById('show').style.display = '';
                     }
                 } catch (error) {
-                    console.log(error)
+                    // console.log(error)
                 }
             })
 

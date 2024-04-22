@@ -56,7 +56,7 @@ export default {
       const nodes = this.graph.getNodes();
       if (!nodes || nodes.length === 0) {
         // todo 提示没有文本
-        console.log("没有文本")
+        // console.log("没有文本")
         return
       }
       const nodeMap = {}

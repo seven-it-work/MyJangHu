@@ -35,9 +35,9 @@ class LocalApi extends BaseApi {
             data.id = randomUtil.guid()
             this.allDataList.push(data)
             if (isDebug) {
-                console.log(`模块${this.constructor.name}。序列化对象↓↓↓↓↓↓↓↓↓↓`);
-                console.log(`export default ${JSON.stringify(this.allDataList)}`)
-                console.log(`模块${this.constructor.name}。↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑`)
+                // console.log(`模块${this.constructor.name}。序列化对象↓↓↓↓↓↓↓↓↓↓`);
+                // console.log(`export default ${JSON.stringify(this.allDataList)}`)
+                // console.log(`模块${this.constructor.name}。↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑`)
             }
         })
     }
@@ -46,9 +46,9 @@ class LocalApi extends BaseApi {
         return super.delete(id).then(() => {
             this.allDataList = this.allDataList.filter(item => item.id !== id);
             if (isDebug) {
-                console.log(`模块${this.constructor.name}。序列化对象↓↓↓↓↓↓↓↓↓↓`);
-                console.log(`export default ${JSON.stringify(this.allDataList)}`)
-                console.log(`模块${this.constructor.name}。↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑`)
+                // console.log(`模块${this.constructor.name}。序列化对象↓↓↓↓↓↓↓↓↓↓`);
+                // console.log(`export default ${JSON.stringify(this.allDataList)}`)
+                // console.log(`模块${this.constructor.name}。↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑`)
             }
         })
     }
@@ -59,9 +59,9 @@ class LocalApi extends BaseApi {
             if (findData) {
                 Object.assign(findData, data);
                 if (isDebug) {
-                    console.log(`模块${this.constructor.name}。序列化对象↓↓↓↓↓↓↓↓↓↓`);
-                    console.log(`export default ${JSON.stringify(this.allDataList)}`)
-                    console.log(`模块${this.constructor.name}。↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑`)
+                    // console.log(`模块${this.constructor.name}。序列化对象↓↓↓↓↓↓↓↓↓↓`);
+                    // console.log(`export default ${JSON.stringify(this.allDataList)}`)
+                    // console.log(`模块${this.constructor.name}。↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑`)
                 }
             }
         })

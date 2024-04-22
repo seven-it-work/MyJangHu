@@ -58,7 +58,7 @@ export default {
   watch: {
     componentsData: {
       handler() {
-        console.log("更新")
+        // console.log("更新")
         this.messageDataList = []
         this.selectValue = {
           id: ''

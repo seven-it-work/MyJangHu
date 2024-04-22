@@ -162,7 +162,7 @@ export const randomColor = {
             });
             return hex; //返回十六进制
         } else {
-            console.log(`Input ${rgb} is wrong!`);
+            // console.log(`Input ${rgb} is wrong!`);
             throw new Error(`Input ${rgb} is wrong!`)
         }
     },
@@ -170,7 +170,7 @@ export const randomColor = {
         if (rgb && rgb.length === 3) {
             return rgb.map(color => 255 - color);
         } else {
-            console.log(`Input ${rgb} is wrong!`);
+            // console.log(`Input ${rgb} is wrong!`);
             throw new Error(`Input ${rgb} is wrong!`)
         }
     },
