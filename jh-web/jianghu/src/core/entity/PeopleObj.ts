@@ -9,6 +9,7 @@ import {getName} from "random_chinese_fantasy_names";
 import core from "@/core/core";
 import {formatTime} from "@/core/utils";
 import dayjs from "dayjs";
+import {toFormData} from "axios";
 
 export enum SexType {
     MAN = "MAN",
@@ -190,17 +191,19 @@ export class PeopleObj implements PeopleInterface {
 
     doMakeLove(target: PeopleObj, type: string) {
         // console.log(`${this.getName()}(${this.sex})和${target.getName()}(${target.sex})进行运动。关系类型:${type}`)
-        let pregnantPeople: PeopleObj
+        let pregnantPeople: PeopleObj=undefined
         if (this.isPregnant()) {
             pregnantPeople = this;
         } else if (target.isPregnant()) {
             pregnantPeople = target;
         }
-        if (pregnantPeople) {
+        if (!!pregnantPeople) {
             // 概率丢失
-            this.dystocia(50, pregnantPeople)
+            this.dystocia(50, pregnantPeople, "有孕，还运动")
         } else if ((this.sex === SexType.MAN && target.sex === SexType.WOMAN) ||
             (this.sex === SexType.WOMAN && target.sex === SexType.MAN)) {
+            console.log(pregnantPeople)
+            console.log(this.isPregnant(),target.isPregnant())
             let father
             if (this.sex === SexType.WOMAN) {
                 pregnantPeople = this
@@ -210,9 +213,22 @@ export class PeopleObj implements PeopleInterface {
                 father = this
             }
             // 概率有kid
+            let inabilityToConceiveBase = 0
+            if (pregnantPeople.age > 30) {
+                // 30以上是高龄产妇
+                inabilityToConceiveBase += (pregnantPeople.age - 30) / 5
+            } else if (pregnantPeople.age < 16) {
+                // 16以下是低龄产妇
+                inabilityToConceiveBase += 16 - pregnantPeople.age
+            }
+            if (father.age > 65) {
+                inabilityToConceiveBase += (father.age - 65) / 10
+            } else if (father.age < 14) {
+                inabilityToConceiveBase += 14 - father.age
+            }
             ProbabilisticActuators.run([
                 {
-                    weight: this.numberOfPregnancies * 2, action: () => {
+                    weight: this.numberOfPregnancies * 2 + (inabilityToConceiveBase * 10), action: () => {
                     },
                 },
                 {
@@ -233,7 +249,9 @@ export class PeopleObj implements PeopleInterface {
                         pregnantPeople.pregnant = peopleObj;
                         pregnantPeople.numberOfPregnancies += 1;
                         this.dystociaCheckTimes = 0;
-                        // // console.log(`${pregnantPeople.getName()}怀孕了`)
+                        // todo 这里有bug
+                        console.log(`${pregnantPeople.getName()}怀孕了`)
+                        console.log(pregnantPeople.isPregnant(),this.isPregnant(),target.isPregnant())
                     },
                 },
             ])
@@ -725,38 +743,42 @@ export class PeopleObj implements PeopleInterface {
         return false;
     }
 
-    private isNextOfKin(peopleObj: PeopleObj) {
-        if (this.id === peopleObj.mother?.id) {
+    public static checkIsNextKin(people1:PeopleObj,people2:PeopleObj,generations:number=3){
+        if (generations===0){
+            return false
+        }
+        if (!people1){
+            return false
+        }
+        if (!people2){
+            return false
+        }
+        if (people1.id===people2.id){
             return true
         }
-        if (this.id === peopleObj.father?.id) {
+        if (people1.id===people2.mother?.id){
             return true
         }
-        if (this.mother?.id === peopleObj.id) {
+        if (people1.id===people2.father?.id){
             return true
         }
-        if (this.father?.id === peopleObj.id) {
+        if (people2.id===people1.mother?.id){
             return true
         }
-        if (this.mother?.id === peopleObj.mother?.id) {
+        if (people2.id===people1.father?.id){
             return true
         }
-        if (this.father?.id === peopleObj.father?.id) {
+        if (this.checkIsNextKin(people1.father, people2.father, generations - 1)) {
             return true
         }
-        if (this.father?.father?.id === peopleObj.father?.father?.id) {
-            return true
-        }
-        if (this.father?.mother?.id === peopleObj.father?.mother?.id) {
-            return true
-        }
-        if (this.mother?.mother?.id === peopleObj.mother?.mother?.id) {
-            return true
-        }
-        if (this.mother?.father?.id === peopleObj.mother?.father?.id) {
+        if (this.checkIsNextKin(people1.mother, people2.mother, generations - 1)) {
             return true
         }
         return false
+    }
+
+    private isNextOfKin(peopleObj: PeopleObj) {
+       return  PeopleObj.checkIsNextKin(this,peopleObj)
     }
 
     private baseCheck(context: CoreContext) {
@@ -771,9 +793,10 @@ export class PeopleObj implements PeopleInterface {
                 child.father.changeRelationShipType(child, RelationshipType.KID, true, 150)
                 context.peopleMap.set(child.id, child)
                 this.currentSceneObj.peopleMoveIn(child)
+                console.log(`${this.getName()}在${this.currentSceneObj.name}生出一个宝宝：${child.getName()}`)
             } else if (context.systemTimeObj.gameTime - this.timeOfPregnancy > 1000 * 60 * 60 * 24 * 30 * 3) {
                 // 3个月后才可能难产
-                this.dystociaCheckTimes++
+                this.dystociaCheckTimes+=3
                 ProbabilisticActuators.run([
                     {
                         weight: this.dystociaCheckTimes, action: () => {
@@ -783,9 +806,9 @@ export class PeopleObj implements PeopleInterface {
                         weight: 1, action: () => {
                             // 近亲有概率
                             if (this.pregnant.father.isNextOfKin(this.pregnant.mother)) {
-                                this.dystocia(500, this)
+                                this.dystocia(500, this, "近亲结婚")
                             } else {
-                                this.dystocia(this.age-18, this)
+                                this.dystocia(Math.max(this.age - 30, 0), this, "年纪过大")
                             }
                         },
                     },
@@ -795,12 +818,12 @@ export class PeopleObj implements PeopleInterface {
         }
     }
 
-    private dystocia(probabilityOfIncrease: number, pregnantPeople: PeopleObj) {
+    private dystocia(probabilityOfIncrease: number, pregnantPeople: PeopleObj, reason: string) {
         ProbabilisticActuators.run([
             {
-                weight: (this.numberOfPregnancies * 15) + probabilityOfIncrease, action: () => {
+                weight: (this.numberOfPregnancies * 5) + probabilityOfIncrease, action: () => {
                     pregnantPeople.pregnant = undefined;
-                    // console.log(`${pregnantPeople.getName()}流产了`)
+                    console.log(`怀孕次数：${this.numberOfPregnancies},probabilityOfIncrease=${probabilityOfIncrease}。${pregnantPeople.getName()}流产了，因为：${reason}`)
                     // todo 丢失有概率母亲死亡
                 },
             },
