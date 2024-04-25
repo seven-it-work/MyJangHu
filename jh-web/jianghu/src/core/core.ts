@@ -1,11 +1,9 @@
-import {cityMap, CityObj} from "./entity/CityObj";
-import {sceneMap, SceneObj} from "./entity/SceneObj";
+import {cityMap} from "./entity/CityObj";
+import {sceneMap} from "./entity/SceneObj";
 import {worldMap} from "./entity/WorldObj";
-import {peopleMap} from "./entity/PeopleObj";
-import {ProbabilisticActuators} from "./ProbabilisticActuators";
+import {peopleMap} from "./entity/people/PeopleObj";
 import {SystemTimeObj} from "./entity/SystemTimeObj";
 import {CoreContext} from "./entity/CoreContext";
-import store from "@/vuex/store";
 
 const speeding=100
 

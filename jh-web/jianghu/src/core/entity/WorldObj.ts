@@ -1,6 +1,5 @@
 import {world} from "../../http/api";
 import {CoreContext} from "./CoreContext";
-import {SceneObj} from "./SceneObj";
 import {CityObj} from "./CityObj";
 
 

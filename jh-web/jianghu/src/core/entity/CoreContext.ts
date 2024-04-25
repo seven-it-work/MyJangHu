@@ -2,7 +2,7 @@ import {SystemTimeObj} from "./SystemTimeObj";
 import {WorldObj} from "./WorldObj";
 import {CityObj} from "./CityObj";
 import {SceneObj} from "./SceneObj";
-import {PeopleObj} from "./PeopleObj";
+import {PeopleObj} from "./people/PeopleObj";
 
 export interface CoreContext {
     currentPeople?: PeopleObj;

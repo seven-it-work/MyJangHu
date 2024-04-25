@@ -1,26 +1,19 @@
-import {people} from "../../http/api";
-import {CoreContext} from "./CoreContext";
-import {ProbabilisticActuators} from "../ProbabilisticActuators";
-import {SceneObj} from "./SceneObj";
-import {randomList, randomUtil} from "../../random";
-import {CityObj} from "./CityObj";
-import {WorldObj} from "./WorldObj";
+import {people} from "@/http/api";
+import {CoreContext} from "@/core/entity/CoreContext";
+import {ProbabilisticActuators} from "../../ProbabilisticActuators";
+import {SceneObj} from "@/core/entity/SceneObj";
+import {randomList, randomUtil} from "@/random";
+import {CityObj} from "@/core/entity/CityObj";
+import {WorldObj} from "@/core/entity/WorldObj";
 import {getName} from "random_chinese_fantasy_names";
 import core from "@/core/core";
-import {formatTime} from "@/core/utils";
 import dayjs from "dayjs";
-import {toFormData} from "axios";
-
-export enum SexType {
-    MAN = "MAN",
-    WOMAN = "WOMAN",
-}
-
+import {SexType} from "@/core/entity/people/SexType";
+import {getRelationPair, Relationship, RelationshipType} from "@/core/entity/people/Relationship";
 
 export interface PeopleInterface {
     description: string;
     id: string;
-
     xing: string;
     ming: string;
     sex: SexType;
@@ -40,33 +33,6 @@ export interface PeopleInterface {
     currentlyProgress: 'gainLingLi' | 'gainGold' | undefined;
     relationShipMap: Map<string, Relationship>;
     birthDay: number;// 出生时间
-}
-
-export enum RelationshipType {
-    STRANGER = 'STRANGER',
-    BOY_FRIEND = 'BOY_FRIEND',
-    GIRL_FRIEND = 'GIRL_FRIEND',
-    HUSBAND = 'HUSBAND',
-    WIFE = 'WIFE',
-    PARENTS = 'PARENTS',
-    KID = 'KID'
-}
-
-const map = {}
-map[RelationshipType.STRANGER] = RelationshipType.STRANGER;
-map[RelationshipType.BOY_FRIEND] = RelationshipType.GIRL_FRIEND;
-map[RelationshipType.GIRL_FRIEND] = RelationshipType.BOY_FRIEND;
-map[RelationshipType.HUSBAND] = RelationshipType.WIFE;
-map[RelationshipType.WIFE] = RelationshipType.HUSBAND;
-map[RelationshipType.PARENTS] = RelationshipType.KID;
-map[RelationshipType.KID] = RelationshipType.PARENTS;
-export const getRelationPair = (relationshipType: RelationshipType): RelationshipType => {
-    return map[relationshipType];
-}
-
-export interface Relationship {
-    relationship: RelationshipType;
-    relationshipValue: number;
 }
 
 export class PeopleObj implements PeopleInterface {
@@ -191,7 +157,7 @@ export class PeopleObj implements PeopleInterface {
 
     doMakeLove(target: PeopleObj, type: string) {
         // console.log(`${this.getName()}(${this.sex})和${target.getName()}(${target.sex})进行运动。关系类型:${type}`)
-        let pregnantPeople: PeopleObj=undefined
+        let pregnantPeople: PeopleObj = undefined
         if (this.isPregnant()) {
             pregnantPeople = this;
         } else if (target.isPregnant()) {
@@ -203,7 +169,7 @@ export class PeopleObj implements PeopleInterface {
         } else if ((this.sex === SexType.MAN && target.sex === SexType.WOMAN) ||
             (this.sex === SexType.WOMAN && target.sex === SexType.MAN)) {
             console.log(pregnantPeople)
-            console.log(this.isPregnant(),target.isPregnant())
+            console.log(this.isPregnant(), target.isPregnant())
             let father
             if (this.sex === SexType.WOMAN) {
                 pregnantPeople = this
@@ -251,7 +217,7 @@ export class PeopleObj implements PeopleInterface {
                         this.dystociaCheckTimes = 0;
                         // todo 这里有bug
                         console.log(`${pregnantPeople.getName()}怀孕了`)
-                        console.log(pregnantPeople.isPregnant(),this.isPregnant(),target.isPregnant())
+                        console.log(pregnantPeople.isPregnant(), this.isPregnant(), target.isPregnant())
                     },
                 },
             ])
@@ -378,7 +344,7 @@ export class PeopleObj implements PeopleInterface {
                 weight: 30, action: () => {
                     // 问候
                     // // console.log(`${this.getName()}向${peopleObj.getName()}进行问候`)
-                    const value: number = randomUtil.integer({min: -1, max: 500})
+                    const value: number = randomUtil.integer({min: -1, max: 5})
                     this.changeRelationShip(value, peopleObj)
                 }
             },
@@ -655,7 +621,7 @@ export class PeopleObj implements PeopleInterface {
                 }
             },
             {
-                weight: 0, action: () => {
+                weight: 10, action: () => {
                     // 移动
                     // 3岁才能移动
                     if (this.age >= 3) {
@@ -743,29 +709,29 @@ export class PeopleObj implements PeopleInterface {
         return false;
     }
 
-    public static checkIsNextKin(people1:PeopleObj,people2:PeopleObj,generations:number=3){
-        if (generations===0){
+    public static checkIsNextKin(people1: PeopleObj, people2: PeopleObj, generations: number = 3) {
+        if (generations === 0) {
             return false
         }
-        if (!people1){
+        if (!people1) {
             return false
         }
-        if (!people2){
+        if (!people2) {
             return false
         }
-        if (people1.id===people2.id){
+        if (people1.id === people2.id) {
             return true
         }
-        if (people1.id===people2.mother?.id){
+        if (people1.id === people2.mother?.id) {
             return true
         }
-        if (people1.id===people2.father?.id){
+        if (people1.id === people2.father?.id) {
             return true
         }
-        if (people2.id===people1.mother?.id){
+        if (people2.id === people1.mother?.id) {
             return true
         }
-        if (people2.id===people1.father?.id){
+        if (people2.id === people1.father?.id) {
             return true
         }
         if (this.checkIsNextKin(people1.father, people2.father, generations - 1)) {
@@ -778,7 +744,7 @@ export class PeopleObj implements PeopleInterface {
     }
 
     private isNextOfKin(peopleObj: PeopleObj) {
-       return  PeopleObj.checkIsNextKin(this,peopleObj)
+        return PeopleObj.checkIsNextKin(this, peopleObj)
     }
 
     private baseCheck(context: CoreContext) {
@@ -796,7 +762,7 @@ export class PeopleObj implements PeopleInterface {
                 console.log(`${this.getName()}在${this.currentSceneObj.name}生出一个宝宝：${child.getName()}`)
             } else if (context.systemTimeObj.gameTime - this.timeOfPregnancy > 1000 * 60 * 60 * 24 * 30 * 3) {
                 // 3个月后才可能难产
-                this.dystociaCheckTimes+=3
+                this.dystociaCheckTimes += 3
                 ProbabilisticActuators.run([
                     {
                         weight: this.dystociaCheckTimes, action: () => {
@@ -834,6 +800,7 @@ export class PeopleObj implements PeopleInterface {
         ])
     }
 }
+
 
 export const peopleMap: Map<string, PeopleObj> = new Map()
 

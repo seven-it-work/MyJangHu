@@ -30,6 +30,7 @@
     "lodash": "^4.17.21",
     "random_chinese_fantasy_names": "^0.1.18",
     "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^1.5.1",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
     "vuex": "^4.0.2"

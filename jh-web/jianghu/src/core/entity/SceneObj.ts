@@ -1,5 +1,5 @@
 import {CityObj} from "./CityObj";
-import {PeopleObj} from "./PeopleObj";
+import {PeopleObj} from "./people/PeopleObj";
 import {WorldObj} from "./WorldObj";
 import {scene} from "../../http/api";
 import {CoreContext} from "./CoreContext";

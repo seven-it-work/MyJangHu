@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import {defineConfig} from 'vite'
 import vue from '@vitejs/plugin-vue'
 import * as path from 'path'
@@ -18,5 +19,8 @@ export default defineConfig({
                 javascriptEnabled: true // 启用 Less 的 JavaScript 表达式支持
             }
         }
-    }
+    },
+    test: {
+        globals: true,
+    },
 })
