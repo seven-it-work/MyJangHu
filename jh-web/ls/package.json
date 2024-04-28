@@ -1,0 +1,30 @@
+{
+  "name": "ls",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui"
+  },
+  "dependencies": {
+    "@vue/test-utils": "^2.4.5",
+    "chance": "^1.1.11",
+    "prettier": "^3.2.5",
+    "vue": "^3.4.21"
+  },
+  "devDependencies": {
+    "@types/chance": "^1.1.6",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vitest/ui": "^1.5.2",
+    "eslint": "^9.1.1",
+    "happy-dom": "^14.7.1",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0",
+    "vitest": "^1.5.2",
+    "vue-tsc": "^2.0.6"
+  }
+}
