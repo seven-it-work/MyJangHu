@@ -12,6 +12,7 @@ export default abstract class BaseCard implements Trigger<BaseCard> {
     // 出售价格
     salePrice: Number = 1;
     ethnicity: String[] = [];
+    accompanyingRace: String[] = [];
     attack: Number = 0;
     life: Number = 0;
     // 等级
@@ -19,6 +20,16 @@ export default abstract class BaseCard implements Trigger<BaseCard> {
     description: String = '';
     otherDeadCounter: Number = 0;
     otherDeadMaxCounter: Number = 0;
+    // 嘲讽
+    isMockery: Boolean = false;
+    // 是否剧毒，用完就没了
+    isHighlyToxic: Boolean = false;
+    // 是否毒药，能一直毒
+    hasPoison: Boolean = false;
+    // 受攻击时，剧毒
+    attackHighlyToxic: Boolean = false;
+    // 是否有圣盾
+    isHolyShield: Boolean = false;
 
     /**
      * 当其他随从死亡时触发器
@@ -45,7 +56,7 @@ export default abstract class BaseCard implements Trigger<BaseCard> {
     /**
      * 当前随从死亡时触发器
      */
-    whenDeadTrigger(contextObj) {
+    whenDeadTrigger(contextObj: ContextObj) {
 
     }
 
@@ -65,5 +76,11 @@ export default abstract class BaseCard implements Trigger<BaseCard> {
     }
 
     whenSaleOtherCardTrigger(targetCard: BaseCard, context: ContextObj) {
+    }
+
+    whenOtherHandlerCardUsedTrigger(targetCard: BaseCard, context: ContextObj) {
+    }
+
+    whenAttackTrigger(defender: BaseCardObj, context: ContextObj, targetContext: ContextObj) {
     }
 }

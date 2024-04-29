@@ -1,16 +1,25 @@
 import BaseCardObj from "./BaseCardObj";
 import ContextObj from "./ContextObj";
+import Taverns from "./Taverns";
 
 export default class Player {
+
+
+    constructor(tavern: Taverns) {
+        this.tavern = tavern;
+    }
+
+    tavern: Taverns;
+
     currentGoldCoin: Number = 0;
     currentMaxGoldCoin: Number = 0;
     currentLife: Number = 0;
     currentArmor: Number = 0;
     handCardMap: Map<String, BaseCardObj> = new Map<String, BaseCardObj>();
-    tavernAttackBonus: Number = 0;
-    tavernLifeBonus: Number = 0;
     // 场上的牌
     cardList: BaseCardObj[] = [];
+    // 战斗中的牌
+    cardListInFighting: BaseCardObj[] = [];
     /**
      * 战吼额外触发次数
      */
@@ -20,7 +29,13 @@ export default class Player {
      */
     deadWordsExtraTriggers: Number = 0;
 
-    canBuyCard(cardObj: BaseCardObj) {
+    private readonly static MAX_HAND_CARD: Number = 10;
+
+    canBuyCard(cardObj: BaseCardObj): Boolean {
+        if (this.handCardMap.size >= Player.MAX_HAND_CARD) {
+            console.log("手牌满了")
+            return false
+        }
         return this.currentGoldCoin >= cardObj.baseCard.spendingGoldCoin
     }
 
@@ -30,6 +45,7 @@ export default class Player {
             return;
         }
         this.currentGoldCoin -= cardObj.baseCard.spendingGoldCoin;
+        this.tavern.buyCard(cardObj, context)
         this.handCardMap.set(cardObj.id, cardObj);
         cardObj.whenBuyCardTrigger(context)
         this.handCardMap.forEach((v, k) => {
@@ -37,26 +53,96 @@ export default class Player {
         })
     }
 
-    userCard(cardObj: BaseCardObj, context: ContextObj) {
+    canUseCard(cardObj: BaseCardObj): Boolean {
+        return this.cardList.length < 7;
+    }
+
+    useCard(cardObj: BaseCardObj, context: ContextObj) {
         if (this.handCardMap.delete(cardObj.id)) {
             cardObj.whenCardUsedTrigger(context);
-            this.handCardMap.forEach((v, k) => {
+            this.cardList.forEach((v) => {
                 v.whenOtherCardUsedTrigger(cardObj, context)
             })
+            this.handCardMap.forEach((v) => {
+                v.whenOtherHandlerCardUsedTrigger(cardObj, context)
+            })
+            this.cardList.push(cardObj)
         }
     }
 
-    canSaleCard(cardObj: BaseCardObj) {
+    canSaleCard(cardObj: BaseCardObj): Boolean {
         return cardObj.baseCard.canSold;
     }
 
     saleCard(cardObj: BaseCardObj, context: ContextObj) {
         if (this.handCardMap.delete(cardObj.id)) {
             this.currentGoldCoin += cardObj.baseCard.salePrice;
+            this.tavern.saleCard(cardObj, context)
             cardObj.whenSaleCardTrigger(context);
             this.handCardMap.forEach((v, k) => {
                 v.whenSaleOtherCardTrigger(cardObj, context)
             })
+        }
+    }
+
+    canRefreshTavern(): Boolean {
+        return this.currentGoldCoin >= this.tavern.refreshExpenses
+    }
+
+    refreshTavern(context: ContextObj) {
+        if (!this.canRefreshTavern()) {
+            console.error("不能刷新")
+        }
+        this.currentGoldCoin -= this.tavern.refreshExpenses
+        this.tavern.refresh(context)
+    }
+
+    canUpgradeTavern(): Boolean {
+        return this.currentGoldCoin >= this.tavern.currentUpgradeExpenses
+    }
+
+    upgradeTavern() {
+        if (!this.canUpgradeTavern()) {
+            console.error("不能升级")
+        }
+        this.currentGoldCoin -= this.tavern.currentUpgradeExpenses
+        this.tavern.upgrade()
+    }
+
+    changeLife(changeValue: Number, onlyLife: Boolean = false) {
+        if (!onlyLife) {
+            if (this.currentArmor > 0) {
+                this.currentArmor += changeValue;
+                changeValue = 0;
+            }
+            if (this.currentArmor < 0) {
+                changeValue = this.currentArmor;
+                this.currentArmor = 0;
+            }
+        }
+        this.currentLife += changeValue;
+    }
+
+    doFighting(player: Player) {
+        const cardListInFighting = this.cardListInFighting;
+        const target = player.cardListInFighting;
+        if (cardListInFighting.length === 0 && target.length === 0) {
+            return;
+        } else if (cardListInFighting.length === 0) {
+            const sum = target.map(card => card.baseCard.graded).reduce((sum, num) => sum + num, 0);
+            this.changeLife(-sum);
+            return;
+        } else if (target.length === 0) {
+            const sum = cardListInFighting.map(card => card.baseCard.graded).reduce((sum, num) => sum + num, 0);
+            player.changeLife(-sum);
+            return;
+        }
+        /**
+         * 随机攻击
+         * 1、数量多的先手，如果一样则随机
+         */
+        if (cardListInFighting.length>target.length){
+
         }
     }
 }

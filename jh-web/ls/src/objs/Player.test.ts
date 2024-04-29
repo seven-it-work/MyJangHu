@@ -3,6 +3,7 @@ import ContextObj from "./ContextObj";
 import Player from "./Player";
 import BaseCardObj from "./BaseCardObj";
 import XieNengYuanSu from "../entity/card/XieNengYuanSu";
+import Taverns from "./Taverns";
 
 
 describe('player', () => {
@@ -20,7 +21,7 @@ describe('player', () => {
         var canBuyCard = contextObj.player.canBuyCard(new BaseCardObj(new XieNengYuanSu()));
         expect(canBuyCard).toBe(false)
     });
-    it('buyCard is success', () => {
+    it('cardOut is success', () => {
         const contextObj = new ContextObj();
         contextObj.player = new Player();
         contextObj.player.currentGoldCoin = 3;
@@ -29,7 +30,7 @@ describe('player', () => {
         expect(contextObj.player.currentGoldCoin).toBe(0)
         expect(contextObj.player.handCardMap.get(cardObj.id)).toBe(cardObj)
     });
-    it('userCard is success', () => {
+    it('useCard is success', () => {
         const contextObj = new ContextObj();
         contextObj.player = new Player();
         contextObj.player.currentGoldCoin = 3;
@@ -37,6 +38,13 @@ describe('player', () => {
         contextObj.player.buyCard(cardObj, contextObj);
         expect(contextObj.player.currentGoldCoin).toBe(0)
         expect(contextObj.player.handCardMap.get(cardObj.id)).toBe(cardObj)
+        expect(contextObj.player.canUseCard(cardObj)).toBe(true)
+        contextObj.player.useCard(cardObj, contextObj)
+        expect(contextObj.player.cardList.length).toBe(1)
+    });
+    it('fight test', () => {
+        const player1 = new Player(new Taverns());
+
     });
 })
 

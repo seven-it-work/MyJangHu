@@ -2,13 +2,14 @@ import BaseCard from "../entity/baseCard";
 import ContextObj from "./ContextObj";
 import {Trigger} from "../entity/Trigger";
 import Chance from 'chance'
+import {cloneDeep} from "lodash";
 
 export default class BaseCardObj implements Trigger<BaseCardObj> {
     id: String;
 
     constructor(baseCard: BaseCard) {
         this.id = new Chance().guid();
-        this.baseCard = baseCard;
+        this.baseCard = cloneDeep(baseCard);
     }
 
 
@@ -38,7 +39,10 @@ export default class BaseCardObj implements Trigger<BaseCardObj> {
 
     whenDeadTrigger(context: ContextObj) {
         for (let i = 0; i <= context.player.deadWordsExtraTriggers; i++) {
-            this.baseCard.whenDeadTrigger(context);
+            const cardListInFighting = context.player.cardListInFighting;
+            if (cardListInFighting.length < 7) {
+                this.baseCard.whenDeadTrigger(context);
+            }
         }
     }
 
@@ -80,5 +84,52 @@ export default class BaseCardObj implements Trigger<BaseCardObj> {
 
     whenOtherCardUsedTrigger(targetCard: BaseCardObj, context: ContextObj) {
         this.baseCard.whenOtherCardUsedTrigger(targetCard.baseCard, context)
+    }
+
+    whenOtherHandlerCardUsedTrigger(targetCard: BaseCardObj, context: ContextObj) {
+    }
+
+    whenAttackTrigger(defender: BaseCardObj, context: ContextObj, targetContext: ContextObj) {
+        this.baseCard.whenAttackTrigger(defender, context, targetContext)
+        // 受到伤害
+        let toBeHarmed = 0;
+        // 造成伤害
+        let toCauseHarm = 0;
+        if (this.baseCard.isHolyShield) {
+            this.baseCard.isHolyShield = false;
+            toBeHarmed = 0;
+        } else if (defender.baseCard.isHighlyToxic) {
+            toBeHarmed = this.baseCard.life;
+            defender.baseCard.isHighlyToxic = false;
+        } else if (defender.baseCard.hasPoison) {
+            toBeHarmed = this.baseCard.life;
+        } else if (defender.baseCard.hasPoison) {
+            toBeHarmed = this.baseCard.life;
+        } else {
+            toBeHarmed = defender.baseCard.attack;
+        }
+        if (defender.baseCard.isHolyShield) {
+            defender.baseCard.isHolyShield = false;
+            toCauseHarm = 0;
+        } else if (this.baseCard.isHighlyToxic) {
+            toCauseHarm = defender.baseCard.life;
+            this.baseCard.isHighlyToxic = false;
+        } else if (this.baseCard.hasPoison) {
+            toCauseHarm = defender.baseCard.life;
+        } else {
+            toCauseHarm = this.baseCard.attack;
+        }
+        this.baseCard.life -= toBeHarmed;
+        defender.baseCard.life -= toCauseHarm;
+        if (this.baseCard.life <= 0) {
+            this.whenDeadTrigger(context);
+        }
+        if (defender.baseCard.life <= 0) {
+            defender.whenDeadTrigger(targetContext);
+        }
+    }
+
+    attacking(target: BaseCardObj, context: ContextObj, targetContext: ContextObj) {
+        this.whenAttackTrigger(target, context, targetContext)
     }
 }

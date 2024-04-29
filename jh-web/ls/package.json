@@ -13,11 +13,13 @@
   "dependencies": {
     "@vue/test-utils": "^2.4.5",
     "chance": "^1.1.11",
+    "lodash": "^4.17.21",
     "prettier": "^3.2.5",
     "vue": "^3.4.21"
   },
   "devDependencies": {
     "@types/chance": "^1.1.6",
+    "@types/lodash": "^4.17.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vitest/ui": "^1.5.2",
     "eslint": "^9.1.1",

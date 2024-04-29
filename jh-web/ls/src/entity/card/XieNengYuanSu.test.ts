@@ -1,5 +1,3 @@
-
-
 import {describe, it, expect,} from 'vitest';
 import ContextObj from "../../objs/ContextObj";
 import Player from "../../objs/Player";
@@ -14,8 +12,11 @@ describe('useStorage', () => {
 
         const baseCardObj = new BaseCardObj(new XieNengYuanSu());
         baseCardObj.whenCardUsedTrigger(contextObj);
-        expect(contextObj.player.tavernAttackBonus).toBe(1)
-        expect(contextObj.player.tavernLifeBonus).toBe(1)
+        expect(contextObj.player.tavern.tavernAttackBonus).toBe(1)
+        expect(contextObj.player.tavern.tavernLifeBonus).toBe(1)
+    });
+    it('XieNengYuanSu', () => {
+        expect(XieNengYuanSu.name).toBe('XieNengYuanSu')
     });
 })
 

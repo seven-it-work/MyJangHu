@@ -14,8 +14,15 @@ export interface Trigger<T> {
 
     /**
      * 其他随从使用时触发器
+     * (场上触发)
      */
     whenOtherCardUsedTrigger(targetCard: T, context: ContextObj);
+
+    /**
+     * 其他随从使用时触发器
+     * (手牌触发)
+     */
+    whenOtherHandlerCardUsedTrigger(targetCard: T, context: ContextObj);
 
     /**
      * 当前随从使用时触发器
@@ -52,4 +59,9 @@ export interface Trigger<T> {
      * 出售当前卡片时
      */
     whenSaleCardTrigger(context: ContextObj);
+
+    /**
+     * 当前随从攻击时
+     */
+    whenAttackTrigger(defender: BaseCardObj, context: ContextObj, targetContext: ContextObj);
 }

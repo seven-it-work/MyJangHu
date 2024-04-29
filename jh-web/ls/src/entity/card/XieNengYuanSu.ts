@@ -9,8 +9,8 @@ export default class XieNengYuanSu extends BaseCard {
     graded = 3
     description = "在本局"
 
-    whenCardUsedTrigger(context:ContextObj){
-        context.player.tavernLifeBonus++;
-        context.player.tavernAttackBonus++;
+    whenCardUsedTrigger(context: ContextObj) {
+        context.player.tavern.tavernLifeBonus++;
+        context.player.tavern.tavernAttackBonus++;
     }
 }
