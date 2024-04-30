@@ -3,7 +3,8 @@ import ContextObj from "../../objs/ContextObj";
 
 export default class FenNuBianZhiZhe extends BaseCard {
     name = "愤怒编织者"
-    ethnicity = ["恶魔"]
+    ethnicity = ["中立"]
+    accompanyingRace = ["恶魔"]
     attack = 3
     life = 1
     graded = 1

@@ -30,6 +30,8 @@ export default abstract class BaseCard implements Trigger<BaseCard> {
     attackHighlyToxic: Boolean = false;
     // 是否有圣盾
     isHolyShield: Boolean = false;
+    // 是否复生
+    isRebirth: Boolean = false;
 
     /**
      * 当其他随从死亡时触发器

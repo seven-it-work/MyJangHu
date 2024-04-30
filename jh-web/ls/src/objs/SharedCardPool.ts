@@ -2,6 +2,7 @@ import CardDb from "../entity/CardDb";
 import {GRADED_RULES} from "./Taverns";
 import Chance from 'chance'
 import BaseCard from "../entity/baseCard";
+import {cloneDeep} from "lodash";
 
 export default class SharedCardPool {
     accompanyingRace: String[]
@@ -47,6 +48,6 @@ export default class SharedCardPool {
     }
 
     getByName(name: String): BaseCard {
-        return this.cardDb.getByName(name);
+        return cloneDeep(this.cardDb.getByName(name));
     }
 }

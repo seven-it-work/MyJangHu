@@ -1,6 +1,7 @@
 import BaseCardObj from "./BaseCardObj";
 import ContextObj from "./ContextObj";
 import Taverns from "./Taverns";
+import randomUtil from "../utils/RandomUtils";
 
 export default class Player {
 
@@ -123,26 +124,5 @@ export default class Player {
         this.currentLife += changeValue;
     }
 
-    doFighting(player: Player) {
-        const cardListInFighting = this.cardListInFighting;
-        const target = player.cardListInFighting;
-        if (cardListInFighting.length === 0 && target.length === 0) {
-            return;
-        } else if (cardListInFighting.length === 0) {
-            const sum = target.map(card => card.baseCard.graded).reduce((sum, num) => sum + num, 0);
-            this.changeLife(-sum);
-            return;
-        } else if (target.length === 0) {
-            const sum = cardListInFighting.map(card => card.baseCard.graded).reduce((sum, num) => sum + num, 0);
-            player.changeLife(-sum);
-            return;
-        }
-        /**
-         * 随机攻击
-         * 1、数量多的先手，如果一样则随机
-         */
-        if (cardListInFighting.length>target.length){
 
-        }
-    }
 }

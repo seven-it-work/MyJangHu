@@ -25,6 +25,10 @@ export default class BaseCardObj implements Trigger<BaseCardObj> {
     lifeBonus: Number = 0;
     attackBonus: Number = 0;
 
+    isSurviving() {
+        return this.baseCard.life > 0;
+    }
+
 
     /**
      * 当其他随从死亡时触发器
@@ -90,6 +94,7 @@ export default class BaseCardObj implements Trigger<BaseCardObj> {
     }
 
     whenAttackTrigger(defender: BaseCardObj, context: ContextObj, targetContext: ContextObj) {
+        // todo 风怒
         this.baseCard.whenAttackTrigger(defender, context, targetContext)
         // 受到伤害
         let toBeHarmed = 0;
@@ -123,9 +128,17 @@ export default class BaseCardObj implements Trigger<BaseCardObj> {
         defender.baseCard.life -= toCauseHarm;
         if (this.baseCard.life <= 0) {
             this.whenDeadTrigger(context);
+            // 复生
+            if (this.baseCard.isRebirth) {
+                this.baseCard.life = 1;
+                this.baseCard.isRebirth = false;
+            }
         }
         if (defender.baseCard.life <= 0) {
             defender.whenDeadTrigger(targetContext);
+            // 复生
+            defender.baseCard.life = 1;
+            defender.baseCard.isRebirth = false;
         }
     }
 
