@@ -4,9 +4,9 @@ import randomUtil from "../utils/RandomUtils";
 export default class Fight {
     // 攻击发起人
     attackerContextObj: ContextObj;
-    attackerIndex: Number = 0;
+    attackerIndex: number = 0;
     defenderContextObj: ContextObj;
-    defenderIndex: Number = 0;
+    defenderIndex: number = 0;
 
     constructor(attackerContextObj: ContextObj, defenderContextObj: ContextObj) {
         this.attackerContextObj = attackerContextObj;
@@ -94,7 +94,7 @@ export default class Fight {
             attackerContextObj = this.defenderContextObj;
             index = this.defenderIndex;
         }
-        attackerContextObj.player.cardListInFighting[index].whenAttackTrigger(randomUtil.pick(defenderContextObj.player.cardListInFighting, 1), attackerContextObj, defenderContextObj)
+        attackerContextObj.player.cardListInFighting[index].whenAttackTrigger(randomUtil.pickone(defenderContextObj.player.cardListInFighting), attackerContextObj, defenderContextObj)
         attackerContextObj.player.cardListInFighting = attackerContextObj.player.cardListInFighting.filter(card => card.isSurviving());
         attackerContextObj.player.cardListInFighting = attackerContextObj.player.cardListInFighting.filter(card => card.isSurviving());
         if (isAttacker) {

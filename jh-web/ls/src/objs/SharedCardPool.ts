@@ -1,15 +1,15 @@
 import CardDb from "../entity/CardDb";
 import {GRADED_RULES} from "./Taverns";
-import Chance from 'chance'
 import BaseCard from "../entity/baseCard";
 import {cloneDeep} from "lodash";
+import randomUtil from "../utils/RandomUtils.ts";
 
 export default class SharedCardPool {
-    accompanyingRace: String[]
+    accompanyingRace: string[]
     pool = new Map()
     cardDb: CardDb;
 
-    constructor(accompanyingRace: String[]) {
+    constructor(accompanyingRace: string[]) {
         this.accompanyingRace = accompanyingRace;
         const cardDb = new CardDb();
         this.cardDb = cardDb;
@@ -30,7 +30,7 @@ export default class SharedCardPool {
         }).filter(card => {
             return card.graded <= graded
         }).map(card => card.baseCard)
-        return new Chance().pick(list, cardNumber);
+        return randomUtil.pick(list, cardNumber);
     }
 
     cardOut(baseCard: BaseCard) {
@@ -47,7 +47,7 @@ export default class SharedCardPool {
         }
     }
 
-    getByName(name: String): BaseCard {
+    getByName(name: string): BaseCard {
         return cloneDeep(this.cardDb.getByName(name));
     }
 }

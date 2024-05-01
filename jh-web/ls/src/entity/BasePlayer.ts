@@ -1,7 +1,7 @@
 import BaseSkill from "./BaseSkill";
 
 export default class BasePlayer {
-    life: Number;
-    armor: Number;
+    life: number;
+    armor: number;
     skill: BaseSkill;
 }

@@ -13,17 +13,17 @@ export default class BaseCardObj implements Trigger<BaseCardObj> {
     }
 
 
-    get life(): Number {
+    get life(): number {
         return this.baseCard.life + this.lifeBonus;
     }
 
-    get attack(): Number {
+    get attack(): number {
         return this.baseCard.attack + this.attackBonus;
     }
 
     baseCard: BaseCard;
-    lifeBonus: Number = 0;
-    attackBonus: Number = 0;
+    lifeBonus: number = 0;
+    attackBonus: number = 0;
 
     isSurviving() {
         return this.baseCard.life > 0;
@@ -33,7 +33,7 @@ export default class BaseCardObj implements Trigger<BaseCardObj> {
     /**
      * 当其他随从死亡时触发器
      */
-    whenOtherDeadTrigger(deadCardObj, contextObj: ContextObj) {
+    whenOtherDeadTrigger(deadCardObj: ContextObj, contextObj: ContextObj) {
         this.baseCard.otherDeadCounter++;
         if (this.baseCard.otherDeadCounter >= this.baseCard.otherDeadMaxCounter) {
             this.baseCard.otherDeadCounter = 0;
@@ -54,7 +54,7 @@ export default class BaseCardObj implements Trigger<BaseCardObj> {
      * 当前使用随从时触发器
      * (战吼)
      */
-    whenCardUsedTrigger(contextObj) {
+    whenCardUsedTrigger(contextObj: ContextObj) {
         for (let i = 0; i <= contextObj.player.battleRoarExtraTriggers; i++) {
             this.baseCard.whenCardUsedTrigger(contextObj);
         }

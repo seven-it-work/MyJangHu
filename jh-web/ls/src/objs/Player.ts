@@ -12,10 +12,10 @@ export default class Player {
 
     tavern: Taverns;
 
-    currentGoldCoin: Number = 0;
-    currentMaxGoldCoin: Number = 0;
-    currentLife: Number = 0;
-    currentArmor: Number = 0;
+    currentGoldCoin: number = 0;
+    currentMaxGoldCoin: number = 0;
+    currentLife: number = 0;
+    currentArmor: number = 0;
     handCardMap: Map<String, BaseCardObj> = new Map<String, BaseCardObj>();
     // 场上的牌
     cardList: BaseCardObj[] = [];
@@ -24,13 +24,13 @@ export default class Player {
     /**
      * 战吼额外触发次数
      */
-    battleRoarExtraTriggers: Number = 0;
+    battleRoarExtraTriggers: number = 0;
     /**
      * 亡语额外触发次数
      */
-    deadWordsExtraTriggers: Number = 0;
+    deadWordsExtraTriggers: number = 0;
 
-    private readonly static MAX_HAND_CARD: Number = 10;
+    private readonly static MAX_HAND_CARD: number = 10;
 
     canBuyCard(cardObj: BaseCardObj): Boolean {
         if (this.handCardMap.size >= Player.MAX_HAND_CARD) {
@@ -46,7 +46,7 @@ export default class Player {
             return;
         }
         this.currentGoldCoin -= cardObj.baseCard.spendingGoldCoin;
-        this.tavern.buyCard(cardObj, context)
+        this.tavern.removeCard(cardObj, context)
         this.handCardMap.set(cardObj.id, cardObj);
         cardObj.whenBuyCardTrigger(context)
         this.handCardMap.forEach((v, k) => {
@@ -110,7 +110,7 @@ export default class Player {
         this.tavern.upgrade()
     }
 
-    changeLife(changeValue: Number, onlyLife: Boolean = false) {
+    changeLife(changeValue: number, onlyLife: Boolean = false) {
         if (!onlyLife) {
             if (this.currentArmor > 0) {
                 this.currentArmor += changeValue;

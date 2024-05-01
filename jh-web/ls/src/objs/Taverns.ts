@@ -1,5 +1,4 @@
 import BaseCardObj from "./BaseCardObj";
-import Player from "./Player";
 import ContextObj from "./ContextObj";
 import BaseCard from "../entity/baseCard";
 
@@ -18,19 +17,19 @@ export const GRADED_RULES = {
 }
 export default class Taverns {
     // 酒馆攻击加成
-    tavernAttackBonus: Number = 0;
+    tavernAttackBonus: number = 0;
     // 酒馆防御加成
-    tavernLifeBonus: Number = 0;
+    tavernLifeBonus: number = 0;
     // 酒馆等级
-    graded: Number = 1;
+    graded: number = 1;
     // 当前卡片
     currentCard: Map<String, BaseCardObj> = new Map<String, BaseCardObj>()
     // 是否冻结 cardId
     freezeCardId: String[] = [];
     // 刷新费用
-    refreshExpenses: Number = 1;
+    refreshExpenses: number = 1;
     // 当前升级费用
-    currentUpgradeExpenses: Number = GRADED_RULES[1].upgradeExpenses;
+    currentUpgradeExpenses: number = GRADED_RULES[1].upgradeExpenses;
 
 
     refresh(context: ContextObj) {
@@ -49,7 +48,7 @@ export default class Taverns {
         this.graded++;
     }
 
-    buyCard(cardObj: BaseCardObj, context: ContextObj) {
+    removeCard(cardObj: BaseCardObj, context: ContextObj) {
         this.currentCard.delete(cardObj.id)
         if (context.sharedCardPool) {
             context.sharedCardPool.cardOut(cardObj.baseCard)

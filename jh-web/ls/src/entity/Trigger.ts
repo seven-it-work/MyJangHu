@@ -63,5 +63,5 @@ export interface Trigger<T> {
     /**
      * 当前随从攻击时
      */
-    whenAttackTrigger(defender: BaseCardObj, context: ContextObj, targetContext: ContextObj);
+    whenAttackTrigger(defender: T, context: ContextObj, targetContext: ContextObj);
 }
