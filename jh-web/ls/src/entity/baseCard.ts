@@ -11,14 +11,18 @@ export default abstract class BaseCard implements Trigger<BaseCard> {
     canSold: boolean = true;
     // 出售价格
     salePrice: number = 1;
+    // 种族
     ethnicity: string[] = [];
+    // 体系类别
     accompanyingRace: string[] = [];
     attack: number = 0;
     life: number = 0;
     // 等级
     graded: number = 1;
     description: string = '';
+    // 复仇计数器
     otherDeadCounter: number = 0;
+    // 复仇次数，达到清空otherDeadCounter
     otherDeadMaxCounter: number = 0;
     // 嘲讽
     isMockery: boolean = false;
@@ -32,10 +36,12 @@ export default abstract class BaseCard implements Trigger<BaseCard> {
     isHolyShield: boolean = false;
     // 是否复生
     isRebirth: boolean = false;
+    // 版本信息
     version: string[] = ["v28.0.0.189384"]
     // 是否花费生命值
     isSpendLife: boolean = false;
-
+    // 是否潜行
+    isSneak:boolean=false;
     /**
      * 当其他随从死亡时触发器
      */
