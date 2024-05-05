@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@vue/test-utils": "^2.4.5",
+    "ant-design-vue": "^4.2.1",
     "lodash": "^4.17.21",
     "prettier": "^3.2.5",
     "vue": "^3.4.21"
