@@ -1,11 +1,46 @@
+const CardStorage = new Map<String, any>();
+
 import FenNuBianZhiZhe from "./FenNuBianZhiZhe";
+import JiEDeFuMo from "./JiEDeFuMo";
+import JiXieJiaLaKeSuSi from "./JiXieJiaLaKeSuSi";
+import JunTuanJianGong from "./JunTuanJianGong";
+import KongJuHuZiWang from "./KongJuHuZiWang";
+import LingHunHuiSuZhe from "./LingHunHuiSuZhe";
+import PiaoFuGuanChaZhe from "./PiaoFuGuanChaZhe";
+import QiGuiDaJiLeShou from "./QiGuiDaJiLeShou";
+import SaGeLaSiDeYongShi from "./SaGeLaSiDeYongShi";
+import TanShiDeWuZuEr from "./TanShiDeWuZuEr";
+import TiaoShiMoQuan from "./TiaoShiMoQuan";
+import TiKeDiAoSaoSi from "./TiKeDiAoSaoSi";
+import WuDaoWangZiMaKeZhaEr from "./WuDaoWangZiMaKeZhaEr";
 import XiaoGui from "./XiaoGui";
 import XiaoGuiQiuTu from "./XiaoGuiQiuTu";
 import XieNengYuanSu from "./XieNengYuanSu";
+import XinLingNiMo from "./XinLingNiMo";
+import XiongEDeXieNengYouLong from "./XiongEDeXieNengYouLong";
+import XiXueDiYuQuan from "./XiXueDiYuQuan";
+import YiJiaoTuSiSeLa from "./YiJiaoTuSiSeLa";
+import ZaoDongQiZhaZhe from "./ZaoDongQiZhaZhe";
 
-const CardStorage = new Map<String, any>();
-CardStorage.set(FenNuBianZhiZhe.name, FenNuBianZhiZhe)
-CardStorage.set(XiaoGui.name, XiaoGui)
-CardStorage.set(XiaoGuiQiuTu.name, XiaoGuiQiuTu)
-CardStorage.set(XieNengYuanSu.name, XieNengYuanSu)
+CardStorage.set(FenNuBianZhiZhe.name, FenNuBianZhiZhe);
+CardStorage.set(JiEDeFuMo.name, JiEDeFuMo);
+CardStorage.set(JiXieJiaLaKeSuSi.name, JiXieJiaLaKeSuSi);
+CardStorage.set(JunTuanJianGong.name, JunTuanJianGong);
+CardStorage.set(KongJuHuZiWang.name, KongJuHuZiWang);
+CardStorage.set(LingHunHuiSuZhe.name, LingHunHuiSuZhe);
+CardStorage.set(PiaoFuGuanChaZhe.name, PiaoFuGuanChaZhe);
+CardStorage.set(QiGuiDaJiLeShou.name, QiGuiDaJiLeShou);
+CardStorage.set(SaGeLaSiDeYongShi.name, SaGeLaSiDeYongShi);
+CardStorage.set(TanShiDeWuZuEr.name, TanShiDeWuZuEr);
+CardStorage.set(TiaoShiMoQuan.name, TiaoShiMoQuan);
+CardStorage.set(TiKeDiAoSaoSi.name, TiKeDiAoSaoSi);
+CardStorage.set(WuDaoWangZiMaKeZhaEr.name, WuDaoWangZiMaKeZhaEr);
+CardStorage.set(XiaoGui.name, XiaoGui);
+CardStorage.set(XiaoGuiQiuTu.name, XiaoGuiQiuTu);
+CardStorage.set(XieNengYuanSu.name, XieNengYuanSu);
+CardStorage.set(XinLingNiMo.name, XinLingNiMo);
+CardStorage.set(XiongEDeXieNengYouLong.name, XiongEDeXieNengYouLong);
+CardStorage.set(XiXueDiYuQuan.name, XiXueDiYuQuan);
+CardStorage.set(YiJiaoTuSiSeLa.name, YiJiaoTuSiSeLa);
+CardStorage.set(ZaoDongQiZhaZhe.name, ZaoDongQiZhaZhe);
 export default CardStorage
