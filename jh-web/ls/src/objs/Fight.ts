@@ -17,14 +17,13 @@ export default class Fight {
         const attacker = this.attackerContextObj.player;
         const defender = this.defenderContextObj.player;
         if (attacker.cardListInFighting.length === 0 && defender.cardListInFighting.length === 0) {
+            this.battleSettlement(this.attackerContextObj, this.defenderContextObj)
             return;
         } else if (attacker.cardListInFighting.length === 0) {
-            const sum = defender.cardListInFighting.map(card => card.baseCard.graded).reduce((sum, num) => sum + num, 0);
-            attacker.changeLife(-sum);
+            this.battleSettlement(this.attackerContextObj, this.defenderContextObj)
             return;
         } else if (defender.cardListInFighting.length === 0) {
-            const sum = attacker.cardListInFighting.map(card => card.baseCard.graded).reduce((sum, num) => sum + num, 0);
-            defender.changeLife(-sum);
+            this.battleSettlement(this.attackerContextObj, this.defenderContextObj)
             return;
         }
         /**
@@ -36,10 +35,12 @@ export default class Fight {
                 // 攻击者先手
                 while (true) {
                     if (attacker.cardListInFighting.length <= 0 || defender.cardListInFighting.length <= 0) {
+                        this.battleSettlement(this.attackerContextObj, this.defenderContextObj)
                         return;
                     }
                     this.doFight(true);
                     if (attacker.cardListInFighting.length <= 0 || defender.cardListInFighting.length <= 0) {
+                        this.battleSettlement(this.attackerContextObj, this.defenderContextObj)
                         return;
                     }
                     this.doFight(false);
@@ -47,10 +48,12 @@ export default class Fight {
             } else {
                 while (true) {
                     if (attacker.cardListInFighting.length <= 0 || defender.cardListInFighting.length <= 0) {
+                        this.battleSettlement(this.attackerContextObj, this.defenderContextObj)
                         return;
                     }
                     this.doFight(false);
                     if (attacker.cardListInFighting.length <= 0 || defender.cardListInFighting.length <= 0) {
+                        this.battleSettlement(this.attackerContextObj, this.defenderContextObj)
                         return;
                     }
                     this.doFight(true);
@@ -59,10 +62,12 @@ export default class Fight {
         } else if (attacker.cardListInFighting.length > defender.cardListInFighting.length) {
             while (true) {
                 if (attacker.cardListInFighting.length <= 0 || defender.cardListInFighting.length <= 0) {
+                    this.battleSettlement(this.attackerContextObj, this.defenderContextObj)
                     return;
                 }
                 this.doFight(true);
                 if (attacker.cardListInFighting.length <= 0 || defender.cardListInFighting.length <= 0) {
+                    this.battleSettlement(this.attackerContextObj, this.defenderContextObj)
                     return;
                 }
                 this.doFight(false);
@@ -70,14 +75,31 @@ export default class Fight {
         } else {
             while (true) {
                 if (attacker.cardListInFighting.length <= 0 || defender.cardListInFighting.length <= 0) {
+                    this.battleSettlement(this.attackerContextObj, this.defenderContextObj)
                     return;
                 }
                 this.doFight(false);
                 if (attacker.cardListInFighting.length <= 0 || defender.cardListInFighting.length <= 0) {
+                    this.battleSettlement(this.attackerContextObj, this.defenderContextObj)
                     return;
                 }
                 this.doFight(true);
             }
+        }
+    }
+
+    private battleSettlement(attackerContextObj: ContextObj, defenderContextObj: ContextObj) {
+        if (attackerContextObj.player.cardListInFighting.length !== 0 &&
+            defenderContextObj.player.cardListInFighting.length !== 0) {
+            throw new Error("错误战斗结算")
+        } else if (attackerContextObj.player.cardListInFighting.length !== 0) {
+            const sum = attackerContextObj.player.cardListInFighting.map(card => card.baseCard.graded).reduce((sum, num) => sum + num, 0);
+            defenderContextObj.player.changeLife(-sum);
+        } else if (defenderContextObj.player.cardListInFighting.length !== 0) {
+            const sum = defenderContextObj.player.cardListInFighting.map(card => card.baseCard.graded).reduce((sum, num) => sum + num, 0);
+            attackerContextObj.player.changeLife(-sum);
+        } else {
+            // 平局
         }
     }
 
@@ -95,8 +117,9 @@ export default class Fight {
             index = this.defenderIndex;
         }
         attackerContextObj.player.cardListInFighting[index].whenAttackTrigger(randomUtil.pickone(defenderContextObj.player.cardListInFighting), attackerContextObj, defenderContextObj)
+
         attackerContextObj.player.cardListInFighting = attackerContextObj.player.cardListInFighting.filter(card => card.isSurviving());
-        attackerContextObj.player.cardListInFighting = attackerContextObj.player.cardListInFighting.filter(card => card.isSurviving());
+        defenderContextObj.player.cardListInFighting = defenderContextObj.player.cardListInFighting.filter(card => card.isSurviving());
         if (isAttacker) {
             this.attackerIndex++;
             if (this.attackerIndex >= attackerContextObj.player.cardListInFighting.length) {

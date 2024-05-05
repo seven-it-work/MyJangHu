@@ -33,11 +33,11 @@ export default class BaseCardObj implements Trigger<BaseCardObj> {
     /**
      * 当其他随从死亡时触发器
      */
-    whenOtherDeadTrigger(deadCardObj: ContextObj, contextObj: ContextObj) {
+    whenOtherDeadTrigger(targetCard: BaseCardObj, contextObj: ContextObj) {
         this.baseCard.otherDeadCounter++;
         if (this.baseCard.otherDeadCounter >= this.baseCard.otherDeadMaxCounter) {
             this.baseCard.otherDeadCounter = 0;
-            this.baseCard.whenOtherDeadTrigger(deadCardObj, contextObj);
+            this.baseCard.whenOtherDeadTrigger(targetCard.baseCard, contextObj);
         }
     }
 
@@ -95,20 +95,21 @@ export default class BaseCardObj implements Trigger<BaseCardObj> {
 
     whenAttackTrigger(defender: BaseCardObj, context: ContextObj, targetContext: ContextObj) {
         // todo 风怒
-        this.baseCard.whenAttackTrigger(defender, context, targetContext)
+        this.baseCard.whenAttackTrigger(defender.baseCard, context, targetContext)
         // 受到伤害
         let toBeHarmed = 0;
         // 造成伤害
         let toCauseHarm = 0;
         if (this.baseCard.isHolyShield) {
+            // 圣盾
             this.baseCard.isHolyShield = false;
             toBeHarmed = 0;
         } else if (defender.baseCard.isHighlyToxic) {
+            // 剧毒，用完就没了
             toBeHarmed = this.baseCard.life;
             defender.baseCard.isHighlyToxic = false;
         } else if (defender.baseCard.hasPoison) {
-            toBeHarmed = this.baseCard.life;
-        } else if (defender.baseCard.hasPoison) {
+            // 毒药，能一直毒
             toBeHarmed = this.baseCard.life;
         } else {
             toBeHarmed = defender.baseCard.attack;
@@ -127,18 +128,26 @@ export default class BaseCardObj implements Trigger<BaseCardObj> {
         this.baseCard.life -= toBeHarmed;
         defender.baseCard.life -= toCauseHarm;
         if (this.baseCard.life <= 0) {
-            this.whenDeadTrigger(context);
             // 复生
             if (this.baseCard.isRebirth) {
                 this.baseCard.life = 1;
                 this.baseCard.isRebirth = false;
+            } else {
+                // 移除
+                context.player.cardListInFighting = context.player.cardListInFighting.filter(card => card.isSurviving());
             }
+            this.whenDeadTrigger(context);
         }
         if (defender.baseCard.life <= 0) {
-            defender.whenDeadTrigger(targetContext);
             // 复生
-            defender.baseCard.life = 1;
-            defender.baseCard.isRebirth = false;
+            if (defender.baseCard.isRebirth) {
+                defender.baseCard.life = 1;
+                defender.baseCard.isRebirth = false;
+            } else {
+                // 移除
+                targetContext.player.cardListInFighting = targetContext.player.cardListInFighting.filter(card => card.isSurviving());
+            }
+            defender.whenDeadTrigger(targetContext);
         }
     }
 

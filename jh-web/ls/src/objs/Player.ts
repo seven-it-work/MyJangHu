@@ -14,7 +14,7 @@ export default class Player {
 
     currentGoldCoin: number = 0;
     currentMaxGoldCoin: number = 0;
-    currentLife: number = 0;
+    currentLife: number = 30;
     currentArmor: number = 0;
     handCardMap: Map<String, BaseCardObj> = new Map<String, BaseCardObj>();
     // 场上的牌

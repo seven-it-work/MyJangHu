@@ -2,36 +2,61 @@ import {describe, it, expect,} from 'vitest';
 import ContextObj from "./ContextObj";
 import Player from "./Player";
 import BaseCardObj from "./BaseCardObj";
-import XieNengYuanSu from "../entity/card/XieNengYuanSu";
 import Taverns from "./Taverns";
 import Fight from "./Fight";
 import SharedCardPool from "./SharedCardPool";
 import XiaoGuiQiuTu from "../entity/card/XiaoGuiQiuTu";
 
 
-
-
 export default {};
 
 describe('Fight', () => {
-    it("doFighting", () => {
+    it("doFighting 平局", () => {
         try {
-            var sharedCardPool = new SharedCardPool(["恶魔"]);
-
-
-            var player = new Player(new Taverns());
-            player.cardList.push(new BaseCardObj(sharedCardPool.getByName("XiaoGuiQiuTu")))
-            var attackerContextObj = new ContextObj(player, sharedCardPool);
-            var player1 = new Player(new Taverns());
+            const xiaoGuiQiuTu = new XiaoGuiQiuTu();
+            const player = new Player(new Taverns());
+            player.cardList.push(new BaseCardObj(xiaoGuiQiuTu))
+            const sharedCardPool = new SharedCardPool(["恶魔"]);
+            const attackerContextObj = new ContextObj(player, sharedCardPool);
+            const player1 = new Player(new Taverns());
             player1.cardList.push(new BaseCardObj(xiaoGuiQiuTu))
-            var defenderContextObj = new ContextObj(player1, sharedCardPool);
+            const defenderContextObj = new ContextObj(player1, sharedCardPool);
 
             player.cardListInFighting = player.cardList
             player1.cardListInFighting = player1.cardList
-            console.log(player1.cardListInFighting[0].baseCard.life)
-            var fight = new Fight(attackerContextObj, defenderContextObj);
+            expect(player1.cardListInFighting[0].baseCard.life).toBe(2)
+            expect(player1.cardListInFighting[0].baseCard.name).toBe('小鬼囚徒')
+            const fight = new Fight(attackerContextObj, defenderContextObj);
             fight.doFighting()
-            console.log(player1.cardListInFighting[0].baseCard.life)
+            expect(player1.cardListInFighting.length).toBe(0)
+        } catch (e) {
+            console.log(e)
+        }
+    })
+    it("doFighting player 胜利", () => {
+        try {
+            const xiaoGuiQiuTu = new XiaoGuiQiuTu();
+            const player = new Player(new Taverns());
+            const baseCardObj = new BaseCardObj(xiaoGuiQiuTu);
+            baseCardObj.baseCard.life = 10;
+            player.cardList.push(baseCardObj)
+            const sharedCardPool = new SharedCardPool(["恶魔"]);
+            const attackerContextObj = new ContextObj(player, sharedCardPool);
+            const player1 = new Player(new Taverns());
+            player1.cardList.push(new BaseCardObj(xiaoGuiQiuTu))
+            const defenderContextObj = new ContextObj(player1, sharedCardPool);
+
+            player.cardListInFighting = player.cardList
+            player1.cardListInFighting = player1.cardList
+            expect(player.cardListInFighting[0].baseCard.life).toBe(10)
+            expect(player.cardListInFighting[0].baseCard.name).toBe('小鬼囚徒')
+            const fight = new Fight(attackerContextObj, defenderContextObj);
+            fight.doFighting()
+            expect(player.cardListInFighting[0].baseCard.life).toBe(6)
+            expect(player.cardListInFighting[0].baseCard.name).toBe('小鬼囚徒')
+            expect(player1.cardListInFighting.length).toBe(0)
+            expect(player.currentLife).toBe(30)
+            expect(player1.currentLife).toBe(29)
         } catch (e) {
             console.log(e)
         }
