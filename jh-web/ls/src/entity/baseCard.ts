@@ -33,11 +33,13 @@ export default abstract class BaseCard implements Trigger<BaseCard> {
     // 是否复生
     isRebirth: boolean = false;
     version: string[] = ["v28.0.0.189384"]
+    // 是否花费生命值
+    isSpendLife: boolean = false;
 
     /**
      * 当其他随从死亡时触发器
      */
-    whenOtherDeadTrigger(deadCardObj:BaseCard, context: ContextObj) {
+    whenOtherDeadTrigger(deadCardObj: BaseCard, context: ContextObj) {
 
     }
 
@@ -52,7 +54,7 @@ export default abstract class BaseCard implements Trigger<BaseCard> {
     /**
      * 当前召唤随从时触发器
      */
-    whenSummonedTrigger(contextObj:ContextObj) {
+    whenSummonedTrigger(contextObj: ContextObj) {
 
     }
 

@@ -26,7 +26,7 @@ export interface Trigger<T> {
 
     /**
      * 当前随从使用时触发器
-     * (战吼)
+     * (战吼) 部分属性计算
      */
     whenCardUsedTrigger(context: ContextObj);
 

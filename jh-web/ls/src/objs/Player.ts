@@ -45,11 +45,16 @@ export default class Player {
             console.error("不能购买")
             return;
         }
-        this.currentGoldCoin -= cardObj.baseCard.spendingGoldCoin;
+        if (cardObj.baseCard.isSpendLife) {
+            this.currentLife -= cardObj.baseCard.spendingGoldCoin;
+            //  todo 死亡判断
+        } else {
+            this.currentGoldCoin -= cardObj.baseCard.spendingGoldCoin;
+        }
         this.tavern.removeCard(cardObj, context)
         this.handCardMap.set(cardObj.id, cardObj);
         cardObj.whenBuyCardTrigger(context)
-        this.handCardMap.forEach((v, k) => {
+        this.handCardMap.forEach((v) => {
             v.whenBuyOtherCardTrigger(cardObj, context)
         })
     }

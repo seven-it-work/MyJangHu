@@ -1,6 +1,4 @@
 import BaseCard from "../baseCard";
-import ContextObj from "../../objs/ContextObj.ts";
-import randomUtil from "../../utils/RandomUtils.ts";
 
 export default class LingHunHuiSuZhe extends BaseCard {
     name = "灵魂回溯者"
