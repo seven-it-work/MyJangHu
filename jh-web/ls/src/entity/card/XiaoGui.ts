@@ -7,4 +7,5 @@ export default class XiaoGui extends BaseCard {
     life = 1
     graded = 1
     description = ""
+    isSell: boolean = false;
 }

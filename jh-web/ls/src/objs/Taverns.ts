@@ -13,7 +13,8 @@ export const GRADED_RULES = {
     3: {cardNumber: 4, upgradeExpenses: 8, cardSize: 13},
     4: {cardNumber: 5, upgradeExpenses: 9, cardSize: 11},
     5: {cardNumber: 5, upgradeExpenses: 11, cardSize: 9},
-    6: {cardNumber: 6, upgradeExpenses: undefined, cardSize: 6},
+    6: {cardNumber: 6, upgradeExpenses: 20, cardSize: 6},
+    7: {cardNumber: 3, upgradeExpenses: undefined, cardSize: 6},
 }
 export default class Taverns {
     // 酒馆攻击加成
@@ -25,14 +26,21 @@ export default class Taverns {
     // 当前卡片
     currentCard: Map<String, BaseCardObj> = new Map<String, BaseCardObj>()
     // 是否冻结 cardId
-    freezeCardId: String[] = [];
+    freezeCardId: string[] = [];
     // 刷新费用
     refreshExpenses: number = 1;
+    // 冻结费用
+    freezeExpenses: number = 0;
     // 当前升级费用
     currentUpgradeExpenses: number = GRADED_RULES[1].upgradeExpenses;
 
+    isFreezeAll(): boolean {
+        return this.freezeCardId.length >= this.currentCard.size;
+    }
+
 
     refresh(context: ContextObj) {
+        // todo 刷新要锁定共享池,释放已有的，锁定新出的
         this.freezeCardId = []
         this.currentCard.clear()
         const baseCards: BaseCard[] = context.sharedCardPool.refreshRandom(this.graded);
@@ -48,6 +56,11 @@ export default class Taverns {
         this.graded++;
     }
 
+    /**
+     * 购买后，移除
+     * @param cardObj
+     * @param context
+     */
     removeCard(cardObj: BaseCardObj, context: ContextObj) {
         this.currentCard.delete(cardObj.id)
         if (context.sharedCardPool) {
@@ -59,5 +72,23 @@ export default class Taverns {
         if (context.sharedCardPool) {
             context.sharedCardPool.cardIn(cardObj.baseCard)
         }
+    }
+
+    freeze(cardList: BaseCardObj[]) {
+        if (this.isFreezeAll()) {
+            // 解冻
+            this.freezeCardId = []
+        } else {
+            cardList.forEach(item => {
+                this.freezeCardId.push(item.id)
+            })
+        }
+        Array.from(this.currentCard.values()).forEach(card => {
+            if (this.freezeCardId.includes(card.id)) {
+                card.isFreeze = true;
+            } else {
+                card.isFreeze = false;
+            }
+        })
     }
 }

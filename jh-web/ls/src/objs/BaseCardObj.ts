@@ -5,7 +5,8 @@ import Chance from 'chance'
 import {cloneDeep} from "lodash";
 
 export default class BaseCardObj implements Trigger<BaseCardObj> {
-    id: String;
+    id: string;
+    isFreeze: boolean = false;
 
     constructor(baseCard: BaseCard) {
         this.id = new Chance().guid();

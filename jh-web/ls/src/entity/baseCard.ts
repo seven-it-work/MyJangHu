@@ -4,6 +4,9 @@ import {Trigger} from "./Trigger";
 
 export default abstract class BaseCard implements Trigger<BaseCard> {
     name: string = '';
+    // 酒馆是否出售
+    isSell: boolean = true;
+
     type: string = '随从';
     // 购买价格
     spendingGoldCoin: number = 3;
@@ -12,7 +15,7 @@ export default abstract class BaseCard implements Trigger<BaseCard> {
     // 出售价格
     salePrice: number = 1;
     // 种族
-    ethnicity: string[] = [];
+    ethnicity: string[] = ['中立'];
     // 体系类别
     accompanyingRace: string[] = [];
     attack: number = 0;
@@ -41,7 +44,8 @@ export default abstract class BaseCard implements Trigger<BaseCard> {
     // 是否花费生命值
     isSpendLife: boolean = false;
     // 是否潜行
-    isSneak:boolean=false;
+    isSneak: boolean = false;
+
     /**
      * 当其他随从死亡时触发器
      */

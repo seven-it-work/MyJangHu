@@ -1,8 +1,10 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
+import Tavern from "../components/Tavern.vue";
 
 export default defineComponent({
   name: "Player",
+  components: {Tavern},
   data() {
     return {
       activeKey: ['1'],
@@ -13,47 +15,8 @@ export default defineComponent({
 
 <template>
   <div>
-    <a-collapse v-model:activeKey="activeKey">
-      <a-collapse-panel key="1" >
-        <template #header>
-          酒馆
-          <a-button>升级</a-button>
-          <span>当前等级:</span>
-          <a-button>刷新</a-button>
-          <a-button>冻结</a-button>
-          <span>当前金币：10/10</span>
-        </template>
-        <a-row :gutter="16">
-          <a-col v-for="i in 7" :key="i">
-            <a-card hoverable style="width: 180px;" body-style="padding:10px">
-              <template #actions>
-                <span>攻击力：1</span>
-                <span>
-          <div>恶魔</div>
-          <div>机械</div>
-        </span>
-                <span>生命值：1</span>
-              </template>
-              <a-card-meta>
-                <template #title>
-                  <a-avatar>3级</a-avatar>
-                  小鬼
-                  <a-button size="small">购买</a-button>
-                </template>
-                <template #description>
-                  <a-tooltip placement="bottom" :title="'在你使用一张恶魔牌后，对你的英雄造成1点伤害，并获得+2/+1'">
-                    <div style="width:160px;height:90px;">
-                      <p style="display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 4;overflow:hidden;">
-                        在你使用一张恶魔牌后，对你的英雄造成1点伤害，并获得+2/+1
-                      </p>
-                    </div>
-                  </a-tooltip>
-                </template>
-              </a-card-meta>
-            </a-card>
-          </a-col>
-        </a-row>
-      </a-collapse-panel>
+    <a-collapse v-model:activeKey="activeKey" collapsible="icon">
+      <Tavern key="1"></Tavern>
       <a-collapse-panel key="2" header="出场随从">
         <a-row :gutter="16">
           <a-col v-for="i in 7" :key="i">

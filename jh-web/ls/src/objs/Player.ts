@@ -1,7 +1,7 @@
 import BaseCardObj from "./BaseCardObj";
 import ContextObj from "./ContextObj";
 import Taverns from "./Taverns";
-import randomUtil from "../utils/RandomUtils";
+import {message} from 'ant-design-vue';
 
 export default class Player {
 
@@ -12,8 +12,11 @@ export default class Player {
 
     tavern: Taverns;
 
-    currentGoldCoin: number = 0;
-    currentMaxGoldCoin: number = 0;
+    currentGoldCoin: number = 3;
+    // 最大铸币加成
+    private currentMaxGoldCoin: number = 3;
+    // 最大铸币加成
+    private maxGoldCoinBonus: number = 0;
     currentLife: number = 30;
     currentArmor: number = 0;
     handCardMap: Map<String, BaseCardObj> = new Map<String, BaseCardObj>();
@@ -32,6 +35,10 @@ export default class Player {
 
     private readonly static MAX_HAND_CARD: number = 10;
 
+    getMaxGoldCoin(): number {
+        return this.currentMaxGoldCoin + this.maxGoldCoinBonus
+    }
+
     canBuyCard(cardObj: BaseCardObj): Boolean {
         if (this.handCardMap.size >= Player.MAX_HAND_CARD) {
             console.log("手牌满了")
@@ -40,9 +47,13 @@ export default class Player {
         return this.currentGoldCoin >= cardObj.baseCard.spendingGoldCoin
     }
 
+    freeze(cardList: BaseCardObj[]) {
+        this.tavern.freeze(cardList);
+    }
+
     buyCard(cardObj: BaseCardObj, context: ContextObj) {
         if (!this.canBuyCard(cardObj)) {
-            console.error("不能购买")
+            message.error({content: '金币不足，不能购买'});
             return;
         }
         if (cardObj.baseCard.isSpendLife) {
@@ -59,7 +70,7 @@ export default class Player {
         })
     }
 
-    canUseCard(cardObj: BaseCardObj): Boolean {
+    canUseCard(): Boolean {
         return this.cardList.length < 7;
     }
 
@@ -97,7 +108,8 @@ export default class Player {
 
     refreshTavern(context: ContextObj) {
         if (!this.canRefreshTavern()) {
-            console.error("不能刷新")
+            message.error({content: '金币不足，不能刷新'});
+            return
         }
         this.currentGoldCoin -= this.tavern.refreshExpenses
         this.tavern.refresh(context)
@@ -109,7 +121,8 @@ export default class Player {
 
     upgradeTavern() {
         if (!this.canUpgradeTavern()) {
-            console.error("不能升级")
+            message.error({content: '金币不足，不能升级'});
+            return
         }
         this.currentGoldCoin -= this.tavern.currentUpgradeExpenses
         this.tavern.upgrade()
@@ -128,6 +141,4 @@ export default class Player {
         }
         this.currentLife += changeValue;
     }
-
-
 }

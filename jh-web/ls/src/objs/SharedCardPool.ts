@@ -4,9 +4,22 @@ import BaseCard from "../entity/baseCard";
 import {cloneDeep} from "lodash";
 import randomUtil from "../utils/RandomUtils.ts";
 
+class SharedCardPoolData {
+
+    graded: number;
+    remainingQuantity: number;
+    baseCard: BaseCard;
+
+    constructor(graded: number, remainingQuantity: number, baseCard: BaseCard) {
+        this.graded = graded;
+        this.remainingQuantity = remainingQuantity;
+        this.baseCard = baseCard;
+    }
+}
+
 export default class SharedCardPool {
     accompanyingRace: string[]
-    pool = new Map()
+    pool: Map<string, SharedCardPoolData> = new Map<string, SharedCardPoolData>()
     cardDb: CardDb;
 
     constructor(accompanyingRace: string[]) {
@@ -15,20 +28,18 @@ export default class SharedCardPool {
         this.cardDb = cardDb;
         const baseCards: BaseCard[] = cardDb.listByAccompanyingRace(accompanyingRace);
         baseCards.forEach(card => {
-            this.pool.set(card.constructor.name, {
-                graded: card.graded,
-                remainingQuantity: GRADED_RULES[card.graded].cardSize,
-                baseCard: card
-            })
+            this.pool.set(card.constructor.name, new SharedCardPoolData(card.graded, GRADED_RULES[card.graded].cardSize, card))
         })
     }
 
-    refreshRandom(graded: Number): BaseCard[] {
+    refreshRandom(graded: number): BaseCard[] {
         const cardNumber = GRADED_RULES[graded].cardNumber;
         const list = Array.from(this.pool.values()).filter(card => {
             return card.remainingQuantity > 0;
         }).filter(card => {
-            return card.graded <= graded
+            return card.baseCard.graded <= graded
+        }).filter(card => {
+            return card.baseCard.isSell
         }).map(card => card.baseCard)
         return randomUtil.pick(list, cardNumber);
     }
