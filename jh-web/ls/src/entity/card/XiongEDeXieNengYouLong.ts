@@ -1,5 +1,6 @@
 import BaseCard from "../baseCard";
 import ContextObj from "../../objs/ContextObj";
+import randomUtil from "../../utils/RandomUtils";
 
 export default class XiongEDeXieNengYouLong extends BaseCard {
     name = "凶恶的邪能幼龙"
@@ -9,5 +10,17 @@ export default class XiongEDeXieNengYouLong extends BaseCard {
     graded = 4
     description = "战吼：吞食酒馆中的3个随从，获得其属性值。"
 
-    // todo 战吼完善
+    whenCardUsedTrigger(context: ContextObj) {
+        for (let i = 0; i < 3; i++) {
+            const tavern = context.player.tavern;
+            const baseCardObjs = Array.from(tavern.currentCard.values()).filter(card => card.baseCard.type === '随从');
+            if (baseCardObjs.length <= 0) {
+                return;
+            }
+            const pick = randomUtil.pickone(baseCardObjs);
+            tavern.removeCard(pick, context)
+            this.attack += pick.baseCard.attack;
+            this.life += pick.baseCard.life;
+        }
+    }
 }

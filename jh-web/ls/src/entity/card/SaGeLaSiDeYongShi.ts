@@ -8,5 +8,14 @@ export default class SaGeLaSiDeYongShi extends BaseCard {
     life = 10
     graded = 7
     description = "酒馆中的随从拥有+10/10。"
-    // todo 完善
+
+    whenCardUsedTrigger(context: ContextObj) {
+        context.player.tavern.tavernAttackBonus += 10;
+        context.player.tavern.tavernLifeBonus += 10;
+    }
+
+    whenSaleCardTrigger(context: ContextObj) {
+        context.player.tavern.tavernAttackBonus -= 10;
+        context.player.tavern.tavernLifeBonus -= 10;
+    }
 }

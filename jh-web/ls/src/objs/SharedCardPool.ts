@@ -32,8 +32,30 @@ export default class SharedCardPool {
         })
     }
 
-    refreshRandom(graded: number): BaseCard[] {
-        const cardNumber = GRADED_RULES[graded].cardNumber;
+    listByEthnicity(ethnicity: string[], levelLimits: number | undefined = undefined, isMatchAll = false): BaseCard[] {
+        return Array.from(this.pool.values()).filter(card => {
+            if (isMatchAll) {
+                const ethnicityData = ethnicity.filter(str => {
+                    return card.baseCard.ethnicity.includes(str)
+                }).length
+                return ethnicityData === ethnicity.length;
+            } else {
+                return ethnicity.filter(str => {
+                    return card.baseCard.ethnicity.includes(str)
+                }).length > 0;
+            }
+        }).filter(data => {
+            if (levelLimits) {
+                return data.baseCard.graded <= levelLimits;
+            }
+            return true
+        }).map(data => data.baseCard);
+    }
+
+    refreshRandom(cardNumber: number, graded: number): BaseCard[] {
+        if (cardNumber <= 0) {
+            return []
+        }
         const list = Array.from(this.pool.values()).filter(card => {
             return card.remainingQuantity > 0;
         }).filter(card => {

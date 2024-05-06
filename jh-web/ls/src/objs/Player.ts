@@ -2,6 +2,7 @@ import BaseCardObj from "./BaseCardObj";
 import ContextObj from "./ContextObj";
 import Taverns from "./Taverns";
 import {message} from 'ant-design-vue';
+import {cloneDeep} from "lodash";
 
 export default class Player {
 
@@ -24,6 +25,8 @@ export default class Player {
     cardList: BaseCardObj[] = [];
     // 战斗中的牌
     cardListInFighting: BaseCardObj[] = [];
+    // 战斗死亡池
+    deadCardListInFighting: BaseCardObj[] = [];
     /**
      * 战吼额外触发次数
      */
@@ -32,6 +35,14 @@ export default class Player {
      * 亡语额外触发次数
      */
     deadWordsExtraTriggers: number = 0;
+    /**
+     * 回合结束额外触发次数
+     */
+    endRoundExtraTriggers: number = 0;
+    /**
+     * 回合是否结束
+     */
+    isEndRound: boolean = false;
 
     private readonly static MAX_HAND_CARD: number = 10;
 
@@ -57,12 +68,16 @@ export default class Player {
             return;
         }
         if (cardObj.baseCard.isSpendLife) {
-            this.currentLife -= cardObj.baseCard.spendingGoldCoin;
+            this.changeLife(-cardObj.baseCard.spendingGoldCoin, context);
             //  todo 死亡判断
         } else {
             this.currentGoldCoin -= cardObj.baseCard.spendingGoldCoin;
         }
         this.tavern.removeCard(cardObj, context)
+        // 酒馆加成写入
+        cardObj.baseCard.attack += this.tavern.tavernAttackBonus;
+        cardObj.baseCard.life += this.tavern.tavernLifeBonus;
+
         this.handCardMap.set(cardObj.id, cardObj);
         cardObj.whenBuyCardTrigger(context)
         this.handCardMap.forEach((v) => {
@@ -70,11 +85,15 @@ export default class Player {
         })
     }
 
-    canUseCard(): Boolean {
+    canUseCard(): boolean {
         return this.cardList.length < 7;
     }
 
     useCard(cardObj: BaseCardObj, context: ContextObj) {
+        if (!this.canUseCard()) {
+            message.error({content: '最多有7个随从'});
+            return
+        }
         if (this.handCardMap.delete(cardObj.id)) {
             cardObj.whenCardUsedTrigger(context);
             this.cardList.forEach((v) => {
@@ -92,11 +111,16 @@ export default class Player {
     }
 
     saleCard(cardObj: BaseCardObj, context: ContextObj) {
-        if (this.handCardMap.delete(cardObj.id)) {
+        if (this.cardList.map(card => card.id).includes(cardObj.id)) {
+            this.cardList = this.cardList.filter(card => card.id !== cardObj.id)
             this.currentGoldCoin += cardObj.baseCard.salePrice;
             this.tavern.saleCard(cardObj, context)
             cardObj.whenSaleCardTrigger(context);
-            this.handCardMap.forEach((v, k) => {
+            // 手牌出售监听，战场出售监听
+            this.handCardMap.forEach((v) => {
+                v.whenSaleOtherHandlerCardTrigger(cardObj, context)
+            })
+            this.cardList.forEach((v) => {
                 v.whenSaleOtherCardTrigger(cardObj, context)
             })
         }
@@ -107,6 +131,15 @@ export default class Player {
     }
 
     refreshTavern(context: ContextObj) {
+        // 刷新消耗生命值
+        const baseCardObjs = this.cardList.filter(card => card.baseCard.remainRefreshTimes > 0);
+        if (baseCardObjs.length > 0) {
+            const baseCardObj = baseCardObjs[0];
+            baseCardObj.baseCard.remainRefreshTimes--;
+            this.changeLife(-1, context);
+            this.tavern.refresh(context)
+            return;
+        }
         if (!this.canRefreshTavern()) {
             message.error({content: '金币不足，不能刷新'});
             return
@@ -128,7 +161,7 @@ export default class Player {
         this.tavern.upgrade()
     }
 
-    changeLife(changeValue: number, onlyLife: Boolean = false) {
+    changeLife(changeValue: number, contextObj: ContextObj, onlyLife: Boolean = false) {
         if (!onlyLife) {
             if (this.currentArmor > 0) {
                 this.currentArmor += changeValue;
@@ -140,5 +173,41 @@ export default class Player {
             }
         }
         this.currentLife += changeValue;
+        if (changeValue < 0) {
+            this.cardList.forEach(card => card.whenPlayerInjuries(-changeValue, contextObj))
+        }
+    }
+
+    /**
+     * 结束回合
+     */
+    endTheRound(contextObj: ContextObj) {
+        this.isEndRound = true;
+        // 手牌影响
+        Array.from(this.handCardMap.values()).forEach(card => card.whenEndRoundHandler(contextObj))
+        // 战场影响
+        this.cardList.forEach(card => card.whenEndRound(contextObj))
+        // 系统默认影响
+        // 1、属性计算完成后，将cardListInFighting进行赋值
+        this.cardListInFighting = cloneDeep(this.cardList)
+        this.deadCardListInFighting = []
+    }
+
+    /**
+     * 开始回合
+     */
+    startTheRound(contextObj: ContextObj) {
+        this.isEndRound = false;
+        // 手牌影响
+        Array.from(this.handCardMap.values()).forEach(card => card.whenStartRoundHandler(contextObj))
+        // 战场影响
+        this.cardList.forEach(card => card.whenStartRound(contextObj))
+        // 系统默认影响
+        // 1、金币上限+1（最大10）
+        this.currentMaxGoldCoin = Math.min(10, this.currentMaxGoldCoin + 1)
+        // 2、铸币=上限值
+        this.currentGoldCoin = this.getMaxGoldCoin();
+        // 刷新未冻结的随从
+        this.tavern.refresh(contextObj)
     }
 }

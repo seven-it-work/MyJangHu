@@ -13,7 +13,7 @@ export default class FenNuBianZhiZhe extends BaseCard {
 
     whenOtherCardUsedTrigger(targetCard: BaseCard, context: ContextObj) {
         if (targetCard.ethnicity.includes("恶魔")) {
-            context.player.changeLife(-1)
+            context.player.changeLife(-1, context)
             this.attack += 2
             this.life += 1;
         }

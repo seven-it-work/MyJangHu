@@ -8,5 +8,13 @@ export default class TiKeDiAoSaoSi extends BaseCard {
     life = 4
     graded = 5
     description = "在你的英雄受到伤害后，使你的其他恶魔获得+1/+1"
-    // todo 英雄伤害监听
+
+    whenPlayerInjuries(injuring: number, context: ContextObj) {
+        if (!context.player.isEndRound) {
+            context.player.cardList.filter(card => card.id !== this.tempId).forEach(card => {
+                card.baseCard.life++;
+                card.baseCard.attack++;
+            })
+        }
+    }
 }

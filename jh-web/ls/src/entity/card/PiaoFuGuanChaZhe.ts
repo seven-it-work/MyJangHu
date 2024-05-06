@@ -9,5 +9,10 @@ export default class PiaoFuGuanChaZhe extends BaseCard {
     graded = 4
     description = "每当你的英雄在你的回合受到伤害，便获得+2/+2。"
 
-    // todo 英雄伤害监听
+    whenPlayerInjuries(injuring: number, context: ContextObj) {
+        if (!context.player.isEndRound) {
+            this.life = this.life + 2;
+            this.attack = this.attack + 2;
+        }
+    }
 }

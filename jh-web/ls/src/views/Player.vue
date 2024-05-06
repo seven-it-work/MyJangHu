@@ -1,13 +1,29 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import Tavern from "../components/Tavern.vue";
+import Taverns from "../objs/Taverns";
+import SharedCardPool from "../objs/SharedCardPool";
+import Player from "../objs/Player";
+import ContextObj from "../objs/ContextObj";
+import PlayerHandler from "../components/PlayerHandler.vue";
+import Battlefield from "../components/Battlefield.vue";
+import PlayerInfo from "../components/PlayerInfo.vue";
+
+const taverns = new Taverns();
+const sharedCardPool = new SharedCardPool(['恶魔']);
+const player = new Player(taverns);
+const contextObj = new ContextObj(player, sharedCardPool);
+taverns.refresh(contextObj)
+
+player.currentGoldCoin=999
 
 export default defineComponent({
   name: "Player",
-  components: {Tavern},
+  components: {PlayerInfo, Battlefield, PlayerHandler, Tavern},
   data() {
     return {
-      activeKey: ['1'],
+      activeKey: ['1', '2', '3', '4',],
+      contextObj,
     }
   },
 })
@@ -16,87 +32,11 @@ export default defineComponent({
 <template>
   <div>
     <a-collapse v-model:activeKey="activeKey" collapsible="icon">
-      <Tavern key="1"></Tavern>
-      <a-collapse-panel key="2" header="出场随从">
-        <a-row :gutter="16">
-          <a-col v-for="i in 7" :key="i">
-            <a-card hoverable style="width: 180px;" body-style="padding:10px">
-              <template #actions>
-                <span>攻击力：1</span>
-                <span>
-          <div>恶魔</div>
-          <div>机械</div>
-        </span>
-                <span>生命值：1</span>
-              </template>
-              <a-card-meta>
-                <template #title>
-                  <a-avatar>3级</a-avatar>
-                  小鬼
-                  <a-button size="small">出售</a-button>
-                </template>
-                <template #description>
-                  <a-tooltip placement="bottom" :title="'在你使用一张恶魔牌后，对你的英雄造成1点伤害，并获得+2/+1'">
-                    <div style="width:160px;height:90px;">
-                      <p style="display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 4;overflow:hidden;">
-                        在你使用一张恶魔牌后，对你的英雄造成1点伤害，并获得+2/+1
-                      </p>
-                    </div>
-                  </a-tooltip>
-                </template>
-              </a-card-meta>
-            </a-card>
-          </a-col>
-        </a-row>
-      </a-collapse-panel>
-      <a-collapse-panel key="3" header="手牌 数量：9/10">
-        <a-row :gutter="16">
-          <a-col v-for="i in 7" :key="i">
-            <a-card hoverable style="width: 180px;" body-style="padding:10px">
-              <template #actions>
-                <span>攻击力：1</span>
-                <span>
-          <div>恶魔</div>
-          <div>机械</div>
-        </span>
-                <span>生命值：1</span>
-              </template>
-              <a-card-meta>
-                <template #title>
-                  <a-avatar>3级</a-avatar>
-                  小鬼
-                  <a-button size="small">使用</a-button>
-                </template>
-                <template #description>
-                  <a-tooltip placement="bottom" :title="'在你使用一张恶魔牌后，对你的英雄造成1点伤害，并获得+2/+1'">
-                    <div style="width:160px;height:90px;">
-                      <p style="display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 4;overflow:hidden;">
-                        在你使用一张恶魔牌后，对你的英雄造成1点伤害，并获得+2/+1
-                      </p>
-                    </div>
-                  </a-tooltip>
-                </template>
-              </a-card-meta>
-            </a-card>
-          </a-col>
-        </a-row>
-      </a-collapse-panel>
-      <a-collapse-panel key="4">
-        <template #header>
-          英雄
-          当前生命:30
-          当前护甲:30
-          <a-button>结束回合</a-button>
-        </template>
-        <a-row>
-          <a-col><a-button>使用</a-button></a-col>
-          <a-col>技能描述：</a-col>
-        </a-row>
-      </a-collapse-panel>
+      <Tavern :context-obj="contextObj" key="1"></Tavern>
+      <Battlefield :context-obj="contextObj" key="2"></Battlefield>
+      <PlayerHandler :context-obj="contextObj" key="3"></PlayerHandler>
+      <PlayerInfo :context-obj="contextObj" key="4"></PlayerInfo>
     </a-collapse>
-
-
-
   </div>
 </template>
 

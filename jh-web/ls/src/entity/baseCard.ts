@@ -3,6 +3,7 @@ import {Trigger} from "./Trigger";
 
 
 export default abstract class BaseCard implements Trigger<BaseCard> {
+    tempId: string = '';
     name: string = '';
     // 酒馆是否出售
     isSell: boolean = true;
@@ -45,6 +46,10 @@ export default abstract class BaseCard implements Trigger<BaseCard> {
     isSpendLife: boolean = false;
     // 是否潜行
     isSneak: boolean = false;
+    // 刷新消耗生命值次数
+    refreshTimes: number = 0;
+    // 剩余刷新消耗生命值次数
+    remainRefreshTimes: number = 0;
 
     /**
      * 当其他随从死亡时触发器
@@ -97,5 +102,23 @@ export default abstract class BaseCard implements Trigger<BaseCard> {
     }
 
     whenAttackTrigger(defender: BaseCard, context: ContextObj, targetContext: ContextObj) {
+    }
+
+    whenSaleOtherHandlerCardTrigger(targetCard: BaseCard, context: ContextObj) {
+    }
+
+    whenEndRound(context: ContextObj) {
+    }
+
+    whenEndRoundHandler(context: ContextObj) {
+    }
+
+    whenStartRound(context: ContextObj) {
+    }
+
+    whenStartRoundHandler(context: ContextObj) {
+    }
+
+    whenPlayerInjuries(injuring: number, context: ContextObj) {
     }
 }

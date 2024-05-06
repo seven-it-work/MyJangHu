@@ -12,7 +12,11 @@ export default class TiaoShiMoQuan extends BaseCard {
 
     whenCardUsedTrigger(context: ContextObj) {
         const tavern = context.player.tavern;
-        const pick = randomUtil.pickone(Array.from(tavern.currentCard.values()));
+        const baseCardObjs = Array.from(tavern.currentCard.values()).filter(card => card.baseCard.type === '随从');
+        if (baseCardObjs.length <= 0) {
+            return;
+        }
+        const pick = randomUtil.pickone(baseCardObjs);
         tavern.removeCard(pick, context)
         this.attack += pick.baseCard.attack;
         this.life += pick.baseCard.life;

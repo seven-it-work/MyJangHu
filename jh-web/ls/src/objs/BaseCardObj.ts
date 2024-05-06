@@ -87,11 +87,16 @@ export default class BaseCardObj implements Trigger<BaseCardObj> {
         this.baseCard.whenSaleOtherCardTrigger(targetCard.baseCard, context)
     }
 
+    whenSaleOtherHandlerCardTrigger(targetCard: BaseCardObj, context: ContextObj) {
+        this.baseCard.whenSaleOtherHandlerCardTrigger(targetCard.baseCard, context)
+    }
+
     whenOtherCardUsedTrigger(targetCard: BaseCardObj, context: ContextObj) {
         this.baseCard.whenOtherCardUsedTrigger(targetCard.baseCard, context)
     }
 
     whenOtherHandlerCardUsedTrigger(targetCard: BaseCardObj, context: ContextObj) {
+        this.baseCard.whenOtherHandlerCardUsedTrigger(targetCard.baseCard, context)
     }
 
     whenAttackTrigger(defender: BaseCardObj, context: ContextObj, targetContext: ContextObj) {
@@ -129,6 +134,8 @@ export default class BaseCardObj implements Trigger<BaseCardObj> {
         this.baseCard.life -= toBeHarmed;
         defender.baseCard.life -= toCauseHarm;
         if (this.baseCard.life <= 0) {
+            // 加入死亡池
+            context.player.deadCardListInFighting.push(this)
             // 复生
             if (this.baseCard.isRebirth) {
                 this.baseCard.life = 1;
@@ -140,6 +147,8 @@ export default class BaseCardObj implements Trigger<BaseCardObj> {
             this.whenDeadTrigger(context);
         }
         if (defender.baseCard.life <= 0) {
+            // 加入死亡池
+            targetContext.player.deadCardListInFighting.push(this)
             // 复生
             if (defender.baseCard.isRebirth) {
                 defender.baseCard.life = 1;
@@ -154,5 +163,30 @@ export default class BaseCardObj implements Trigger<BaseCardObj> {
 
     attacking(target: BaseCardObj, context: ContextObj, targetContext: ContextObj) {
         this.whenAttackTrigger(target, context, targetContext)
+    }
+
+    whenEndRound(context: ContextObj) {
+        for (let i = 0; i <= context.player.endRoundExtraTriggers; i++) {
+            this.baseCard.whenEndRound(context)
+        }
+    }
+
+    whenEndRoundHandler(context: ContextObj) {
+        for (let i = 0; i <= context.player.endRoundExtraTriggers; i++) {
+            this.baseCard.whenEndRoundHandler(context)
+        }
+    }
+
+    whenStartRound(context: ContextObj) {
+        this.baseCard.whenStartRound(context)
+    }
+
+    whenStartRoundHandler(context: ContextObj) {
+        this.baseCard.whenStartRoundHandler(context)
+    }
+
+    whenPlayerInjuries(injuring: number, context: ContextObj) {
+        this.baseCard.tempId = this.id
+        this.baseCard.whenPlayerInjuries(injuring, context)
     }
 }

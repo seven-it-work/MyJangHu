@@ -6,6 +6,6 @@ export default class XiaoGui extends BaseCard {
     attack = 1
     life = 1
     graded = 1
-    description = ""
+    description = "我是小鬼，我最帅"
     isSell: boolean = false;
 }

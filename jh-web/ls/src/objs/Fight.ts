@@ -94,10 +94,10 @@ export default class Fight {
             throw new Error("错误战斗结算")
         } else if (attackerContextObj.player.cardListInFighting.length !== 0) {
             const sum = attackerContextObj.player.cardListInFighting.map(card => card.baseCard.graded).reduce((sum, num) => sum + num, 0);
-            defenderContextObj.player.changeLife(-sum);
+            defenderContextObj.player.changeLife(-sum, defenderContextObj);
         } else if (defenderContextObj.player.cardListInFighting.length !== 0) {
             const sum = defenderContextObj.player.cardListInFighting.map(card => card.baseCard.graded).reduce((sum, num) => sum + num, 0);
-            attackerContextObj.player.changeLife(-sum);
+            attackerContextObj.player.changeLife(-sum, attackerContextObj);
         } else {
             // 平局
         }

@@ -52,8 +52,15 @@ export interface Trigger<T> {
 
     /**
      * 当前出售其他卡片时
+     * (战场监听)
      */
     whenSaleOtherCardTrigger(targetCard: T, context: ContextObj);
+
+    /**
+     * 当前出售其他卡片时
+     * (手牌监听)
+     */
+    whenSaleOtherHandlerCardTrigger(targetCard: T, context: ContextObj);
 
     /**
      * 出售当前卡片时
@@ -64,4 +71,34 @@ export interface Trigger<T> {
      * 当前随从攻击时
      */
     whenAttackTrigger(defender: T, context: ContextObj, targetContext: ContextObj);
+
+    /**
+     * 当回合结束时
+     * (战场)
+     */
+    whenEndRound(context: ContextObj);
+
+    /**
+     * 当回合结束时
+     * (手牌)
+     */
+    whenEndRoundHandler(context: ContextObj);
+
+    /**
+     * 当回合开始时
+     * (战场)
+     */
+    whenStartRound(context: ContextObj);
+
+    /**
+     * 当回合开始时
+     * (手牌)
+     */
+    whenStartRoundHandler(context: ContextObj);
+
+    /**
+     * 当回合开始时
+     * (战场)
+     */
+    whenPlayerInjuries(injuring:number,context: ContextObj);
 }

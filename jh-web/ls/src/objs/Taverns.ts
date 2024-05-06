@@ -13,8 +13,8 @@ export const GRADED_RULES = {
     3: {cardNumber: 4, upgradeExpenses: 8, cardSize: 13},
     4: {cardNumber: 5, upgradeExpenses: 9, cardSize: 11},
     5: {cardNumber: 5, upgradeExpenses: 11, cardSize: 9},
-    6: {cardNumber: 6, upgradeExpenses: 20, cardSize: 6},
-    7: {cardNumber: 3, upgradeExpenses: undefined, cardSize: 6},
+    6: {cardNumber: 6, upgradeExpenses: undefined, cardSize: 6},
+    7: {cardNumber: 6, upgradeExpenses: undefined, cardSize: 6},
 }
 export default class Taverns {
     // 酒馆攻击加成
@@ -39,21 +39,38 @@ export default class Taverns {
     }
 
 
-    refresh(context: ContextObj) {
-        // todo 刷新要锁定共享池,释放已有的，锁定新出的
+    refresh(context: ContextObj, isClearAll = true) {
+        const freezeId = []
+        if (!isClearAll) {
+            // 冻结随从不刷新
+            freezeId.push(...this.freezeCardId)
+        }
         this.freezeCardId = []
-        this.currentCard.clear()
-        const baseCards: BaseCard[] = context.sharedCardPool.refreshRandom(this.graded);
+        // 冻结的不移除
+        const keys = Array.from(this.currentCard.keys());
+        keys.forEach((id) => {
+            const baseCardObj = this.currentCard.get(id);
+            if (freezeId.includes(baseCardObj.id)) {
+                baseCardObj.isFreeze = false;
+            } else {
+                // 释放已有的
+                context.sharedCardPool.cardIn(baseCardObj.baseCard);
+                this.currentCard.delete(id);
+            }
+        })
+        const cardNumber = GRADED_RULES[this.graded].cardNumber - freezeId.length;
+        const baseCards: BaseCard[] = context.sharedCardPool.refreshRandom(cardNumber, this.graded);
         baseCards.forEach(card => {
+            // 刷新要锁定共享池，锁定新出的
+            context.sharedCardPool.cardOut(card);
             const baseCardObj = new BaseCardObj(card);
-            baseCardObj.baseCard.attack += this.tavernAttackBonus;
-            baseCardObj.baseCard.life += this.tavernLifeBonus;
             this.currentCard.set(baseCardObj.id, baseCardObj)
         })
     }
 
     upgrade() {
         this.graded++;
+        this.currentUpgradeExpenses= GRADED_RULES[this.graded].upgradeExpenses;
     }
 
     /**
