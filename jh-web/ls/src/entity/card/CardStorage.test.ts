@@ -3,30 +3,25 @@ import {describe, expect, it} from "vitest";
 
 describe('CardStorage', () => {
     it('自动生成卡牌代码', function () {
-        const s = "FenNuBianZhiZhe.test.ts\n" +
-            "FenNuBianZhiZhe.ts\n" +
-            "JiEDeFuMo.ts\n" +
-            "JiXieJiaLaKeSuSi.ts\n" +
-            "JunTuanJianGong.ts\n" +
-            "KongJuHuZiWang.ts\n" +
-            "LingHunHuiSuZhe.ts\n" +
-            "PiaoFuGuanChaZhe.ts\n" +
-            "QiGuiDaJiLeShou.ts\n" +
-            "SaGeLaSiDeYongShi.ts\n" +
-            "TanShiDeWuZuEr.ts\n" +
-            "TiaoShiMoQuan.ts\n" +
-            "TiKeDiAoSaoSi.ts\n" +
-            "WuDaoWangZiMaKeZhaEr.ts\n" +
-            "XiaoGui.ts\n" +
-            "XiaoGuiQiuTu.test.ts\n" +
-            "XiaoGuiQiuTu.ts\n" +
-            "XieNengYuanSu.test.ts\n" +
-            "XieNengYuanSu.ts\n" +
-            "XinLingNiMo.ts\n" +
-            "XiongEDeXieNengYouLong.ts\n" +
-            "XiXueDiYuQuan.ts\n" +
-            "YiJiaoTuSiSeLa.ts\n" +
-            "ZaoDongQiZhaZhe.ts";
+        const dir="machine"
+        const s = "BaoBaoJiQiRen.ts\n" +
+            "BaoFeiFeiPinHuiShouJi.ts\n" +
+            "ChaoChaoJiQiRen.ts\n" +
+            "ChaoChaoMoZu.ts\n" +
+            "ChiQuPuYiJi.ts\n" +
+            "CuiMianJiQiRen.ts\n" +
+            "DuoMianFuZhuWuRenJi.ts\n" +
+            "JiXieMuMa.ts\n" +
+            "JiXingB_BOXQuanShou.ts\n" +
+            "KanGeErDeXueTu.ts\n" +
+            "LiangChanXingKongHeJi.ts\n" +
+            "OuMiQiePoHuaiZhe.ts\n" +
+            "PengPengFeiChe.ts\n" +
+            "PianZheJiQiRen.ts\n" +
+            "ShouFengQinJiQiRen.ts\n" +
+            "SiShen4000Xing.ts\n" +
+            "WeiXingMuNaiYi.ts\n" +
+            "ZiShiYingLuZhang.ts";
         const list = s.split("\n").filter(cardName => {
             if (cardName.includes("test.ts")) {
                 // 忽略
@@ -40,7 +35,7 @@ describe('CardStorage', () => {
             return cardName.split(".ts")[0];
         })
         list.forEach(cardName=>{
-            console.log(`import ${cardName} from "./${cardName}";`)
+            console.log(`import ${cardName} from "./${dir}/${cardName}";`)
         })
         list.forEach(cardName=>{
             console.log(`CardStorage.set(${cardName}.name, ${cardName});`)
