@@ -3,11 +3,13 @@ import ContextObj from "./ContextObj";
 import Taverns from "./Taverns";
 import {message} from 'ant-design-vue';
 import {cloneDeep} from "lodash";
+import {TriggerObj} from "../entity/Trigger";
 
 export default class Player {
 
 
-    constructor(tavern: Taverns) {
+    constructor(name: string, tavern: Taverns) {
+        this.name = name;
         this.tavern = tavern;
     }
 
@@ -43,8 +45,15 @@ export default class Player {
      * 回合是否结束
      */
     isEndRound: boolean = false;
+    // 姓名
+    name: string;
+
 
     private readonly static MAX_HAND_CARD: number = 10;
+
+    isSurvival(): boolean {
+        return this.currentLife > 0;
+    }
 
     getMaxGoldCoin(): number {
         return this.currentMaxGoldCoin + this.maxGoldCoinBonus
@@ -68,7 +77,11 @@ export default class Player {
             return;
         }
         if (cardObj.baseCard.isSpendLife) {
-            this.changeLife(-cardObj.baseCard.spendingGoldCoin, context);
+            this.changeLife(-cardObj.baseCard.spendingGoldCoin, {
+                currentCard: cardObj,
+                contextObj: context,
+                currentPlayer: this
+            });
             //  todo 死亡判断
         } else {
             this.currentGoldCoin -= cardObj.baseCard.spendingGoldCoin;
@@ -79,9 +92,18 @@ export default class Player {
         cardObj.baseCard.life += this.tavern.tavernLifeBonus;
 
         this.handCardMap.set(cardObj.id, cardObj);
-        cardObj.whenBuyCardTrigger(context)
+        cardObj.whenBuyCardTrigger({
+            currentCard: cardObj,
+            contextObj: context,
+            currentPlayer: this
+        })
         this.handCardMap.forEach((v) => {
-            v.whenBuyOtherCardTrigger(cardObj, context)
+            v.whenBuyOtherCardTrigger({
+                currentCard: v,
+                contextObj: context,
+                currentPlayer: this,
+                targetCard: cardObj,
+            })
         })
     }
 
@@ -90,17 +112,32 @@ export default class Player {
     }
 
     useCard(cardObj: BaseCardObj, context: ContextObj) {
+        // todo 使用位置
         if (!this.canUseCard()) {
             message.error({content: '最多有7个随从'});
             return
         }
         if (this.handCardMap.delete(cardObj.id)) {
-            cardObj.whenCardUsedTrigger(context);
+            cardObj.whenCardUsedTrigger({
+                contextObj: context,
+                currentPlayer: this,
+                targetCard: cardObj,
+            });
             this.cardList.forEach((v) => {
-                v.whenOtherCardUsedTrigger(cardObj, context)
+                v.whenOtherCardUsedTrigger({
+                    currentCard: v,
+                    contextObj: context,
+                    currentPlayer: this,
+                    targetCard: cardObj,
+                })
             })
             this.handCardMap.forEach((v) => {
-                v.whenOtherHandlerCardUsedTrigger(cardObj, context)
+                v.whenOtherHandlerCardUsedTrigger({
+                    currentCard: v,
+                    contextObj: context,
+                    currentPlayer: this,
+                    targetCard: cardObj,
+                })
             })
             this.cardList.push(cardObj)
         }
@@ -115,13 +152,27 @@ export default class Player {
             this.cardList = this.cardList.filter(card => card.id !== cardObj.id)
             this.currentGoldCoin += cardObj.baseCard.salePrice;
             this.tavern.saleCard(cardObj, context)
-            cardObj.whenSaleCardTrigger(context);
+            cardObj.whenSaleCardTrigger({
+                contextObj: context,
+                currentPlayer: this,
+                targetCard: cardObj,
+            });
             // 手牌出售监听，战场出售监听
             this.handCardMap.forEach((v) => {
-                v.whenSaleOtherHandlerCardTrigger(cardObj, context)
+                v.whenSaleOtherHandlerCardTrigger({
+                    currentCard: v,
+                    contextObj: context,
+                    currentPlayer: this,
+                    targetCard: cardObj,
+                })
             })
             this.cardList.forEach((v) => {
-                v.whenSaleOtherCardTrigger(cardObj, context)
+                v.whenSaleOtherCardTrigger({
+                    currentCard: v,
+                    contextObj: context,
+                    currentPlayer: this,
+                    targetCard: cardObj,
+                })
             })
         }
     }
@@ -131,13 +182,14 @@ export default class Player {
     }
 
     refreshTavern(context: ContextObj) {
+        const triggerObj = {contextObj: context, currentPlayer: this};
         // 刷新消耗生命值
         const baseCardObjs = this.cardList.filter(card => card.baseCard.remainRefreshTimes > 0);
         if (baseCardObjs.length > 0) {
             const baseCardObj = baseCardObjs[0];
             baseCardObj.baseCard.remainRefreshTimes--;
-            this.changeLife(-1, context);
-            this.tavern.refresh(context)
+            this.changeLife(-1, triggerObj);
+            this.tavern.refresh(triggerObj)
             return;
         }
         if (!this.canRefreshTavern()) {
@@ -145,7 +197,7 @@ export default class Player {
             return
         }
         this.currentGoldCoin -= this.tavern.refreshExpenses
-        this.tavern.refresh(context)
+        this.tavern.refresh(triggerObj)
     }
 
     canUpgradeTavern(): Boolean {
@@ -161,7 +213,7 @@ export default class Player {
         this.tavern.upgrade()
     }
 
-    changeLife(changeValue: number, contextObj: ContextObj, onlyLife: Boolean = false) {
+    changeLife(changeValue: number, triggerObj: TriggerObj, onlyLife: Boolean = false) {
         if (!onlyLife) {
             if (this.currentArmor > 0) {
                 this.currentArmor += changeValue;
@@ -174,19 +226,32 @@ export default class Player {
         }
         this.currentLife += changeValue;
         if (changeValue < 0) {
-            this.cardList.forEach(card => card.whenPlayerInjuries(-changeValue, contextObj))
+            this.cardList.forEach(card => card.whenPlayerInjuries(-changeValue, {
+                ...triggerObj,
+                currentCard: card,
+                currentPlayer: this,
+            }))
         }
     }
 
     /**
      * 结束回合
      */
-    endTheRound(contextObj: ContextObj) {
+    endTheRound(triggerObj: TriggerObj) {
+        console.log(`玩家：【${this.name}】结束当前回合`)
         this.isEndRound = true;
         // 手牌影响
-        Array.from(this.handCardMap.values()).forEach(card => card.whenEndRoundHandler(contextObj))
+        Array.from(this.handCardMap.values()).forEach(card => card.whenEndRoundHandler({
+            ...triggerObj,
+            currentCard: card,
+            currentPlayer: this,
+        }))
         // 战场影响
-        this.cardList.forEach(card => card.whenEndRound(contextObj))
+        this.cardList.forEach(card => card.whenEndRound({
+            ...triggerObj,
+            currentCard: card,
+            currentPlayer: this,
+        }))
         // 系统默认影响
         // 1、属性计算完成后，将cardListInFighting进行赋值
         this.cardListInFighting = cloneDeep(this.cardList)
@@ -196,18 +261,26 @@ export default class Player {
     /**
      * 开始回合
      */
-    startTheRound(contextObj: ContextObj) {
+    startTheRound(triggerObj: TriggerObj) {
         this.isEndRound = false;
         // 手牌影响
-        Array.from(this.handCardMap.values()).forEach(card => card.whenStartRoundHandler(contextObj))
+        Array.from(this.handCardMap.values()).forEach(card => card.whenStartRoundHandler({
+            ...triggerObj,
+            currentCard: card,
+            currentPlayer: this,
+        }))
         // 战场影响
-        this.cardList.forEach(card => card.whenStartRound(contextObj))
+        this.cardList.forEach(card => card.whenStartRound({
+            ...triggerObj,
+            currentCard: card,
+            currentPlayer: this,
+        }))
         // 系统默认影响
         // 1、金币上限+1（最大10）
         this.currentMaxGoldCoin = Math.min(10, this.currentMaxGoldCoin + 1)
         // 2、铸币=上限值
         this.currentGoldCoin = this.getMaxGoldCoin();
         // 刷新未冻结的随从
-        this.tavern.refresh(contextObj)
+        this.tavern.refresh(triggerObj)
     }
 }

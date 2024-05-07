@@ -2,11 +2,11 @@ import Player from "./Player";
 import SharedCardPool from "./SharedCardPool";
 
 export default class ContextObj {
-    player: Player;
     sharedCardPool: SharedCardPool;
 
-    constructor(player: Player, sharedCardPool: SharedCardPool) {
-        this.player = player;
+    currentRound: number = 1;
+
+    constructor(sharedCardPool: SharedCardPool) {
         this.sharedCardPool = sharedCardPool;
     }
 }

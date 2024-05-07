@@ -1,10 +1,12 @@
 <template>
   <a-collapse-panel>
     <template #header>
+      【{{ playObj?.currentPlayerInfo.name }}】
       英雄
-      当前生命:{{ contextObj.player.currentLife }}
-      当前护甲:{{ contextObj.player.currentArmor }}
+      当前生命:{{ playObj?.currentPlayerInfo.currentLife }}
+      当前护甲:{{ playObj?.currentPlayerInfo.currentArmor }}
       <a-button @click="endTheRound">结束回合</a-button>
+      第{{playObj?.contextObj.currentRound}}回合
     </template>
     <a-row>
       <a-col>
@@ -16,16 +18,24 @@
 </template>
 
 <script lang="ts">
-import ContextObj from "../objs/ContextObj";
+import PlayObj from "../objs/PlayObj";
+import {PropType} from "@vue/runtime-core";
+import Player from "../objs/Player";
 
 export default {
   name: "PlayerInfo",
   props: {
-    contextObj: ContextObj
+    playObj: {
+      type: Object as PropType<PlayObj>,
+      required: true,
+    },
   },
   methods: {
     endTheRound() {
-      this.contextObj?.player.endTheRound()
+      if (!this.playObj) {
+        return
+      }
+      this.playObj.endRound()
     }
   }
 }

@@ -6,12 +6,13 @@ export default class PengPengFeiChe extends BaseCard {
     attack = 12
     life = 12
     graded = 7
-    description = "磁力复生。圣盾。嘲讽。风怒。"
+    description = "<div><b>磁力</b></div>复生。圣盾。<b>嘲讽</b>。风怒。"
     isMockery: boolean = true;
     // 是否有圣盾
     isHolyShield: boolean = true;
     // 是否复生
     isRebirth: boolean = true;
-    // todo 风怒 磁力
+    numberAttack = 2;
+    isMagneticForce = true;
 }
 

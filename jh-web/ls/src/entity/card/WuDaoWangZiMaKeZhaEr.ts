@@ -1,5 +1,6 @@
 import BaseCard from "../baseCard";
 import ContextObj from "../../objs/ContextObj";
+import {TriggerObj} from "../Trigger";
 
 export default class WuDaoWangZiMaKeZhaEr extends BaseCard {
     name = "舞蹈王子玛克扎儿"
@@ -12,7 +13,7 @@ export default class WuDaoWangZiMaKeZhaEr extends BaseCard {
     // 剩余刷新消耗生命值次数
     remainRefreshTimes: number = 2;
 
-    whenEndRound(context: ContextObj) {
+    whenEndRound(triggerObj: TriggerObj) {
         this.remainRefreshTimes = this.refreshTimes;
     }
 }

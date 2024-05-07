@@ -2,6 +2,7 @@ import BaseCard from "../baseCard";
 import ContextObj from "../../objs/ContextObj";
 import randomUtil from "../../utils/RandomUtils";
 import BaseCardObj from "../../objs/BaseCardObj";
+import {TriggerObj} from "../Trigger";
 
 export default class QiGuiDaJiLeShou extends BaseCard {
     name = "奇瑰打击乐手"
@@ -9,18 +10,22 @@ export default class QiGuiDaJiLeShou extends BaseCard {
     attack = 4
     life = 4
     graded = 4
-    description = "战吼：发现一张恶魔牌，对你的英雄造成等同于其等级的伤害。"
+    description = "<b>战吼</b>：发现一张恶魔牌，对你的英雄造成等同于其等级的伤害。"
 
-    whenCardUsedTrigger(context: ContextObj) {
+    whenCardUsedTrigger(triggerObj: TriggerObj) {
+        const currentPlayer = triggerObj.currentPlayer;
+        if (!currentPlayer) {
+            return
+        }
         // 只能发现当前等级
-        const handCardMap = context.player.handCardMap;
-        const baseCards = context.sharedCardPool.listByEthnicity(['恶魔'], context.player.tavern.graded);
+        const handCardMap = currentPlayer.handCardMap;
+        const baseCards = triggerObj.contextObj.sharedCardPool.listByEthnicity(['恶魔'], currentPlayer.tavern.graded);
         if (baseCards.length > 0) {
             const baseCard = randomUtil.pickone(baseCards);
-            context.sharedCardPool.cardOut(baseCard);
+            triggerObj.contextObj.sharedCardPool.cardOut(baseCard);
             const baseCardObj = new BaseCardObj(baseCard);
             handCardMap.set(baseCardObj.id, baseCardObj)
-            context.player.changeLife(-baseCard.graded, context)
+            currentPlayer.changeLife(-baseCard.graded, triggerObj)
         }
     }
 }

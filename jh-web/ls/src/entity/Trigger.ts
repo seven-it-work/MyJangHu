@@ -1,104 +1,114 @@
 import ContextObj from "../objs/ContextObj";
+import BaseCardObj from "../objs/BaseCardObj";
+import Player from "../objs/Player";
 
-export interface Trigger<T> {
+export interface TriggerObj {
+    targetPlayer?: Player;
+    currentPlayer?: Player;
+    contextObj: ContextObj;
+    targetCard?: BaseCardObj;
+    currentCard?: BaseCardObj;
+}
+
+export interface Trigger {
 
     /**
      * 当其他随从死亡时触发器
      */
-    whenOtherDeadTrigger(targetCard: T, context: ContextObj);
+    whenOtherDeadTrigger(triggerObj: TriggerObj);
 
     /**
      * 当前随从死亡时触发器
      */
-    whenDeadTrigger(context: ContextObj);
+    whenDeadTrigger(triggerObj: TriggerObj);
 
     /**
      * 其他随从使用时触发器
      * (场上触发)
      */
-    whenOtherCardUsedTrigger(targetCard: T, context: ContextObj);
+    whenOtherCardUsedTrigger(triggerObj: TriggerObj);
 
     /**
      * 其他随从使用时触发器
      * (手牌触发)
      */
-    whenOtherHandlerCardUsedTrigger(targetCard: T, context: ContextObj);
+    whenOtherHandlerCardUsedTrigger(triggerObj: TriggerObj);
 
     /**
      * 当前随从使用时触发器
      * (战吼) 部分属性计算
      */
-    whenCardUsedTrigger(context: ContextObj);
+    whenCardUsedTrigger(triggerObj: TriggerObj);
 
     /**
      * 其他随从被召唤时触发器
      */
-    whenOtherSummonedTrigger(targetCard: T, context: ContextObj);
+    whenOtherSummonedTrigger(triggerObj: TriggerObj);
 
     /**
      * 当前随从被召唤时触发器
      */
-    whenSummonedTrigger(context: ContextObj);
+    whenSummonedTrigger(triggerObj: TriggerObj);
 
     /**
      * 购买其他卡片时
      */
-    whenBuyOtherCardTrigger(targetCard: T, context: ContextObj);
+    whenBuyOtherCardTrigger(triggerObj: TriggerObj);
 
     /**
      * 购买当前卡片时
      */
-    whenBuyCardTrigger(context: ContextObj);
+    whenBuyCardTrigger(triggerObj: TriggerObj);
 
     /**
      * 当前出售其他卡片时
      * (战场监听)
      */
-    whenSaleOtherCardTrigger(targetCard: T, context: ContextObj);
+    whenSaleOtherCardTrigger(triggerObj: TriggerObj);
 
     /**
      * 当前出售其他卡片时
      * (手牌监听)
      */
-    whenSaleOtherHandlerCardTrigger(targetCard: T, context: ContextObj);
+    whenSaleOtherHandlerCardTrigger(triggerObj: TriggerObj);
 
     /**
      * 出售当前卡片时
      */
-    whenSaleCardTrigger(context: ContextObj);
+    whenSaleCardTrigger(triggerObj: TriggerObj);
 
     /**
      * 当前随从攻击时
      */
-    whenAttackTrigger(defender: T, context: ContextObj, targetContext: ContextObj);
+    whenAttackTrigger(triggerObj: TriggerObj);
 
     /**
      * 当回合结束时
      * (战场)
      */
-    whenEndRound(context: ContextObj);
+    whenEndRound(triggerObj: TriggerObj);
 
     /**
      * 当回合结束时
      * (手牌)
      */
-    whenEndRoundHandler(context: ContextObj);
+    whenEndRoundHandler(triggerObj: TriggerObj);
 
     /**
      * 当回合开始时
      * (战场)
      */
-    whenStartRound(context: ContextObj);
+    whenStartRound(triggerObj: TriggerObj);
 
     /**
      * 当回合开始时
      * (手牌)
      */
-    whenStartRoundHandler(context: ContextObj);
+    whenStartRoundHandler(triggerObj: TriggerObj);
 
     /**
      * 当回合开始时
      * (战场)
      */
-    whenPlayerInjuries(injuring:number,context: ContextObj);
+    whenPlayerInjuries(injuring: number, triggerObj: TriggerObj);
 }

@@ -2,6 +2,7 @@ import BaseCard from "../baseCard";
 import ContextObj from "../../objs/ContextObj";
 import randomUtil from "../../utils/RandomUtils";
 import BaseCardObj from "../../objs/BaseCardObj";
+import {TriggerObj} from "../Trigger";
 
 export default class JiXieJiaLaKeSuSi extends BaseCard {
     name = "机械加拉克苏斯"
@@ -9,14 +10,18 @@ export default class JiXieJiaLaKeSuSi extends BaseCard {
     attack = 3
     life = 15
     graded = 6
-    description = "战吼：随机获取一张机械-恶魔牌。"
+    description = "<b>战吼</b>：随机获取一张机械-恶魔牌。"
 
-    whenCardUsedTrigger(context: ContextObj) {
-        const handCardMap = context.player.handCardMap;
-        const baseCards = context.sharedCardPool.listByEthnicity(['恶魔', '机械'], context.player.tavern.graded, true);
+    whenCardUsedTrigger(triggerObj: TriggerObj) {
+        const currentPlayer = triggerObj.currentPlayer;
+        if (!currentPlayer) {
+            return
+        }
+        const handCardMap = currentPlayer.handCardMap;
+        const baseCards = triggerObj.contextObj.sharedCardPool.listByEthnicity(['恶魔', '机械'], currentPlayer.tavern.graded, true);
         if (baseCards.length > 0) {
             const baseCard = randomUtil.pickone(baseCards);
-            context.sharedCardPool.cardOut(baseCard);
+            triggerObj.contextObj.sharedCardPool.cardOut(baseCard);
             const baseCardObj = new BaseCardObj(baseCard);
             handCardMap.set(baseCardObj.id, baseCardObj)
         }

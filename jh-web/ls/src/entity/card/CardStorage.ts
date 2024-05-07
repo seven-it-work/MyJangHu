@@ -51,7 +51,9 @@ import ChaoChaoMoZu from "./machine/ChaoChaoMoZu";
 import ChiQuPuYiJi from "./machine/ChiQuPuYiJi";
 import CuiMianJiQiRen from "./machine/CuiMianJiQiRen";
 import DuoMianFuZhuWuRenJi from "./machine/DuoMianFuZhuWuRenJi";
+import JiXiangMaJu from "./machine/JiXiangMaJu";
 import JiXieMuMa from "./machine/JiXieMuMa";
+import JiXieXiaoMa from "./machine/JiXieXiaoMa";
 import JiXingB_BOXQuanShou from "./machine/JiXingB_BOXQuanShou";
 import KanGeErDeXueTu from "./machine/KanGeErDeXueTu";
 import LiangChanXingKongHeJi from "./machine/LiangChanXingKongHeJi";
@@ -60,6 +62,7 @@ import PengPengFeiChe from "./machine/PengPengFeiChe";
 import PianZheJiQiRen from "./machine/PianZheJiQiRen";
 import ShouFengQinJiQiRen from "./machine/ShouFengQinJiQiRen";
 import SiShen4000Xing from "./machine/SiShen4000Xing";
+import WeiXingJiQiRen from "./machine/WeiXingJiQiRen";
 import WeiXingMuNaiYi from "./machine/WeiXingMuNaiYi";
 import ZiShiYingLuZhang from "./machine/ZiShiYingLuZhang";
 
@@ -70,7 +73,9 @@ CardStorage.set(ChaoChaoMoZu.name, ChaoChaoMoZu);
 CardStorage.set(ChiQuPuYiJi.name, ChiQuPuYiJi);
 CardStorage.set(CuiMianJiQiRen.name, CuiMianJiQiRen);
 CardStorage.set(DuoMianFuZhuWuRenJi.name, DuoMianFuZhuWuRenJi);
+CardStorage.set(JiXiangMaJu.name, JiXiangMaJu);
 CardStorage.set(JiXieMuMa.name, JiXieMuMa);
+CardStorage.set(JiXieXiaoMa.name, JiXieXiaoMa);
 CardStorage.set(JiXingB_BOXQuanShou.name, JiXingB_BOXQuanShou);
 CardStorage.set(KanGeErDeXueTu.name, KanGeErDeXueTu);
 CardStorage.set(LiangChanXingKongHeJi.name, LiangChanXingKongHeJi);
@@ -79,6 +84,8 @@ CardStorage.set(PengPengFeiChe.name, PengPengFeiChe);
 CardStorage.set(PianZheJiQiRen.name, PianZheJiQiRen);
 CardStorage.set(ShouFengQinJiQiRen.name, ShouFengQinJiQiRen);
 CardStorage.set(SiShen4000Xing.name, SiShen4000Xing);
+CardStorage.set(WeiXingJiQiRen.name, WeiXingJiQiRen);
 CardStorage.set(WeiXingMuNaiYi.name, WeiXingMuNaiYi);
 CardStorage.set(ZiShiYingLuZhang.name, ZiShiYingLuZhang);
+
 export default CardStorage

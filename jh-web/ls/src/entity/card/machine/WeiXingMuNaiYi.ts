@@ -1,4 +1,6 @@
 import BaseCard from "../../baseCard";
+import {TriggerObj} from "../../Trigger";
+import randomUtil from "../../../utils/RandomUtils";
 
 export default class WeiXingMuNaiYi extends BaseCard {
     name = "微型木乃伊"
@@ -6,7 +8,23 @@ export default class WeiXingMuNaiYi extends BaseCard {
     attack = 1
     life = 2
     graded = 1
-    description = "复生在你的回合结束是，随机使另一个友方随从获得+1攻击力"
+    description = "<div><b>复生</b></div>在你的回合结束是，随机使另一个友方随从获得+1攻击力"
     isRebirth: boolean = true;
+
+    whenEndRound(triggerObj: TriggerObj) {
+        const currentPlayer = triggerObj.currentPlayer;
+        const currentCard = triggerObj.currentCard;
+        if (!currentCard) {
+            return
+        }
+        if (!currentPlayer) {
+            return
+        }
+        const baseCardObjs = currentPlayer.cardList.filter(card => card.id !== currentCard.id);
+        if (baseCardObjs.length <= 0) {
+            return;
+        }
+        randomUtil.pickone(baseCardObjs).baseCard.attack++
+    }
 }
 

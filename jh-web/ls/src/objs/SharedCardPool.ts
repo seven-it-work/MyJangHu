@@ -52,6 +52,17 @@ export default class SharedCardPool {
         }).map(data => data.baseCard);
     }
 
+    listMagneticForceCard(levelLimits: number | undefined = undefined): BaseCard[] {
+        return Array.from(this.pool.values()).filter(card => {
+            return card.baseCard.isMagneticForce;
+        }).filter(data => {
+            if (levelLimits) {
+                return data.baseCard.graded <= levelLimits;
+            }
+            return true
+        }).map(data => data.baseCard);
+    }
+
     refreshRandom(cardNumber: number, graded: number): BaseCard[] {
         if (cardNumber <= 0) {
             return []

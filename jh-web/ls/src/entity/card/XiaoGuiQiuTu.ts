@@ -2,6 +2,7 @@ import BaseCard from "../baseCard";
 import ContextObj from "../../objs/ContextObj";
 import XiaoGui from "./XiaoGui";
 import BaseCardObj from "../../objs/BaseCardObj";
+import {TriggerObj} from "../Trigger";
 
 export default class XiaoGuiQiuTu extends BaseCard {
     name = "小鬼囚徒"
@@ -9,10 +10,14 @@ export default class XiaoGuiQiuTu extends BaseCard {
     attack = 3
     life = 2
     graded = 1
-    description = "嘲讽，亡语：召唤一个1/1的小鬼"
+    description = "<b>嘲讽</b>，<b>亡语</b>：召唤一个1/1的小鬼"
     isMockery = true;
 
-    whenDeadTrigger(contextObj: ContextObj) {
-        contextObj.player.cardListInFighting.push(new BaseCardObj(contextObj.sharedCardPool.getByName("XiaoGui")));
+    whenDeadTrigger(triggerObj: TriggerObj) {
+        const currentPlayer = triggerObj.currentPlayer;
+        if (!currentPlayer) {
+            return
+        }
+        currentPlayer.cardListInFighting.push(new BaseCardObj(triggerObj.contextObj.sharedCardPool.getByName("XiaoGui")));
     }
 }

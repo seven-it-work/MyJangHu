@@ -3,7 +3,7 @@ import ContextObj from "./ContextObj";
 import Player from "./Player";
 import BaseCardObj from "./BaseCardObj";
 import Taverns from "./Taverns";
-import Fight from "./Fight";
+import FightObj from "./FightObj";
 import SharedCardPool from "./SharedCardPool";
 import XiaoGuiQiuTu from "../entity/card/XiaoGuiQiuTu";
 
@@ -26,7 +26,7 @@ describe('Fight', () => {
             player1.cardListInFighting = player1.cardList
             expect(player1.cardListInFighting[0].baseCard.life).toBe(2)
             expect(player1.cardListInFighting[0].baseCard.name).toBe('小鬼囚徒')
-            const fight = new Fight(attackerContextObj, defenderContextObj);
+            const fight = new FightObj(attackerContextObj, defenderContextObj);
             fight.doFighting()
             expect(player1.cardListInFighting.length).toBe(0)
         } catch (e) {
@@ -50,7 +50,7 @@ describe('Fight', () => {
             player1.cardListInFighting = player1.cardList
             expect(player.cardListInFighting[0].baseCard.life).toBe(10)
             expect(player.cardListInFighting[0].baseCard.name).toBe('小鬼囚徒')
-            const fight = new Fight(attackerContextObj, defenderContextObj);
+            const fight = new FightObj(attackerContextObj, defenderContextObj);
             fight.doFighting()
             expect(player.cardListInFighting[0].baseCard.life).toBe(6)
             expect(player.cardListInFighting[0].baseCard.name).toBe('小鬼囚徒')

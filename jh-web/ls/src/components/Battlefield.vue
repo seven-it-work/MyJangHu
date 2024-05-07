@@ -1,17 +1,17 @@
 <template>
   <a-collapse-panel>
     <template #header>
-      出场随从 {{contextObj.player.cardList.length}}/7
+      出场随从 {{ playObj.currentPlayerInfo.cardList.length }}/7
     </template>
     <a-row :gutter="16">
-      <a-col v-for="cardObj in contextObj.player.cardList" :key="cardObj.id">
+      <a-col v-for="cardObj in playObj.currentPlayerInfo.cardList" :key="cardObj.id">
         <a-card hoverable style="width: 180px;" body-style="padding:10px">
           <template #actions>
-            <div>攻击力：{{ cardObj.baseCard.attack }}</div>
+            <div>攻击力：{{ cardObj.attack }}</div>
             <div>
               <div v-for="str in cardObj.baseCard.ethnicity" :key="str">{{ str }}</div>
             </div>
-            <div>生命值：{{ cardObj.baseCard.life }}</div>
+            <div>生命值：{{ cardObj.life }}</div>
           </template>
           <a-card-meta>
             <template #title>
@@ -22,8 +22,8 @@
             <template #description>
               <a-tooltip placement="bottom" :title="cardObj.baseCard.description">
                 <div style="width:160px;height:90px;">
-                  <p style="display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 4;overflow:hidden;">
-                    {{ cardObj.baseCard.description }}
+                  <p style="display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 4;overflow:hidden;"
+                     v-html="cardObj.baseCard.description">
                   </p>
                 </div>
               </a-tooltip>
@@ -38,15 +38,20 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import ContextObj from "../objs/ContextObj.ts";
+import {PropType} from "@vue/runtime-core";
+import PlayObj from "../objs/PlayObj";
 
 export default defineComponent({
   name: "Battlefield",
   props: {
-    contextObj: ContextObj
+    playObj: {
+      type: Object as PropType<PlayObj>,
+      required: true,
+    },
   },
   methods: {
     saleCard(cardObj) {
-      this.contextObj?.player.saleCard(cardObj, <ContextObj>this.contextObj)
+      this.playObj.currentPlayerInfo.saleCard(cardObj, this.playObj.contextObj)
     }
   }
 })

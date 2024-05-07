@@ -1,8 +1,9 @@
 import ContextObj from "../objs/ContextObj";
-import {Trigger} from "./Trigger";
+import {Trigger, TriggerObj} from "./Trigger";
+import BaseCardObj from "../objs/BaseCardObj";
 
 
-export default abstract class BaseCard implements Trigger<BaseCard> {
+export default abstract class BaseCard implements Trigger {
     tempId: string = '';
     name: string = '';
     // 酒馆是否出售
@@ -50,11 +51,24 @@ export default abstract class BaseCard implements Trigger<BaseCard> {
     refreshTimes: number = 0;
     // 剩余刷新消耗生命值次数
     remainRefreshTimes: number = 0;
+    // 是否磁力
+    isMagneticForce: boolean = false;
+    // 磁力随从list
+    magneticForceList: BaseCard[] = [];
+    // 是否潜行
+    isSneaking: boolean = false;
+    /**
+     * 攻击次数
+     * 1 正常
+     * 2 风怒
+     * 3 超级风怒
+     */
+    numberAttack: number = 1;
 
     /**
      * 当其他随从死亡时触发器
      */
-    whenOtherDeadTrigger(deadCardObj: BaseCard, context: ContextObj) {
+    whenOtherDeadTrigger(triggerObj: TriggerObj) {
 
     }
 
@@ -62,63 +76,63 @@ export default abstract class BaseCard implements Trigger<BaseCard> {
      * 当前召唤随从时触发器
      * (战吼)
      */
-    whenCardUsedTrigger(context: ContextObj) {
+    whenCardUsedTrigger(triggerObj: TriggerObj) {
 
     }
 
     /**
      * 当前召唤随从时触发器
      */
-    whenSummonedTrigger(contextObj: ContextObj) {
+    whenSummonedTrigger(triggerObj: TriggerObj) {
 
     }
 
     /**
      * 当前随从死亡时触发器
      */
-    whenDeadTrigger(contextObj: ContextObj) {
+    whenDeadTrigger(triggerObj: TriggerObj) {
 
     }
 
-    whenBuyCardTrigger(context: ContextObj) {
+    whenBuyCardTrigger(triggerObj: TriggerObj) {
     }
 
-    whenSaleCardTrigger(context: ContextObj) {
+    whenSaleCardTrigger(triggerObj: TriggerObj) {
     }
 
-    whenBuyOtherCardTrigger(targetCard: BaseCard, context: ContextObj) {
+    whenBuyOtherCardTrigger(triggerObj: TriggerObj) {
     }
 
-    whenOtherCardUsedTrigger(targetCard: BaseCard, context: ContextObj) {
+    whenOtherCardUsedTrigger(triggerObj: TriggerObj) {
     }
 
-    whenOtherSummonedTrigger(targetCard: BaseCard, context: ContextObj) {
+    whenOtherSummonedTrigger(triggerObj: TriggerObj) {
     }
 
-    whenSaleOtherCardTrigger(targetCard: BaseCard, context: ContextObj) {
+    whenSaleOtherCardTrigger(triggerObj: TriggerObj) {
     }
 
-    whenOtherHandlerCardUsedTrigger(targetCard: BaseCard, context: ContextObj) {
+    whenOtherHandlerCardUsedTrigger(triggerObj: TriggerObj) {
     }
 
-    whenAttackTrigger(defender: BaseCard, context: ContextObj, targetContext: ContextObj) {
+    whenAttackTrigger(triggerObj: TriggerObj) {
     }
 
-    whenSaleOtherHandlerCardTrigger(targetCard: BaseCard, context: ContextObj) {
+    whenSaleOtherHandlerCardTrigger(triggerObj: TriggerObj) {
     }
 
-    whenEndRound(context: ContextObj) {
+    whenEndRound(triggerObj: TriggerObj) {
     }
 
-    whenEndRoundHandler(context: ContextObj) {
+    whenEndRoundHandler(triggerObj: TriggerObj) {
     }
 
-    whenStartRound(context: ContextObj) {
+    whenStartRound(triggerObj: TriggerObj) {
     }
 
-    whenStartRoundHandler(context: ContextObj) {
+    whenStartRoundHandler(triggerObj: TriggerObj) {
     }
 
-    whenPlayerInjuries(injuring: number, context: ContextObj) {
+    whenPlayerInjuries(injuring: number, triggerObj: TriggerObj) {
     }
 }

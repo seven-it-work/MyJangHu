@@ -1,6 +1,7 @@
 import BaseCard from "../baseCard";
 import ContextObj from "../../objs/ContextObj.ts";
 import randomUtil from "../../utils/RandomUtils.ts";
+import {TriggerObj} from "../Trigger";
 
 export default class ZaoDongQiZhaZhe extends BaseCard {
     name = "躁动欺诈者"
@@ -8,10 +9,14 @@ export default class ZaoDongQiZhaZhe extends BaseCard {
     attack = 2
     life = 3
     graded = 2
-    description = "亡语：使另一个友方随从获得本随从的生命值上限。"
+    description = "<b>亡语</b>：使另一个友方随从获得本随从的生命值上限。"
 
-    whenDeadTrigger(contextObj: ContextObj) {
-        const baseCardObjs = Array.from(contextObj.player.cardListInFighting.values());
+    whenDeadTrigger(triggerObj: TriggerObj) {
+        const currentPlayer = triggerObj.currentPlayer;
+        if (!currentPlayer) {
+            return
+        }
+        const baseCardObjs = Array.from(currentPlayer.cardListInFighting.values());
         if (baseCardObjs.length <= 0) {
             return
         }

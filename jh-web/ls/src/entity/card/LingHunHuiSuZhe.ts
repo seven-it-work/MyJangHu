@@ -1,5 +1,6 @@
 import BaseCard from "../baseCard";
 import ContextObj from "../../objs/ContextObj";
+import {TriggerObj} from "../Trigger";
 
 export default class LingHunHuiSuZhe extends BaseCard {
     name = "灵魂回溯者"
@@ -9,11 +10,15 @@ export default class LingHunHuiSuZhe extends BaseCard {
     graded = 2
     description = "在你的英雄受到伤害后，回溯该伤害并使本随从获取+1生命值"
 
-    whenPlayerInjuries(injuring: number, context: ContextObj) {
+    whenPlayerInjuries(injuring: number,triggerObj: TriggerObj) {
+        const currentPlayer = triggerObj.currentPlayer;
+        if (!currentPlayer) {
+            return
+        }
         // 只有回合中，英雄受伤才行
-        if (!context.player.isEndRound) {
+        if (!currentPlayer.isEndRound) {
             // 伤害回溯，问题？护甲能回溯吗，回溯到护甲上吗？满血回溯到哪里，有护甲生命值没有满的问题
-            context.player.changeLife(injuring, context)
+            currentPlayer.changeLife(injuring, triggerObj)
             this.life = this.life + 1;
         }
     }

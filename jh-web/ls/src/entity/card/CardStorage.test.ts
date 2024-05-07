@@ -3,25 +3,31 @@ import {describe, expect, it} from "vitest";
 
 describe('CardStorage', () => {
     it('自动生成卡牌代码', function () {
-        const dir="machine"
-        const s = "BaoBaoJiQiRen.ts\n" +
-            "BaoFeiFeiPinHuiShouJi.ts\n" +
-            "ChaoChaoJiQiRen.ts\n" +
-            "ChaoChaoMoZu.ts\n" +
-            "ChiQuPuYiJi.ts\n" +
-            "CuiMianJiQiRen.ts\n" +
-            "DuoMianFuZhuWuRenJi.ts\n" +
-            "JiXieMuMa.ts\n" +
-            "JiXingB_BOXQuanShou.ts\n" +
-            "KanGeErDeXueTu.ts\n" +
-            "LiangChanXingKongHeJi.ts\n" +
-            "OuMiQiePoHuaiZhe.ts\n" +
-            "PengPengFeiChe.ts\n" +
-            "PianZheJiQiRen.ts\n" +
-            "ShouFengQinJiQiRen.ts\n" +
-            "SiShen4000Xing.ts\n" +
-            "WeiXingMuNaiYi.ts\n" +
-            "ZiShiYingLuZhang.ts";
+        const dir=""
+        const s = "FenNuBianZhiZhe.test.ts\n" +
+            "FenNuBianZhiZhe.ts\n" +
+            "JiEDeFuMo.ts\n" +
+            "JiXieJiaLaKeSuSi.ts\n" +
+            "JunTuanJianGong.ts\n" +
+            "KongJuHuZiWang.ts\n" +
+            "LingHunHuiSuZhe.ts\n" +
+            "PiaoFuGuanChaZhe.ts\n" +
+            "QiGuiDaJiLeShou.ts\n" +
+            "SaGeLaSiDeYongShi.ts\n" +
+            "TanShiDeWuZuEr.ts\n" +
+            "TiaoShiMoQuan.ts\n" +
+            "TiKeDiAoSaoSi.ts\n" +
+            "WuDaoWangZiMaKeZhaEr.ts\n" +
+            "XiaoGui.ts\n" +
+            "XiaoGuiQiuTu.test.ts\n" +
+            "XiaoGuiQiuTu.ts\n" +
+            "XieNengYuanSu.test.ts\n" +
+            "XieNengYuanSu.ts\n" +
+            "XinLingNiMo.ts\n" +
+            "XiongEDeXieNengYouLong.ts\n" +
+            "XiXueDiYuQuan.ts\n" +
+            "YiJiaoTuSiSeLa.ts\n" +
+            "ZaoDongQiZhaZhe.ts";
         const list = s.split("\n").filter(cardName => {
             if (cardName.includes("test.ts")) {
                 // 忽略

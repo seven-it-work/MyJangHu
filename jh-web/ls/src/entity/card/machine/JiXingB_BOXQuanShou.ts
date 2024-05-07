@@ -7,5 +7,6 @@ export default class JiXingB_BOXQuanShou extends BaseCard {
     life = 10
     graded = 6
     description = "每当你对另一个随从施加磁力时，还会对本随从施加磁力。"
+    // todo 磁力监控
 }
 

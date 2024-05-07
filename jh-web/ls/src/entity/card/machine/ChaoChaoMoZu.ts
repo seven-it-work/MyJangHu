@@ -6,8 +6,9 @@ export default class ShouFengQinJiQiRen extends BaseCard {
     attack = 2
     life = 4
     graded = 4
-    description = "磁力圣盾嘲讽"
+    description = "<div><b>磁力</b></div><div><b>圣盾</b></div><div><b>嘲讽</b></div>"
     isMockery = true;
     isHolyShield = true;
+    isMagneticForce = true;
 }
 
