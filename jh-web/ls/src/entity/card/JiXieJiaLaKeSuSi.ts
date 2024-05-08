@@ -17,13 +17,12 @@ export default class JiXieJiaLaKeSuSi extends BaseCard {
         if (!currentPlayer) {
             return
         }
-        const handCardMap = currentPlayer.handCardMap;
         const baseCards = triggerObj.contextObj.sharedCardPool.listByEthnicity(['恶魔', '机械'], currentPlayer.tavern.graded, true);
         if (baseCards.length > 0) {
             const baseCard = randomUtil.pickone(baseCards);
             triggerObj.contextObj.sharedCardPool.cardOut(baseCard);
             const baseCardObj = new BaseCardObj(baseCard);
-            handCardMap.set(baseCardObj.id, baseCardObj)
+            currentPlayer.addCardInHand(baseCardObj)
         }
     }
 }

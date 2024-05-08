@@ -15,12 +15,17 @@
           </template>
           <a-card-meta>
             <template #title>
-              <a-button size="small" @click="saleCard(cardObj)">出售</a-button>
+              <a-button size="small" :disabled="!playObj.currentPlayerInfo.canSaleCard(cardObj)"
+                        @click="saleCard(cardObj)">出售
+              </a-button>
               <a-avatar>{{ cardObj.baseCard.graded }}级</a-avatar>
               <a-tooltip :title="cardObj.baseCard.name">{{ cardObj.baseCard.name }}</a-tooltip>
             </template>
             <template #description>
-              <a-tooltip placement="bottom" :title="cardObj.baseCard.description">
+              <a-tooltip placement="bottom">
+                <template #title>
+                  <div v-html="cardObj.baseCard.description"></div>
+                </template>
                 <div style="width:160px;height:90px;">
                   <p style="display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 4;overflow:hidden;"
                      v-html="cardObj.baseCard.description">

@@ -64,6 +64,8 @@ export default abstract class BaseCard implements Trigger {
      * 3 超级风怒
      */
     numberAttack: number = 1;
+    // 是否金色(三连)
+    isGold = false;
 
     /**
      * 当其他随从死亡时触发器
@@ -134,5 +136,14 @@ export default abstract class BaseCard implements Trigger {
     }
 
     whenPlayerInjuries(injuring: number, triggerObj: TriggerObj) {
+    }
+
+    whenHolyShieldDisappears(triggerObj: TriggerObj) {
+    }
+
+    whenOtherHolyShieldDisappears(triggerObj: TriggerObj) {
+    }
+
+    whenDefenseTrigger(triggerObj: TriggerObj) {
     }
 }

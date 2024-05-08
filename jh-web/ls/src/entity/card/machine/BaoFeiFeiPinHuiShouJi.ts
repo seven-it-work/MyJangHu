@@ -11,16 +11,16 @@ export default class BaoFeiFeiPinHuiShouJi extends BaseCard {
     graded = 4
     roundCounter: number = 2;
     description = `每2个回合，在回合结束时，随机获取一张磁力机械牌。（还剩${this.roundCounter}个回合）`
+    preRoundNumber: number = -1;
 
     whenEndRound(triggerObj: TriggerObj) {
-        if (this.roundCounter <= 0) {
-            // todo 这里要优化为回合，不然有bug，需要有总对象，存放这整局的信息
-            this.roundCounter = 2;
+        this.roundCounter = 2 - (triggerObj.contextObj.currentRound - this.preRoundNumber)
+        if (this.roundCounter <= 0 || triggerObj.contextObj.currentRound === this.preRoundNumber) {
+            this.preRoundNumber = triggerObj.contextObj.currentRound
             const currentPlayer = triggerObj.currentPlayer;
             if (!currentPlayer) {
                 return
             }
-            const handCardMap = currentPlayer.handCardMap;
             const baseCards = triggerObj.contextObj.sharedCardPool.listMagneticForceCard(currentPlayer.tavern.graded);
             if (baseCards.length <= 0) {
                 return;
@@ -28,9 +28,7 @@ export default class BaoFeiFeiPinHuiShouJi extends BaseCard {
             const baseCard = RandomUtils.pickone(baseCards);
             triggerObj.contextObj.sharedCardPool.cardOut(baseCard);
             const baseCardObj = new BaseCardObj(baseCard);
-            handCardMap.set(baseCardObj.id, baseCardObj)
-        } else {
-            this.roundCounter--;
+            currentPlayer.addCardInHand(baseCardObj)
         }
     }
 }

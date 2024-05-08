@@ -16,7 +16,7 @@ export default class LiangChanXingKongHeJi extends BaseCard {
             return
         }
         for (let i = 0; i < 3; i++) {
-            currentPlayer.cardListInFighting.push(new BaseCardObj(triggerObj.contextObj.sharedCardPool.getByName("WeiXingJiQiRen")))
+            currentPlayer.addCard(new BaseCardObj(triggerObj.contextObj.sharedCardPool.getByName("WeiXingJiQiRen")),triggerObj)
         }
     }
 }

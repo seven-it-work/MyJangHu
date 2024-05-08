@@ -1,4 +1,6 @@
 import BaseCard from "../../baseCard";
+import {TriggerObj} from "../../Trigger";
+import randomUtil from "../../../utils/RandomUtils";
 
 export default class ChiQuPuYiJi extends BaseCard {
     name = "齿驱扑翼机"
@@ -9,6 +11,18 @@ export default class ChiQuPuYiJi extends BaseCard {
     description = "<div><b>圣盾</b></div>在一个友方随从失去圣盾后，在你手牌中的一张随从获得+1/+1。"
     isHolyShield: boolean = true;
 
-    // todo 监听圣盾消失
+    whenOtherHolyShieldDisappears(triggerObj: TriggerObj) {
+        const currentPlayer = triggerObj.currentPlayer;
+        if (!currentPlayer) {
+            return
+        }
+        const handCardList = currentPlayer.handCardList.filter(card => card.baseCard.type === '随从');
+        if (handCardList.length <= 0) {
+            return;
+        }
+        const baseCardObj = randomUtil.pickone(handCardList);
+        baseCardObj.baseCard.life++;
+        baseCardObj.baseCard.attack++;
+    }
 }
 

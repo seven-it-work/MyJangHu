@@ -8,7 +8,7 @@ export default class WeiXingMuNaiYi extends BaseCard {
     attack = 1
     life = 2
     graded = 1
-    description = "<div><b>复生</b></div>在你的回合结束是，随机使另一个友方随从获得+1攻击力"
+    description = "<div><b>复生</b></div>在你的回合结束时，随机使另一个友方随从获得+1攻击力"
     isRebirth: boolean = true;
 
     whenEndRound(triggerObj: TriggerObj) {

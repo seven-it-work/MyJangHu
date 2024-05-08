@@ -21,6 +21,6 @@ export default class YiJiaoTuSiSeLa extends BaseCard {
         if (baseCardObjs.length <= 0) {
             return;
         }
-        currentPlayer.cardListInFighting.push(baseCardObjs[0]);
+        currentPlayer.addCard(baseCardObjs[0]);
     }
 }

@@ -15,8 +15,8 @@ export default class FightObj {
 
     constructor(attackerPlayer: Player, defenderPlayer: Player, contextObj: ContextObj) {
         // 战斗前初始化战斗list
-        attackerPlayer.cardListInFighting = cloneDeep(attackerPlayer.cardList)
-        defenderPlayer.cardListInFighting = cloneDeep(defenderPlayer.cardList)
+        attackerPlayer.initCardListInFighting()
+        defenderPlayer.initCardListInFighting()
         this.attackerPlayer = attackerPlayer;
         this.defenderPlayer = defenderPlayer;
         this.contextObj = contextObj;
@@ -137,8 +137,8 @@ export default class FightObj {
             currentCard: attacker,
             contextObj: this.contextObj,
         })
-        attackerPlayer.cardListInFighting = attackerPlayer.cardListInFighting.filter(card => card.isSurviving());
-        defenderPlayer.cardListInFighting = defenderPlayer.cardListInFighting.filter(card => card.isSurviving());
+        attackerPlayer.updateCardListInFighting()
+        defenderPlayer.updateCardListInFighting()
         if (isAttacker) {
             this.attackerIndex++;
             if (this.attackerIndex >= attackerPlayer.cardListInFighting.length) {

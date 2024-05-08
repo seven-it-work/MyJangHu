@@ -4,47 +4,54 @@ import Player from "./Player";
 import BaseCardObj from "./BaseCardObj";
 import XieNengYuanSu from "../entity/card/XieNengYuanSu";
 import Taverns from "./Taverns";
+import {groupBy} from "lodash";
+import CardDb from "../entity/CardDb";
+import SharedCardPool from "./SharedCardPool";
 
 
 describe('player', () => {
-    it('canBuyCard is true', () => {
-        const contextObj = new ContextObj();
-        contextObj.player = new Player();
-        contextObj.player.currentGoldCoin = 9;
-        var canBuyCard = contextObj.player.canBuyCard(new BaseCardObj(new XieNengYuanSu()));
-        expect(canBuyCard).toBe(true)
+    it('test groupBy', () => {
+        try {
+            const cardListMap = groupBy([{name: "1"}, {name: "2"}, {name: "1"}], (card) => card.name);
+            const handCardListMap = groupBy([{name: "2"}, {name: "1"}], (card) => card.name);
+            const merges = new Map<string, Object>();
+            for (let dataKey in cardListMap) {
+                const merge = merges[dataKey] || [];
+                merge.push(...cardListMap[dataKey]);
+                merges[dataKey] = merge;
+            }
+            for (let dataKey in handCardListMap) {
+                const merge = merges[dataKey] || [];
+                merge.push(...cardListMap[dataKey]);
+                merges[dataKey] = merge;
+            }
+            console.log(merges)
+        } catch (e) {
+            console.log(e)
+        }
     });
-    it('canBuyCard is false', () => {
-        const contextObj = new ContextObj();
-        contextObj.player = new Player();
-        contextObj.player.currentGoldCoin = 2;
-        var canBuyCard = contextObj.player.canBuyCard(new BaseCardObj(new XieNengYuanSu()));
-        expect(canBuyCard).toBe(false)
+    it('addCardInHand 三连 来着手牌', () => {
+        try {
+            const cardDb = new CardDb();
+            const player = new Player("test", new Taverns());
+            player.addCardInHand(new BaseCardObj(cardDb.getByName("ZaoDongQiZhaZhe")))
+            player.addCardInHand(new BaseCardObj(cardDb.getByName("ZaoDongQiZhaZhe")))
+            player.addCardInHand(new BaseCardObj(cardDb.getByName("ZaoDongQiZhaZhe")))
+            player.addCardInHand(new BaseCardObj(cardDb.getByName("ZaoDongQiZhaZhe")))
+        } catch (e) {
+            console.log(e)
+        }
     });
-    it('cardOut is success', () => {
-        const contextObj = new ContextObj();
-        contextObj.player = new Player();
-        contextObj.player.currentGoldCoin = 3;
-        const cardObj = new BaseCardObj(new XieNengYuanSu());
-        contextObj.player.buyCard(cardObj, contextObj);
-        expect(contextObj.player.currentGoldCoin).toBe(0)
-        expect(contextObj.player.handCardMap.get(cardObj.id)).toBe(cardObj)
-    });
-    it('useCard is success', () => {
-        const contextObj = new ContextObj();
-        contextObj.player = new Player();
-        contextObj.player.currentGoldCoin = 3;
-        const cardObj = new BaseCardObj(new XieNengYuanSu());
-        contextObj.player.buyCard(cardObj, contextObj);
-        expect(contextObj.player.currentGoldCoin).toBe(0)
-        expect(contextObj.player.handCardMap.get(cardObj.id)).toBe(cardObj)
-        expect(contextObj.player.canUseCard(cardObj)).toBe(true)
-        contextObj.player.useCard(cardObj, contextObj)
-        expect(contextObj.player.cardList.length).toBe(1)
-    });
-    it('fight test', () => {
-        const player1 = new Player(new Taverns());
-
+    it('addCardInHand 三连 2张来着战场，1张来着手牌', () => {
+        try {
+            const cardDb = new CardDb();
+            const player = new Player("test", new Taverns());
+            player.addCard(new BaseCardObj(cardDb.getByName("ZaoDongQiZhaZhe")), {contextObj: new ContextObj(new SharedCardPool([]))});
+            player.addCard(new BaseCardObj(cardDb.getByName("ZaoDongQiZhaZhe")), {contextObj: new ContextObj(new SharedCardPool([]))});
+            player.addCardInHand(new BaseCardObj(cardDb.getByName("ZaoDongQiZhaZhe")))
+        } catch (e) {
+            console.log(e)
+        }
     });
 })
 

@@ -16,9 +16,9 @@ export default class JiXieXiaoMa extends BaseCard {
         if (!currentPlayer) {
             return
         }
-        // todo 亡语 要分是在战斗中 还是在回合中
-        var baseCard = triggerObj.contextObj.sharedCardPool.getByName("JiXiangMaJu");
-        currentPlayer.cardListInFighting.push(...[new BaseCardObj(baseCard), new BaseCardObj(baseCard)])
+        const baseCard = triggerObj.contextObj.sharedCardPool.getByName("JiXiangMaJu");
+        currentPlayer.addCard(new BaseCardObj(baseCard),triggerObj)
+        currentPlayer.addCard(new BaseCardObj(baseCard),triggerObj)
     }
 }
 

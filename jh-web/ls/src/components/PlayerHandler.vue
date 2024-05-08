@@ -1,10 +1,10 @@
 <template>
   <a-collapse-panel>
     <template #header>
-      手牌 数量：{{ playObj.currentPlayerInfo.handCardMap.size }}/10
+      手牌 数量：{{ playObj.currentPlayerInfo.handCardList.length }}/10
     </template>
     <a-row :gutter="16">
-      <a-col v-for="cardObj in Array.from(playObj.currentPlayerInfo.handCardMap.values())" :key="cardObj.id">
+      <a-col v-for="cardObj in Array.from(playObj.currentPlayerInfo.handCardList)" :key="cardObj.id">
         <a-card hoverable style="width: 180px;" body-style="padding:10px">
           <template #actions>
             <div>攻击力：{{ cardObj.attack }}</div>
@@ -15,12 +15,15 @@
           </template>
           <a-card-meta>
             <template #title>
-              <a-button size="small" @click="useCard(cardObj)">使用</a-button>
+              <a-button size="small" :disabled="!playObj.currentPlayerInfo.canUseCard()" @click="useCard(cardObj)">使用</a-button>
               <a-avatar>{{ cardObj.baseCard.graded }}级</a-avatar>
               <a-tooltip :title="cardObj.baseCard.name">{{ cardObj.baseCard.name }}</a-tooltip>
             </template>
             <template #description>
-              <a-tooltip placement="bottom" :title="cardObj.baseCard.description">
+              <a-tooltip placement="bottom" >
+                <template #title>
+                  <div v-html="cardObj.baseCard.description"></div>
+                </template>
                 <div style="width:160px;height:90px;">
                   <p style="display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 4;overflow:hidden;"
                      v-html="cardObj.baseCard.description">

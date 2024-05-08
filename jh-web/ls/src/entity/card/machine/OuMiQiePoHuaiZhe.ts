@@ -17,7 +17,7 @@ export default class OuMiQiePoHuaiZhe extends BaseCard {
         }
         for (let i = 0; i < 6; i++) {
             if (currentPlayer.cardListInFighting.length < 7) {
-                currentPlayer.cardListInFighting.push(new BaseCardObj(triggerObj.contextObj.sharedCardPool.getByName("WeiXingJiQiRen")))
+                currentPlayer.addCard(new BaseCardObj(triggerObj.contextObj.sharedCardPool.getByName("WeiXingJiQiRen")),triggerObj)
             } else {
                 currentPlayer.cardListInFighting.filter(card => card.baseCard.ethnicity.includes("机械")).forEach(card => {
                     card.baseCard.life++;

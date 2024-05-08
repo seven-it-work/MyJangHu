@@ -4,6 +4,7 @@ import {Trigger, TriggerObj} from "../entity/Trigger";
 import Chance from 'chance'
 import {cloneDeep} from "lodash";
 import SharedCardPool from "./SharedCardPool";
+import Player from "./Player";
 
 export default class BaseCardObj implements Trigger {
     id: string;
@@ -20,19 +21,17 @@ export default class BaseCardObj implements Trigger {
 
 
     get life(): number {
-        return this.baseCard.life + this.lifeBonus;
+        return this.baseCard.life;
     }
 
     get attack(): number {
-        return this.baseCard.attack + this.attackBonus;
+        return this.baseCard.attack;
     }
 
     baseCard: BaseCard;
-    lifeBonus: number = 0;
-    attackBonus: number = 0;
 
     isSurviving() {
-        return this.baseCard.life > 0;
+        return this.life > 0;
     }
 
     healthChange(number: number, triggerObj: TriggerObj) {
@@ -45,6 +44,24 @@ export default class BaseCardObj implements Trigger {
             if (this.baseCard.isHolyShield) {
                 // 圣盾
                 this.baseCard.isHolyShield = false;
+                this.whenHolyShieldDisappears(triggerObj)
+                if (currentPlayer.isEndRound) {
+                    currentPlayer.cardListInFighting.forEach(card => {
+                        this.whenOtherHolyShieldDisappears({
+                            ...triggerObj,
+                            currentCard: card,
+                            targetCard: this,
+                        })
+                    })
+                } else {
+                    currentPlayer.cardList.forEach(card => {
+                        this.whenOtherHolyShieldDisappears({
+                            ...triggerObj,
+                            currentCard: card,
+                            targetCard: this,
+                        })
+                    })
+                }
                 number = 0;
                 console.log(`(${currentPlayer.name})的【${this.baseCard.name}】的圣盾失效`)
             }
@@ -62,7 +79,7 @@ export default class BaseCardObj implements Trigger {
                 console.log(`${currentPlayer.name})的【${this.baseCard.name}】复生`)
             } else {
                 // 移除
-                currentPlayer.cardListInFighting = currentPlayer.cardListInFighting.filter(card => card.isSurviving());
+                currentPlayer.cardRemove(this);
             }
             // 触发亡语
             this.whenDeadTrigger(triggerObj);
@@ -168,9 +185,30 @@ export default class BaseCardObj implements Trigger {
         if (!targetPlayer) {
             return
         }
-        // todo 风怒
+        for (let i = 0; i < this.baseCard.numberAttack; i++) {
+            if (this.isSurviving()) {
+                this.doAttack(currentPlayer, targetPlayer, targetCard, triggerObj);
+            }
+        }
+    }
+
+    private doAttack(currentPlayer: Player, targetPlayer: Player, targetCard: BaseCardObj, triggerObj: TriggerObj) {
         console.log(`(${currentPlayer.name})的【${this.baseCard.name}】对(${targetPlayer.name})的【${targetCard.baseCard.name}】进行攻击`)
+        targetCard.whenDeadTrigger({
+            ...triggerObj,
+            currentPlayer: targetPlayer,
+            targetPlayer: currentPlayer,
+            currentCard: targetCard,
+            targetCard: this
+        })
         this.baseCard.whenAttackTrigger(this.triggerObj2BaseCard(triggerObj))
+        targetCard.whenDefenseTrigger({
+            ...triggerObj,
+            currentPlayer: targetPlayer,
+            targetPlayer: currentPlayer,
+            currentCard: targetCard,
+            targetCard: this
+        })
         // 受到伤害
         let toBeHarmed = 0;
         // 造成伤害
@@ -184,6 +222,10 @@ export default class BaseCardObj implements Trigger {
             // 毒药，能一直毒
             toBeHarmed = this.baseCard.life;
             console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}】烈药触发`)
+        } else if (targetCard.baseCard.attackHighlyToxic) {
+            // 遭受攻击时，剧毒 todo 放到防御触发器里面 改 剧毒=true
+            toBeHarmed = this.baseCard.life;
+            console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}】遭受攻击时，剧毒`)
         } else {
             toBeHarmed = targetCard.baseCard.attack;
         }
@@ -249,5 +291,17 @@ export default class BaseCardObj implements Trigger {
     whenPlayerInjuries(injuring: number, triggerObj: TriggerObj) {
         this.baseCard.tempId = this.id
         this.baseCard.whenPlayerInjuries(injuring, this.triggerObj2BaseCard(triggerObj))
+    }
+
+    whenHolyShieldDisappears(triggerObj: TriggerObj) {
+        this.baseCard.whenHolyShieldDisappears(triggerObj);
+    }
+
+    whenOtherHolyShieldDisappears(triggerObj: TriggerObj) {
+        this.baseCard.whenOtherHolyShieldDisappears(triggerObj);
+    }
+
+    whenDefenseTrigger(triggerObj: TriggerObj) {
+        this.baseCard.whenDefenseTrigger(triggerObj);
     }
 }
