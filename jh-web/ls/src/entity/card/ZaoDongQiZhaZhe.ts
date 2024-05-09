@@ -16,11 +16,18 @@ export default class ZaoDongQiZhaZhe extends BaseCard {
         if (!currentPlayer) {
             return
         }
+        const currentCard = triggerObj.currentCard;
+        if (!currentCard) {
+            return
+        }
         const baseCardObjs = Array.from(currentPlayer.cardListInFighting.values());
         if (baseCardObjs.length <= 0) {
             return
         }
         const baseCardObj = randomUtil.pickone(baseCardObjs);
-        baseCardObj.baseCard.life += this.life;
+        baseCardObj.lifeBonus.push({
+            markupValue: this.life,
+            baseCardObj: currentCard,
+        })
     }
 }

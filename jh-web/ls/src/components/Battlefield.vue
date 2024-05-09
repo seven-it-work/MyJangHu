@@ -5,36 +5,13 @@
     </template>
     <a-row :gutter="16">
       <a-col v-for="cardObj in playObj.currentPlayerInfo.cardList" :key="cardObj.id">
-        <a-card hoverable style="width: 180px;" body-style="padding:10px">
-          <template #actions>
-            <div>攻击力：{{ cardObj.attack }}</div>
-            <div>
-              <div v-for="str in cardObj.baseCard.ethnicity" :key="str">{{ str }}</div>
-            </div>
-            <div>生命值：{{ cardObj.life }}</div>
+        <Card :card-obj="cardObj">
+          <template #titleButton>
+            <a-button size="small" :disabled="!playObj.currentPlayerInfo.canSaleCard(cardObj)"
+                      @click="saleCard(cardObj)">出售
+            </a-button>
           </template>
-          <a-card-meta>
-            <template #title>
-              <a-button size="small" :disabled="!playObj.currentPlayerInfo.canSaleCard(cardObj)"
-                        @click="saleCard(cardObj)">出售
-              </a-button>
-              <a-avatar>{{ cardObj.baseCard.graded }}级</a-avatar>
-              <a-tooltip :title="cardObj.baseCard.name">{{ cardObj.baseCard.name }}</a-tooltip>
-            </template>
-            <template #description>
-              <a-tooltip placement="bottom">
-                <template #title>
-                  <div v-html="cardObj.baseCard.description"></div>
-                </template>
-                <div style="width:160px;height:90px;">
-                  <p style="display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 4;overflow:hidden;"
-                     v-html="cardObj.baseCard.description">
-                  </p>
-                </div>
-              </a-tooltip>
-            </template>
-          </a-card-meta>
-        </a-card>
+        </Card>
       </a-col>
     </a-row>
   </a-collapse-panel>
@@ -42,12 +19,13 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue'
-import ContextObj from "../objs/ContextObj.ts";
 import {PropType} from "@vue/runtime-core";
 import PlayObj from "../objs/PlayObj";
+import Card from "./Card.vue";
 
 export default defineComponent({
   name: "Battlefield",
+  components: {Card},
   props: {
     playObj: {
       type: Object as PropType<PlayObj>,

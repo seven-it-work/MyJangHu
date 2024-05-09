@@ -28,7 +28,7 @@ export default class BaoFeiFeiPinHuiShouJi extends BaseCard {
             const baseCard = RandomUtils.pickone(baseCards);
             triggerObj.contextObj.sharedCardPool.cardOut(baseCard);
             const baseCardObj = new BaseCardObj(baseCard);
-            currentPlayer.addCardInHand(baseCardObj)
+            currentPlayer.addCardInHand(baseCardObj, triggerObj.contextObj.sharedCardPool)
         }
     }
 }

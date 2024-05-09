@@ -12,12 +12,22 @@ export default class PiaoFuGuanChaZhe extends BaseCard {
 
     whenPlayerInjuries(injuring: number, triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
+        const currentCard = triggerObj.currentCard;
         if (!currentPlayer) {
             return
         }
+        if (!currentCard) {
+            return
+        }
         if (!currentPlayer.isEndRound) {
-            this.life = this.life + 2;
-            this.attack = this.attack + 2;
+            this.attackBonus.push({
+                markupValue: 2,
+                baseCardObj: currentCard,
+            })
+            this.lifeBonus.push({
+                markupValue: 1,
+                baseCardObj: currentCard,
+            })
         }
     }
 }

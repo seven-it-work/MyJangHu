@@ -12,14 +12,21 @@ export default class LingHunHuiSuZhe extends BaseCard {
 
     whenPlayerInjuries(injuring: number,triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
+        const currentCard = triggerObj.currentCard;
         if (!currentPlayer) {
+            return
+        }
+        if (!currentCard) {
             return
         }
         // 只有回合中，英雄受伤才行
         if (!currentPlayer.isEndRound) {
             // 伤害回溯，问题？护甲能回溯吗，回溯到护甲上吗？满血回溯到哪里，有护甲生命值没有满的问题
             currentPlayer.changeLife(injuring, triggerObj)
-            this.life = this.life + 1;
+            this.lifeBonus.push({
+                markupValue: 1,
+                baseCardObj: currentCard,
+            })
         }
     }
 }

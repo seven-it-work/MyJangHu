@@ -15,16 +15,26 @@ export default class FenNuBianZhiZhe extends BaseCard {
     whenOtherCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
         const targetCard = triggerObj.targetCard;
+        const currentCard = triggerObj.currentCard;
         if (!currentPlayer) {
             return
         }
         if (!targetCard) {
             return
         }
+        if (!currentCard) {
+            return
+        }
         if (targetCard.baseCard.ethnicity.includes("恶魔")) {
             currentPlayer.changeLife(-1, triggerObj)
-            this.attack += 2
-            this.life += 1;
+            this.attackBonus.push({
+                markupValue: 2,
+                baseCardObj: currentCard,
+            })
+            this.lifeBonus.push({
+                markupValue: 1,
+                baseCardObj: currentCard,
+            })
         }
     }
 }

@@ -11,8 +11,22 @@ export default class BaoBaoJiQiRen extends BaseCard {
     isMagneticForce = true;
 
     whenEndRound(triggerObj: TriggerObj) {
-        this.life++;
-        this.attack++;
+        const currentPlayer = triggerObj.currentPlayer;
+        const currentCard = triggerObj.currentCard;
+        if (!currentPlayer) {
+            return
+        }
+        if (!currentCard) {
+            return
+        }
+        this.attackBonus.push({
+            markupValue: 1,
+            baseCardObj: currentCard,
+        })
+        this.lifeBonus.push({
+            markupValue: 1,
+            baseCardObj: currentCard,
+        })
     }
 }
 

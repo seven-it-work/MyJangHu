@@ -4,6 +4,7 @@ import Taverns from "./Taverns";
 import {message} from 'ant-design-vue';
 import {cloneDeep, groupBy} from "lodash";
 import {TriggerObj} from "../entity/Trigger";
+import SharedCardPool from "./SharedCardPool";
 
 export default class Player {
     get cardList(): BaseCardObj[] {
@@ -60,13 +61,15 @@ export default class Player {
         return Array.from(this._handCardMap.values());
     }
 
-    addCardInHand(baseCardObj: BaseCardObj) {
+    addCardInHand(baseCardObj: BaseCardObj, sharedCardPool: SharedCardPool) {
         this._handCardMap.set(baseCardObj.id, baseCardObj);
         // 三连判定
-        this.sanLianCheck();
+        if (!baseCardObj.baseCard.isGold) {
+            this.sanLianCheck(sharedCardPool);
+        }
     }
 
-    private sanLianCheck() {
+    private sanLianCheck(sharedCardPool: SharedCardPool) {
         if (!this.isEndRound) {
             const merges = new Map<string, { index: number, form: 'handCardList' | 'cardList', baseCardObj: BaseCardObj }[]>();
             for (let i = 0; i < this.handCardList.length; i++) {
@@ -88,10 +91,11 @@ export default class Player {
                 merges.set(this.cardList[i].baseCard.constructor.name, merge)
             }
             merges.forEach((v) => {
-                console.log(v.length)
                 for (let i = 0; i < Math.floor(v.length / 3); i++) {
+                    const cardObj = []
                     for (let j = i * 3; j < v.length; j++) {
                         const vElement = v[j];
+                        cardObj.push(vElement.baseCardObj)
                         if (vElement.form === 'cardList') {
                             delete this._cardList[vElement.index]
                         } else {
@@ -100,8 +104,10 @@ export default class Player {
                     }
                     // 给一张三连和升级牌
                     console.log("给一张三连和升级牌")
-                    // todo 设计如何三连 和 升级牌
+                    const baseCardObj = BaseCardObj.sanLian(cardObj[0], cardObj[1], cardObj[2], sharedCardPool);
+                    this.addCardInHand(baseCardObj, sharedCardPool)
                 }
+                this._cardList = this._cardList.filter(item => item);
             })
         }
     }
@@ -143,10 +149,10 @@ export default class Player {
         }
         this.tavern.removeCard(cardObj, context)
         // 酒馆加成写入
-        cardObj.baseCard.attack += this.tavern.tavernAttackBonus;
-        cardObj.baseCard.life += this.tavern.tavernLifeBonus;
+        cardObj.baseCard.attackBonus.push(...this.tavern.attackBonus)
+        cardObj.baseCard.lifeBonus.push(...this.tavern.lifeBonus)
 
-        this.addCardInHand(cardObj)
+        this.addCardInHand(cardObj, context.sharedCardPool)
         cardObj.whenBuyCardTrigger({
             currentCard: cardObj,
             contextObj: context,

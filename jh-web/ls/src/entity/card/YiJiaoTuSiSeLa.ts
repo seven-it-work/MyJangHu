@@ -10,7 +10,6 @@ export default class YiJiaoTuSiSeLa extends BaseCard {
     graded = 6
     description = "潜行。<b>亡语</b>：召唤你在本场战斗中死亡的第一个恶魔，保留其额外效果。"
     isSneak = true;
-    isSneaking = true;
 
     whenDeadTrigger(triggerObj: TriggerObj) {
         var currentPlayer = triggerObj.currentPlayer;
@@ -21,6 +20,6 @@ export default class YiJiaoTuSiSeLa extends BaseCard {
         if (baseCardObjs.length <= 0) {
             return;
         }
-        currentPlayer.addCard(baseCardObjs[0]);
+        currentPlayer.addCard(baseCardObjs[0], triggerObj);
     }
 }

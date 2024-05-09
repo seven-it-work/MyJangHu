@@ -16,6 +16,10 @@ export default class TiaoShiMoQuan extends BaseCard {
         if (!currentPlayer) {
             return
         }
+        const currentCard = triggerObj.currentCard;
+        if (!currentCard) {
+            return
+        }
         const tavern = currentPlayer.tavern;
         const baseCardObjs = Array.from(tavern.currentCard.values()).filter(card => card.baseCard.type === '随从');
         if (baseCardObjs.length <= 0) {
@@ -23,7 +27,13 @@ export default class TiaoShiMoQuan extends BaseCard {
         }
         const pick = randomUtil.pickone(baseCardObjs);
         tavern.removeCard(pick, triggerObj.contextObj)
-        this.attack += pick.baseCard.attack;
-        this.life += pick.baseCard.life;
+        this.attackBonus.push({
+            markupValue: pick.baseCard.attack,
+            baseCardObj: currentCard,
+        })
+        this.lifeBonus.push({
+            markupValue: pick.baseCard.life,
+            baseCardObj: currentCard,
+        })
     }
 }

@@ -23,7 +23,7 @@ export default class QiGuiDaJiLeShou extends BaseCard {
             const baseCard = randomUtil.pickone(baseCards);
             triggerObj.contextObj.sharedCardPool.cardOut(baseCard);
             const baseCardObj = new BaseCardObj(baseCard);
-            currentPlayer.addCardInHand(baseCardObj)
+            currentPlayer.addCardInHand(baseCardObj, triggerObj.contextObj.sharedCardPool)
             currentPlayer.changeLife(-baseCard.graded, triggerObj)
         }
     }

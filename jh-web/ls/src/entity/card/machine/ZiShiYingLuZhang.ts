@@ -13,10 +13,23 @@ export default class ZiShiYingLuZhang extends BaseCard {
 
     whenDefenseTrigger(triggerObj: TriggerObj) {
         const targetCard = triggerObj.targetCard;
+        const currentCard = triggerObj.currentCard;
         if (!targetCard) {
             return
         }
-        this.life = 1 + targetCard.attack
+        if (!currentCard) {
+            return
+        }
+        if (currentCard.attack <= 0) {
+            return;
+        }
+        if (targetCard.attack > currentCard.life) {
+            const number = targetCard.attack - currentCard.life + 1;
+            if (currentCard.attack >= number) {
+                this.attack -= number
+                this.life = number
+            }
+        }
     }
 }
 

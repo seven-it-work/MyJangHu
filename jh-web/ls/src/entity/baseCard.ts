@@ -1,6 +1,8 @@
 import ContextObj from "../objs/ContextObj";
 import {Trigger, TriggerObj} from "./Trigger";
 import BaseCardObj from "../objs/BaseCardObj";
+import {sum} from "lodash";
+import {Bonus} from "../objs/Bonus";
 
 
 export default abstract class BaseCard implements Trigger {
@@ -20,8 +22,11 @@ export default abstract class BaseCard implements Trigger {
     ethnicity: string[] = ['中立'];
     // 体系类别
     accompanyingRace: string[] = [];
+    // 基础攻击力
     attack: number = 0;
+    // 基础生命值
     life: number = 0;
+    private _injuriesReceived: number = 0;
     // 等级
     graded: number = 1;
     description: string = '';
@@ -55,8 +60,6 @@ export default abstract class BaseCard implements Trigger {
     isMagneticForce: boolean = false;
     // 磁力随从list
     magneticForceList: BaseCard[] = [];
-    // 是否潜行
-    isSneaking: boolean = false;
     /**
      * 攻击次数
      * 1 正常
@@ -66,6 +69,44 @@ export default abstract class BaseCard implements Trigger {
     numberAttack: number = 1;
     // 是否金色(三连)
     isGold = false;
+    // 生命加成
+    lifeBonus: Bonus[] = [];
+    // 攻击加成
+    attackBonus: Bonus[] = [];
+
+    getLife(): number {
+        // 磁力加成
+        const magneticAddition = sum(this.magneticForceList.map(card => card.life)) || 0
+        const bonus = sum(this.lifeBonus.map(bonus => bonus.markupValue)) || 0
+        let life = this.life
+        if (this.isGold) {
+            life = life * 2;
+        }
+        return life - this._injuriesReceived + magneticAddition + bonus
+    }
+
+    getAttack(): number {
+        // 磁力加成
+        const magneticAddition = sum(this.magneticForceList.map(card => card.attack)) || 0
+        const bonus = sum(this.attackBonus.map(bonus => bonus.markupValue)) || 0
+        let attack = this.attack
+        if (this.isGold) {
+            attack = attack * 2;
+        }
+        return attack + magneticAddition + bonus
+    }
+
+    /**
+     * 遭受的伤害
+     */
+    injuriesReceived(num: number) {
+        this._injuriesReceived += num;
+    }
+
+    isSurviving() {
+        return this.getLife() > this._injuriesReceived;
+    }
+
 
     /**
      * 当其他随从死亡时触发器

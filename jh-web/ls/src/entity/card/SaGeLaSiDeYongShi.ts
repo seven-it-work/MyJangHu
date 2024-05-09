@@ -12,19 +12,33 @@ export default class SaGeLaSiDeYongShi extends BaseCard {
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
+        const currentCard = triggerObj.currentCard;
         if (!currentPlayer) {
             return
         }
-        currentPlayer.tavern.tavernAttackBonus += 10;
-        currentPlayer.tavern.tavernLifeBonus += 10;
+        if (!currentCard) {
+            return
+        }
+        currentPlayer.tavern.attackBonus.push({
+            markupValue: 10,
+            baseCardObj: currentCard
+        })
+        currentPlayer.tavern.attackBonus.push({
+            markupValue: 10,
+            baseCardObj: currentCard
+        })
     }
 
     whenSaleCardTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
+        const currentCard = triggerObj.currentCard;
         if (!currentPlayer) {
             return
         }
-        currentPlayer.tavern.tavernAttackBonus -= 10;
-        currentPlayer.tavern.tavernLifeBonus -= 10;
+        if (!currentCard) {
+            return
+        }
+        currentPlayer.tavern.removeBonus(currentCard, 'attack')
+        currentPlayer.tavern.removeBonus(currentCard, 'life')
     }
 }

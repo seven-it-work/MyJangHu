@@ -2,6 +2,7 @@ import BaseCardObj from "./BaseCardObj";
 import ContextObj from "./ContextObj";
 import BaseCard from "../entity/baseCard";
 import {TriggerObj} from "../entity/Trigger";
+import {Bonus} from "./Bonus";
 
 /**
  * cardNumber 酒馆刷新卡片数量
@@ -18,10 +19,10 @@ export const GRADED_RULES = {
     7: {cardNumber: 6, upgradeExpenses: undefined, cardSize: 6},
 }
 export default class Taverns {
-    // 酒馆攻击加成
-    tavernAttackBonus: number = 0;
-    // 酒馆防御加成
-    tavernLifeBonus: number = 0;
+    // 生命加成
+    lifeBonus: Bonus[] = [];
+    // 攻击加成
+    attackBonus: Bonus[] = [];
     // 酒馆等级
     graded: number = 1;
     // 当前卡片
@@ -34,6 +35,14 @@ export default class Taverns {
     freezeExpenses: number = 0;
     // 当前升级费用
     currentUpgradeExpenses: number = GRADED_RULES[1].upgradeExpenses;
+
+    removeBonus(baseCardObj: BaseCardObj, type: 'attack' | 'life') {
+        if (type === 'attack') {
+            this.attackBonus = this.attackBonus.filter(b => b.baseCardObj.id !== baseCardObj.id)
+        } else {
+            this.lifeBonus = this.lifeBonus.filter(b => b.baseCardObj.id !== baseCardObj.id)
+        }
+    }
 
     isFreezeAll(): boolean {
         return this.freezeCardId.length >= this.currentCard.size;
@@ -71,7 +80,7 @@ export default class Taverns {
 
     upgrade() {
         this.graded++;
-        this.currentUpgradeExpenses= GRADED_RULES[this.graded].upgradeExpenses;
+        this.currentUpgradeExpenses = GRADED_RULES[this.graded].upgradeExpenses;
     }
 
     /**
