@@ -9,6 +9,7 @@ import Player from "./Player";
 export default class BaseCardObj implements Trigger {
     id: string;
     isFreeze: boolean = false;
+    index: number;
 
     constructor(baseCard: BaseCard) {
         this.id = new Chance().guid();
@@ -68,8 +69,8 @@ export default class BaseCardObj implements Trigger {
             return
         }
         if (number < 0) {
-            console.log(`(${currentPlayer.name})的【${this.baseCard.name}】遭受${number}伤害`)
             if (this.baseCard.isHolyShield) {
+                debugger
                 // 圣盾
                 this.baseCard.isHolyShield = false;
                 this.whenHolyShieldDisappears(triggerObj)
@@ -91,20 +92,21 @@ export default class BaseCardObj implements Trigger {
                     })
                 }
                 number = 0;
-                console.log(`(${currentPlayer.name})的【${this.baseCard.name}】的圣盾失效`)
+                console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】的圣盾失效`)
             }
+            console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】遭受${number}伤害`)
             this.baseCard.life += number;
             if (this.isSurviving()) {
                 return;
             }
-            console.log(`(${currentPlayer.name})的【${this.baseCard.name}】死亡`)
+            console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】死亡`)
             // 加入死亡池
             currentPlayer.deadCardListInFighting.push(this)
             // 复生
             if (this.baseCard.isRebirth) {
                 this.baseCard.life = 1;
                 this.baseCard.isRebirth = false;
-                console.log(`${currentPlayer.name})的【${this.baseCard.name}】复生`)
+                console.log(`${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】复生`)
             } else {
                 // 移除
                 currentPlayer.cardRemove(this);
@@ -221,14 +223,7 @@ export default class BaseCardObj implements Trigger {
     }
 
     private doAttack(currentPlayer: Player, targetPlayer: Player, targetCard: BaseCardObj, triggerObj: TriggerObj) {
-        console.log(`(${currentPlayer.name})的【${this.baseCard.name}】对(${targetPlayer.name})的【${targetCard.baseCard.name}】进行攻击`)
-        targetCard.whenDeadTrigger({
-            ...triggerObj,
-            currentPlayer: targetPlayer,
-            targetPlayer: currentPlayer,
-            currentCard: targetCard,
-            targetCard: this
-        })
+        console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】对(${targetPlayer.name})的【${targetCard.baseCard.name}(${targetCard.attack}/${targetCard.life})】进行攻击`)
         this.baseCard.whenAttackTrigger(this.triggerObj2BaseCard(triggerObj))
         targetCard.whenDefenseTrigger({
             ...triggerObj,
@@ -245,25 +240,25 @@ export default class BaseCardObj implements Trigger {
             // 剧毒，用完就没了
             toBeHarmed = this.baseCard.life;
             targetCard.baseCard.isHighlyToxic = false;
-            console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}】剧毒已使用`)
+            console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}(${targetCard.attack}/${targetCard.life})】剧毒已使用`)
         } else if (targetCard.baseCard.hasPoison) {
             // 毒药，能一直毒
             toBeHarmed = this.baseCard.life;
-            console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}】烈药触发`)
+            console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}(${targetCard.attack}/${targetCard.life})】烈药触发`)
         } else if (targetCard.baseCard.attackHighlyToxic) {
             // 遭受攻击时，剧毒 todo 放到防御触发器里面 改 剧毒=true
             toBeHarmed = this.baseCard.life;
-            console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}】遭受攻击时，剧毒`)
+            console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}(${targetCard.attack}/${targetCard.life})】遭受攻击时，剧毒`)
         } else {
             toBeHarmed = targetCard.baseCard.attack;
         }
 
         if (this.baseCard.isHighlyToxic) {
             toCauseHarm = targetCard.baseCard.life;
-            console.log(`(${currentPlayer.name})的【${this.baseCard.name}】剧毒已使用`)
+            console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】剧毒已使用`)
             this.baseCard.isHighlyToxic = false;
         } else if (this.baseCard.hasPoison) {
-            console.log(`(${currentPlayer.name})的【${this.baseCard.name}】烈药触发`)
+            console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】烈药触发`)
             toCauseHarm = targetCard.baseCard.life;
         } else {
             toCauseHarm = this.baseCard.attack;

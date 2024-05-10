@@ -13,8 +13,12 @@
   "dependencies": {
     "@vue/test-utils": "^2.4.5",
     "ant-design-vue": "^4.2.1",
+    "class-transformer": "^0.5.1",
+    "es6-shim": "^0.35.8",
     "lodash": "^4.17.21",
     "prettier": "^3.2.5",
+    "reflect-metadata": "^0.2.2",
+    "serializer-node": "^0.0.1",
     "vue": "^3.4.21"
   },
   "devDependencies": {

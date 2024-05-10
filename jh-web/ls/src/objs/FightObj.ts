@@ -116,6 +116,7 @@ export default class FightObj {
     }
 
     private doFight(isAttacker: Boolean) {
+        debugger
         let attackerPlayer: Player
         let defenderPlayer: Player
         let index;
@@ -129,7 +130,6 @@ export default class FightObj {
             index = this.defenderIndex;
         }
         const attacker = attackerPlayer.cardListInFighting[index];
-        // todo 这里有问题
         attacker.whenAttackTrigger({
             targetPlayer: defenderPlayer,
             currentPlayer: attackerPlayer,
@@ -141,14 +141,14 @@ export default class FightObj {
         defenderPlayer.updateCardListInFighting()
         if (isAttacker) {
             this.attackerIndex++;
-            if (this.attackerIndex >= attackerPlayer.cardListInFighting.length) {
-                this.attackerIndex = 0;
-            }
         } else {
             this.defenderIndex++;
-            if (this.defenderIndex >= defenderPlayer.cardListInFighting.length) {
-                this.defenderIndex = 0;
-            }
+        }
+        if (this.attackerIndex >= attackerPlayer.cardListInFighting.length) {
+            this.attackerIndex = 0;
+        }
+        if (this.defenderIndex >= defenderPlayer.cardListInFighting.length) {
+            this.defenderIndex = 0;
         }
     }
 }

@@ -1,5 +1,8 @@
 <template>
   <div>
+    <a-textarea v-model:value="saveInfo" show-count/>
+    <a-button @click="reload">读取</a-button>
+    <a-button type="primary" @click="save">保存</a-button>
     <Player :play-obj="playObj"></Player>
   </div>
 </template>
@@ -11,6 +14,9 @@ import SharedCardPool from "./objs/SharedCardPool";
 import Player from "./objs/Player";
 import ContextObj from "./objs/ContextObj";
 import PlayObj from "./objs/PlayObj";
+import {message} from "ant-design-vue";
+import SaveUtils from "./utils/SaveUtils";
+import {deserialize, serialize} from "class-transformer";
 
 const sharedCardPool = new SharedCardPool(['恶魔', '机械']);
 
@@ -18,7 +24,6 @@ const playerList = []
 for (let i = 0; i < 2; i++) {
   const taverns = new Taverns();
   var player = new Player("玩家" + i, taverns);
-  player.currentGoldCoin = 999;
   playerList.push(player)
   // 初始刷新
   taverns.refresh({contextObj: new ContextObj(sharedCardPool)})
@@ -30,9 +35,22 @@ export default {
   components: {Player: PlayerVue},
   data() {
     return {
-      playObj
+      playObj,
+      saveInfo: '{}',
     }
-  }
+  },
+  methods: {
+    save() {
+      this.saveInfo = serialize(this.playObj);
+      const playObj1 = SaveUtils.load(this.saveInfo);
+      // this.playObj = result
+
+    },
+    reload() {
+      const playObj1 = SaveUtils.load(this.saveInfo);
+      console.log(playObj1)
+    },
+  },
 }
 </script>
 

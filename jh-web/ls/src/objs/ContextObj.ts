@@ -6,7 +6,9 @@ export default class ContextObj {
 
     currentRound: number = 1;
 
-    constructor(sharedCardPool: SharedCardPool) {
-        this.sharedCardPool = sharedCardPool;
+    constructor(sharedCardPool: SharedCardPool | undefined) {
+        if (sharedCardPool) {
+            this.sharedCardPool = sharedCardPool;
+        }
     }
 }

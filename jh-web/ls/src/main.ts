@@ -1,3 +1,5 @@
+import "reflect-metadata";
+import "es6-shim";
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'

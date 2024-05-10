@@ -14,21 +14,16 @@
         </Card>
       </a-col>
     </a-row>
-    <a-modal v-model:open="open" title="选中召唤的位置">
-      <div style="width: 80%;height:300px;overflow-x: scroll">
-        <div v-for="(cardObj,index) in tempCardList"
+    <a-modal v-model:open="open" title="选中召唤的位置" @ok="useCard">
+      <div style="height:220px;width: 100%;overflow-x: auto;white-space: nowrap;display: flex;">
+        <div style="padding: 5px" v-for="(cardObj,index) in tempCardList"
              :key="cardObj.id">
           <Card :card-obj="cardObj" v-if="cardObj.id">
-            <template #titleButton>
-              <a-button size="small" :disabled="!playObj.currentPlayerInfo.canUseCard()" @click="useCard(cardObj)">
-                使用
-              </a-button>
-            </template>
           </Card>
           <a-card v-else hoverable style="width: 180px;" body-style="padding:10px" @click="selectCard(cardObj,index)">
             <a-card-meta>
               <template #description>
-                <div style="width:160px;height:90px;">
+                <div style="width:160px;height:180px;">
                 </div>
               </template>
             </a-card-meta>
@@ -55,6 +50,13 @@ export default defineComponent({
       required: true,
     },
   },
+  mounted() {
+    document.onkeydown = e => {
+      if (e.key == 'Enter' && this.open) {
+        this.useCard()
+      }
+    }
+  },
   data() {
     return {
       open: false,
@@ -64,18 +66,15 @@ export default defineComponent({
   },
   methods: {
     selectCard(cardObj, index) {
-      console.log(cardObj, index)
-      if (cardObj && cardObj.id) {
+      if (!cardObj || !cardObj.id) {
         for (let i = 0; i < this.tempCardList.length; i++) {
-          if (this.tempCardList[i] && this.tempCardList[i].id && this.tempCardList[i].id === cardObj.id) {
+          if (this.tempCardList[i] && this.tempCardList[i].id && this.tempCardList[i].id === this.toBeUseCard.id) {
             this.tempCardList[i] = {}
             break
           }
         }
       }
       this.tempCardList[index] = this.toBeUseCard;
-      console.log(this.toBeUseCard)
-      console.log(this.toBeUseCard.baseCard.attackBonus.length)
     },
     openModal(cardObj) {
       this.toBeUseCard = cardObj
@@ -87,8 +86,24 @@ export default defineComponent({
       }
       this.tempCardList = tempCardList;
     },
-    useCard(cardObj) {
-      this.playObj.currentPlayerInfo.useCard(cardObj, this.playObj.contextObj)
+    useCard() {
+      let nextCard = undefined;
+      let findCurrent = false;
+      for (let i = 0; i < this.tempCardList.length; i++) {
+        if (this.tempCardList[i] && this.tempCardList[i].id) {
+          if (findCurrent) {
+            nextCard = this.tempCardList[i];
+            break
+          }
+          if (this.tempCardList[i].id === this.toBeUseCard.id) {
+            findCurrent = true;
+          }
+        }
+      }
+      if (this.toBeUseCard) {
+        this.playObj.currentPlayerInfo.useCard(this.toBeUseCard, nextCard, this.playObj.contextObj)
+      }
+      this.open = false
     }
   }
 })

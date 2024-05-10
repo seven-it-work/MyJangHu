@@ -5,11 +5,12 @@ import randomUtils from "../utils/RandomUtils";
 import {shuffle} from "lodash";
 import FightObj from "./FightObj";
 import ContextObj from "./ContextObj";
+import {Serialization} from "../utils/SaveUtils";
 
 /**
  * 局内对象，存放共享信息
  */
-export default class PlayObj {
+export default class PlayObj implements Serialization<PlayObj> {
     sharedCardPool: SharedCardPool;
 
     playerObjList: Player[];
@@ -19,11 +20,15 @@ export default class PlayObj {
     contextObj: ContextObj;
 
 
-    constructor(playerObjList: Player[], sharedCardPool: SharedCardPool) {
-        this.contextObj = new ContextObj(sharedCardPool)
-        this.playerObjList = playerObjList;
-        this.currentPlayerInfo = playerObjList[0]
-        this.sharedCardPool = sharedCardPool
+    constructor(playerObjList: Player[] | undefined, sharedCardPool: SharedCardPool | undefined) {
+        if (sharedCardPool) {
+            this.contextObj = new ContextObj(sharedCardPool)
+            this.sharedCardPool = sharedCardPool
+        }
+        if (playerObjList) {
+            this.playerObjList = playerObjList;
+            this.currentPlayerInfo = playerObjList[0]
+        }
     }
 
     endRound() {
@@ -57,5 +62,20 @@ export default class PlayObj {
             // 战斗完成
             this.playerObjList.filter(player => player.isSurvival()).forEach(player => player.startTheRound(triggerObj))
         }
+    }
+
+    deserialize(json: string | any): PlayObj {
+        let dataObj = json;
+        if (typeof json === 'string') {
+            dataObj = JSON.parse(json)
+        }
+        this.sharedCardPool = new SharedCardPool(undefined).deserialize(dataObj.sharedCardPool)
+        this.playerObjList = dataObj.playerObjList.map(data => new Player(undefined, undefined).deserialize(data))
+        this.currentPlayerInfo = new Player(undefined, undefined).deserialize(dataObj.currentPlayerInfo)
+        return this;
+    }
+
+    serialization(): string {
+        return "";
     }
 }

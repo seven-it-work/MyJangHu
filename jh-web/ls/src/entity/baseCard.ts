@@ -6,6 +6,8 @@ import {Bonus} from "../objs/Bonus";
 
 
 export default abstract class BaseCard implements Trigger {
+    classType: string = this.constructor.name
+
     tempId: string = '';
     name: string = '';
     // 酒馆是否出售

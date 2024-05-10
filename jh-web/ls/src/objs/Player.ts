@@ -5,19 +5,20 @@ import {message} from 'ant-design-vue';
 import {cloneDeep, groupBy} from "lodash";
 import {TriggerObj} from "../entity/Trigger";
 import SharedCardPool from "./SharedCardPool";
+import {Serialization} from "../utils/SaveUtils";
 
-export default class Player {
+export default class Player implements Serialization<Player> {
     get cardList(): BaseCardObj[] {
         return cloneDeep(this._cardList);
     }
 
-    get cardListInFighting(): BaseCardObj[] {
-        return cloneDeep(this._cardListInFighting);
-    }
-
-    constructor(name: string, tavern: Taverns) {
-        this.name = name;
-        this.tavern = tavern;
+    constructor(name: string | undefined, tavern: Taverns | undefined) {
+        if (name) {
+            this.name = name;
+        }
+        if (tavern) {
+            this.tavern = tavern;
+        }
     }
 
     tavern: Taverns;
@@ -33,7 +34,7 @@ export default class Player {
     // 场上的牌
     private _cardList: BaseCardObj[] = [];
     // 战斗中的牌
-    private _cardListInFighting: BaseCardObj[] = [];
+    cardListInFighting: BaseCardObj[] = [];
     // 战斗死亡池
     deadCardListInFighting: BaseCardObj[] = [];
     /**
@@ -173,20 +174,20 @@ export default class Player {
     }
 
     initCardListInFighting() {
-        this._cardListInFighting = cloneDeep(this._cardList)
+        this.cardListInFighting = cloneDeep(this._cardList)
     }
 
-    addCard(cardObj: BaseCardObj, triggerObj: TriggerObj) {
+    addCard(cardObj: BaseCardObj, nextCard: BaseCardObj, triggerObj: TriggerObj) {
         if (this.isEndRound) {
             // 回合结束完成，召唤都在战场上
-            if (this._cardListInFighting.length < 7) {
+            if (this.cardListInFighting.length < 7) {
                 // 召唤触发器
                 cardObj.whenSummonedTrigger({
                     ...triggerObj,
                     currentPlayer: this,
                     currentCard: cardObj,
                 })
-                this._cardListInFighting.forEach(card => {
+                this.cardListInFighting.forEach(card => {
                     card.whenOtherSummonedTrigger({
                         ...triggerObj,
                         currentPlayer: this,
@@ -194,7 +195,12 @@ export default class Player {
                         targetCard: cardObj
                     })
                 })
-                this._cardListInFighting.push(cardObj)
+                if (nextCard) {
+                    const nextCardIndex = this.cardListInFighting.findIndex((card) => card.id === nextCard.id)
+                    this.cardListInFighting.splice(nextCardIndex, 0, cardObj);
+                } else {
+                    this.cardListInFighting.push(cardObj)
+                }
             }
         } else {
             if (this._cardList.length < 7) {
@@ -212,12 +218,17 @@ export default class Player {
                         targetCard: cardObj
                     })
                 })
-                this._cardList.push(cardObj)
+                if (nextCard) {
+                    const nextCardIndex = this._cardList.findIndex((card) => card.id === nextCard.id)
+                    this._cardList.splice(nextCardIndex, 0, cardObj);
+                } else {
+                    this._cardList.push(cardObj)
+                }
             }
         }
     }
 
-    useCard(cardObj: BaseCardObj, context: ContextObj) {
+    useCard(cardObj: BaseCardObj, nextCard: BaseCardObj, context: ContextObj) {
         if (!this.canUseCard()) {
             message.error({content: '最多有7个随从'});
             return
@@ -244,7 +255,7 @@ export default class Player {
                     targetCard: cardObj,
                 })
             })
-            this.addCard(cardObj, {
+            this.addCard(cardObj, nextCard, {
                 contextObj: context,
                 currentPlayer: this,
                 currentCard: cardObj,
@@ -363,7 +374,7 @@ export default class Player {
         }))
         // 系统默认影响
         // 1、属性计算完成后，将cardListInFighting进行赋值
-        this._cardListInFighting = cloneDeep(this._cardList)
+        this.cardListInFighting = cloneDeep(this._cardList)
         this.deadCardListInFighting = []
     }
 
@@ -392,6 +403,8 @@ export default class Player {
         this.currentGoldCoin = this.getMaxGoldCoin();
         // 刷新未冻结的随从
         this.tavern.refresh(triggerObj)
+        // 3、酒馆升级--
+        this.tavern.currentUpgradeExpenses = Math.max(0, this.tavern.currentUpgradeExpenses - 1)
     }
 
     /**
@@ -399,13 +412,22 @@ export default class Player {
      */
     cardRemove(baseCardObj: BaseCardObj) {
         if (this.isEndRound) {
-            this._cardListInFighting = this._cardListInFighting.filter(card => card.id !== baseCardObj.id);
+            this.cardListInFighting = this.cardListInFighting.filter(card => card.id !== baseCardObj.id);
         } else {
             this._cardList = this._cardList.filter(card => card.id !== baseCardObj.id);
         }
     }
 
     updateCardListInFighting() {
-        this._cardListInFighting = this._cardListInFighting.filter(card => card.isSurviving());
+        this.cardListInFighting = this.cardListInFighting.filter(card => card.isSurviving());
+    }
+
+    deserialize(json: any): Player {
+
+        return this;
+    }
+
+    serialization(): string {
+        return "";
     }
 }

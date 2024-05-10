@@ -3,33 +3,56 @@ import {GRADED_RULES} from "./Taverns";
 import BaseCard from "../entity/baseCard";
 import {cloneDeep} from "lodash";
 import randomUtil from "../utils/RandomUtils.ts";
+import {Serialization} from "../utils/SaveUtils";
 
-class SharedCardPoolData {
+class SharedCardPoolData implements Serialization<SharedCardPoolData> {
 
     graded: number;
     remainingQuantity: number;
     baseCard: BaseCard;
 
-    constructor(graded: number, remainingQuantity: number, baseCard: BaseCard) {
-        this.graded = graded;
-        this.remainingQuantity = remainingQuantity;
-        this.baseCard = baseCard;
+    constructor(graded: number | undefined, remainingQuantity: number | undefined, baseCard: BaseCard | undefined) {
+        if (graded) {
+            this.graded = graded;
+        }
+        if (remainingQuantity) {
+            this.remainingQuantity = remainingQuantity;
+        }
+        if (baseCard) {
+            this.baseCard = baseCard;
+        }
+    }
+
+    deserialize(json: any): SharedCardPoolData {
+        if (typeof json === 'string') {
+            json = JSON.parse(json)
+        }
+        this.graded = json.graded
+        this.remainingQuantity = json.remainingQuantity
+        this.baseCard = new CardDb().getByName(json.baseCard)
+        return this;
+    }
+
+    serialization(): string {
+        return "";
     }
 }
 
-export default class SharedCardPool {
+export default class SharedCardPool implements Serialization<SharedCardPool> {
     accompanyingRace: string[]
     pool: Map<string, SharedCardPoolData> = new Map<string, SharedCardPoolData>()
     cardDb: CardDb;
 
-    constructor(accompanyingRace: string[]) {
-        this.accompanyingRace = accompanyingRace;
+    constructor(accompanyingRace: string[] | undefined) {
         const cardDb = new CardDb();
         this.cardDb = cardDb;
-        const baseCards: BaseCard[] = cardDb.listByAccompanyingRace(accompanyingRace);
-        baseCards.forEach(card => {
-            this.pool.set(card.constructor.name, new SharedCardPoolData(card.graded, GRADED_RULES[card.graded].cardSize, card))
-        })
+        if (accompanyingRace) {
+            this.accompanyingRace = accompanyingRace;
+            const baseCards: BaseCard[] = cardDb.listByAccompanyingRace(accompanyingRace);
+            baseCards.forEach(card => {
+                this.pool.set(card.constructor.name, new SharedCardPoolData(card.graded, GRADED_RULES[card.graded].cardSize, card))
+            })
+        }
     }
 
     listByEthnicity(ethnicity: string[], levelLimits: number | undefined = undefined, isMatchAll = false): BaseCard[] {
@@ -87,11 +110,30 @@ export default class SharedCardPool {
     cardIn(baseCard: BaseCard) {
         const newVar = this.pool.get(baseCard.constructor.name);
         if (newVar) {
-            newVar.remainingQuantity = Math.min(newVar.remainingQuantity + 1, GRADED_RULES[baseCard.graded].cardSize);
+            let size = 1;
+            if (baseCard.isGold) {
+                size = 3
+            }
+            newVar.remainingQuantity = Math.min(newVar.remainingQuantity + size, GRADED_RULES[baseCard.graded].cardSize);
         }
     }
 
     getByName(name: string): BaseCard {
         return cloneDeep(this.cardDb.getByName(name));
+    }
+
+    deserialize(json: any): SharedCardPool {
+        if (typeof json === 'string') {
+            json = JSON.parse(json)
+        }
+        this.accompanyingRace = json.accompanyingRace
+        Object.keys(json.pool).forEach(k => {
+            this.pool.set(k, new SharedCardPoolData(undefined, undefined, undefined).deserialize(json.pool[k]))
+        })
+        return this;
+    }
+
+    serialization(): string {
+        return "";
     }
 }
