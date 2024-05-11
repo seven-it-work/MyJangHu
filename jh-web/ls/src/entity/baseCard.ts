@@ -5,6 +5,7 @@ import {sum} from "lodash";
 import {Bonus} from "../objs/Bonus";
 import {Serialization} from "../utils/SaveUtils";
 import {serialize} from "class-transformer";
+import SharedCardPool from "../objs/SharedCardPool";
 
 
 export default abstract class BaseCard implements Trigger, Serialization<BaseCard> {
@@ -77,6 +78,8 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
     lifeBonus: Bonus[] = [];
     // 攻击加成
     attackBonus: Bonus[] = [];
+    // 是否选中其他
+    isNeedSelect: boolean = false;
 
     getLife(): number {
         // 磁力加成
@@ -225,7 +228,9 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
         this.refreshTimes = json.refreshTimes
         this.remainRefreshTimes = json.remainRefreshTimes
         this.isMagneticForce = json.isMagneticForce
-        this.magneticForceList = json.magneticForceList
+        this.magneticForceList = json.magneticForceList.map(data => {
+            return SharedCardPool.initCardDb().getByName(data.classType).deserialize(data)
+        })
         this.numberAttack = json.numberAttack
         this.isGold = json.isGold
         this.lifeBonus = json.lifeBonus

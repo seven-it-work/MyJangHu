@@ -1,13 +1,15 @@
 <template>
   <a-card hoverable style="width: 180px;" body-style="padding:10px">
     <template #actions>
-      <Tooltip :is-html="true" :disable="cardObj.baseCard.attackBonus.length<=0" :title="attackTips(cardObj)">
+      <Tooltip :is-html="true" :disable="(cardObj.baseCard.attackBonus.length+cardObj.baseCard.magneticForceList)<=0"
+               :title="attackTips(cardObj)">
         <div>攻击力：{{ cardObj.attack }}</div>
       </Tooltip>
       <div>
         <div v-for="str in cardObj.baseCard.ethnicity" :key="str">{{ str }}</div>
       </div>
-      <Tooltip :is-html="true" :disable="cardObj.baseCard.lifeBonus.length<=0" :title="lifeTips(cardObj)">
+      <Tooltip :is-html="true" :disable="(cardObj.baseCard.lifeBonus.length+cardObj.baseCard.magneticForceList)<=0"
+               :title="lifeTips(cardObj)">
         <div>生命值：{{ cardObj.life }}</div>
       </Tooltip>
     </template>
@@ -40,6 +42,7 @@ import {PropType} from "@vue/runtime-core";
 import BaseCardObj from "../objs/BaseCardObj";
 import Tooltip from "./Tooltip.vue";
 import {groupBy} from "lodash";
+import randomUtil from "../utils/RandomUtils";
 
 export default {
   name: "Card",
@@ -52,21 +55,35 @@ export default {
   },
   methods: {
     attackTips(cardObj: BaseCardObj) {
-      const result = groupBy(cardObj.baseCard.attackBonus, (card) => {
-        return card.baseCardObj.baseCard.name
+      const magneticForceList = cardObj.baseCard.magneticForceList.map(card => {
+        return {
+          markupValue: card.attack,
+          baseCardId: card.tempId || randomUtil.guid(),
+          baseCardName: card.name,
+        }
       })
-      return Object.keys(result).map(key=>{
-        const number = result[key].map(data=>data.markupValue).reduce((sum, data)=>sum+data);
-        return key+":"+(number>0?"+":"-")+number
+      const result = groupBy([...cardObj.baseCard.attackBonus, ...magneticForceList], (card) => {
+        return card.baseCardName
+      })
+      return Object.keys(result).map(key => {
+        const number = result[key].map(data => data.markupValue).reduce((sum, data) => sum + data);
+        return key + ":" + (number > 0 ? "+" : "-") + number
       })
     },
     lifeTips(cardObj: BaseCardObj) {
-      const result = groupBy(cardObj.baseCard.lifeBonus, (card) => {
-        return card.baseCardObj.baseCard.name
+      const magneticForceList = cardObj.baseCard.magneticForceList.map(card => {
+        return {
+          markupValue: card.life,
+          baseCardId: card.tempId || randomUtil.guid(),
+          baseCardName: card.name,
+        }
       })
-      return Object.keys(result).map(key=>{
-        const number = result[key].map(data=>data.markupValue).reduce((sum, data)=>sum+data);
-        return key+":"+(number>0?"+":"-")+number
+      const result = groupBy([...cardObj.baseCard.lifeBonus, ...magneticForceList], (card) => {
+        return card.baseCardName
+      })
+      return Object.keys(result).map(key => {
+        const number = result[key].map(data => data.markupValue).reduce((sum, data) => sum + data);
+        return key + ":" + (number > 0 ? "+" : "-") + number
       })
     }
   }

@@ -37,12 +37,22 @@ export default {
     return {
       playObj,
       saveInfo: '{}',
+      autoSave: 0,
+    }
+  },
+  mounted() {
+    this.autoSave = setInterval(() => {
+      // this.save()
+    }, 5000)
+  },
+  destroyed() {
+    if (this.autoSave) {
+      clearInterval(this.autoSave)
     }
   },
   methods: {
     save() {
       this.saveInfo = SaveUtils.save(this.playObj);
-
     },
     reload() {
       this.playObj = SaveUtils.load(this.saveInfo);

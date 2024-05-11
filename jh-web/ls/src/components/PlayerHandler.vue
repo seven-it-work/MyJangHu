@@ -7,13 +7,24 @@
       <a-col v-for="cardObj in Array.from(playObj.currentPlayerInfo.handCardList)" :key="cardObj.id">
         <Card :card-obj="cardObj">
           <template #titleButton>
-            <a-button size="small" :disabled="!playObj.currentPlayerInfo.canUseCard()" @click="openModal(cardObj)">
+            <a-button size="small" :disabled="!playObj.currentPlayerInfo.canUseCard(cardObj)"
+                      @click="openModal(cardObj)">
               使用
             </a-button>
           </template>
         </Card>
       </a-col>
     </a-row>
+    <a-modal v-model:open="isNeedSelectOpen" :title="isNeedSelectTitle" @ok="isNeedSelectOk">
+      <a-row :gutter="16">
+        <a-col v-for="cardObj in Array.from(playObj.currentPlayerInfo.cardList)" :key="cardObj.id"
+               :style="cardObj.id===targetBaseCard?.id?'border: solid 2px #98bf21':''"
+               @click="()=>targetBaseCard=cardObj">
+          <Card :card-obj="cardObj">
+          </Card>
+        </a-col>
+      </a-row>
+    </a-modal>
     <a-modal v-model:open="open" title="选中召唤的位置" @ok="useCard">
       <div style="height:220px;width: 100%;overflow-x: auto;white-space: nowrap;display: flex;">
         <div style="padding: 5px" v-for="(cardObj,index) in tempCardList"
@@ -62,9 +73,17 @@ export default defineComponent({
       open: false,
       tempCardList: [],
       toBeUseCard: null,
+      isNeedSelectOpen: false,
+      isNeedSelectTitle: '',
+      targetBaseCard: undefined,
     }
   },
   methods: {
+    isNeedSelectOk() {
+      this.isNeedSelectOpen = false;
+      this.isNeedSelectTitle = '';
+      this.openModal(this.toBeUseCard, false)
+    },
     selectCard(cardObj, index) {
       if (!cardObj || !cardObj.id) {
         for (let i = 0; i < this.tempCardList.length; i++) {
@@ -76,8 +95,13 @@ export default defineComponent({
       }
       this.tempCardList[index] = this.toBeUseCard;
     },
-    openModal(cardObj) {
+    openModal(cardObj, checkIsNeedSelect = true) {
       this.toBeUseCard = cardObj
+      if (cardObj.baseCard.isNeedSelect && checkIsNeedSelect) {
+        this.isNeedSelectOpen = true;
+        this.isNeedSelectTitle = cardObj.baseCard.description;
+        return
+      }
       this.open = true
       const tempCardList = [{}]
       for (let i = 0; i < this.playObj.currentPlayerInfo.cardList.length; i++) {
@@ -101,7 +125,10 @@ export default defineComponent({
         }
       }
       if (this.toBeUseCard) {
-        this.playObj.currentPlayerInfo.useCard(this.toBeUseCard, nextCard, this.playObj.contextObj)
+        this.playObj.currentPlayerInfo.useCard(this.toBeUseCard, nextCard, {
+          contextObj: this.playObj.contextObj,
+          needSelectCard: this.targetBaseCard,
+        })
       }
       this.open = false
     }

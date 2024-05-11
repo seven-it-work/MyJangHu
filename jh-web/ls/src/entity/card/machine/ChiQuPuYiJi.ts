@@ -16,13 +16,25 @@ export default class ChiQuPuYiJi extends BaseCard {
         if (!currentPlayer) {
             return
         }
+        const currentCard = triggerObj.currentCard;
+        if (!currentCard) {
+            return
+        }
         const handCardList = currentPlayer.handCardList.filter(card => card.baseCard.type === '随从');
         if (handCardList.length <= 0) {
             return;
         }
         const baseCardObj = randomUtil.pickone(handCardList);
-        baseCardObj.baseCard.life++;
-        baseCardObj.baseCard.attack++;
+        baseCardObj.attackBonus.push({
+            markupValue: 1,
+            baseCardName: currentCard.baseCard.name,
+            baseCardId: currentCard.id,
+        })
+        baseCardObj.lifeBonus.push({
+            markupValue: 1,
+            baseCardName: currentCard.baseCard.name,
+            baseCardId: currentCard.id,
+        })
     }
 }
 

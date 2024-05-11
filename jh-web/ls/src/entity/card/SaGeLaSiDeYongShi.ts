@@ -21,11 +21,13 @@ export default class SaGeLaSiDeYongShi extends BaseCard {
         }
         currentPlayer.tavern.attackBonus.push({
             markupValue: 10,
-            baseCardObj: currentCard
+            baseCardName: currentCard.baseCard.name,
+            baseCardId: currentCard.id,
         })
         currentPlayer.tavern.attackBonus.push({
             markupValue: 10,
-            baseCardObj: currentCard
+            baseCardName: currentCard.baseCard.name,
+            baseCardId: currentCard.id,
         })
     }
 

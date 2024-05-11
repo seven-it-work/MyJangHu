@@ -16,9 +16,13 @@ export default class JiXieXiaoMa extends BaseCard {
         if (!currentPlayer) {
             return
         }
+        const currentCard = triggerObj.currentCard;
+        if (!currentCard) {
+            return
+        }
         const baseCard = triggerObj.contextObj.sharedCardPool.getByName("JiXiangMaJu");
-        currentPlayer.addCard(new BaseCardObj(baseCard),triggerObj)
-        currentPlayer.addCard(new BaseCardObj(baseCard),triggerObj)
+        currentPlayer.addCard(new BaseCardObj(baseCard), currentPlayer.findNextCard(currentCard), triggerObj)
+        currentPlayer.addCard(new BaseCardObj(baseCard), currentPlayer.findNextCard(currentCard), triggerObj)
     }
 }
 

@@ -21,11 +21,13 @@ export default class XieNengYuanSu extends BaseCard {
         }
         currentPlayer.tavern.attackBonus.push({
             markupValue: 1,
-            baseCardObj: currentCard
+            baseCardName: currentCard.baseCard.name,
+            baseCardId: currentCard.id,
         })
         currentPlayer.tavern.attackBonus.push({
             markupValue: 1,
-            baseCardObj: currentCard
+            baseCardName: currentCard.baseCard.name,
+            baseCardId: currentCard.id,
         })
     }
 }

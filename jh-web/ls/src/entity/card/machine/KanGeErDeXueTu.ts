@@ -15,12 +15,16 @@ export default class KanGeErDeXueTu extends BaseCard {
         if (!currentPlayer) {
             return
         }
+        const currentCard = triggerObj.currentCard;
+        if (!currentCard) {
+            return
+        }
         const baseCardObjs = currentPlayer.deadCardListInFighting.filter(card => card.baseCard.ethnicity.includes('机械'));
         if (baseCardObjs[0]) {
-            currentPlayer.addCard(baseCardObjs[0].getOriginalVersion(triggerObj.contextObj.sharedCardPool),triggerObj)
+            currentPlayer.addCard(baseCardObjs[0].getOriginalVersion(triggerObj.contextObj.sharedCardPool), currentPlayer.findNextCard(currentCard),triggerObj)
         }
         if (baseCardObjs[1]) {
-            currentPlayer.addCard(baseCardObjs[1].getOriginalVersion(triggerObj.contextObj.sharedCardPool),triggerObj)
+            currentPlayer.addCard(baseCardObjs[1].getOriginalVersion(triggerObj.contextObj.sharedCardPool), currentPlayer.findNextCard(currentCard),triggerObj)
         }
     }
 }

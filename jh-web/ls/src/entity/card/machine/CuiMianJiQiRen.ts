@@ -21,11 +21,13 @@ export default class BaoBaoJiQiRen extends BaseCard {
         }
         this.attackBonus.push({
             markupValue: 1,
-            baseCardObj: currentCard,
+            baseCardName: currentCard.baseCard.name,
+            baseCardId: currentCard.id,
         })
         this.lifeBonus.push({
             markupValue: 1,
-            baseCardObj: currentCard,
+            baseCardName: currentCard.baseCard.name,
+            baseCardId: currentCard.id,
         })
     }
 }

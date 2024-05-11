@@ -15,10 +15,22 @@ export default class TiKeDiAoSaoSi extends BaseCard {
         if (!currentPlayer) {
             return
         }
+        const currentCard = triggerObj.currentCard;
+        if (!currentCard) {
+            return
+        }
         if (!currentPlayer.isEndRound) {
             currentPlayer.cardList.filter(card => card.id !== this.tempId).forEach(card => {
-                card.baseCard.life++;
-                card.baseCard.attack++;
+                card.baseCard.attackBonus.push({
+                    markupValue: 1,
+                    baseCardName: currentCard.baseCard.name,
+                    baseCardId: currentCard.id,
+                })
+                card.baseCard.lifeBonus.push({
+                    markupValue: 1,
+                    baseCardName: currentCard.baseCard.name,
+                    baseCardId: currentCard.id,
+                })
             })
         }
     }

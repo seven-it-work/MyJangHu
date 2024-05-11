@@ -29,5 +29,6 @@ export default class ZaoDongQiZhaZhe extends BaseCard {
             markupValue: this.life,
             baseCardObj: currentCard,
         })
+        console.log(`(${currentPlayer.name})的【${currentCard.baseCard.name}(${currentCard.attack}/${currentCard.life})】触发亡语：使另一个友方随从【${baseCardObj.baseCard.name}】获得本随从的生命值上限。`)
     }
 }

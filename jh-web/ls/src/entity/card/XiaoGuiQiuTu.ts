@@ -18,6 +18,10 @@ export default class XiaoGuiQiuTu extends BaseCard {
         if (!currentPlayer) {
             return
         }
-        currentPlayer.addCard(new BaseCardObj(triggerObj.contextObj.sharedCardPool.getByName("XiaoGui")));
+        const currentCard = triggerObj.currentCard;
+        if (!currentCard) {
+            return
+        }
+        currentPlayer.addCard(new BaseCardObj(triggerObj.contextObj.sharedCardPool.getByName("XiaoGui")),currentPlayer.findNextCard(currentCard),triggerObj);
     }
 }

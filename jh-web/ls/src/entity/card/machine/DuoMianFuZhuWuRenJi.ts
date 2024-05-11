@@ -14,10 +14,22 @@ export default class DuoMianFuZhuWuRenJi extends BaseCard {
         if (!currentPlayer) {
             return
         }
+        const currentCard = triggerObj.currentCard;
+        if (!currentCard) {
+            return
+        }
         currentPlayer.cardList.filter(card => card.baseCard.magneticForceList.length > 0).forEach(card => {
             card.baseCard.magneticForceList.forEach(() => {
-                card.baseCard.life++;
-                card.baseCard.attack++;
+                card.baseCard.attackBonus.push({
+                    markupValue: 1,
+                    baseCardName: currentCard.baseCard.name,
+                    baseCardId: currentCard.id,
+                })
+                card.baseCard.lifeBonus.push({
+                    markupValue: 1,
+                    baseCardName: currentCard.baseCard.name,
+                    baseCardId: currentCard.id,
+                })
             })
         })
     }

@@ -15,13 +15,25 @@ export default class OuMiQiePoHuaiZhe extends BaseCard {
         if (!currentPlayer) {
             return
         }
+        const currentCard = triggerObj.currentCard;
+        if (!currentCard) {
+            return
+        }
         for (let i = 0; i < 6; i++) {
             if (currentPlayer.cardListInFighting.length < 7) {
-                currentPlayer.addCard(new BaseCardObj(triggerObj.contextObj.sharedCardPool.getByName("WeiXingJiQiRen")),triggerObj)
+                currentPlayer.addCard(new BaseCardObj(triggerObj.contextObj.sharedCardPool.getByName("WeiXingJiQiRen")),currentPlayer.findNextCard(currentCard),triggerObj)
             } else {
                 currentPlayer.cardListInFighting.filter(card => card.baseCard.ethnicity.includes("机械")).forEach(card => {
-                    card.baseCard.life++;
-                    card.baseCard.attack++;
+                    this.attackBonus.push({
+                        markupValue: 1,
+                        baseCardName: currentCard.baseCard.name,
+                        baseCardId: currentCard.id,
+                    })
+                    this.lifeBonus.push({
+                        markupValue: 1,
+                        baseCardName: currentCard.baseCard.name,
+                        baseCardId: currentCard.id,
+                    })
                 })
             }
         }

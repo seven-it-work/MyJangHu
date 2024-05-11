@@ -16,9 +16,12 @@ export default class JiEDeFuMo extends BaseCard {
         if (!currentPlayer) {
             return
         }
+        const currentCard = triggerObj.currentCard;
+        if (!currentCard) {
+            return
+        }
         const tavern = currentPlayer.tavern;
-        const currentCard = tavern.currentCard;
-        if (currentCard.size <= 0) {
+        if (tavern.currentCard.size <= 0) {
             return;
         }
         currentPlayer.cardList.filter(item => {
@@ -30,8 +33,16 @@ export default class JiEDeFuMo extends BaseCard {
             }
             const pick = randomUtil.pickone(baseCardObjs);
             tavern.removeCard(pick, triggerObj.contextObj)
-            item.baseCard.attack += pick.baseCard.attack;
-            item.baseCard.life += pick.baseCard.life;
+            item.baseCard.attackBonus.push({
+                markupValue: pick.baseCard.attack,
+                baseCardName: currentCard.baseCard.name,
+                baseCardId: currentCard.id,
+            })
+            item.baseCard.lifeBonus.push({
+                markupValue: pick.baseCard.life,
+                baseCardName: currentCard.baseCard.name,
+                baseCardId: currentCard.id,
+            })
         })
     }
 }

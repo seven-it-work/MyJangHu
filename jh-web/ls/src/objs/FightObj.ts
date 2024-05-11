@@ -116,7 +116,6 @@ export default class FightObj {
     }
 
     private doFight(isAttacker: Boolean) {
-        debugger
         let attackerPlayer: Player
         let defenderPlayer: Player
         let index;
@@ -130,10 +129,15 @@ export default class FightObj {
             index = this.defenderIndex;
         }
         const attacker = attackerPlayer.cardListInFighting[index];
+        // 嘲讽优先，潜行过滤掉
+        let pickList = defenderPlayer.cardListInFighting.filter(card => !card.baseCard.isSneak).filter(card => card.baseCard.isMockery);
+        if (pickList.length <= 0) {
+            pickList = defenderPlayer.cardListInFighting.filter(card => !card.baseCard.isSneak)
+        }
         attacker.whenAttackTrigger({
             targetPlayer: defenderPlayer,
             currentPlayer: attackerPlayer,
-            targetCard: randomUtil.pickone(defenderPlayer.cardListInFighting),
+            targetCard: randomUtil.pickone(pickList),
             currentCard: attacker,
             contextObj: this.contextObj,
         })

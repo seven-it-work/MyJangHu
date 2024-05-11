@@ -9,9 +9,6 @@ import {Serialization} from "../utils/SaveUtils";
 import {serialize} from "class-transformer";
 
 export default class Player implements Serialization<Player> {
-    get cardList(): BaseCardObj[] {
-        return cloneDeep(this._cardList);
-    }
 
     constructor(name: string | undefined, tavern: Taverns | undefined) {
         if (name) {
@@ -33,7 +30,7 @@ export default class Player implements Serialization<Player> {
     currentArmor: number = 0;
     private _handCardMap: Map<String, BaseCardObj> = new Map<String, BaseCardObj>();
     // 场上的牌
-    private _cardList: BaseCardObj[] = [];
+    cardList: BaseCardObj[] = [];
     // 战斗中的牌
     cardListInFighting: BaseCardObj[] = [];
     // 战斗死亡池
@@ -99,7 +96,7 @@ export default class Player implements Serialization<Player> {
                         const vElement = v[j];
                         cardObj.push(vElement.baseCardObj)
                         if (vElement.form === 'cardList') {
-                            delete this._cardList[vElement.index]
+                            delete this.cardList[vElement.index]
                         } else {
                             this._handCardMap.delete(vElement.baseCardObj.id);
                         }
@@ -109,7 +106,7 @@ export default class Player implements Serialization<Player> {
                     const baseCardObj = BaseCardObj.sanLian(cardObj[0], cardObj[1], cardObj[2], sharedCardPool);
                     this.addCardInHand(baseCardObj, sharedCardPool)
                 }
-                this._cardList = this._cardList.filter(item => item);
+                this.cardList = this.cardList.filter(item => item);
             })
         }
     }
@@ -170,15 +167,18 @@ export default class Player implements Serialization<Player> {
         })
     }
 
-    canUseCard(): boolean {
-        return this._cardList.length < 7;
+    canUseCard(cardObj: BaseCardObj): boolean {
+        if (cardObj.baseCard.isMagneticForce) {
+            return this.cardList.length <= 7
+        }
+        return this.cardList.length < 7;
     }
 
     initCardListInFighting() {
-        this.cardListInFighting = cloneDeep(this._cardList)
+        this.cardListInFighting = cloneDeep(this.cardList)
     }
 
-    addCard(cardObj: BaseCardObj, nextCard: BaseCardObj, triggerObj: TriggerObj) {
+    addCard(cardObj: BaseCardObj, nextCard: BaseCardObj | undefined, triggerObj: TriggerObj) {
         if (this.isEndRound) {
             // 回合结束完成，召唤都在战场上
             if (this.cardListInFighting.length < 7) {
@@ -204,14 +204,14 @@ export default class Player implements Serialization<Player> {
                 }
             }
         } else {
-            if (this._cardList.length < 7) {
+            if (this.cardList.length < 7) {
                 // 召唤触发器
                 cardObj.whenSummonedTrigger({
                     ...triggerObj,
                     currentPlayer: this,
                     currentCard: cardObj,
                 })
-                this._cardList.forEach(card => {
+                this.cardList.forEach(card => {
                     card.whenOtherSummonedTrigger({
                         ...triggerObj,
                         currentPlayer: this,
@@ -220,44 +220,50 @@ export default class Player implements Serialization<Player> {
                     })
                 })
                 if (nextCard) {
-                    const nextCardIndex = this._cardList.findIndex((card) => card.id === nextCard.id)
-                    this._cardList.splice(nextCardIndex, 0, cardObj);
+                    const nextCardIndex = this.cardList.findIndex((card) => card.id === nextCard.id)
+                    this.cardList.splice(nextCardIndex, 0, cardObj);
                 } else {
-                    this._cardList.push(cardObj)
+                    this.cardList.push(cardObj)
                 }
             }
         }
     }
 
-    useCard(cardObj: BaseCardObj, nextCard: BaseCardObj, context: ContextObj) {
-        if (!this.canUseCard()) {
+    useCard(cardObj: BaseCardObj, nextCard: BaseCardObj, triggerObj: TriggerObj) {
+        if (!this.canUseCard(cardObj)) {
             message.error({content: '最多有7个随从'});
             return
         }
         if (this._handCardMap.delete(cardObj.id)) {
+            // 磁力判断
+            if (cardObj.baseCard.isMagneticForce && nextCard && nextCard.baseCard.ethnicity.includes("机械")) {
+                debugger
+                nextCard.baseCard.magneticForceList.push(cardObj.baseCard);
+                return;
+            }
             cardObj.whenCardUsedTrigger({
-                contextObj: context,
+                ...triggerObj,
                 currentPlayer: this,
                 targetCard: cardObj,
             });
-            this._cardList.forEach((v) => {
+            this.cardList.forEach((v) => {
                 v.whenOtherCardUsedTrigger({
+                    ...triggerObj,
                     currentCard: v,
-                    contextObj: context,
                     currentPlayer: this,
                     targetCard: cardObj,
                 })
             })
             this._handCardMap.forEach((v) => {
                 v.whenOtherHandlerCardUsedTrigger({
+                    ...triggerObj,
                     currentCard: v,
-                    contextObj: context,
                     currentPlayer: this,
                     targetCard: cardObj,
                 })
             })
             this.addCard(cardObj, nextCard, {
-                contextObj: context,
+                ...triggerObj,
                 currentPlayer: this,
                 currentCard: cardObj,
             })
@@ -269,8 +275,8 @@ export default class Player implements Serialization<Player> {
     }
 
     saleCard(cardObj: BaseCardObj, context: ContextObj) {
-        if (this._cardList.map(card => card.id).includes(cardObj.id)) {
-            this._cardList = this._cardList.filter(card => card.id !== cardObj.id)
+        if (this.cardList.map(card => card.id).includes(cardObj.id)) {
+            this.cardList = this.cardList.filter(card => card.id !== cardObj.id)
             this.currentGoldCoin += cardObj.baseCard.salePrice;
             this.tavern.saleCard(cardObj, context)
             cardObj.whenSaleCardTrigger({
@@ -287,7 +293,7 @@ export default class Player implements Serialization<Player> {
                     targetCard: cardObj,
                 })
             })
-            this._cardList.forEach((v) => {
+            this.cardList.forEach((v) => {
                 v.whenSaleOtherCardTrigger({
                     currentCard: v,
                     contextObj: context,
@@ -305,7 +311,7 @@ export default class Player implements Serialization<Player> {
     refreshTavern(context: ContextObj) {
         const triggerObj = {contextObj: context, currentPlayer: this};
         // 刷新消耗生命值
-        const baseCardObjs = this._cardList.filter(card => card.baseCard.remainRefreshTimes > 0);
+        const baseCardObjs = this.cardList.filter(card => card.baseCard.remainRefreshTimes > 0);
         if (baseCardObjs.length > 0) {
             const baseCardObj = baseCardObjs[0];
             baseCardObj.baseCard.remainRefreshTimes--;
@@ -347,7 +353,7 @@ export default class Player implements Serialization<Player> {
         }
         this.currentLife += changeValue;
         if (changeValue < 0) {
-            this._cardList.forEach(card => card.whenPlayerInjuries(-changeValue, {
+            this.cardList.forEach(card => card.whenPlayerInjuries(-changeValue, {
                 ...triggerObj,
                 currentCard: card,
                 currentPlayer: this,
@@ -368,14 +374,14 @@ export default class Player implements Serialization<Player> {
             currentPlayer: this,
         }))
         // 战场影响
-        this._cardList.forEach(card => card.whenEndRound({
+        this.cardList.forEach(card => card.whenEndRound({
             ...triggerObj,
             currentCard: card,
             currentPlayer: this,
         }))
         // 系统默认影响
         // 1、属性计算完成后，将cardListInFighting进行赋值
-        this.cardListInFighting = cloneDeep(this._cardList)
+        this.cardListInFighting = cloneDeep(this.cardList)
         this.deadCardListInFighting = []
     }
 
@@ -392,7 +398,7 @@ export default class Player implements Serialization<Player> {
             currentPlayer: this,
         }))
         // 战场影响
-        this._cardList.forEach(card => card.whenStartRound({
+        this.cardList.forEach(card => card.whenStartRound({
             ...triggerObj,
             currentCard: card,
             currentPlayer: this,
@@ -415,7 +421,7 @@ export default class Player implements Serialization<Player> {
         if (this.isEndRound) {
             this.cardListInFighting = this.cardListInFighting.filter(card => card.id !== baseCardObj.id);
         } else {
-            this._cardList = this._cardList.filter(card => card.id !== baseCardObj.id);
+            this.cardList = this.cardList.filter(card => card.id !== baseCardObj.id);
         }
     }
 
@@ -436,9 +442,9 @@ export default class Player implements Serialization<Player> {
         Object.keys(json._handCardMap).forEach(k => {
             this._handCardMap.set(k, new BaseCardObj(undefined).deserialize(json._handCardMap[k]))
         })
-        this._cardList = json._cardList.map(data=>new BaseCardObj(undefined).deserialize(data))
-        this.cardListInFighting = json._cardList.map(data=>new BaseCardObj(undefined).deserialize(data))
-        this.deadCardListInFighting = json._cardList.map(data=>new BaseCardObj(undefined).deserialize(data))
+        this.cardList = json.cardList.map(data => new BaseCardObj(undefined).deserialize(data))
+        this.cardListInFighting = json.cardList.map(data => new BaseCardObj(undefined).deserialize(data))
+        this.deadCardListInFighting = json.cardList.map(data => new BaseCardObj(undefined).deserialize(data))
         this.battleRoarExtraTriggers = json.battleRoarExtraTriggers
         this.deadWordsExtraTriggers = json.deadWordsExtraTriggers
         this.endRoundExtraTriggers = json.endRoundExtraTriggers
@@ -448,6 +454,27 @@ export default class Player implements Serialization<Player> {
     }
 
     serialization(): string {
-        return serialize(this);
+        return JSON.stringify({
+            ...JSON.parse(JSON.stringify(this)),
+            tavern: this.tavern.serialization(),
+            _handCardMap: JSON.parse(serialize(this._handCardMap))
+        });
+    }
+
+    findNextCard(currentCard: BaseCardObj): BaseCardObj | undefined {
+        if (this.isEndRound) {
+            // 回合结束完成，召唤都在战场上
+            const number = this.cardListInFighting.findIndex(value => value.id === currentCard.id);
+            if (number >= 0 && number < this.cardListInFighting.length) {
+                return this.cardListInFighting[number]
+            }
+            return undefined
+        } else {
+            const number = this.cardList.findIndex(value => value.id === currentCard.id);
+            if (number >= 0 && number < this.cardList.length) {
+                return this.cardList[number]
+            }
+            return undefined
+        }
     }
 }

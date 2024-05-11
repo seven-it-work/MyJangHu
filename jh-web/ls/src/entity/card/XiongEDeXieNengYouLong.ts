@@ -30,11 +30,13 @@ export default class XiongEDeXieNengYouLong extends BaseCard {
             tavern.removeCard(pick, triggerObj.contextObj)
             this.attackBonus.push({
                 markupValue: pick.baseCard.attack,
-                baseCardObj: currentCard,
+                baseCardName: currentCard.baseCard.name,
+                baseCardId: currentCard.id,
             })
             this.lifeBonus.push({
                 markupValue: pick.baseCard.life,
-                baseCardObj: currentCard,
+                baseCardName: currentCard.baseCard.name,
+                baseCardId: currentCard.id,
             })
         }
     }

@@ -1,5 +1,6 @@
 import BaseCard from "./baseCard";
 import cardStorage from "./card/CardStorage";
+import {cloneDeep} from "lodash";
 
 export default class CardDb {
     private readonly cardMap: Map<String, BaseCard> = new Map<String, BaseCard>()
@@ -27,6 +28,6 @@ export default class CardDb {
     }
 
     getByName(name: String): BaseCard {
-        return this.cardMap.get(name);
+        return cloneDeep(this.cardMap.get(name));
     }
 }

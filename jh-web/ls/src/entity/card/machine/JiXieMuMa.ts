@@ -20,9 +20,8 @@ export default class ZiShiYingLuZhang extends BaseCard {
             return
         }
         const baseCard = triggerObj.contextObj.sharedCardPool.getByName("JiXieXiaoMa");
-        currentPlayer.findByIndex(currentCard)
-        currentPlayer.addCard(new BaseCardObj(baseCard), triggerObj)
-        currentPlayer.addCard(new BaseCardObj(baseCard), triggerObj)
+        currentPlayer.addCard(new BaseCardObj(baseCard),currentPlayer.findNextCard(currentCard), triggerObj)
+        currentPlayer.addCard(new BaseCardObj(baseCard),currentPlayer.findNextCard(currentCard), triggerObj)
     }
 }
 

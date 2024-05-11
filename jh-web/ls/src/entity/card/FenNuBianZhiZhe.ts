@@ -29,11 +29,13 @@ export default class FenNuBianZhiZhe extends BaseCard {
             currentPlayer.changeLife(-1, triggerObj)
             this.attackBonus.push({
                 markupValue: 2,
-                baseCardObj: currentCard,
+                baseCardName: currentCard.baseCard.name,
+                baseCardId: currentCard.id,
             })
             this.lifeBonus.push({
                 markupValue: 1,
-                baseCardObj: currentCard,
+                baseCardName: currentCard.baseCard.name,
+                baseCardId: currentCard.id,
             })
         }
     }

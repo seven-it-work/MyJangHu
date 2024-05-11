@@ -66,7 +66,9 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
     }
 
     listByEthnicity(ethnicity: string[], levelLimits: number | undefined = undefined, isMatchAll = false): BaseCard[] {
-        return Array.from(this.pool.values()).filter(card => {
+        return Array.from(this.pool.values())
+            .filter(card=>card.baseCard.isSell)
+            .filter(card => {
             if (isMatchAll) {
                 const ethnicityData = ethnicity.filter(str => {
                     return card.baseCard.ethnicity.includes(str)
@@ -86,7 +88,9 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
     }
 
     listMagneticForceCard(levelLimits: number | undefined = undefined): BaseCard[] {
-        return Array.from(this.pool.values()).filter(card => {
+        return Array.from(this.pool.values())
+            .filter(card=>card.baseCard.isSell)
+            .filter(card => {
             return card.baseCard.isMagneticForce;
         }).filter(data => {
             if (levelLimits) {
@@ -100,12 +104,12 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
         if (cardNumber <= 0) {
             return []
         }
-        const list = Array.from(this.pool.values()).filter(card => {
+        const list = Array.from(this.pool.values())
+            .filter(card=>card.baseCard.isSell)
+            .filter(card => {
             return card.remainingQuantity > 0;
         }).filter(card => {
             return card.baseCard.graded <= graded
-        }).filter(card => {
-            return card.baseCard.isSell
         }).map(card => card.baseCard)
         return randomUtil.pick(list, cardNumber);
     }
@@ -129,7 +133,7 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
     }
 
     getByName(name: string): BaseCard {
-        return cloneDeep(this.cardDb.getByName(name));
+        return SharedCardPool.initCardDb().getByName(name);
     }
 
     deserialize(json: any): SharedCardPool {

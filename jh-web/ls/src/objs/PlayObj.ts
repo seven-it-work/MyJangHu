@@ -71,7 +71,7 @@ export default class PlayObj implements Serialization<PlayObj> {
         }
         this.sharedCardPool = new SharedCardPool(undefined).deserialize(dataObj.sharedCardPool)
         this.playerObjList = dataObj.playerObjList.map(data => new Player(undefined, undefined).deserialize(data))
-        this.currentPlayerInfo = new Player(undefined, undefined).deserialize(dataObj.currentPlayerInfo)
+        this.currentPlayerInfo = this.playerObjList.filter(data => data.name === dataObj.currentPlayerInfo.name)[0]
         this.contextObj = new ContextObj(this.sharedCardPool).deserialize(dataObj.contextObj);
         return this;
     }
@@ -80,7 +80,9 @@ export default class PlayObj implements Serialization<PlayObj> {
         return JSON.stringify({
             sharedCardPool: JSON.parse(this.sharedCardPool.serialization()),
             playerObjList: this.playerObjList.map(data => JSON.parse(data.serialization())),
-            currentPlayerInfo: JSON.parse(this.currentPlayerInfo.serialization()),
+            currentPlayerInfo: {
+                name: this.currentPlayerInfo.name
+            },
             contextObj: JSON.parse(this.contextObj.serialization()),
         });
     }

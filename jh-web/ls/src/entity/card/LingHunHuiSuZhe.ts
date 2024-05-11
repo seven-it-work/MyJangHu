@@ -25,7 +25,8 @@ export default class LingHunHuiSuZhe extends BaseCard {
             currentPlayer.changeLife(injuring, triggerObj)
             this.lifeBonus.push({
                 markupValue: 1,
-                baseCardObj: currentCard,
+                baseCardName: currentCard.baseCard.name,
+                baseCardId: currentCard.id,
             })
         }
     }

@@ -22,11 +22,13 @@ export default class JunTuanJianGong extends BaseCard {
         }
         currentPlayer.tavern.attackBonus.push({
             markupValue: 2,
-            baseCardObj: currentCard
+            baseCardName: currentCard.baseCard.name,
+            baseCardId: currentCard.id,
         })
         currentPlayer.tavern.attackBonus.push({
             markupValue: 1,
-            baseCardObj: currentCard
+            baseCardName: currentCard.baseCard.name,
+            baseCardId: currentCard.id,
         })
     }
 

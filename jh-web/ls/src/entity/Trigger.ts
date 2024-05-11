@@ -8,6 +8,7 @@ export interface TriggerObj {
     contextObj: ContextObj;
     targetCard?: BaseCardObj;
     currentCard?: BaseCardObj;
+    needSelectCard?: BaseCardObj;
 }
 
 export interface Trigger {

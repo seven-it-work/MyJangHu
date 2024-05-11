@@ -74,7 +74,6 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
         }
         if (number < 0) {
             if (this.baseCard.isHolyShield) {
-                debugger
                 // 圣盾
                 this.baseCard.isHolyShield = false;
                 this.whenHolyShieldDisappears(triggerObj)
@@ -219,6 +218,7 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
         if (!targetPlayer) {
             return
         }
+        // 风怒
         for (let i = 0; i < this.baseCard.numberAttack; i++) {
             if (this.isSurviving()) {
                 this.doAttack(currentPlayer, targetPlayer, targetCard, triggerObj);
@@ -242,28 +242,28 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
         let toCauseHarm = 0;
         if (targetCard.baseCard.isHighlyToxic) {
             // 剧毒，用完就没了
-            toBeHarmed = this.baseCard.life;
+            toBeHarmed = this.life;
             targetCard.baseCard.isHighlyToxic = false;
             console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}(${targetCard.attack}/${targetCard.life})】剧毒已使用`)
         } else if (targetCard.baseCard.hasPoison) {
             // 毒药，能一直毒
-            toBeHarmed = this.baseCard.life;
+            toBeHarmed = this.life;
             console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}(${targetCard.attack}/${targetCard.life})】烈药触发`)
         } else if (targetCard.baseCard.attackHighlyToxic) {
             // 遭受攻击时，剧毒 todo 放到防御触发器里面 改 剧毒=true
-            toBeHarmed = this.baseCard.life;
+            toBeHarmed = this.life;
             console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}(${targetCard.attack}/${targetCard.life})】遭受攻击时，剧毒`)
         } else {
-            toBeHarmed = targetCard.baseCard.attack;
+            toBeHarmed = targetCard.attack;
         }
 
         if (this.baseCard.isHighlyToxic) {
-            toCauseHarm = targetCard.baseCard.life;
+            toCauseHarm = targetCard.life;
             console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】剧毒已使用`)
             this.baseCard.isHighlyToxic = false;
         } else if (this.baseCard.hasPoison) {
             console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】烈药触发`)
-            toCauseHarm = targetCard.baseCard.life;
+            toCauseHarm = targetCard.life;
         } else {
             toCauseHarm = this.baseCard.attack;
         }

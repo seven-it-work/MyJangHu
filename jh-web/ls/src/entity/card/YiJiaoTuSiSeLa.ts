@@ -12,14 +12,19 @@ export default class YiJiaoTuSiSeLa extends BaseCard {
     isSneak = true;
 
     whenDeadTrigger(triggerObj: TriggerObj) {
-        var currentPlayer = triggerObj.currentPlayer;
+        const currentPlayer = triggerObj.currentPlayer;
         if (!currentPlayer) {
             return
         }
-        var baseCardObjs = currentPlayer.deadCardListInFighting.filter(card => card.baseCard.ethnicity.includes("恶魔"));
+        const currentCard = triggerObj.currentCard;
+        if (!currentCard) {
+            return
+        }
+        const baseCardObjs = currentPlayer.deadCardListInFighting.filter(card => card.baseCard.ethnicity.includes("恶魔"));
         if (baseCardObjs.length <= 0) {
             return;
         }
-        currentPlayer.addCard(baseCardObjs[0], triggerObj);
+        currentPlayer.addCard(baseCardObjs[0], currentPlayer.findNextCard(currentCard), triggerObj);
+        console.log(`(${currentPlayer.name})的【${currentCard.baseCard.name}(${currentCard.attack}/${currentCard.life})】触发亡语：召唤你在本场战斗中死亡的第一个恶魔【${baseCardObjs[0].baseCard.name}】，保留其额外效果。`)
     }
 }

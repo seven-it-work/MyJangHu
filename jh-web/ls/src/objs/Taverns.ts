@@ -41,9 +41,9 @@ export default class Taverns implements Serialization<Taverns> {
 
     removeBonus(baseCardObj: BaseCardObj, type: 'attack' | 'life') {
         if (type === 'attack') {
-            this.attackBonus = this.attackBonus.filter(b => b.baseCardObj.id !== baseCardObj.id)
+            this.attackBonus = this.attackBonus.filter(b => b.baseCardId !== baseCardObj.id)
         } else {
-            this.lifeBonus = this.lifeBonus.filter(b => b.baseCardObj.id !== baseCardObj.id)
+            this.lifeBonus = this.lifeBonus.filter(b => b.baseCardId !== baseCardObj.id)
         }
     }
 
@@ -140,6 +140,9 @@ export default class Taverns implements Serialization<Taverns> {
     }
 
     serialization(): string {
-        return serialize(this);
+        return JSON.stringify({
+            ...JSON.parse(JSON.stringify(this)),
+            currentCard: JSON.parse(serialize(this.currentCard))
+        });
     }
 }
