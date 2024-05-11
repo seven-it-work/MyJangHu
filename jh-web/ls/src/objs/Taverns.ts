@@ -3,6 +3,9 @@ import ContextObj from "./ContextObj";
 import BaseCard from "../entity/baseCard";
 import {TriggerObj} from "../entity/Trigger";
 import {Bonus} from "./Bonus";
+import {Serialization} from "../utils/SaveUtils";
+import SharedCardPool from "./SharedCardPool";
+import {serialize} from "class-transformer";
 
 /**
  * cardNumber 酒馆刷新卡片数量
@@ -18,7 +21,7 @@ export const GRADED_RULES = {
     6: {cardNumber: 6, upgradeExpenses: undefined, cardSize: 6},
     7: {cardNumber: 6, upgradeExpenses: undefined, cardSize: 6},
 }
-export default class Taverns {
+export default class Taverns implements Serialization<Taverns> {
     // 生命加成
     lifeBonus: Bonus[] = [];
     // 攻击加成
@@ -117,5 +120,26 @@ export default class Taverns {
                 card.isFreeze = false;
             }
         })
+    }
+
+    deserialize(json: any) {
+        if (typeof json === 'string') {
+            json = JSON.parse(json)
+        }
+        this.lifeBonus = json.lifeBonus
+        this.attackBonus = json.attackBonus
+        this.graded = json.graded
+        Object.keys(json.currentCard).forEach(k => {
+            this.currentCard.set(k, new BaseCardObj(undefined).deserialize(json.currentCard[k]))
+        })
+        this.freezeCardId = json.freezeCardId
+        this.refreshExpenses = json.refreshExpenses
+        this.freezeExpenses = json.freezeExpenses
+        this.currentUpgradeExpenses = json.currentUpgradeExpenses
+        return this;
+    }
+
+    serialization(): string {
+        return serialize(this);
     }
 }

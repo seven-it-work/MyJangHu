@@ -72,10 +72,16 @@ export default class PlayObj implements Serialization<PlayObj> {
         this.sharedCardPool = new SharedCardPool(undefined).deserialize(dataObj.sharedCardPool)
         this.playerObjList = dataObj.playerObjList.map(data => new Player(undefined, undefined).deserialize(data))
         this.currentPlayerInfo = new Player(undefined, undefined).deserialize(dataObj.currentPlayerInfo)
+        this.contextObj = new ContextObj(this.sharedCardPool).deserialize(dataObj.contextObj);
         return this;
     }
 
     serialization(): string {
-        return "";
+        return JSON.stringify({
+            sharedCardPool: JSON.parse(this.sharedCardPool.serialization()),
+            playerObjList: this.playerObjList.map(data => JSON.parse(data.serialization())),
+            currentPlayerInfo: JSON.parse(this.currentPlayerInfo.serialization()),
+            contextObj: JSON.parse(this.contextObj.serialization()),
+        });
     }
 }

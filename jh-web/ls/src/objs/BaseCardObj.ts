@@ -5,15 +5,19 @@ import Chance from 'chance'
 import {cloneDeep} from "lodash";
 import SharedCardPool from "./SharedCardPool";
 import Player from "./Player";
+import {Serialization} from "../utils/SaveUtils";
+import {serialize} from "class-transformer";
 
-export default class BaseCardObj implements Trigger {
+export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> {
     id: string;
     isFreeze: boolean = false;
     index: number;
 
-    constructor(baseCard: BaseCard) {
+    constructor(baseCard: BaseCard | undefined) {
+        if (baseCard) {
+            this.baseCard = cloneDeep(baseCard);
+        }
         this.id = new Chance().guid();
-        this.baseCard = cloneDeep(baseCard);
     }
 
     getOriginalVersion(sharedCardPool: SharedCardPool) {
@@ -326,5 +330,20 @@ export default class BaseCardObj implements Trigger {
 
     whenDefenseTrigger(triggerObj: TriggerObj) {
         this.baseCard.whenDefenseTrigger(this.triggerObj2BaseCard(triggerObj));
+    }
+
+    deserialize(json: any) {
+        if (typeof json === 'string') {
+            json = JSON.parse(json)
+        }
+        this.id = json.id
+        this.isFreeze = json.isFreeze
+        this.index = json.index
+        this.baseCard = SharedCardPool.initCardDb().getByName(json.baseCard.classType).deserialize(json.baseCard);
+        return this;
+    }
+
+    serialization(): string {
+        return serialize(this);
     }
 }

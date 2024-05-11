@@ -3,9 +3,11 @@ import {Trigger, TriggerObj} from "./Trigger";
 import BaseCardObj from "../objs/BaseCardObj";
 import {sum} from "lodash";
 import {Bonus} from "../objs/Bonus";
+import {Serialization} from "../utils/SaveUtils";
+import {serialize} from "class-transformer";
 
 
-export default abstract class BaseCard implements Trigger {
+export default abstract class BaseCard implements Trigger, Serialization<BaseCard> {
     classType: string = this.constructor.name
 
     tempId: string = '';
@@ -188,5 +190,50 @@ export default abstract class BaseCard implements Trigger {
     }
 
     whenDefenseTrigger(triggerObj: TriggerObj) {
+    }
+
+    deserialize(json: any) {
+        if (typeof json === 'string') {
+            json = JSON.parse(json)
+        }
+        this.classType = json.classType
+        this.tempId = json.tempId
+        this.name = json.name
+        this.isSell = json.isSell
+        this.type = json.type
+        this.spendingGoldCoin = json.spendingGoldCoin
+        this.canSold = json.canSold
+        this.salePrice = json.salePrice
+        this.ethnicity = json.ethnicity
+        this.accompanyingRace = json.accompanyingRace
+        this.attack = json.attack
+        this.life = json.life
+        this._injuriesReceived = json._injuriesReceived
+        this.graded = json.graded
+        this.description = json.description
+        this.otherDeadCounter = json.otherDeadCounter
+        this.otherDeadMaxCounter = json.otherDeadMaxCounter
+        this.isMockery = json.isMockery
+        this.isHighlyToxic = json.isHighlyToxic
+        this.hasPoison = json.hasPoison
+        this.attackHighlyToxic = json.attackHighlyToxic
+        this.isHolyShield = json.isHolyShield
+        this.isRebirth = json.isRebirth
+        this.version = json.version
+        this.isSpendLife = json.isSpendLife
+        this.isSneak = json.isSneak
+        this.refreshTimes = json.refreshTimes
+        this.remainRefreshTimes = json.remainRefreshTimes
+        this.isMagneticForce = json.isMagneticForce
+        this.magneticForceList = json.magneticForceList
+        this.numberAttack = json.numberAttack
+        this.isGold = json.isGold
+        this.lifeBonus = json.lifeBonus
+        this.attackBonus = json.attackBonus
+        return this;
+    }
+
+    serialization(): string {
+        return serialize(this);
     }
 }

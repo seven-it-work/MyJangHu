@@ -6,6 +6,7 @@ import {cloneDeep, groupBy} from "lodash";
 import {TriggerObj} from "../entity/Trigger";
 import SharedCardPool from "./SharedCardPool";
 import {Serialization} from "../utils/SaveUtils";
+import {serialize} from "class-transformer";
 
 export default class Player implements Serialization<Player> {
     get cardList(): BaseCardObj[] {
@@ -383,7 +384,7 @@ export default class Player implements Serialization<Player> {
      */
     startTheRound(triggerObj: TriggerObj) {
         this.isEndRound = false;
-        this.sanLianCheck();
+        this.sanLianCheck(triggerObj.contextObj.sharedCardPool);
         // 手牌影响
         Array.from(this._handCardMap.values()).forEach(card => card.whenStartRoundHandler({
             ...triggerObj,
@@ -423,11 +424,30 @@ export default class Player implements Serialization<Player> {
     }
 
     deserialize(json: any): Player {
-
+        if (typeof json === 'string') {
+            json = JSON.parse(json)
+        }
+        this.tavern = new Taverns().deserialize(json.tavern)
+        this.currentGoldCoin = json.currentGoldCoin
+        this.currentMaxGoldCoin = json.currentMaxGoldCoin
+        this.maxGoldCoinBonus = json.maxGoldCoinBonus
+        this.currentLife = json.currentLife
+        this.currentArmor = json.currentArmor
+        Object.keys(json._handCardMap).forEach(k => {
+            this._handCardMap.set(k, new BaseCardObj(undefined).deserialize(json._handCardMap[k]))
+        })
+        this._cardList = json._cardList.map(data=>new BaseCardObj(undefined).deserialize(data))
+        this.cardListInFighting = json._cardList.map(data=>new BaseCardObj(undefined).deserialize(data))
+        this.deadCardListInFighting = json._cardList.map(data=>new BaseCardObj(undefined).deserialize(data))
+        this.battleRoarExtraTriggers = json.battleRoarExtraTriggers
+        this.deadWordsExtraTriggers = json.deadWordsExtraTriggers
+        this.endRoundExtraTriggers = json.endRoundExtraTriggers
+        this.isEndRound = json.isEndRound
+        this.name = json.name
         return this;
     }
 
     serialization(): string {
-        return "";
+        return serialize(this);
     }
 }

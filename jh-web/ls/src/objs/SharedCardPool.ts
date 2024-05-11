@@ -4,6 +4,8 @@ import BaseCard from "../entity/baseCard";
 import {cloneDeep} from "lodash";
 import randomUtil from "../utils/RandomUtils.ts";
 import {Serialization} from "../utils/SaveUtils";
+import {deserialize, serialize} from "class-transformer";
+import BaseCardObj from "./BaseCardObj";
 
 class SharedCardPoolData implements Serialization<SharedCardPoolData> {
 
@@ -29,7 +31,8 @@ class SharedCardPoolData implements Serialization<SharedCardPoolData> {
         }
         this.graded = json.graded
         this.remainingQuantity = json.remainingQuantity
-        this.baseCard = new CardDb().getByName(json.baseCard)
+        SharedCardPool.initCardDb()
+        this.baseCard = SharedCardPool.initCardDb().getByName(json.baseCard.classType)
         return this;
     }
 
@@ -42,13 +45,20 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
     accompanyingRace: string[]
     pool: Map<string, SharedCardPoolData> = new Map<string, SharedCardPoolData>()
     cardDb: CardDb;
+    static CARD_DB: CardDb;
+
+    static initCardDb(): CardDb {
+        if (!SharedCardPool.CARD_DB) {
+            SharedCardPool.CARD_DB = new CardDb();
+        }
+        return SharedCardPool.CARD_DB
+    }
 
     constructor(accompanyingRace: string[] | undefined) {
-        const cardDb = new CardDb();
-        this.cardDb = cardDb;
+        this.cardDb = SharedCardPool.initCardDb();
         if (accompanyingRace) {
             this.accompanyingRace = accompanyingRace;
-            const baseCards: BaseCard[] = cardDb.listByAccompanyingRace(accompanyingRace);
+            const baseCards: BaseCard[] = this.cardDb.listByAccompanyingRace(accompanyingRace);
             baseCards.forEach(card => {
                 this.pool.set(card.constructor.name, new SharedCardPoolData(card.graded, GRADED_RULES[card.graded].cardSize, card))
             })
@@ -134,6 +144,6 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
     }
 
     serialization(): string {
-        return "";
+        return serialize(this);
     }
 }

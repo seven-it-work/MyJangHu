@@ -41,14 +41,11 @@ export default {
   },
   methods: {
     save() {
-      this.saveInfo = serialize(this.playObj);
-      const playObj1 = SaveUtils.load(this.saveInfo);
-      // this.playObj = result
+      this.saveInfo = SaveUtils.save(this.playObj);
 
     },
     reload() {
-      const playObj1 = SaveUtils.load(this.saveInfo);
-      console.log(playObj1)
+      this.playObj = SaveUtils.load(this.saveInfo);
     },
   },
 }

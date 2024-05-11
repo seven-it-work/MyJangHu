@@ -1,8 +1,5 @@
 import PlayObj from "../objs/PlayObj";
-import SharedCardPool from "../objs/SharedCardPool";
-import Taverns from "../objs/Taverns";
-import Player from "../objs/Player";
-import ContextObj from "../objs/ContextObj";
+
 
 export interface Serialization<T> {
     serialization(): string;
@@ -11,9 +8,13 @@ export interface Serialization<T> {
 }
 
 function load(json: string): PlayObj {
-    return undefined
+    return new PlayObj(undefined, undefined).deserialize(json)
+}
+
+function save(playObj: PlayObj): string {
+    return playObj.serialization();
 }
 
 export default {
-    load
+    load, save
 }
