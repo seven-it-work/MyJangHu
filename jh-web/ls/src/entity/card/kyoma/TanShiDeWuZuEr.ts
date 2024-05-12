@@ -1,7 +1,6 @@
 import BaseCard from "../../baseCard";
 import {TriggerObj} from "../../Trigger";
 import randomUtil from "../../../utils/RandomUtils.ts";
-import BaseCardObj from "../../../objs/BaseCardObj.ts";
 
 export default class TanShiDeWuZuEr extends BaseCard {
     name = "贪食的乌祖尔"
@@ -11,6 +10,7 @@ export default class TanShiDeWuZuEr extends BaseCard {
     graded = 5
     description = "<b>嘲讽</b>。在你使用一张恶魔牌后，吞食酒馆中的一个随从，获取其属性值。"
     isMockery = true;
+    version = ["v28.0.0.189384", "v29.2.0.198037"]
 
     whenOtherCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

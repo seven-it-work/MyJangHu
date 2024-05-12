@@ -1,7 +1,5 @@
 import BaseCard from "../../baseCard";
 import {TriggerObj} from "../../Trigger";
-import randomUtil from "../../../utils/RandomUtils.ts";
-import BaseCardObj from "../../../objs/BaseCardObj.ts";
 
 export default class LingHunHuiSuZhe extends BaseCard {
     name = "灵魂回溯者"
@@ -10,6 +8,8 @@ export default class LingHunHuiSuZhe extends BaseCard {
     life = 1
     graded = 2
     description = "在你的英雄受到伤害后，回溯该伤害并使本随从获取+1生命值"
+
+    version = ["v28.0.0.189384", "v29.2.0.198037"]
 
     whenPlayerInjuries(injuring: number,triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

@@ -41,9 +41,9 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
     otherDeadMaxCounter: number = 0;
     // 嘲讽
     isMockery: boolean = false;
-    // 是否剧毒，用完就没了
+    // 是否烈毒，用完就没了
     isHighlyToxic: boolean = false;
-    // 是否毒药，能一直毒
+    // 是否剧毒，能一直毒
     hasPoison: boolean = false;
     // 受攻击时，剧毒
     attackHighlyToxic: boolean = false;

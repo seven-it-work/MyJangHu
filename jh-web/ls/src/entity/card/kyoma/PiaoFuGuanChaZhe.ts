@@ -1,7 +1,5 @@
 import BaseCard from "../../baseCard";
 import {TriggerObj} from "../../Trigger";
-import randomUtil from "../../../utils/RandomUtils.ts";
-import BaseCardObj from "../../../objs/BaseCardObj.ts";
 
 export default class PiaoFuGuanChaZhe extends BaseCard {
     name = "漂浮观察者"
@@ -10,6 +8,8 @@ export default class PiaoFuGuanChaZhe extends BaseCard {
     life = 4
     graded = 4
     description = "每当你的英雄在你的回合受到伤害，便获得+2/+2。"
+
+    version = ["v28.0.0.189384", "v29.2.0.198037"]
 
     whenPlayerInjuries(injuring: number, triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

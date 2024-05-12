@@ -1,7 +1,6 @@
 import BaseCard from "../../baseCard";
 import {TriggerObj} from "../../Trigger";
 import randomUtil from "../../../utils/RandomUtils.ts";
-import BaseCardObj from "../../../objs/BaseCardObj.ts";
 
 export default class TiaoShiMoQuan extends BaseCard {
     name = "挑食魔犬"
@@ -10,6 +9,7 @@ export default class TiaoShiMoQuan extends BaseCard {
     life = 1
     graded = 1
     description = "<b>战吼</b>：随机吞噬酒馆一个随从，获取其属性值。"
+    version = ["v28.0.0.189384", "v29.2.0.198037"]
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
