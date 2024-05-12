@@ -1,7 +1,6 @@
 import ContextObj from "./ContextObj";
 import randomUtil from "../utils/RandomUtils";
 import Player from "./Player";
-import {cloneDeep} from "lodash";
 
 export default class FightObj {
     // 攻击发起人
@@ -133,6 +132,10 @@ export default class FightObj {
         let pickList = defenderPlayer.cardListInFighting.filter(card => !card.baseCard.isSneak).filter(card => card.baseCard.isMockery);
         if (pickList.length <= 0) {
             pickList = defenderPlayer.cardListInFighting.filter(card => !card.baseCard.isSneak)
+        }
+        //  这里为什么会为null
+        if (!attacker){
+            debugger
         }
         attacker.whenAttackTrigger({
             targetPlayer: defenderPlayer,
