@@ -25,7 +25,7 @@ export default class ZaoDongQiZhaZhe extends BaseCard {
             return
         }
         const baseCardObj = randomUtil.pickone(baseCardObjs);
-        baseCardObj.lifeBonus.push({
+        baseCardObj.baseCard.lifeBonus.push({
             markupValue: this.life,
             baseCardObj: currentCard,
         })

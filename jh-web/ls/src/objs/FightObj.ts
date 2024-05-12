@@ -121,10 +121,16 @@ export default class FightObj {
         if (isAttacker) {
             attackerPlayer = this.attackerPlayer;
             defenderPlayer = this.defenderPlayer;
+            if (this.attackerIndex >= attackerPlayer.cardListInFighting.length) {
+                this.attackerIndex = 0;
+            }
             index = this.attackerIndex;
         } else {
             defenderPlayer = this.attackerPlayer;
             attackerPlayer = this.defenderPlayer;
+            if (this.attackerIndex >= attackerPlayer.cardListInFighting.length) {
+                this.attackerIndex = 0;
+            }
             index = this.defenderIndex;
         }
         const attacker = attackerPlayer.cardListInFighting[index];

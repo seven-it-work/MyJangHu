@@ -265,7 +265,7 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
             console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】烈药触发`)
             toCauseHarm = targetCard.life;
         } else {
-            toCauseHarm = this.baseCard.attack;
+            toCauseHarm = this.attack;
         }
         this.healthChange(-toBeHarmed, {
             ...triggerObj,

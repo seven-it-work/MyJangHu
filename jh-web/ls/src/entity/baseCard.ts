@@ -83,7 +83,7 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
 
     getLife(): number {
         // 磁力加成
-        const magneticAddition = sum(this.magneticForceList.map(card => card.life)) || 0
+        const magneticAddition = sum(this.magneticForceList.map(card => card.getLife())) || 0
         const bonus = sum(this.lifeBonus.map(bonus => bonus.markupValue)) || 0
         let life = this.life
         if (this.isGold) {
@@ -94,7 +94,7 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
 
     getAttack(): number {
         // 磁力加成
-        const magneticAddition = sum(this.magneticForceList.map(card => card.attack)) || 0
+        const magneticAddition = sum(this.magneticForceList.map(card => card.getAttack())) || 0
         const bonus = sum(this.attackBonus.map(bonus => bonus.markupValue)) || 0
         let attack = this.attack
         if (this.isGold) {
