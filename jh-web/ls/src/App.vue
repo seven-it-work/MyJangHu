@@ -24,6 +24,7 @@ const playerList = []
 for (let i = 0; i < 2; i++) {
   const taverns = new Taverns();
   var player = new Player("玩家" + i, taverns);
+  player.currentGoldCoin = 99
   playerList.push(player)
   // 初始刷新
   taverns.refresh({contextObj: new ContextObj(sharedCardPool)})

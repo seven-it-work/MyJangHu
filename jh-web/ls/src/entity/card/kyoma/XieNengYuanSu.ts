@@ -1,6 +1,7 @@
-import BaseCard from "../baseCard";
-import ContextObj from "../../objs/ContextObj";
-import {TriggerObj} from "../Trigger";
+import BaseCard from "../../baseCard";
+import {TriggerObj} from "../../Trigger";
+import randomUtil from "../../../utils/RandomUtils.ts";
+import BaseCardObj from "../../../objs/BaseCardObj.ts";
 
 export default class XieNengYuanSu extends BaseCard {
     name = "邪能元素"

@@ -1,8 +1,7 @@
-import BaseCard from "../baseCard";
-import ContextObj from "../../objs/ContextObj";
-import randomUtil from "../../utils/RandomUtils";
-import BaseCardObj from "../../objs/BaseCardObj";
-import {TriggerObj} from "../Trigger";
+import BaseCard from "../../baseCard";
+import {TriggerObj} from "../../Trigger";
+import randomUtil from "../../../utils/RandomUtils.ts";
+import BaseCardObj from "../../../objs/BaseCardObj.ts";
 
 export default class JiXieJiaLaKeSuSi extends BaseCard {
     name = "机械加拉克苏斯"

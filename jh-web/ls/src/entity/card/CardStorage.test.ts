@@ -3,7 +3,7 @@ import {describe, expect, it} from "vitest";
 
 describe('CardStorage', () => {
     it('自动生成卡牌代码', function () {
-        const dir=""
+        const dir="kyoma"
         const s = "FenNuBianZhiZhe.test.ts\n" +
             "FenNuBianZhiZhe.ts\n" +
             "JiEDeFuMo.ts\n" +

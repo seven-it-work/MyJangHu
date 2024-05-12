@@ -1,6 +1,5 @@
-import BaseCard from "../baseCard";
-import ContextObj from "../../objs/ContextObj";
-import {TriggerObj} from "../Trigger";
+import BaseCard from "../../baseCard";
+import {TriggerObj} from "../../Trigger";
 
 export default class FenNuBianZhiZhe extends BaseCard {
     name = "愤怒编织者"

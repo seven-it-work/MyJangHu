@@ -1,7 +1,7 @@
-import BaseCard from "../baseCard";
-import ContextObj from "../../objs/ContextObj";
-import {TriggerObj} from "../Trigger";
-
+import BaseCard from "../../baseCard";
+import {TriggerObj} from "../../Trigger";
+import randomUtil from "../../../utils/RandomUtils.ts";
+import BaseCardObj from "../../../objs/BaseCardObj.ts";
 export default class YiJiaoTuSiSeLa extends BaseCard {
     name = "异教徒斯瑟拉"
     accompanyingRace = ["恶魔"]

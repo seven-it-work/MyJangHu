@@ -1,7 +1,7 @@
-import BaseCard from "../baseCard";
-import ContextObj from "../../objs/ContextObj";
-import randomUtil from "../../utils/RandomUtils";
-import {TriggerObj} from "../Trigger";
+import BaseCard from "../../baseCard";
+import {TriggerObj} from "../../Trigger";
+import randomUtil from "../../../utils/RandomUtils.ts";
+import BaseCardObj from "../../../objs/BaseCardObj.ts";
 
 export default class TanShiDeWuZuEr extends BaseCard {
     name = "贪食的乌祖尔"

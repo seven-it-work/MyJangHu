@@ -1,7 +1,7 @@
-import BaseCard from "../baseCard";
-import ContextObj from "../../objs/ContextObj.ts";
-import randomUtil from "../../utils/RandomUtils.ts";
-import {TriggerObj} from "../Trigger";
+import BaseCard from "../../baseCard";
+import {TriggerObj} from "../../Trigger";
+import randomUtil from "../../../utils/RandomUtils.ts";
+import BaseCardObj from "../../../objs/BaseCardObj.ts";
 
 export default class TiaoShiMoQuan extends BaseCard {
     name = "挑食魔犬"

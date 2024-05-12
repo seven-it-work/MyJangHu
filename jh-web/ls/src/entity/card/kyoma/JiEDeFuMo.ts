@@ -1,7 +1,6 @@
-import BaseCard from "../baseCard";
-import ContextObj from "../../objs/ContextObj";
-import randomUtil from "../../utils/RandomUtils";
-import {TriggerObj} from "../Trigger";
+import BaseCard from "../../baseCard";
+import {TriggerObj} from "../../Trigger";
+import randomUtil from "../../../utils/RandomUtils.ts";
 
 export default class JiEDeFuMo extends BaseCard {
     name = "饥饿的蝠魔"
