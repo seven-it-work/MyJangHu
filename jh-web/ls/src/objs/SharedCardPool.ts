@@ -106,7 +106,7 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
             }).map(data => data.baseCard);
     }
 
-    refreshRandom(cardNumber: number, graded: number): BaseCard[] {
+    refreshRandom(cardNumber: number, graded: number, gradedIsItEqual = false): BaseCard[] {
         if (cardNumber <= 0) {
             return []
         }
@@ -115,8 +115,14 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
             .filter(card => {
                 return card.remainingQuantity > 0;
             }).filter(card => {
+                if (gradedIsItEqual) {
+                    return card.baseCard.graded === graded;
+                }
                 return card.baseCard.graded <= graded
             }).map(card => card.baseCard)
+        if (cardNumber === 1) {
+            return [randomUtil.pick(list, cardNumber)]
+        }
         return randomUtil.pick(list, cardNumber);
     }
 

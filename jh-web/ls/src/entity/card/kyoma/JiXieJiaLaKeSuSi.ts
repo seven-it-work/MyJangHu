@@ -10,6 +10,10 @@ export default class JiXieJiaLaKeSuSi extends BaseCard {
     life = 15
     graded = 6
     description = "<b>战吼</b>：随机获取一张机械-恶魔牌。"
+    /**
+     * 这个版本只有一个机械-恶魔牌，这样就能无限循环获取，导致不公平bug
+     */
+    isSell = false
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

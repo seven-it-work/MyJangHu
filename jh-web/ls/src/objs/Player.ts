@@ -7,6 +7,7 @@ import {TriggerObj} from "../entity/Trigger";
 import SharedCardPool from "./SharedCardPool";
 import {Serialization} from "../utils/SaveUtils";
 import {serialize} from "class-transformer";
+import Sanlian from "../entity/card/spells/Sanlian";
 
 export default class Player implements Serialization<Player> {
 
@@ -63,7 +64,7 @@ export default class Player implements Serialization<Player> {
     addCardInHand(baseCardObj: BaseCardObj, sharedCardPool: SharedCardPool) {
         this._handCardMap.set(baseCardObj.id, baseCardObj);
         // 三连判定
-        if (!baseCardObj.baseCard.isGold) {
+        if (baseCardObj.baseCard.type === '随从' && !baseCardObj.baseCard.isGold) {
             this.sanLianCheck(sharedCardPool);
         }
     }
@@ -168,6 +169,9 @@ export default class Player implements Serialization<Player> {
     }
 
     canUseCard(cardObj: BaseCardObj): boolean {
+        if (cardObj.baseCard.type !== '随从') {
+            return true;
+        }
         if (cardObj.baseCard.isMagneticForce) {
             return this.cardList.length <= 7
         }
@@ -204,44 +208,54 @@ export default class Player implements Serialization<Player> {
         }
     }
 
-    useCard(cardObj: BaseCardObj, nextCard: BaseCardObj, triggerObj: TriggerObj) {
+    useCard(cardObj: BaseCardObj, nextCard: BaseCardObj | undefined, triggerObj: TriggerObj) {
         if (!this.canUseCard(cardObj)) {
             message.error({content: '最多有7个随从'});
             return
         }
         if (this._handCardMap.delete(cardObj.id)) {
-            // 磁力判断
-            if (cardObj.baseCard.isMagneticForce && nextCard && nextCard.baseCard.ethnicity.includes("机械")) {
-                debugger
-                nextCard.baseCard.magneticForceList.push(cardObj.baseCard);
-                return;
+            if (cardObj.baseCard.type === '随从') {
+                // 磁力判断
+                if (cardObj.baseCard.isMagneticForce && nextCard && nextCard.baseCard.ethnicity.includes("机械")) {
+                    debugger
+                    nextCard.baseCard.magneticForceList.push(cardObj.baseCard);
+                    return;
+                }
+                cardObj.whenCardUsedTrigger({
+                    ...triggerObj,
+                    currentPlayer: this,
+                    targetCard: cardObj,
+                });
+                this.cardList.forEach((v) => {
+                    v.whenOtherCardUsedTrigger({
+                        ...triggerObj,
+                        currentCard: v,
+                        currentPlayer: this,
+                        targetCard: cardObj,
+                    })
+                })
+                this._handCardMap.forEach((v) => {
+                    v.whenOtherHandlerCardUsedTrigger({
+                        ...triggerObj,
+                        currentCard: v,
+                        currentPlayer: this,
+                        targetCard: cardObj,
+                    })
+                })
+                this.addCard(cardObj, nextCard, {
+                    ...triggerObj,
+                    currentPlayer: this,
+                    currentCard: cardObj,
+                })
+                if (cardObj.baseCard.isGold) {
+                    // 使用金色卡，获得三连卡
+                    const sanlian = new Sanlian();
+                    sanlian.graded = Math.min(6, this.tavern.graded + 1)
+                    this.addCardInHand(new BaseCardObj(sanlian), triggerObj.contextObj.sharedCardPool)
+                }
+            } else {
+                cardObj.whenCardUsedTrigger(triggerObj);
             }
-            cardObj.whenCardUsedTrigger({
-                ...triggerObj,
-                currentPlayer: this,
-                targetCard: cardObj,
-            });
-            this.cardList.forEach((v) => {
-                v.whenOtherCardUsedTrigger({
-                    ...triggerObj,
-                    currentCard: v,
-                    currentPlayer: this,
-                    targetCard: cardObj,
-                })
-            })
-            this._handCardMap.forEach((v) => {
-                v.whenOtherHandlerCardUsedTrigger({
-                    ...triggerObj,
-                    currentCard: v,
-                    currentPlayer: this,
-                    targetCard: cardObj,
-                })
-            })
-            this.addCard(cardObj, nextCard, {
-                ...triggerObj,
-                currentPlayer: this,
-                currentCard: cardObj,
-            })
         }
     }
 

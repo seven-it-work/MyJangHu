@@ -101,14 +101,23 @@ export default defineComponent({
         this.isNeedSelectOpen = true;
         this.isNeedSelectTitle = cardObj.baseCard.description;
         return
+      } else if (cardObj.baseCard.type === '随从') {
+        this.open = true
+        const tempCardList = [{}]
+        for (let i = 0; i < this.playObj.currentPlayerInfo.cardList.length; i++) {
+          tempCardList.push(this.playObj.currentPlayerInfo.cardList[i])
+          tempCardList.push({})
+        }
+        this.tempCardList = tempCardList;
+        return;
+      } else {
+        // 直接使用
+        this.playObj.currentPlayerInfo.useCard(cardObj, undefined, {
+          contextObj: this.playObj.contextObj,
+          currentPlayer: this.playObj.currentPlayerInfo,
+          currentCard: cardObj
+        })
       }
-      this.open = true
-      const tempCardList = [{}]
-      for (let i = 0; i < this.playObj.currentPlayerInfo.cardList.length; i++) {
-        tempCardList.push(this.playObj.currentPlayerInfo.cardList[i])
-        tempCardList.push({})
-      }
-      this.tempCardList = tempCardList;
     },
     useCard() {
       let nextCard = undefined;

@@ -88,4 +88,42 @@ CardStorage.set(WeiXingJiQiRen.name, WeiXingJiQiRen);
 CardStorage.set(WeiXingMuNaiYi.name, WeiXingMuNaiYi);
 CardStorage.set(ZiShiYingLuZhang.name, ZiShiYingLuZhang);
 
+
+import BaiGeErGeGuoWang from "./fishPeople/BaiGeErGeGuoWang";
+import ChaoXiXianZhiMoGeEr from "./fishPeople/ChaoXiXianZhiMoGeEr";
+import CuXinDeTunJiZhe from "./fishPeople/CuXinDeTunJiZhe";
+import DiDiaoTiQinYuRen from "./fishPeople/DiDiaoTiQinYuRen";
+import GeJuYiShuJia from "./fishPeople/GeJuYiShuJia";
+import HeChangYuRen from "./fishPeople/HeChangYuRen";
+import LieYanFeiYu from "./fishPeople/LieYanFeiYu";
+import ManYuChiHou from "./fishPeople/ManYuChiHou";
+import MoLaKeLiSi from "./fishPeople/MoLaKeLiSi";
+import NanChanDeShiShiYuRen from "./fishPeople/NanChanDeShiShiYuRen";
+import ShiTangLieRen from "./fishPeople/ShiTangLieRen";
+import TaDe from "./fishPeople/TaDe";
+import XiaoXiaYan from "./fishPeople/XiaoXiaYan";
+import XieQiDaoHangYuan from "./fishPeople/XieQiDaoHangYuan";
+import XiongEDeMiShiZhe from "./fishPeople/XiongEDeMiShiZhe";
+import XunBaoYuRen from "./fishPeople/XunBaoYuRen";
+import ZaiKuaiYuRen from "./fishPeople/ZaiKuaiYuRen";
+import ZhaoZeQianFeng from "./fishPeople/ZhaoZeQianFeng";
+CardStorage.set(BaiGeErGeGuoWang.name, BaiGeErGeGuoWang);
+CardStorage.set(ChaoXiXianZhiMoGeEr.name, ChaoXiXianZhiMoGeEr);
+CardStorage.set(CuXinDeTunJiZhe.name, CuXinDeTunJiZhe);
+CardStorage.set(DiDiaoTiQinYuRen.name, DiDiaoTiQinYuRen);
+CardStorage.set(GeJuYiShuJia.name, GeJuYiShuJia);
+CardStorage.set(HeChangYuRen.name, HeChangYuRen);
+CardStorage.set(LieYanFeiYu.name, LieYanFeiYu);
+CardStorage.set(ManYuChiHou.name, ManYuChiHou);
+CardStorage.set(MoLaKeLiSi.name, MoLaKeLiSi);
+CardStorage.set(NanChanDeShiShiYuRen.name, NanChanDeShiShiYuRen);
+CardStorage.set(ShiTangLieRen.name, ShiTangLieRen);
+CardStorage.set(TaDe.name, TaDe);
+CardStorage.set(XiaoXiaYan.name, XiaoXiaYan);
+CardStorage.set(XieQiDaoHangYuan.name, XieQiDaoHangYuan);
+CardStorage.set(XiongEDeMiShiZhe.name, XiongEDeMiShiZhe);
+CardStorage.set(XunBaoYuRen.name, XunBaoYuRen);
+CardStorage.set(ZaiKuaiYuRen.name, ZaiKuaiYuRen);
+CardStorage.set(ZhaoZeQianFeng.name, ZhaoZeQianFeng);
+
 export default CardStorage
