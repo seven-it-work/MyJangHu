@@ -92,6 +92,17 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
         return life - this._injuriesReceived + magneticAddition + bonus
     }
 
+    getPrimitiveLife(): number {
+        // 磁力加成
+        const magneticAddition = sum(this.magneticForceList.map(card => card.getPrimitiveLife())) || 0
+        const bonus = sum(this.lifeBonus.map(bonus => bonus.markupValue)) || 0
+        let life = this.life
+        if (this.isGold) {
+            life = life * 2;
+        }
+        return life + magneticAddition + bonus
+    }
+
     getAttack(): number {
         // 磁力加成
         const magneticAddition = sum(this.magneticForceList.map(card => card.getAttack())) || 0

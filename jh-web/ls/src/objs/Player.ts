@@ -266,6 +266,7 @@ export default class Player implements Serialization<Player> {
     saleCard(cardObj: BaseCardObj, context: ContextObj) {
         if (this.cardList.map(card => card.id).includes(cardObj.id)) {
             this.cardList = this.cardList.filter(card => card.id !== cardObj.id)
+            console.log(`(${this.name})出售【${cardObj.baseCard.name}(${cardObj.attack}/${cardObj.life})】`)
             this.currentGoldCoin += cardObj.baseCard.salePrice;
             this.tavern.saleCard(cardObj, context)
             cardObj.whenSaleCardTrigger({

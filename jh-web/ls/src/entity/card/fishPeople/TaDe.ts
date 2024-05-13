@@ -1,6 +1,7 @@
 import BaseCard from "../../baseCard";
 import {TriggerObj} from "../../Trigger";
 import randomUtil from "../../../utils/RandomUtils";
+import BaseCardObj from "../../../objs/BaseCardObj";
 
 export default class TaDe extends BaseCard {
     name = "塔德"
@@ -24,11 +25,11 @@ export default class TaDe extends BaseCard {
             // 发现完了，只能发现1级鱼人
             baseCards = triggerObj.contextObj.sharedCardPool.listByEthnicity(['鱼人'], 1);
         }
-        const baseCard = randomUtil.pickone(baseCards);
+        const baseCard: BaseCard = randomUtil.pickone(baseCards);
         if (!baseCard) {
             return;
         }
-        currentPlayer.addCardInHand(baseCard, triggerObj.contextObj.sharedCardPool)
+        currentPlayer.addCardInHand(new BaseCardObj(baseCard), triggerObj.contextObj.sharedCardPool)
     }
 
 }

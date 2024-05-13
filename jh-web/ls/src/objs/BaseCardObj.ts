@@ -98,7 +98,7 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
                 console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】的圣盾失效`)
             }
             console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】遭受${number}伤害`)
-            this.baseCard.life += number;
+            this.baseCard.injuriesReceived(-number);
             if (this.isSurviving()) {
                 return;
             }
@@ -108,7 +108,7 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
             // 复生，随从原本属性
             if (this.baseCard.isRebirth) {
                 this.baseCard = triggerObj.contextObj.sharedCardPool.getByName(this.baseCard.classType)
-                this.baseCard.life = 1;
+                this.baseCard.injuriesReceived(this.baseCard.getPrimitiveLife() - 1);
                 this.baseCard.isRebirth = false;
                 console.log(`${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】复生`)
             } else {
@@ -286,6 +286,15 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
             this.whenKillOneTrigger({
                 ...triggerObj,
                 targetCard: targetCard,
+            })
+        }
+        if (!this.isSurviving()) {
+            targetCard.whenKillOneTrigger({
+                ...triggerObj,
+                currentPlayer: targetPlayer,
+                targetPlayer: currentPlayer,
+                currentCard: targetCard,
+                targetCard: this
             })
         }
     }

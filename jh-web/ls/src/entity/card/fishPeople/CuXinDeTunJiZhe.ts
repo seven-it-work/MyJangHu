@@ -19,6 +19,7 @@ export default class CuXinDeTunJiZhe extends BaseCard {
         if (!currentCard) {
             return
         }
+        console.log(`(${currentPlayer.name})的【${this.name}】触发：当你出售本随从时，使一个友方鱼人获得本随从的属性值。`)
         const baseCardObjs = currentPlayer.cardList.filter(item => item.baseCard.ethnicity.includes('鱼人'));
         if (baseCardObjs.length <= 0) {
             return;
@@ -30,7 +31,7 @@ export default class CuXinDeTunJiZhe extends BaseCard {
             baseCardName: this.name,
         })
         baseCardObj.baseCard.lifeBonus.push({
-            markupValue: currentCard.attack,
+            markupValue: currentCard.life,
             baseCardId: currentCard.id,
             baseCardName: this.name,
         })

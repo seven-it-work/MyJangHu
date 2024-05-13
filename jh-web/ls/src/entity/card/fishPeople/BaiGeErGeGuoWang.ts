@@ -19,7 +19,7 @@ export default class BaiGeErGeGuoWang extends BaseCard {
         if (!currentCard) {
             return
         }
-        console.log(`${currentPlayer.name})的【${this.name}】触发战吼：使你的其他鱼人获得+2/+3。`)
+        console.log(`(${currentPlayer.name})的【${this.name}】触发战吼：使你的其他鱼人获得+2/+3。`)
         const baseCardObjs = currentPlayer.getCardList().filter(card => card.baseCard.ethnicity.includes('鱼人')).filter(card => card.id !== currentCard.id);
         if (baseCardObjs.length <= 0) {
             return;

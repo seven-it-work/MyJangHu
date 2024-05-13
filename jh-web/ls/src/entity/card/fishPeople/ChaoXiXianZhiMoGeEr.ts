@@ -25,6 +25,7 @@ export default class ChaoXiXianZhiMoGeEr extends BaseCard {
         if (!currentCard) {
             return
         }
+        console.log(`(${currentPlayer.name})的【${this.name}】触发每当本随从消灭一个随从时，使你手牌中的张随从牌获得被消灭随从的最大属性值`)
         const baseCardObjs = currentPlayer.handCardList.filter(item => item.baseCard.type === '随从');
         if (baseCardObjs.length <= 0) {
             return;
@@ -36,7 +37,7 @@ export default class ChaoXiXianZhiMoGeEr extends BaseCard {
             baseCardName: this.name,
         })
         baseCardObj.baseCard.lifeBonus.push({
-            markupValue: targetCard.life,
+            markupValue: targetCard.baseCard.getPrimitiveLife(),
             baseCardId: currentCard.id,
             baseCardName: this.name,
         })
