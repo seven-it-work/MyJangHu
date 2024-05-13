@@ -195,6 +195,10 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
     whenDefenseTrigger(triggerObj: TriggerObj) {
     }
 
+    whenKillOneTrigger(triggerObj: TriggerObj) {
+
+    }
+
     deserialize(json: any) {
         if (typeof json === 'string') {
             json = JSON.parse(json)
@@ -240,5 +244,8 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
 
     serialization(): string {
         return serialize(this);
+    }
+
+    whenStartFightingTrigger(triggerObj: TriggerObj) {
     }
 }

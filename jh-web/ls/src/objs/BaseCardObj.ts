@@ -105,8 +105,9 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
             console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】死亡`)
             // 加入死亡池
             currentPlayer.deadCardListInFighting.push(this)
-            // 复生
+            // 复生，随从原本属性
             if (this.baseCard.isRebirth) {
+                this.baseCard = triggerObj.contextObj.sharedCardPool.getByName(this.baseCard.classType)
                 this.baseCard.life = 1;
                 this.baseCard.isRebirth = false;
                 console.log(`${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】复生`)
@@ -281,6 +282,12 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
             currentCard: targetCard,
             targetCard: this
         })
+        if (!targetCard.isSurviving()) {
+            this.whenKillOneTrigger({
+                ...triggerObj,
+                targetCard: targetCard,
+            })
+        }
     }
 
     attacking(triggerObj: TriggerObj) {
@@ -330,6 +337,14 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
 
     whenDefenseTrigger(triggerObj: TriggerObj) {
         this.baseCard.whenDefenseTrigger(this.triggerObj2BaseCard(triggerObj));
+    }
+
+    whenKillOneTrigger(triggerObj: TriggerObj) {
+        this.baseCard.whenKillOneTrigger(this.triggerObj2BaseCard(triggerObj));
+    }
+
+    whenStartFightingTrigger(triggerObj: TriggerObj) {
+        this.baseCard.whenStartFightingTrigger(this.triggerObj2BaseCard(triggerObj));
     }
 
     deserialize(json: any) {

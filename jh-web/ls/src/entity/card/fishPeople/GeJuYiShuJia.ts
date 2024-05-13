@@ -1,4 +1,6 @@
 import BaseCard from "../../baseCard";
+import {TriggerObj} from "../../Trigger";
+import randomUtils from "../../../utils/RandomUtils";
 
 export default class GeJuYiShuJia extends BaseCard {
     name = "歌剧异术家"
@@ -8,5 +10,18 @@ export default class GeJuYiShuJia extends BaseCard {
     graded = 5
     description = "烈毒。亡语：使一个友方鱼人获得烈毒。"
     isHighlyToxic = true
+
+    whenDeadTrigger(triggerObj: TriggerObj) {
+        const currentPlayer = triggerObj.currentPlayer;
+        if (!currentPlayer) {
+            return
+        }
+        const cardList = currentPlayer.getCardList().filter(card => card.baseCard.ethnicity.includes('鱼人'));
+        if (cardList.length <= 0) {
+            return;
+        }
+        const baseCardObj = randomUtils.pickone(cardList);
+        baseCardObj.isHighlyToxic = triggerObj;
+    }
 }
 

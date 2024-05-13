@@ -65,39 +65,45 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
         }
     }
 
-    listByEthnicity(ethnicity: string[], levelLimits: number | undefined = undefined, isMatchAll = false): BaseCard[] {
+    listByEthnicity(ethnicity: string[], graded: number | undefined = undefined, isMatchAll = false, checkRemainingQuantity: boolean = false): BaseCard[] {
         return Array.from(this.pool.values())
-            .filter(card=>card.baseCard.isSell)
+            .filter(card => card.baseCard.isSell)
             .filter(card => {
-            if (isMatchAll) {
-                const ethnicityData = ethnicity.filter(str => {
-                    return card.baseCard.ethnicity.includes(str)
-                }).length
-                return ethnicityData === ethnicity.length;
-            } else {
-                return ethnicity.filter(str => {
-                    return card.baseCard.ethnicity.includes(str)
-                }).length > 0;
-            }
-        }).filter(data => {
-            if (levelLimits) {
-                return data.baseCard.graded <= levelLimits;
-            }
-            return true
-        }).map(data => data.baseCard);
+                if (isMatchAll) {
+                    const ethnicityData = ethnicity.filter(str => {
+                        return card.baseCard.ethnicity.includes(str)
+                    }).length
+                    return ethnicityData === ethnicity.length;
+                } else {
+                    return ethnicity.filter(str => {
+                        return card.baseCard.ethnicity.includes(str)
+                    }).length > 0;
+                }
+            }).filter(data => {
+                if (graded) {
+                    return data.baseCard.graded <= graded;
+                }
+                return true
+            }).filter(data => {
+                if (checkRemainingQuantity) {
+                    return data.remainingQuantity > 0;
+                }
+                return true
+            })
+            .map(data => data.baseCard);
     }
 
     listMagneticForceCard(levelLimits: number | undefined = undefined): BaseCard[] {
         return Array.from(this.pool.values())
-            .filter(card=>card.baseCard.isSell)
+            .filter(card => card.baseCard.isSell)
             .filter(card => {
-            return card.baseCard.isMagneticForce;
-        }).filter(data => {
-            if (levelLimits) {
-                return data.baseCard.graded <= levelLimits;
-            }
-            return true
-        }).map(data => data.baseCard);
+                return card.baseCard.isMagneticForce;
+            }).filter(data => {
+                if (levelLimits) {
+                    return data.baseCard.graded <= levelLimits;
+                }
+                return true
+            }).map(data => data.baseCard);
     }
 
     refreshRandom(cardNumber: number, graded: number): BaseCard[] {
@@ -105,12 +111,12 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
             return []
         }
         const list = Array.from(this.pool.values())
-            .filter(card=>card.baseCard.isSell)
+            .filter(card => card.baseCard.isSell)
             .filter(card => {
-            return card.remainingQuantity > 0;
-        }).filter(card => {
-            return card.baseCard.graded <= graded
-        }).map(card => card.baseCard)
+                return card.remainingQuantity > 0;
+            }).filter(card => {
+                return card.baseCard.graded <= graded
+            }).map(card => card.baseCard)
         return randomUtil.pick(list, cardNumber);
     }
 

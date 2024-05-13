@@ -40,3 +40,5 @@ export default class FenNuBianZhiZhe extends BaseCard {
     }
 }
 
+export  class FenNuBianZhiZheV28 extends FenNuBianZhiZhe{}
+

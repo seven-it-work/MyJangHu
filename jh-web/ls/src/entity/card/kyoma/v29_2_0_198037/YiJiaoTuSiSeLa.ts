@@ -1,6 +1,6 @@
-import YiJiaoTuSiSeLa from "../YiJiaoTuSiSeLa.ts";
+import {YiJiaoTuSiSeLaV28} from "../YiJiaoTuSiSeLa.ts";
 
-export default class YiJiaoTuSiSeLaV29 extends YiJiaoTuSiSeLa {
+export default class YiJiaoTuSiSeLa extends YiJiaoTuSiSeLaV28 {
     attack = 11
     life = 3
     graded = 6

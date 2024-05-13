@@ -28,6 +28,6 @@ export default class CardDb {
     }
 
     getByName(name: String): BaseCard {
-        return cloneDeep(this.cardMap.get(name));
+        return <BaseCard>cloneDeep(this.cardMap.get(name));
     }
 }

@@ -134,4 +134,14 @@ export interface Trigger {
      * 当前其他随从圣盾消失时
      */
     whenOtherHolyShieldDisappears(triggerObj: TriggerObj);
+
+    /**
+     * 当消灭一个随从时
+     */
+    whenKillOneTrigger(triggerObj: TriggerObj);
+
+    /**
+     * 战斗开始时
+     */
+    whenStartFightingTrigger(triggerObj: TriggerObj);
 }

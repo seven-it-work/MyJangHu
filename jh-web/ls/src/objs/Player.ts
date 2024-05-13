@@ -179,52 +179,27 @@ export default class Player implements Serialization<Player> {
     }
 
     addCard(cardObj: BaseCardObj, nextCard: BaseCardObj | undefined, triggerObj: TriggerObj) {
-        if (this.isEndRound) {
-            // 回合结束完成，召唤都在战场上
-            if (this.cardListInFighting.length < 7) {
-                // 召唤触发器
-                cardObj.whenSummonedTrigger({
+        const cardList = this.getCardList();
+        if (cardList.length < 7) {
+            // 召唤触发器
+            cardObj.whenSummonedTrigger({
+                ...triggerObj,
+                currentPlayer: this,
+                currentCard: cardObj,
+            })
+            cardList.forEach(card => {
+                card.whenOtherSummonedTrigger({
                     ...triggerObj,
                     currentPlayer: this,
-                    currentCard: cardObj,
+                    currentCard: card,
+                    targetCard: cardObj
                 })
-                this.cardListInFighting.forEach(card => {
-                    card.whenOtherSummonedTrigger({
-                        ...triggerObj,
-                        currentPlayer: this,
-                        currentCard: card,
-                        targetCard: cardObj
-                    })
-                })
-                if (nextCard) {
-                    const nextCardIndex = this.cardListInFighting.findIndex((card) => card.id === nextCard.id)
-                    this.cardListInFighting.splice(nextCardIndex, 0, cardObj);
-                } else {
-                    this.cardListInFighting.push(cardObj)
-                }
-            }
-        } else {
-            if (this.cardList.length < 7) {
-                // 召唤触发器
-                cardObj.whenSummonedTrigger({
-                    ...triggerObj,
-                    currentPlayer: this,
-                    currentCard: cardObj,
-                })
-                this.cardList.forEach(card => {
-                    card.whenOtherSummonedTrigger({
-                        ...triggerObj,
-                        currentPlayer: this,
-                        currentCard: card,
-                        targetCard: cardObj
-                    })
-                })
-                if (nextCard) {
-                    const nextCardIndex = this.cardList.findIndex((card) => card.id === nextCard.id)
-                    this.cardList.splice(nextCardIndex, 0, cardObj);
-                } else {
-                    this.cardList.push(cardObj)
-                }
+            })
+            if (nextCard) {
+                const nextCardIndex = cardList.findIndex((card) => card.id === nextCard.id)
+                cardList.splice(nextCardIndex, 0, cardObj);
+            } else {
+                cardList.push(cardObj)
             }
         }
     }
@@ -461,20 +436,20 @@ export default class Player implements Serialization<Player> {
         });
     }
 
-    findNextCard(currentCard: BaseCardObj): BaseCardObj | undefined {
+    getCardList() {
         if (this.isEndRound) {
-            // 回合结束完成，召唤都在战场上
-            const number = this.cardListInFighting.findIndex(value => value.id === currentCard.id);
-            if (number >= 0 && number < this.cardListInFighting.length) {
-                return this.cardListInFighting[number]
-            }
-            return undefined
+            return this.cardListInFighting
         } else {
-            const number = this.cardList.findIndex(value => value.id === currentCard.id);
-            if (number >= 0 && number < this.cardList.length) {
-                return this.cardList[number]
-            }
-            return undefined
+            return this.cardList;
         }
+    }
+
+    findNextCard(currentCard: BaseCardObj): BaseCardObj | undefined {
+        const cardList = this.getCardList();
+        const number = cardList.findIndex(value => value.id === currentCard.id);
+        if (number >= 0 && number < cardList.length) {
+            return cardList[number]
+        }
+        return undefined
     }
 }

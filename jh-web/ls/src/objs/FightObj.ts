@@ -19,6 +19,19 @@ export default class FightObj {
         this.attackerPlayer = attackerPlayer;
         this.defenderPlayer = defenderPlayer;
         this.contextObj = contextObj;
+        // 触发战斗开始时
+        this.attackerPlayer.cardListInFighting.forEach(card => card.whenStartFightingTrigger({
+            contextObj: contextObj,
+            currentPlayer: attackerPlayer,
+            targetPlayer: defenderPlayer,
+            currentCard: card
+        }))
+        this.defenderPlayer.cardListInFighting.forEach(card => card.whenStartFightingTrigger({
+            contextObj: contextObj,
+            currentPlayer: defenderPlayer,
+            targetPlayer: attackerPlayer,
+            currentCard: card
+        }))
     }
 
     doFighting() {
@@ -140,7 +153,7 @@ export default class FightObj {
             pickList = defenderPlayer.cardListInFighting.filter(card => !card.baseCard.isSneak)
         }
         //  这里为什么会为null
-        if (!attacker){
+        if (!attacker) {
             debugger
         }
         attacker.whenAttackTrigger({
