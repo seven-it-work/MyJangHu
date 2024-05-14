@@ -10,15 +10,20 @@ export default class LieYanFeiYu extends BaseCard {
     description = "在你使用一张战吼随从牌后，获得+1/+1。"
 
     whenOtherCardUsedTrigger(triggerObj: TriggerObj) {
-        var targetCard = triggerObj.targetCard;
+        const targetCard = triggerObj.targetCard;
         if (!targetCard) {
             return
         }
-        var currentCard = triggerObj.currentCard;
+        const currentPlayer = triggerObj.currentPlayer;
+        if (!currentPlayer) {
+            return
+        }
+        const currentCard = triggerObj.currentCard;
         if (!currentCard) {
             return
         }
         if (targetCard.baseCard.description.includes('战吼')) {
+            console.log(`(${currentPlayer.name})的【${this.name}】检测到战吼：在你使用一张战吼随从牌后，获得+1/+1。`)
             this.attackBonus.push({baseCardId: currentCard.id, baseCardName: currentCard.baseCard.name, markupValue: 1})
             this.lifeBonus.push({baseCardId: currentCard.id, baseCardName: currentCard.baseCard.name, markupValue: 1})
         }

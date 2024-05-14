@@ -122,7 +122,7 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
     }
 
     isSurviving() {
-        return this.getLife() > this._injuriesReceived;
+        return this.getPrimitiveLife() > this._injuriesReceived;
     }
 
 

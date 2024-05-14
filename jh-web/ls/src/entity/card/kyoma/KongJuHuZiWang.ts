@@ -2,6 +2,7 @@ import BaseCard from "../../baseCard";
 import {TriggerObj} from "../../Trigger";
 import randomUtil from "../../../utils/RandomUtils.ts";
 import BaseCardObj from "../../../objs/BaseCardObj.ts";
+import Coin from "../spells/Coin";
 
 export default class KongJuHuZiWang extends BaseCard {
     name = "恐惧胡子王"
@@ -17,7 +18,7 @@ export default class KongJuHuZiWang extends BaseCard {
             return
         }
         currentPlayer.changeLife(-1, triggerObj)
-        // todo 铸币魔法牌
-        // context.player.handCardMap.set()
+        const baseCardObj = new BaseCardObj(new Coin());
+        currentPlayer.addCardInHand(baseCardObj, triggerObj.contextObj.sharedCardPool)
     }
 }

@@ -21,6 +21,7 @@ export default class XiaoGuiQiuTu extends BaseCard {
         if (!currentCard) {
             return
         }
+        console.log(`(${currentPlayer.name})的【${this.name}】触发：亡语：召唤一个1/1的小鬼。`)
         currentPlayer.addCard(new BaseCardObj(triggerObj.contextObj.sharedCardPool.getByName("XiaoGui")),currentPlayer.findNextCard(currentCard),triggerObj);
     }
 }

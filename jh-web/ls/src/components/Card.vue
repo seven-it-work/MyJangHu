@@ -1,14 +1,15 @@
 <template>
-  <a-card hoverable style="width: 180px;" body-style="padding:10px">
+  <a-card hoverable style="width: 180px;" body-style="padding:10px"
+          :style="cardObj.isFreeze?'border: 3px slateblue solid':''">
     <template #actions>
-      <Tooltip :is-html="true" :disable="(cardObj.baseCard.attackBonus.length+cardObj.baseCard.magneticForceList)<=0"
+      <Tooltip :is-html="true" :disable="disableAttackTips(cardObj)"
                :title="attackTips(cardObj)">
         <div>攻击力：{{ cardObj.attack }}</div>
       </Tooltip>
       <div>
         <div v-for="str in cardObj.baseCard.ethnicity" :key="str">{{ str }}</div>
       </div>
-      <Tooltip :is-html="true" :disable="(cardObj.baseCard.lifeBonus.length+cardObj.baseCard.magneticForceList)<=0"
+      <Tooltip :is-html="true" :disable="disableLifeTips(cardObj)"
                :title="lifeTips(cardObj)">
         <div>生命值：{{ cardObj.life }}</div>
       </Tooltip>
@@ -43,6 +44,7 @@ import BaseCardObj from "../objs/BaseCardObj";
 import Tooltip from "./Tooltip.vue";
 import {groupBy} from "lodash";
 import randomUtil from "../utils/RandomUtils";
+import Taverns from "../objs/Taverns";
 
 export default {
   name: "Card",
@@ -52,17 +54,55 @@ export default {
       type: Object as PropType<BaseCardObj>,
       required: true,
     },
+    taverns: {
+      type: Object as PropType<Taverns>,
+      required: false,
+    },
   },
   methods: {
-    attackTips(cardObj: BaseCardObj) {
+    disableAttackTips(cardObj: BaseCardObj) {
+      return this.disableTips(cardObj, "attack")
+    },
+    disableLifeTips(cardObj: BaseCardObj) {
+      return this.disableTips(cardObj, "life")
+    },
+    disableTips(cardObj: BaseCardObj, type: 'life' | 'attack') {
+      let len = cardObj.baseCard.magneticForceList.length
+      if (type === 'life') {
+        len += cardObj.baseCard.lifeBonus.length
+        len += this.taverns?.lifeBonus.length || 0
+      }
+      if (type === 'attack') {
+        len += cardObj.baseCard.attackBonus.length
+        len += this.taverns?.attackBonus.length || 0
+      }
+      return len <= 0
+    },
+    toolTips(cardObj: BaseCardObj, type: 'life' | 'attack') {
+      let bonus = []
       const magneticForceList = cardObj.baseCard.magneticForceList.map(card => {
         return {
-          markupValue: card.attack,
+          markupValue: type === "life" ? card.life : card.attack,
           baseCardId: card.tempId || randomUtil.guid(),
           baseCardName: card.name,
         }
       })
-      const result = groupBy([...cardObj.baseCard.attackBonus, ...magneticForceList], (card) => {
+      bonus.push(...magneticForceList);
+      if (this.taverns) {
+        if (type === "attack" && this.taverns.attackBonus) {
+          bonus.push(...this.taverns.attackBonus)
+        }
+        if (type === 'life' && this.taverns.lifeBonus) {
+          bonus.push(...this.taverns.lifeBonus)
+        }
+      }
+      if (type === "life") {
+        bonus.push(...cardObj.baseCard.lifeBonus)
+      }
+      if (type === "attack") {
+        bonus.push(...cardObj.baseCard.attackBonus)
+      }
+      const result = groupBy(bonus, (card) => {
         return card.baseCardName
       })
       return Object.keys(result).map(key => {
@@ -70,21 +110,11 @@ export default {
         return key + ":" + (number > 0 ? "+" : "-") + number
       })
     },
+    attackTips(cardObj: BaseCardObj) {
+      return this.toolTips(cardObj, 'attack')
+    },
     lifeTips(cardObj: BaseCardObj) {
-      const magneticForceList = cardObj.baseCard.magneticForceList.map(card => {
-        return {
-          markupValue: card.life,
-          baseCardId: card.tempId || randomUtil.guid(),
-          baseCardName: card.name,
-        }
-      })
-      const result = groupBy([...cardObj.baseCard.lifeBonus, ...magneticForceList], (card) => {
-        return card.baseCardName
-      })
-      return Object.keys(result).map(key => {
-        const number = result[key].map(data => data.markupValue).reduce((sum, data) => sum + data);
-        return key + ":" + (number > 0 ? "+" : "-") + number
-      })
+      return this.toolTips(cardObj, 'life')
     }
   }
 }

@@ -8,8 +8,8 @@ import FightObj from "../../../objs/FightObj";
 import {cloneDeep} from "lodash";
 
 
-describe('ChaoXiXianZhiMoGeEr', () => {
-    it('should whenKillOneTrigger', function () {
+describe('LieYanFeiYu', () => {
+    it('should whenOtherCardUsedTrigger', function () {
         try {
             const sharedCardPool = new SharedCardPool(['恶魔', '机械', '鱼人']);
             const contextObj = new ContextObj(sharedCardPool);
@@ -18,28 +18,21 @@ describe('ChaoXiXianZhiMoGeEr', () => {
                 contextObj: contextObj,
                 currentPlayer: player
             };
-            const baseCardObj1 = new BaseCardObj(sharedCardPool.getByName("ChaoXiXianZhiMoGeEr"));
+            const baseCardObj1 = new BaseCardObj(sharedCardPool.getByName("LieYanFeiYu"));
             player.addCardInHand(baseCardObj1, sharedCardPool)
+            player.useCard(baseCardObj1, undefined, {...triggerObj, currentCard: baseCardObj1})
 
-            const baseCardObj2 = new BaseCardObj(sharedCardPool.getByName("ChaoXiXianZhiMoGeEr"));
+            const lifeBefore = baseCardObj1.life;
+            const attackBefore = baseCardObj1.attack;
+            expect(lifeBefore).toBe(3)
+            expect(attackBefore).toBe(1)
+
+            const baseCardObj2 = new BaseCardObj(sharedCardPool.getByName("BaiGeErGeGuoWang"));
             player.addCardInHand(baseCardObj2, sharedCardPool)
             player.useCard(baseCardObj2, undefined, {...triggerObj, currentCard: baseCardObj2})
-            expect(player.cardList.length).toBe(1)
 
-            const defenderPlayer = cloneDeep(player);
-            defenderPlayer.name='test'
-
-            player.endTheRound({
-                ...triggerObj,
-            })
-            defenderPlayer.endTheRound({
-                ...triggerObj,
-                currentPlayer: defenderPlayer
-            })
-            new FightObj(player, defenderPlayer, contextObj).doFighting()
-
-            expect(player.handCardList[0].life).toBe(20)
-            expect(player.handCardList[0].attack).toBe(2)
+            expect(baseCardObj1.life).toBe(lifeBefore+1+3)
+            expect(baseCardObj1.attack).toBe(attackBefore+1+2)
         } catch (e) {
             console.log(e)
         }

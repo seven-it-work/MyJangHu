@@ -125,6 +125,9 @@ export default class Player implements Serialization<Player> {
             console.log("手牌满了")
             return false
         }
+        if (cardObj.baseCard.isSpendLife) {
+            return true
+        }
         return this.currentGoldCoin >= cardObj.baseCard.spendingGoldCoin
     }
 
@@ -217,7 +220,6 @@ export default class Player implements Serialization<Player> {
             if (cardObj.baseCard.type === '随从') {
                 // 磁力判断
                 if (cardObj.baseCard.isMagneticForce && nextCard && nextCard.baseCard.ethnicity.includes("机械")) {
-                    debugger
                     nextCard.baseCard.magneticForceList.push(cardObj.baseCard);
                     return;
                 }
@@ -399,7 +401,7 @@ export default class Player implements Serialization<Player> {
         // 2、铸币=上限值
         this.currentGoldCoin = this.getMaxGoldCoin();
         // 刷新未冻结的随从
-        this.tavern.refresh(triggerObj)
+        this.tavern.refresh(triggerObj, false)
         // 3、酒馆升级--
         this.tavern.currentUpgradeExpenses = Math.max(0, this.tavern.currentUpgradeExpenses - 1)
     }

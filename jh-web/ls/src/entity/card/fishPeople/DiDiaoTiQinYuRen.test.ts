@@ -26,6 +26,14 @@ describe('DiDiaoTiQinYuRen', () => {
             player.useCard(baseCardObj2, undefined, {...triggerObj, currentCard: baseCardObj2})
             const defenderPlayer = cloneDeep(player);
             defenderPlayer.name = 'test'
+
+            player.endTheRound({
+                ...triggerObj,
+            })
+            defenderPlayer.endTheRound({
+                ...triggerObj,
+                currentPlayer: defenderPlayer
+            })
             new FightObj(player, defenderPlayer, contextObj).doFighting()
         } catch (e) {
             console.log(e)

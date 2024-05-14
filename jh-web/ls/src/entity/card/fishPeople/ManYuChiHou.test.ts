@@ -8,8 +8,8 @@ import FightObj from "../../../objs/FightObj";
 import {cloneDeep} from "lodash";
 
 
-describe('ChaoXiXianZhiMoGeEr', () => {
-    it('should whenKillOneTrigger', function () {
+describe('ManYuChiHou', () => {
+    it('should whenCardUsedTrigger', function () {
         try {
             const sharedCardPool = new SharedCardPool(['恶魔', '机械', '鱼人']);
             const contextObj = new ContextObj(sharedCardPool);
@@ -18,28 +18,15 @@ describe('ChaoXiXianZhiMoGeEr', () => {
                 contextObj: contextObj,
                 currentPlayer: player
             };
-            const baseCardObj1 = new BaseCardObj(sharedCardPool.getByName("ChaoXiXianZhiMoGeEr"));
+            const baseCardObj1 = new BaseCardObj(sharedCardPool.getByName("ManYuChiHou"));
             player.addCardInHand(baseCardObj1, sharedCardPool)
+            player.useCard(baseCardObj1, undefined, {...triggerObj, currentCard: baseCardObj1})
+            expect(player.handCardList.length).toBe(0)
 
-            const baseCardObj2 = new BaseCardObj(sharedCardPool.getByName("ChaoXiXianZhiMoGeEr"));
+            const baseCardObj2 = new BaseCardObj(sharedCardPool.getByName("ManYuChiHou"));
             player.addCardInHand(baseCardObj2, sharedCardPool)
             player.useCard(baseCardObj2, undefined, {...triggerObj, currentCard: baseCardObj2})
-            expect(player.cardList.length).toBe(1)
-
-            const defenderPlayer = cloneDeep(player);
-            defenderPlayer.name='test'
-
-            player.endTheRound({
-                ...triggerObj,
-            })
-            defenderPlayer.endTheRound({
-                ...triggerObj,
-                currentPlayer: defenderPlayer
-            })
-            new FightObj(player, defenderPlayer, contextObj).doFighting()
-
-            expect(player.handCardList[0].life).toBe(20)
-            expect(player.handCardList[0].attack).toBe(2)
+            expect(player.handCardList.length).toBe(1)
         } catch (e) {
             console.log(e)
         }

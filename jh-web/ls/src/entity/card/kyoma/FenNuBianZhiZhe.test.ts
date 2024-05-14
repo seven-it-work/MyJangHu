@@ -1,31 +1,33 @@
 import {describe, it, expect,} from 'vitest';
-import ContextObj from "../../objs/ContextObj";
-import Player from "../../objs/Player";
-import BaseCardObj from "../../objs/BaseCardObj";
-import XieNengYuanSu from "./XieNengYuanSu";
-import Taverns from "../../objs/Taverns";
-import FenNuBianZhiZhe from "./FenNuBianZhiZhe";
+import Player from "../../../objs/Player";
+import Taverns from "../../../objs/Taverns";
+import SharedCardPool from "../../../objs/SharedCardPool";
+import ContextObj from "../../../objs/ContextObj";
+import BaseCardObj from "../../../objs/BaseCardObj";
 
 
 describe('FenNuBianZhiZhe', () => {
     it('should whenOtherCardUsedTrigger', function () {
         try {
-            const contextObj = new ContextObj();
-            var taverns = new Taverns();
-            contextObj.player = new Player(taverns);
-            contextObj.player.currentGoldCoin = 999;
-            contextObj.player.currentLife = 30;
-            var baseCardObj = new BaseCardObj(new FenNuBianZhiZhe());
-            contextObj.player.buyCard(baseCardObj, contextObj)
-            var baseCardObj1 = new BaseCardObj(new XieNengYuanSu());
-            contextObj.player.buyCard(baseCardObj1, contextObj)
+            const sharedCardPool = new SharedCardPool(['恶魔', '机械', '鱼人']);
+            const contextObj = new ContextObj(sharedCardPool);
+            const player = new Player('player', new Taverns());
+            const triggerObj = {
+                contextObj: contextObj,
+                currentPlayer: player
+            };
+            const baseCardObj1 = new BaseCardObj(sharedCardPool.getByName("FenNuBianZhiZhe"));
+            player.addCardInHand(baseCardObj1, sharedCardPool)
+            player.useCard(baseCardObj1, undefined, {...triggerObj, currentCard: baseCardObj1})
 
-            contextObj.player.useCard(baseCardObj, contextObj)
-            contextObj.player.useCard(baseCardObj1, contextObj)
+            expect(baseCardObj1.life).toBe(1)
+            expect(baseCardObj1.attack).toBe(3)
 
-            expect(contextObj.player.currentLife).toBe(29)
-            expect(baseCardObj.attack).toBe(5)
-            expect(baseCardObj.life).toBe(2)
+            const baseCardObj2 = new BaseCardObj(sharedCardPool.getByName("JiEDeFuMo"));
+            player.addCardInHand(baseCardObj2, sharedCardPool)
+            player.useCard(baseCardObj2, undefined, {...triggerObj, currentCard: baseCardObj2})
+            expect(baseCardObj1.life).toBe(2)
+            expect(baseCardObj1.attack).toBe(5)
         } catch (e) {
             console.log(e)
         }

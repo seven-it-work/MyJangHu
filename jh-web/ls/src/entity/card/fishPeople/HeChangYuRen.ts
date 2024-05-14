@@ -18,6 +18,7 @@ export default class HeChangYuRen extends BaseCard {
         if (!currentCard) {
             return
         }
+        console.log(`(${currentPlayer.name})的【${this.name}】触发：战斗开始时：获得你手牌中所有随从牌的属性值。`)
         currentPlayer.handCardList.forEach(card => {
             this.attackBonus.push({
                 baseCardId: currentCard.id,

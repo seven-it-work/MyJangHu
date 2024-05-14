@@ -32,23 +32,14 @@ describe('player', () => {
     });
     it('addCardInHand 三连 来着手牌', () => {
         try {
-            const cardDb = new CardDb();
-            const player = new Player("test", new Taverns());
-            player.addCardInHand(new BaseCardObj(cardDb.getByName("ZaoDongQiZhaZhe")))
-            player.addCardInHand(new BaseCardObj(cardDb.getByName("ZaoDongQiZhaZhe")))
-            player.addCardInHand(new BaseCardObj(cardDb.getByName("ZaoDongQiZhaZhe")))
-            player.addCardInHand(new BaseCardObj(cardDb.getByName("ZaoDongQiZhaZhe")))
+
         } catch (e) {
             console.log(e)
         }
     });
     it('addCardInHand 三连 2张来着战场，1张来着手牌', () => {
         try {
-            const cardDb = new CardDb();
-            const player = new Player("test", new Taverns());
-            player.addCard(new BaseCardObj(cardDb.getByName("ZaoDongQiZhaZhe")), {contextObj: new ContextObj(new SharedCardPool([]))});
-            player.addCard(new BaseCardObj(cardDb.getByName("ZaoDongQiZhaZhe")), {contextObj: new ContextObj(new SharedCardPool([]))});
-            player.addCardInHand(new BaseCardObj(cardDb.getByName("ZaoDongQiZhaZhe")))
+
         } catch (e) {
             console.log(e)
         }

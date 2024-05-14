@@ -1,23 +1,38 @@
 import {describe, it, expect,} from 'vitest';
-import ContextObj from "../../objs/ContextObj";
-import Player from "../../objs/Player";
-import BaseCardObj from "../../objs/BaseCardObj";
-import XieNengYuanSu from "./XieNengYuanSu";
-import Taverns from "../../objs/Taverns";
-import FenNuBianZhiZhe from "./FenNuBianZhiZhe";
-import XiaoGuiQiuTu from "./XiaoGuiQiuTu";
-import SharedCardPool from "../../objs/SharedCardPool";
+import Player from "../../../objs/Player";
+import Taverns from "../../../objs/Taverns";
+import SharedCardPool from "../../../objs/SharedCardPool";
+import ContextObj from "../../../objs/ContextObj";
+import BaseCardObj from "../../../objs/BaseCardObj";
+import {cloneDeep} from "lodash";
+import FightObj from "../../../objs/FightObj";
 
 
 describe('XiaoGuiQiuTu', () => {
     it('should whenDeadTrigger', function () {
         try {
-            var player = new Player(new Taverns());
-            var contextObj = new ContextObj(player, new SharedCardPool(["恶魔"]));
-            var xiaoGuiQiuTu = new XiaoGuiQiuTu();
-            xiaoGuiQiuTu.whenDeadTrigger(contextObj)
-            var baseCardObj = player.cardListInFighting[0];
-            expect(baseCardObj?.baseCard?.constructor.name).toBe("XiaoGui")
+            const sharedCardPool = new SharedCardPool(['恶魔', '机械', '鱼人']);
+            const contextObj = new ContextObj(sharedCardPool);
+            const player = new Player('player', new Taverns());
+            const triggerObj = {
+                contextObj: contextObj,
+                currentPlayer: player
+            };
+            const baseCardObj1 = new BaseCardObj(sharedCardPool.getByName("XiaoGuiQiuTu"));
+            player.addCardInHand(baseCardObj1, sharedCardPool)
+            player.useCard(baseCardObj1, undefined, {...triggerObj, currentCard: baseCardObj1})
+
+            const defenderPlayer = cloneDeep(player);
+            defenderPlayer.name = 'test'
+
+            player.endTheRound({
+                ...triggerObj,
+            })
+            defenderPlayer.endTheRound({
+                ...triggerObj,
+                currentPlayer: defenderPlayer
+            })
+            new FightObj(player, defenderPlayer, contextObj).doFighting()
         } catch (e) {
             console.log(e)
         }

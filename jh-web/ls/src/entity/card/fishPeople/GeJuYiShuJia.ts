@@ -16,12 +16,13 @@ export default class GeJuYiShuJia extends BaseCard {
         if (!currentPlayer) {
             return
         }
+        console.log(`(${currentPlayer.name})的【${this.name}】触发：亡语：使一个友方鱼人获得烈毒。`)
         const cardList = currentPlayer.getCardList().filter(card => card.baseCard.ethnicity.includes('鱼人'));
         if (cardList.length <= 0) {
             return;
         }
         const baseCardObj = randomUtils.pickone(cardList);
-        baseCardObj.isHighlyToxic = triggerObj;
+        baseCardObj.baseCard.isHighlyToxic = true;
     }
 }
 

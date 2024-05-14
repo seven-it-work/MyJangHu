@@ -12,7 +12,7 @@ export default defineComponent({
     playObj: {
       type: Object as PropType<PlayObj>,
       required: true,
-    },
+    }
   },
   data() {
     return {}
@@ -57,7 +57,7 @@ export default defineComponent({
     </template>
     <a-row :gutter="16">
       <a-col v-for="cardObj in Array.from(playObj.currentPlayerInfo.tavern.currentCard.values())" :key="cardObj.id">
-        <Card :card-obj="cardObj">
+        <Card :taverns="playObj.currentPlayerInfo.tavern" :card-obj="cardObj">
           <template #titleButton>
             <a-button size="small" :disabled="!playObj.currentPlayerInfo.canBuyCard(cardObj)"
                       @click="buyCard(cardObj)">购买({{ cardObj.baseCard.spendingGoldCoin }})
