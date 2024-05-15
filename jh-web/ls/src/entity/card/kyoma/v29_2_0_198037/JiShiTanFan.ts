@@ -1,6 +1,6 @@
 import BaseCard from "../../../baseCard.ts";
 
-export default class JiShiTanFan extends BaseCard {
+export default class JiShiTanFanV29 extends BaseCard {
     name = "集市摊贩"
     ethnicity = ["恶魔"]
     attack = 2

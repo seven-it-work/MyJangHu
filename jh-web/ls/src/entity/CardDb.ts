@@ -1,5 +1,5 @@
 import BaseCard from "./baseCard";
-import cardStorage from "./card/CardStorage";
+import cardStorage from "./card/v28_0_0_189384/CardStorage.ts";
 import {cloneDeep} from "lodash";
 
 export default class CardDb {

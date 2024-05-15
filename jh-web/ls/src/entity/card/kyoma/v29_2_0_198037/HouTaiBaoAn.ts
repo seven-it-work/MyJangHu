@@ -1,6 +1,6 @@
 import BaseCard from "../../../baseCard.ts";
 
-export default class HouTaiBaoAn extends BaseCard {
+export default class HouTaiBaoAnV29 extends BaseCard {
     name = "后台保安"
     ethnicity = ["恶魔"]
     attack = 4

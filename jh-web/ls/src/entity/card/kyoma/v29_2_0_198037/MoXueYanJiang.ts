@@ -1,6 +1,6 @@
 import BaseCard from "../../../baseCard.ts";
 
-export default class MoXueYanJiang extends BaseCard {
+export default class MoXueYanJiangV29 extends BaseCard {
     name = "魔血岩浆"
     ethnicity = ["恶魔","元素"]
     attack = 4

@@ -1,4 +1,4 @@
-import WuDaoWangZiMaKeZhaEr from "../WuDaoWangZiMaKeZhaEr.ts";
+import WuDaoWangZiMaKeZhaEr from "../v28_0_0_189384/WuDaoWangZiMaKeZhaEr.ts";
 
 export default class WuDaoWangZiMaKeZhaErV29 extends WuDaoWangZiMaKeZhaEr {
     attack = 4

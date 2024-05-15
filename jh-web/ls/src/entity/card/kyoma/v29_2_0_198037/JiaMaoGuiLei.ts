@@ -1,6 +1,6 @@
 import BaseCard from "../../../baseCard.ts";
 
-export default class JiaMaoGuiLei extends BaseCard {
+export default class JiaMaoGuiLeiV29 extends BaseCard {
     name = "假冒鬼儡"
     ethnicity = ["恶魔"]
     attack = 1

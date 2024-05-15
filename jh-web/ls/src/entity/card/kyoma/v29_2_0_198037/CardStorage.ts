@@ -1,0 +1,42 @@
+const CardStorage = new Map<String, any>();
+
+import FenNuBianZhiZhe from ".//FenNuBianZhiZhe";
+import HouTaiBaoAn from ".//HouTaiBaoAn";
+import JiaMaoGuiLei from ".//JiaMaoGuiLei";
+import JiaoHuaDeALanNaSi from ".//JiaoHuaDeALanNaSi";
+import JiEDeFuMo from ".//JiEDeFuMo";
+import JiShiTanFan from ".//JiShiTanFan";
+import LingHunHuiSuZhe from ".//LingHunHuiSuZhe";
+import MoXueNianJiang from ".//MoXueNianJiang";
+import MoXueYanJiang from ".//MoXueYanJiang";
+import PiaoFuGuanChaZhe from ".//PiaoFuGuanChaZhe";
+import QiangNengLaoGong from ".//QiangNengLaoGong";
+import SaGeLaSiDeYongShi from ".//SaGeLaSiDeYongShi";
+import TanShiDeWuZuEr from ".//TanShiDeWuZuEr";
+import TiaoShiMoQuan from ".//TiaoShiMoQuan";
+import WuDaoWangZiMaKeZhaEr from ".//WuDaoWangZiMaKeZhaEr";
+import XieNengYeZhuRen from ".//XieNengYeZhuRen";
+import XinLingNiMo from ".//XinLingNiMo";
+import YiJiaoTuSiSeLa from ".//YiJiaoTuSiSeLa";
+import ZaoDongQiZhaZhe from ".//ZaoDongQiZhaZhe";
+CardStorage.set(FenNuBianZhiZhe.name, FenNuBianZhiZhe);
+CardStorage.set(HouTaiBaoAn.name, HouTaiBaoAn);
+CardStorage.set(JiaMaoGuiLei.name, JiaMaoGuiLei);
+CardStorage.set(JiaoHuaDeALanNaSi.name, JiaoHuaDeALanNaSi);
+CardStorage.set(JiEDeFuMo.name, JiEDeFuMo);
+CardStorage.set(JiShiTanFan.name, JiShiTanFan);
+CardStorage.set(LingHunHuiSuZhe.name, LingHunHuiSuZhe);
+CardStorage.set(MoXueNianJiang.name, MoXueNianJiang);
+CardStorage.set(MoXueYanJiang.name, MoXueYanJiang);
+CardStorage.set(PiaoFuGuanChaZhe.name, PiaoFuGuanChaZhe);
+CardStorage.set(QiangNengLaoGong.name, QiangNengLaoGong);
+CardStorage.set(SaGeLaSiDeYongShi.name, SaGeLaSiDeYongShi);
+CardStorage.set(TanShiDeWuZuEr.name, TanShiDeWuZuEr);
+CardStorage.set(TiaoShiMoQuan.name, TiaoShiMoQuan);
+CardStorage.set(WuDaoWangZiMaKeZhaEr.name, WuDaoWangZiMaKeZhaEr);
+CardStorage.set(XieNengYeZhuRen.name, XieNengYeZhuRen);
+CardStorage.set(XinLingNiMo.name, XinLingNiMo);
+CardStorage.set(YiJiaoTuSiSeLa.name, YiJiaoTuSiSeLa);
+CardStorage.set(ZaoDongQiZhaZhe.name, ZaoDongQiZhaZhe);
+
+export default CardStorage

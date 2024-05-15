@@ -7,7 +7,7 @@ import {TriggerObj} from "../entity/Trigger";
 import SharedCardPool from "./SharedCardPool";
 import {Serialization} from "../utils/SaveUtils";
 import {serialize} from "class-transformer";
-import Sanlian from "../entity/card/spells/Sanlian";
+import Sanlian from "../entity/card/spells/base/Sanlian.ts";
 
 export default class Player implements Serialization<Player> {
 

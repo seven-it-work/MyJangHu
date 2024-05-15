@@ -1,0 +1,40 @@
+const CardStorageFishPeople = new Map<String, any>();
+
+import BaiGeErGeGuoWang from ".//BaiGeErGeGuoWang";
+import ChaoXiXianZhiMoGeEr from ".//ChaoXiXianZhiMoGeEr";
+import CuXinDeTunJiZhe from ".//CuXinDeTunJiZhe";
+import DiDiaoTiQinYuRen from ".//DiDiaoTiQinYuRen";
+import GeJuYiShuJia from ".//GeJuYiShuJia";
+import HeChangYuRen from ".//HeChangYuRen";
+import LieYanFeiYu from ".//LieYanFeiYu";
+import ManYuChiHou from ".//ManYuChiHou";
+import MoLaKeLiSi from ".//MoLaKeLiSi";
+import NanChanDeShiShiYuRen from ".//NanChanDeShiShiYuRen";
+import ShiTangLieRen from ".//ShiTangLieRen";
+import TaDe from ".//TaDe";
+import XiaoXiaYan from ".//XiaoXiaYan";
+import XieQiDaoHangYuan from ".//XieQiDaoHangYuan";
+import XiongEDeMiShiZhe from ".//XiongEDeMiShiZhe";
+import XunBaoYuRen from ".//XunBaoYuRen";
+import ZaiKuaiYuRen from ".//ZaiKuaiYuRen";
+import ZhaoZeQianFeng from ".//ZhaoZeQianFeng";
+CardStorageFishPeople.set(BaiGeErGeGuoWang.name, BaiGeErGeGuoWang);
+CardStorageFishPeople.set(ChaoXiXianZhiMoGeEr.name, ChaoXiXianZhiMoGeEr);
+CardStorageFishPeople.set(CuXinDeTunJiZhe.name, CuXinDeTunJiZhe);
+CardStorageFishPeople.set(DiDiaoTiQinYuRen.name, DiDiaoTiQinYuRen);
+CardStorageFishPeople.set(GeJuYiShuJia.name, GeJuYiShuJia);
+CardStorageFishPeople.set(HeChangYuRen.name, HeChangYuRen);
+CardStorageFishPeople.set(LieYanFeiYu.name, LieYanFeiYu);
+CardStorageFishPeople.set(ManYuChiHou.name, ManYuChiHou);
+CardStorageFishPeople.set(MoLaKeLiSi.name, MoLaKeLiSi);
+CardStorageFishPeople.set(NanChanDeShiShiYuRen.name, NanChanDeShiShiYuRen);
+CardStorageFishPeople.set(ShiTangLieRen.name, ShiTangLieRen);
+CardStorageFishPeople.set(TaDe.name, TaDe);
+CardStorageFishPeople.set(XiaoXiaYan.name, XiaoXiaYan);
+CardStorageFishPeople.set(XieQiDaoHangYuan.name, XieQiDaoHangYuan);
+CardStorageFishPeople.set(XiongEDeMiShiZhe.name, XiongEDeMiShiZhe);
+CardStorageFishPeople.set(XunBaoYuRen.name, XunBaoYuRen);
+CardStorageFishPeople.set(ZaiKuaiYuRen.name, ZaiKuaiYuRen);
+CardStorageFishPeople.set(ZhaoZeQianFeng.name, ZhaoZeQianFeng);
+
+export default CardStorageFishPeople
