@@ -1,5 +1,5 @@
-import JiEDeFuMo from "../v28_0_0_189384/JiEDeFuMo";
+import JiEDeFuMoV28 from "../v28_0_0_189384/JiEDeFuMo";
 
-export default class JiEDeFuMoV29 extends JiEDeFuMo {
+export default class JiEDeFuMoV29 extends JiEDeFuMoV28 {
 
 }
