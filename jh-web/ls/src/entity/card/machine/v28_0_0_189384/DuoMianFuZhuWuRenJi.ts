@@ -1,7 +1,7 @@
 import BaseCard from "../../../baseCard";
 import {TriggerObj} from "../../../Trigger";
 
-export default class DuoMianFuZhuWuRenJi extends BaseCard {
+export default class DuoMianFuZhuWuRenJiV28 extends BaseCard {
     name = "多面辅助无人机"
     ethnicity = ["机械"]
     attack = 6

@@ -27,6 +27,3 @@ export default class YiJiaoTuSiSeLaV28 extends BaseCard {
         console.log(`(${currentPlayer.name})的【${currentCard.baseCard.name}(${currentCard.attack}/${currentCard.life})】触发亡语：召唤你在本场战斗中死亡的第一个恶魔【${baseCardObjs[0].baseCard.name}】，保留其额外效果。`)
     }
 }
-
-export  class YiJiaoTuSiSeLaV28 extends YiJiaoTuSiSeLa {
-}

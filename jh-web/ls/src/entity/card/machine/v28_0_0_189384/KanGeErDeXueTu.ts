@@ -1,7 +1,7 @@
 import BaseCard from "../../../baseCard";
 import {TriggerObj} from "../../../Trigger";
 
-export default class KanGeErDeXueTu extends BaseCard {
+export default class KanGeErDeXueTuV28 extends BaseCard {
     name = "坎格尔的学徒"
     ethnicity = ["中立"]
     accompanyingRace = ["机械"]

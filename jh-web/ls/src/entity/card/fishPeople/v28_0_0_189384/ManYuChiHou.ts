@@ -3,7 +3,7 @@ import {TriggerObj} from "../../../Trigger";
 import randomUtil from "../../../../utils/RandomUtils";
 import BaseCardObj from "../../../../objs/BaseCardObj";
 
-export default class ManYuChiHou extends BaseCard {
+export default class ManYuChiHouV28 extends BaseCard {
     name = "蛮鱼斥候"
     ethnicity = ["鱼人"]
     attack = 3

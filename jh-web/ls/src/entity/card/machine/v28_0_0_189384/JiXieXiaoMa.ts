@@ -2,7 +2,7 @@ import BaseCard from "../../../baseCard";
 import {TriggerObj} from "../../../Trigger";
 import BaseCardObj from "../../../../objs/BaseCardObj";
 
-export default class JiXieXiaoMa extends BaseCard {
+export default class JiXieXiaoMaV28 extends BaseCard {
     name = "机械小马"
     ethnicity = ["机械", "野兽"]
     attack = 2

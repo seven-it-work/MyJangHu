@@ -1,12 +1,12 @@
 import BaseCard from "./baseCard";
-import cardStorage from "./card/v28_0_0_189384/CardStorage.ts";
+import CardStorage from "./card/v28_0_0_189384/CardStorage.ts";
 import {cloneDeep} from "lodash";
 
 export default class CardDb {
     private readonly cardMap: Map<String, BaseCard> = new Map<String, BaseCard>()
 
     constructor() {
-        cardStorage.forEach((v, k) => {
+        CardStorage.forEach((v, k) => {
             this.cardMap.set(k, new (v)())
         })
     }

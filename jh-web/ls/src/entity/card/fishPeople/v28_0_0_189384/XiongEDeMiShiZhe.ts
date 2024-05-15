@@ -2,7 +2,7 @@ import BaseCard from "../../../baseCard";
 import {TriggerObj} from "../../../Trigger";
 import randomUtil from "../../../../utils/RandomUtils";
 
-export default class XiongEDeMiShiZhe extends BaseCard {
+export default class XiongEDeMiShiZheV28 extends BaseCard {
     name = "凶恶的觅食者"
     ethnicity = ["鱼人"]
     attack = 4

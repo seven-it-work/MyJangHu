@@ -1,7 +1,7 @@
 import BaseCard from "../../../baseCard";
 import {TriggerObj} from "../../../Trigger";
 
-export default class ZiShiYingLuZhang extends BaseCard {
+export default class ZiShiYingLuZhangV28 extends BaseCard {
     name = "自适应路障"
     ethnicity = ["机械"]
     attack = 6

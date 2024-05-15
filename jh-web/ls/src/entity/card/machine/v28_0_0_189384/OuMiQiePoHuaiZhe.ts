@@ -2,7 +2,7 @@ import BaseCard from "../../../baseCard";
 import {TriggerObj} from "../../../Trigger";
 import BaseCardObj from "../../../../objs/BaseCardObj";
 
-export default class OuMiQiePoHuaiZhe extends BaseCard {
+export default class OuMiQiePoHuaiZheV28 extends BaseCard {
     name = "欧米茄破坏者"
     ethnicity = ["机械"]
     attack = 6

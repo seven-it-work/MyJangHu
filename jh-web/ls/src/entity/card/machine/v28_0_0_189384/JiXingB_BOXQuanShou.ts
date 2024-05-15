@@ -1,6 +1,6 @@
 import BaseCard from "../../../baseCard";
 
-export default class JiXingB_BOXQuanShou extends BaseCard {
+export default class JiXingB_BOXQuanShouV28 extends BaseCard {
     name = "极型B-Box拳手"
     ethnicity = ["机械"]
     attack = 5

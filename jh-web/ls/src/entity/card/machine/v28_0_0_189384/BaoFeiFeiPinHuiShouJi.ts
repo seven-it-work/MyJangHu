@@ -3,7 +3,7 @@ import {TriggerObj} from "../../../Trigger";
 import RandomUtils from "../../../../utils/RandomUtils";
 import BaseCardObj from "../../../../objs/BaseCardObj";
 
-export default class BaoFeiFeiPinHuiShouJi extends BaseCard {
+export default class BaoFeiFeiPinHuiShouJiV28 extends BaseCard {
     name = "报废废品回收机"
     ethnicity = ["机械"]
     attack = 4

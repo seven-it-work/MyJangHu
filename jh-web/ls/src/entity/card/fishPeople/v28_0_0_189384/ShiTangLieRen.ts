@@ -1,7 +1,7 @@
 import BaseCard from "../../../baseCard";
 import {TriggerObj} from "../../../Trigger";
 
-export default class ShiTangLieRen extends BaseCard {
+export default class ShiTangLieRenV28 extends BaseCard {
     name = "石塘猎人"
     ethnicity = ["鱼人"]
     attack = 2

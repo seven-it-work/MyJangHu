@@ -1,7 +1,7 @@
 import BaseCard from "../../../baseCard";
 import {TriggerObj} from "../../../Trigger";
 
-export default class BaoBaoJiQiRen extends BaseCard {
+export default class BaoBaoJiQiRenV28 extends BaseCard {
     name = "催眠机器人"
     ethnicity = ["机械"]
     attack = 2

@@ -1,9 +1,9 @@
-import {describe, expect, it} from "vitest";
+import {describe,  it} from "vitest";
 
 
 describe('CardStorage', () => {
+    const version="28"
     it('自动生成卡牌代码', function () {
-        const dir=""
         const s = "BaoBaoJiQiRen.ts\n" +
             "BaoFeiFeiPinHuiShouJi.ts\n" +
             "CardStorageMachine.ts\n" +
@@ -39,10 +39,10 @@ describe('CardStorage', () => {
             return cardName.split(".ts")[0];
         })
         list.forEach(cardName=>{
-            console.log(`import ${cardName} from "./${dir}/${cardName}";`)
+            console.log(`import ${cardName}${version} from "./${cardName}";`)
         })
         list.forEach(cardName=>{
-            console.log(`CardStorage.set(${cardName}.name, ${cardName});`)
+            console.log(`CardStorage.set("${cardName}", ${cardName}${version});`)
         })
     });
 })

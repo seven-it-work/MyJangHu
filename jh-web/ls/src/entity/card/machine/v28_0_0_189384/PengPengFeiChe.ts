@@ -1,6 +1,6 @@
 import BaseCard from "../../../baseCard";
 
-export default class PengPengFeiChe extends BaseCard {
+export default class PengPengFeiCheV28 extends BaseCard {
     name = "砰砰飞车"
     ethnicity = ["机械"]
     attack = 12

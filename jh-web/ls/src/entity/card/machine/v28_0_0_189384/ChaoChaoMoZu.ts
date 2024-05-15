@@ -1,6 +1,6 @@
 import BaseCard from "../../../baseCard";
 
-export default class ShouFengQinJiQiRen extends BaseCard {
+export default class ShouFengQinJiQiRenV28 extends BaseCard {
     name = "吵吵模组"
     ethnicity = ["机械"]
     attack = 2

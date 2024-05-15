@@ -2,7 +2,7 @@ import BaseCard from "../../../baseCard";
 import {TriggerObj} from "../../../Trigger";
 import {cloneDeep} from "lodash";
 
-export default class DiDiaoTiQinYuRen extends BaseCard {
+export default class DiDiaoTiQinYuRenV28 extends BaseCard {
     name = "低调提琴鱼人"
     ethnicity = ["鱼人"]
     attack = 8
