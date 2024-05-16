@@ -26,7 +26,7 @@ export default class TiaoShiMoQuanV28 extends BaseCard {
             return;
         }
         const pick = randomUtil.pickone(baseCardObjs);
-        tavern.removeCard(pick, triggerObj.contextObj)
+        tavern.removeCard(pick, triggerObj.contextObj.sharedCardPool)
         currentCard.baseCard.attackBonus.push({
             markupValue: pick.baseCard.attack,
             baseCardName: this.name,

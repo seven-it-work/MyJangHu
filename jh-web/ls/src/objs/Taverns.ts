@@ -38,6 +38,8 @@ export default class Taverns implements Serialization<Taverns> {
     freezeExpenses: number = 0;
     // 当前升级费用
     currentUpgradeExpenses: number = GRADED_RULES[1].upgradeExpenses;
+    // 法术牌数量
+    spellSize: number = 1;
 
     removeBonus(baseCardObj: BaseCardObj, type: 'attack' | 'life') {
         if (type === 'attack') {
@@ -51,7 +53,6 @@ export default class Taverns implements Serialization<Taverns> {
         return this.freezeCardId.length >= this.currentCard.size;
     }
 
-
     refresh(triggerObj: TriggerObj, isClearAll = true) {
         const freezeId = []
         if (!isClearAll) {
@@ -63,15 +64,26 @@ export default class Taverns implements Serialization<Taverns> {
         const keys = Array.from(this.currentCard.keys());
         keys.forEach((id) => {
             const baseCardObj = this.currentCard.get(id);
-            if (freezeId.includes(baseCardObj.id)) {
-                baseCardObj.isFreeze = false;
-            } else {
-                // 释放已有的
-                triggerObj.contextObj.sharedCardPool.cardIn(baseCardObj.baseCard);
-                this.currentCard.delete(id);
+            if (baseCardObj) {
+                if (freezeId.includes(baseCardObj.id)) {
+                    baseCardObj.isFreeze = false;
+                } else {
+                    // 释放已有的
+                    triggerObj.contextObj.sharedCardPool.cardIn(baseCardObj.baseCard);
+                    this.removeCard(baseCardObj, triggerObj.contextObj.sharedCardPool);
+                }
             }
         })
-        const cardNumber = GRADED_RULES[this.graded].cardNumber - freezeId.length;
+        let cardNumber = GRADED_RULES[this.graded].cardNumber - freezeId.length;
+        const baseCardObjs = Array.from(this.currentCard.values()).filter(card => card.baseCard.type === '酒馆法术');
+        if (baseCardObjs.length <= 0) {
+            const spell = triggerObj.contextObj.sharedCardPool.listSpell(this.graded, this.spellSize);
+            const spellCard = new BaseCardObj(spell[0]);
+            this.currentCard.set(spellCard.id, spellCard)
+        } else {
+            // 存在酒馆法术
+            cardNumber -= 1;
+        }
         const baseCards: BaseCard[] = triggerObj.contextObj.sharedCardPool.refreshRandom(cardNumber, this.graded);
         baseCards.forEach(card => {
             // 刷新要锁定共享池，锁定新出的
@@ -88,13 +100,11 @@ export default class Taverns implements Serialization<Taverns> {
 
     /**
      * 购买后，移除
-     * @param cardObj
-     * @param context
      */
-    removeCard(cardObj: BaseCardObj, context: ContextObj) {
+    removeCard(cardObj: BaseCardObj, sharedCardPool: SharedCardPool) {
         this.currentCard.delete(cardObj.id)
-        if (context.sharedCardPool) {
-            context.sharedCardPool.cardOut(cardObj.baseCard)
+        if (sharedCardPool) {
+            sharedCardPool.cardOut(cardObj.baseCard)
         }
     }
 

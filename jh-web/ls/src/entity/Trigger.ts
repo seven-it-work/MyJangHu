@@ -144,4 +144,9 @@ export interface Trigger {
      * 战斗开始时
      */
     whenStartFightingTrigger(triggerObj: TriggerObj);
+
+    /**
+     * 战斗结束时
+     */
+    whenEndFightingTrigger(result: '胜利' | '失败' | '平局', triggerObj: TriggerObj);
 }

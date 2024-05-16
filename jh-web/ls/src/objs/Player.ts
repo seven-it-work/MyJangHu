@@ -8,6 +8,7 @@ import SharedCardPool from "./SharedCardPool";
 import {Serialization} from "../utils/SaveUtils";
 import {serialize} from "class-transformer";
 import Sanlian from "../entity/card/spells/base/Sanlian.ts";
+import BaseCard from "../entity/baseCard";
 
 export default class Player implements Serialization<Player> {
 
@@ -26,7 +27,7 @@ export default class Player implements Serialization<Player> {
     // 最大铸币加成
     private currentMaxGoldCoin: number = 3;
     // 最大铸币加成
-    private maxGoldCoinBonus: number = 0;
+    maxGoldCoinBonus: number = 0;
     currentLife: number = 30;
     currentArmor: number = 0;
     private _handCardMap: Map<String, BaseCardObj> = new Map<String, BaseCardObj>();
@@ -54,6 +55,8 @@ export default class Player implements Serialization<Player> {
     isEndRound: boolean = false;
     // 姓名
     name: string;
+    // 法术附加能力（回合结束时）
+    spellAttached: BaseCard[] = [];
 
     private readonly static MAX_HAND_CARD: number = 10;
 
@@ -306,25 +309,37 @@ export default class Player implements Serialization<Player> {
     }
 
     canRefreshTavern(): Boolean {
+        if (this.freeRefreshTimes > 0) {
+            return true
+        }
         return this.currentGoldCoin >= this.tavern.refreshExpenses
     }
 
+    // 免费刷新次数
+    freeRefreshTimes: number = 0;
+
     refreshTavern(context: ContextObj) {
+        let refreshExpenses = this.tavern.refreshExpenses;
+        if (this.freeRefreshTimes > 0) {
+            refreshExpenses = 0
+        }
         const triggerObj = {contextObj: context, currentPlayer: this};
         // 刷新消耗生命值
         const baseCardObjs = this.cardList.filter(card => card.baseCard.remainRefreshTimes > 0);
         if (baseCardObjs.length > 0) {
             const baseCardObj = baseCardObjs[0];
             baseCardObj.baseCard.remainRefreshTimes--;
-            this.changeLife(-1, triggerObj);
-            this.tavern.refresh(triggerObj)
-            return;
+            this.changeLife(-refreshExpenses, triggerObj);
+        } else {
+            if (!this.canRefreshTavern()) {
+                message.error({content: '金币不足，不能刷新'});
+                return
+            }
+            this.currentGoldCoin -= refreshExpenses
         }
-        if (!this.canRefreshTavern()) {
-            message.error({content: '金币不足，不能刷新'});
-            return
+        if (this.freeRefreshTimes > 0) {
+            this.freeRefreshTimes--;
         }
-        this.currentGoldCoin -= this.tavern.refreshExpenses
         this.tavern.refresh(triggerObj)
     }
 
@@ -384,6 +399,15 @@ export default class Player implements Serialization<Player> {
         // 1、属性计算完成后，将cardListInFighting进行赋值
         this.cardListInFighting = cloneDeep(this.cardList)
         this.deadCardListInFighting = []
+        // 系统默认影响，放在结束回合，防止金币加成导致的错误问题
+        // 1、金币上限+1（最大10）
+        this.currentMaxGoldCoin = Math.min(10, this.currentMaxGoldCoin + 1)
+        // 2、铸币=上限值
+        this.currentGoldCoin = this.getMaxGoldCoin();
+        // 刷新未冻结的随从
+        this.tavern.refresh(triggerObj, false)
+        // 3、酒馆升级--
+        this.tavern.currentUpgradeExpenses = Math.max(0, this.tavern.currentUpgradeExpenses - 1)
     }
 
     /**
@@ -404,15 +428,8 @@ export default class Player implements Serialization<Player> {
             currentCard: card,
             currentPlayer: this,
         }))
-        // 系统默认影响
-        // 1、金币上限+1（最大10）
-        this.currentMaxGoldCoin = Math.min(10, this.currentMaxGoldCoin + 1)
-        // 2、铸币=上限值
-        this.currentGoldCoin = this.getMaxGoldCoin();
-        // 刷新未冻结的随从
-        this.tavern.refresh(triggerObj, false)
-        // 3、酒馆升级--
-        this.tavern.currentUpgradeExpenses = Math.max(0, this.tavern.currentUpgradeExpenses - 1)
+        // 法术能力加成，由法术自己移除
+        this.spellAttached.forEach(card => card.whenStartRound(triggerObj))
     }
 
     /**

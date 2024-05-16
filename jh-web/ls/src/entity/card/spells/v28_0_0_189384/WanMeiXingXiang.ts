@@ -1,4 +1,5 @@
 import BaseCard from "../../../baseCard.ts";
+import {TriggerObj} from "../../../Trigger";
 
 export default class extends BaseCard {
     type = '酒馆法术'
@@ -7,4 +8,27 @@ export default class extends BaseCard {
     graded = 6
     spendingGoldCoin = 2
     description = "将一个随从的属性值变为20/20。"
+
+    isNeedSelect = true
+
+    whenCardUsedTrigger(triggerObj: TriggerObj) {
+        const needSelectCard = triggerObj.needSelectCard;
+        if (!needSelectCard) {
+            return
+        }
+        const currentCard = triggerObj.currentCard;
+        if (!currentCard) {
+            return
+        }
+        needSelectCard.baseCard.attackBonus.push({
+            baseCardId: currentCard.id,
+            baseCardName: this.name,
+            markupValue: 20 - needSelectCard.attack
+        })
+        needSelectCard.baseCard.lifeBonus.push({
+            baseCardId: currentCard.id,
+            baseCardName: this.name,
+            markupValue: 20 - needSelectCard.life
+        })
+    }
 }

@@ -6,6 +6,7 @@ import randomUtil from "../utils/RandomUtils.ts";
 import {Serialization} from "../utils/SaveUtils";
 import {deserialize, serialize} from "class-transformer";
 import BaseCardObj from "./BaseCardObj";
+import randomUtils from "../utils/RandomUtils.ts";
 
 class SharedCardPoolData implements Serialization<SharedCardPoolData> {
 
@@ -104,6 +105,43 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
                 }
                 return true
             }).map(data => data.baseCard);
+    }
+
+    listByDescriptionCard(descriptionStr: string, graded: number | undefined = undefined, size: number = 1): BaseCard[] {
+        const baseCards = Array.from(this.pool.values())
+            .filter(card => card.baseCard.isSell)
+            .filter(card => card.baseCard.type === '随从')
+            .filter(card => {
+                return card.baseCard.description.includes(descriptionStr);
+            }).filter(data => {
+                if (graded) {
+                    return data.baseCard.graded <= graded;
+                }
+                return true
+            }).map(data => data.baseCard);
+
+        if (size === 1) {
+            return [randomUtil.pick(baseCards, size)]
+        }
+        return randomUtil.pick(baseCards, size);
+    }
+
+
+    listSpell(graded: number, size: number = 1, isGradedConsistent: boolean = false): BaseCard[] {
+        const list = Array.from(this.pool.values())
+            .filter(card => card.baseCard.isSell)
+            .filter(card => card.baseCard.type === '酒馆法术')
+            .filter(card => {
+                if (isGradedConsistent) {
+                    return card.baseCard.graded = graded;
+                }
+                return card.baseCard.graded <= graded
+            })
+            .map(card => card.baseCard)
+        if (size === 1) {
+            return [randomUtil.pick(list, size)]
+        }
+        return randomUtil.pick(list, size);
     }
 
     refreshRandom(cardNumber: number, graded: number, gradedIsItEqual = false): BaseCard[] {

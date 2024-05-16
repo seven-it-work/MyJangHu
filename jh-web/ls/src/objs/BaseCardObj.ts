@@ -308,10 +308,18 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
         if (!currentPlayer) {
             return
         }
+        triggerObj = this.triggerObj2BaseCard(triggerObj);
         for (let i = 0; i <= currentPlayer.endRoundExtraTriggers; i++) {
+            // 法术附加
+            this.baseCard.spellAttached.forEach(card => {
+                card.whenEndRound({
+                    ...triggerObj,
+                    targetCard: this,
+                })
+            })
             // 磁力效果
             this.baseCard.magneticForceList.forEach(card => card.whenEndRound(triggerObj))
-            this.baseCard.whenEndRound(this.triggerObj2BaseCard(triggerObj))
+            this.baseCard.whenEndRound(triggerObj)
         }
     }
 
@@ -326,9 +334,10 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
     }
 
     whenStartRound(triggerObj: TriggerObj) {
+        triggerObj = this.triggerObj2BaseCard(triggerObj);
         // 磁力效果
         this.baseCard.magneticForceList.forEach(card => card.whenStartRound(triggerObj))
-        this.baseCard.whenStartRound(this.triggerObj2BaseCard(triggerObj))
+        this.baseCard.whenStartRound(triggerObj)
     }
 
     whenStartRoundHandler(triggerObj: TriggerObj) {
@@ -372,5 +381,9 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
 
     serialization(): string {
         return serialize(this);
+    }
+
+    whenEndFightingTrigger(result: "胜利" | "失败" | "平局", triggerObj: TriggerObj) {
+        this.baseCard.whenEndFightingTrigger(result, triggerObj);
     }
 }

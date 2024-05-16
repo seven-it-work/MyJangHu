@@ -32,7 +32,7 @@ export default class JiEDeFuMoV28 extends BaseCard {
                 return;
             }
             const pick = randomUtil.pickone(baseCardObjs);
-            tavern.removeCard(pick, triggerObj.contextObj)
+            tavern.removeCard(pick, triggerObj.contextObj.sharedCardPool)
             item.baseCard.attackBonus.push({
                 markupValue: pick.baseCard.attack,
                 baseCardName: this.name,

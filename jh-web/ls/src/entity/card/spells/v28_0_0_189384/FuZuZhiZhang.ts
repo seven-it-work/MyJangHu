@@ -1,4 +1,6 @@
 import BaseCard from "../../../baseCard.ts";
+import {TriggerObj} from "../../../Trigger";
+import randomUtil from "../../../../utils/RandomUtils";
 
 export default class extends BaseCard {
     type = '酒馆法术'
@@ -7,4 +9,17 @@ export default class extends BaseCard {
     graded = 3
     spendingGoldCoin = 3
     description = "在本局对战中，酒馆中的随从拥有+2/+2。"
+
+    whenCardUsedTrigger(triggerObj: TriggerObj) {
+        const currentPlayer = triggerObj.currentPlayer;
+        if (!currentPlayer) {
+            return
+        }
+        const currentCard = triggerObj.currentCard;
+        if (!currentCard) {
+            return
+        }
+        currentPlayer.tavern.attackBonus.push({baseCardId: currentCard.id, baseCardName: this.name, markupValue: 2})
+        currentPlayer.tavern.lifeBonus.push({baseCardId: currentCard.id, baseCardName: this.name, markupValue: 2})
+    }
 }

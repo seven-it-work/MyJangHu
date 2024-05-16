@@ -7,6 +7,8 @@ import {Serialization} from "../utils/SaveUtils";
 import {serialize} from "class-transformer";
 import SharedCardPool from "../objs/SharedCardPool";
 
+export const baseEthnicity: string[] = ['鱼人', '机械', '恶魔', '亡灵', '龙', '野兽', '野猪人', '纳迦']
+export const ethnicity: string[] = ['中立', '伙伴', ...baseEthnicity]
 
 export default abstract class BaseCard implements Trigger, Serialization<BaseCard> {
     classType: string = this.constructor.name
@@ -80,6 +82,9 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
     attackBonus: Bonus[] = [];
     // 是否选中其他
     isNeedSelect: boolean = false;
+    // 法术附加能力（回合结束时）
+    spellAttached: BaseCard[] = [];
+
     // 选中过滤器
     needSelectFilter(baseCardObj: BaseCardObj[]): BaseCardObj[] {
         return baseCardObj;
@@ -262,5 +267,8 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
     }
 
     whenStartFightingTrigger(triggerObj: TriggerObj) {
+    }
+
+    whenEndFightingTrigger(result: "胜利" | "失败" | "平局", triggerObj: TriggerObj) {
     }
 }
