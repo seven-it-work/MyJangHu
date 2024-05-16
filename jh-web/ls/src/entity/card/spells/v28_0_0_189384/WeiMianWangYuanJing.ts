@@ -4,7 +4,7 @@ import {groupBy} from "lodash";
 import randomUtil from "../../../../utils/RandomUtils";
 import BaseCardObj from "../../../../objs/BaseCardObj";
 
-export default class extends BaseCard {
+export default class WeiMianWangYuanJing28 extends BaseCard {
     type = '酒馆法术'
     ethnicity = ['酒馆']
     name = "位面望远镜"

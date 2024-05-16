@@ -2,7 +2,7 @@ import BaseCard from "../../../baseCard.ts";
 import {TriggerObj} from "../../../Trigger";
 import randomUtil from "../../../../utils/RandomUtils";
 
-export default class ShunXiHuoLi extends BaseCard {
+export default class ShunXiHuoLi28 extends BaseCard {
     type = '酒馆法术'
     ethnicity = ['酒馆']
     name = "瞬息活力"

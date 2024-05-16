@@ -1,7 +1,7 @@
 import BaseCard from "../../../baseCard.ts";
 import {TriggerObj} from "../../../Trigger";
 
-export default class extends BaseCard {
+export default class MingYunZhiE28 extends BaseCard {
     type = '酒馆法术'
     ethnicity = ['酒馆']
     name = "命运之颚"

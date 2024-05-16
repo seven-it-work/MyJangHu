@@ -2,7 +2,7 @@ import BaseCard from "../../../baseCard.ts";
 import {TriggerObj} from "../../../Trigger";
 import BaseCardObj from "../../../../objs/BaseCardObj";
 
-export default class ZhaoMuXinRen extends BaseCard {
+export default class ZhaoMuXinRen28 extends BaseCard {
     type = '酒馆法术'
     ethnicity = ['酒馆']
     name = "招募新人"

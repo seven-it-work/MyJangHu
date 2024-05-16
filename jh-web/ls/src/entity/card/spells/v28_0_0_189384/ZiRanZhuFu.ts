@@ -3,7 +3,7 @@ import BaseCardObj from "../../../../objs/BaseCardObj";
 import {TriggerObj} from "../../../Trigger";
 import randomUtil from "../../../../utils/RandomUtils";
 
-export default class extends BaseCard {
+export default class ZiRanZhuFu28 extends BaseCard {
     type = '酒馆法术'
     ethnicity = ['酒馆']
     name = "自然祝福"

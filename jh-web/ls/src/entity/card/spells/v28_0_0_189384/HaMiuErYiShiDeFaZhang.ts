@@ -4,7 +4,7 @@ import BaseCardObj from "../../../../objs/BaseCardObj";
 import {GRADED_RULES} from "../../../../objs/Taverns";
 import randomUtil from "../../../../utils/RandomUtils";
 
-export default class extends BaseCard {
+export default class HaMiuErYiShiDeFaZhang28 extends BaseCard {
     type = '酒馆法术'
     ethnicity = ['酒馆']
     name = "哈缪尔遗失的法杖"
