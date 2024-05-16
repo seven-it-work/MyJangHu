@@ -24,14 +24,14 @@ export default class OuMiQiePoHuaiZheV28 extends BaseCard {
                 currentPlayer.addCard(new BaseCardObj(triggerObj.contextObj.sharedCardPool.getByName("WeiXingJiQiRen")),currentPlayer.findNextCard(currentCard),triggerObj)
             } else {
                 currentPlayer.cardListInFighting.filter(card => card.baseCard.ethnicity.includes("机械")).forEach(card => {
-                    this.attackBonus.push({
+                    currentCard.baseCard.attackBonus.push({
                         markupValue: 1,
-                        baseCardName: currentCard.baseCard.name,
+                        baseCardName: this.name,
                         baseCardId: currentCard.id,
                     })
-                    this.lifeBonus.push({
+                    currentCard.baseCard.lifeBonus.push({
                         markupValue: 1,
-                        baseCardName: currentCard.baseCard.name,
+                        baseCardName: this.name,
                         baseCardId: currentCard.id,
                     })
                 })

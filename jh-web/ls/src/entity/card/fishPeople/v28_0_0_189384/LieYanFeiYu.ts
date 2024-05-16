@@ -24,8 +24,8 @@ export default class LieYanFeiYuV28 extends BaseCard {
         }
         if (targetCard.baseCard.description.includes('战吼')) {
             console.log(`(${currentPlayer.name})的【${this.name}】检测到战吼：在你使用一张战吼随从牌后，获得+1/+1。`)
-            this.attackBonus.push({baseCardId: currentCard.id, baseCardName: currentCard.baseCard.name, markupValue: 1})
-            this.lifeBonus.push({baseCardId: currentCard.id, baseCardName: currentCard.baseCard.name, markupValue: 1})
+            currentCard.baseCard.attackBonus.push({baseCardId: currentCard.id, baseCardName: this.name, markupValue: 1})
+            currentCard.baseCard.lifeBonus.push({baseCardId: currentCard.id, baseCardName: this.name, markupValue: 1})
         }
     }
 

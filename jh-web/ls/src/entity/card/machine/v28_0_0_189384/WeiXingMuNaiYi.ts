@@ -24,7 +24,11 @@ export default class WeiXingMuNaiYiV28 extends BaseCard {
         if (baseCardObjs.length <= 0) {
             return;
         }
-        randomUtil.pickone(baseCardObjs).baseCard.attack++
+        randomUtil.pickone(baseCardObjs).baseCard.attackBonus.push({
+            markupValue: 1,
+            baseCardName: this.name,
+            baseCardId: currentCard.id,
+        })
     }
 }
 

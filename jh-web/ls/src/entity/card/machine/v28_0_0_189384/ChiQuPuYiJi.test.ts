@@ -1,11 +1,11 @@
 import {describe, it, expect,} from 'vitest';
-import Player from "../../../objs/Player";
-import Taverns from "../../../objs/Taverns";
-import SharedCardPool from "../../../objs/SharedCardPool";
-import ContextObj from "../../../objs/ContextObj";
-import BaseCardObj from "../../../objs/BaseCardObj";
+import Player from "../../../../objs/Player";
+import Taverns from "../../../../objs/Taverns";
+import SharedCardPool from "../../../../objs/SharedCardPool";
+import ContextObj from "../../../../objs/ContextObj";
+import BaseCardObj from "../../../../objs/BaseCardObj";
 import {cloneDeep} from "lodash";
-import FightObj from "../../../objs/FightObj";
+import FightObj from "../../../../objs/FightObj";
 
 
 describe('ChiQuPuYiJi', () => {

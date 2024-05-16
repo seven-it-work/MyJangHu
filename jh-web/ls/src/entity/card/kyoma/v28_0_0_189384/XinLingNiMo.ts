@@ -37,12 +37,12 @@ export default class XinLingNiMoV28 extends BaseCard {
         const pick = randomUtil.pickone(baseCardObjs);
         needSelectCard.baseCard.attackBonus.push({
             markupValue: pick.baseCard.attack,
-            baseCardName: currentCard.baseCard.name,
+            baseCardName: this.name,
             baseCardId: currentCard.id,
         })
         needSelectCard.baseCard.lifeBonus.push({
             markupValue: pick.baseCard.life,
-            baseCardName: currentCard.baseCard.name,
+            baseCardName: this.name,
             baseCardId: currentCard.id,
         })
     }

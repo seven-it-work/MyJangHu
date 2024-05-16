@@ -27,12 +27,12 @@ export default class XunBaoYuRenV28 extends BaseCard {
         baseCardObj.baseCard.attackBonus.push({
             markupValue: 5,
             baseCardId: currentCard.id,
-            baseCardName: currentCard.baseCard.name,
+            baseCardName: this.name,
         })
         baseCardObj.baseCard.lifeBonus.push({
             markupValue: 5,
             baseCardId: currentCard.id,
-            baseCardName: currentCard.baseCard.name,
+            baseCardName: this.name,
         })
     }
 }

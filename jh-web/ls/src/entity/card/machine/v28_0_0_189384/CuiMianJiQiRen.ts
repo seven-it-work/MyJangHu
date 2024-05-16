@@ -1,7 +1,7 @@
 import BaseCard from "../../../baseCard";
 import {TriggerObj} from "../../../Trigger";
 
-export default class BaoBaoJiQiRenV28 extends BaseCard {
+export default class CuiMianJiQiRenV28 extends BaseCard {
     name = "催眠机器人"
     ethnicity = ["机械"]
     attack = 2
@@ -19,14 +19,14 @@ export default class BaoBaoJiQiRenV28 extends BaseCard {
         if (!currentCard) {
             return
         }
-        this.attackBonus.push({
+        currentCard.baseCard.attackBonus.push({
             markupValue: 1,
-            baseCardName: currentCard.baseCard.name,
+            baseCardName: this.name,
             baseCardId: currentCard.id,
         })
-        this.lifeBonus.push({
+        currentCard.baseCard.lifeBonus.push({
             markupValue: 1,
-            baseCardName: currentCard.baseCard.name,
+            baseCardName: this.name,
             baseCardId: currentCard.id,
         })
     }

@@ -21,12 +21,12 @@ export default class ShiTangLieRenV28 extends BaseCard {
         }
         needSelectCard.baseCard.attackBonus.push({
             baseCardId: currentCard.id,
-            baseCardName: currentCard.baseCard.name,
+            baseCardName: this.name,
             markupValue: 1
         })
         needSelectCard.baseCard.lifeBonus.push({
             baseCardId: currentCard.id,
-            baseCardName: currentCard.baseCard.name,
+            baseCardName: this.name,
             markupValue: 1
         })
     }

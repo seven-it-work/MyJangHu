@@ -19,8 +19,8 @@ export default class XunBaoYuRenV28 extends BaseCard {
             return
         }
         if (targetCard.baseCard.ethnicity.includes('鱼人')) {
-            this.lifeBonus.push({baseCardId: currentCard.id, baseCardName: currentCard.baseCard.name, markupValue: 3})
-            this.attackBonus.push({baseCardId: currentCard.id, baseCardName: currentCard.baseCard.name, markupValue: 3})
+            currentCard.baseCard.lifeBonus.push({baseCardId: currentCard.id, baseCardName: this.name, markupValue: 3})
+            currentCard.baseCard.attackBonus.push({baseCardId: currentCard.id, baseCardName: this.name, markupValue: 3})
         }
     }
 }

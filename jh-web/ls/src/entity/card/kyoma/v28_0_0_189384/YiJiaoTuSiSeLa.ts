@@ -24,6 +24,6 @@ export default class YiJiaoTuSiSeLaV28 extends BaseCard {
             return;
         }
         currentPlayer.addCard(baseCardObjs[0], currentPlayer.findNextCard(currentCard), triggerObj);
-        console.log(`(${currentPlayer.name})的【${currentCard.baseCard.name}(${currentCard.attack}/${currentCard.life})】触发亡语：召唤你在本场战斗中死亡的第一个恶魔【${baseCardObjs[0].baseCard.name}】，保留其额外效果。`)
+        console.log(`(${currentPlayer.name})的【${this.name}(${currentCard.attack}/${currentCard.life})】触发亡语：召唤你在本场战斗中死亡的第一个恶魔【${baseCardObjs[0].baseCard.name}】，保留其额外效果。`)
     }
 }

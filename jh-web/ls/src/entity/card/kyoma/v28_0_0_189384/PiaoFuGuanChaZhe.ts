@@ -21,14 +21,14 @@ export default class PiaoFuGuanChaZheV28 extends BaseCard {
             return
         }
         if (!currentPlayer.isEndRound) {
-            this.attackBonus.push({
+            currentCard.baseCard.attackBonus.push({
                 markupValue: 2,
-                baseCardName: currentCard.baseCard.name,
+                baseCardName: this.name,
                 baseCardId: currentCard.id,
             })
-            this.lifeBonus.push({
+            currentCard.baseCard.lifeBonus.push({
                 markupValue: 1,
-                baseCardName: currentCard.baseCard.name,
+                baseCardName: this.name,
                 baseCardId: currentCard.id,
             })
         }

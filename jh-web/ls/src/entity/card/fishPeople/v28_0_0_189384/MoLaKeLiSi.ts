@@ -25,12 +25,12 @@ export default class MoLaKeLiSiV28 extends BaseCard {
         }
         const baseCardObj = randomUtil.pickone(handCardList);
         baseCardObj.baseCard.lifeBonus.push({
-            baseCardName: currentCard.baseCard.name,
+            baseCardName: this.name,
             baseCardId: currentCard.id,
             markupValue: 2
         })
         baseCardObj.baseCard.attackBonus.push({
-            baseCardName: currentCard.baseCard.name,
+            baseCardName: this.name,
             baseCardId: currentCard.id,
             markupValue: 2
         })

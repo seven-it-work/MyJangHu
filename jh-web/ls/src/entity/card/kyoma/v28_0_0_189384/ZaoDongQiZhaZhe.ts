@@ -30,6 +30,6 @@ export default class ZaoDongQiZhaZheV28 extends BaseCard {
             baseCardId: baseCardObj.id,
             baseCardName: baseCardObj.baseCard.name
         })
-        console.log(`(${currentPlayer.name})的【${currentCard.baseCard.name}(${currentCard.attack}/${currentCard.life})】触发亡语：使另一个友方随从【${baseCardObj.baseCard.name}】获得本随从的生命值上限。`)
+        console.log(`(${currentPlayer.name})的【${this.name}(${currentCard.attack}/${currentCard.life})】触发亡语：使另一个友方随从【${baseCardObj.baseCard.name}】获得本随从的生命值上限。`)
     }
 }

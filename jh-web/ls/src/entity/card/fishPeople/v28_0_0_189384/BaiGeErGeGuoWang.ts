@@ -26,10 +26,10 @@ export default class BaiGeErGeGuoWangV28 extends BaseCard {
         }
         baseCardObjs.forEach(card => {
             card.baseCard.attackBonus.push({
-                baseCardId: currentCard.id, baseCardName: currentCard.baseCard.name, markupValue: 2
+                baseCardId: currentCard.id, baseCardName: this.name, markupValue: 2
             })
             card.baseCard.lifeBonus.push({
-                baseCardId: currentCard.id, baseCardName: currentCard.baseCard.name, markupValue: 3
+                baseCardId: currentCard.id, baseCardName: this.name, markupValue: 3
             })
         })
     }

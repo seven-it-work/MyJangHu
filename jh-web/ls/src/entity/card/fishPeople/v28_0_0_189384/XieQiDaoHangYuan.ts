@@ -22,12 +22,12 @@ export default class XieQiDaoHangYuanV28 extends BaseCard {
         cardList.filter(card => card.baseCard.ethnicity.includes('鱼人')).filter(card => card.id !== currentCard.id).forEach(card => {
             card.baseCard.attackBonus.push({
                 baseCardId: currentCard.id,
-                baseCardName: currentCard.baseCard.name,
+                baseCardName: this.name,
                 markupValue: 1
             })
             card.baseCard.lifeBonus.push({
                 baseCardId: currentCard.id,
-                baseCardName: currentCard.baseCard.name,
+                baseCardName: this.name,
                 markupValue: 1
             })
         })

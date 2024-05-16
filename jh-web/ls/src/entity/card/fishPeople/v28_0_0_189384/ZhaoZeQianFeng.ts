@@ -21,7 +21,7 @@ export default class ZhaoZeQianFengV28 extends BaseCard {
         if (targetCard.baseCard.ethnicity.includes('鱼人')) {
             currentCard.baseCard.attackBonus.push({
                 baseCardId: currentCard.id,
-                baseCardName: currentCard.baseCard.name,
+                baseCardName: this.name,
                 markupValue: 1
             })
         }

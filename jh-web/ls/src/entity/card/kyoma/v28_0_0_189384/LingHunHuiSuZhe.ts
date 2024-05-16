@@ -24,9 +24,9 @@ export default class LingHunHuiSuZheV28 extends BaseCard {
         if (!currentPlayer.isEndRound) {
             // 伤害回溯，问题？护甲能回溯吗，回溯到护甲上吗？满血回溯到哪里，有护甲生命值没有满的问题
             currentPlayer.changeLife(injuring, triggerObj)
-            this.lifeBonus.push({
+            currentCard.baseCard.lifeBonus.push({
                 markupValue: 1,
-                baseCardName: currentCard.baseCard.name,
+                baseCardName: this.name,
                 baseCardId: currentCard.id,
             })
         }

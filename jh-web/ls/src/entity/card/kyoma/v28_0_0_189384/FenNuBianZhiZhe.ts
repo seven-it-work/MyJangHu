@@ -26,14 +26,14 @@ export default class FenNuBianZhiZheV28 extends BaseCard {
         }
         if (targetCard.baseCard.ethnicity.includes("恶魔")) {
             currentPlayer.changeLife(-1, triggerObj)
-            this.attackBonus.push({
+            currentCard.baseCard.attackBonus.push({
                 markupValue: 2,
-                baseCardName: currentCard.baseCard.name,
+                baseCardName: this.name,
                 baseCardId: currentCard.id,
             })
-            this.lifeBonus.push({
+            currentCard.baseCard.lifeBonus.push({
                 markupValue: 1,
-                baseCardName: currentCard.baseCard.name,
+                baseCardName: this.name,
                 baseCardId: currentCard.id,
             })
         }

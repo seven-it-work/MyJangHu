@@ -22,12 +22,12 @@ export default class DuoMianFuZhuWuRenJiV28 extends BaseCard {
             card.baseCard.magneticForceList.forEach(() => {
                 card.baseCard.attackBonus.push({
                     markupValue: 1,
-                    baseCardName: currentCard.baseCard.name,
+                    baseCardName: this.name,
                     baseCardId: currentCard.id,
                 })
                 card.baseCard.lifeBonus.push({
                     markupValue: 1,
-                    baseCardName: currentCard.baseCard.name,
+                    baseCardName: this.name,
                     baseCardId: currentCard.id,
                 })
             })

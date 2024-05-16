@@ -35,12 +35,12 @@ export default class JiEDeFuMoV28 extends BaseCard {
             tavern.removeCard(pick, triggerObj.contextObj)
             item.baseCard.attackBonus.push({
                 markupValue: pick.baseCard.attack,
-                baseCardName: currentCard.baseCard.name,
+                baseCardName: this.name,
                 baseCardId: currentCard.id,
             })
             item.baseCard.lifeBonus.push({
                 markupValue: pick.baseCard.life,
-                baseCardName: currentCard.baseCard.name,
+                baseCardName: this.name,
                 baseCardId: currentCard.id,
             })
         })

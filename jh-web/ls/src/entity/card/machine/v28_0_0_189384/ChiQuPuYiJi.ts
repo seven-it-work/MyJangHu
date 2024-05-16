@@ -25,14 +25,14 @@ export default class ChiQuPuYiJiV28 extends BaseCard {
             return;
         }
         const baseCardObj = randomUtil.pickone(handCardList);
-        baseCardObj.attackBonus.push({
+        baseCardObj.baseCard.attackBonus.push({
             markupValue: 1,
-            baseCardName: currentCard.baseCard.name,
+            baseCardName: this.name,
             baseCardId: currentCard.id,
         })
-        baseCardObj.lifeBonus.push({
+        baseCardObj.baseCard.lifeBonus.push({
             markupValue: 1,
-            baseCardName: currentCard.baseCard.name,
+            baseCardName: this.name,
             baseCardId: currentCard.id,
         })
     }

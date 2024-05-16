@@ -149,6 +149,8 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
             return
         }
         for (let i = 0; i <= currentPlayer.deadWordsExtraTriggers; i++) {
+            // 磁力效果
+            this.baseCard.magneticForceList.forEach(base => base.whenDeadTrigger(triggerObj));
             this.baseCard.whenDeadTrigger(this.triggerObj2BaseCard(triggerObj));
         }
     }
@@ -166,7 +168,6 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
             this.baseCard.whenCardUsedTrigger(this.triggerObj2BaseCard(triggerObj));
         }
     }
-
 
     whenSummonedTrigger(triggerObj: TriggerObj) {
         this.baseCard.whenSummonedTrigger(this.triggerObj2BaseCard(triggerObj))

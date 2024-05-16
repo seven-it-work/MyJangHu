@@ -22,12 +22,12 @@ export default class TiKeDiAoSaoSiV28 extends BaseCard {
             currentPlayer.cardList.filter(card => card.id !== this.tempId).forEach(card => {
                 card.baseCard.attackBonus.push({
                     markupValue: 1,
-                    baseCardName: currentCard.baseCard.name,
+                    baseCardName: this.name,
                     baseCardId: currentCard.id,
                 })
                 card.baseCard.lifeBonus.push({
                     markupValue: 1,
-                    baseCardName: currentCard.baseCard.name,
+                    baseCardName: this.name,
                     baseCardId: currentCard.id,
                 })
             })
