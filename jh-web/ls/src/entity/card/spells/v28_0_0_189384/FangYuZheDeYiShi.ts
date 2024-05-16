@@ -28,5 +28,6 @@ export default class FangYuZheDeYiShi28 extends BaseCard {
         }
         needSelectCard.baseCard.attackBonus.push({baseCardId: currentCard.id, baseCardName: this.name, markupValue: 8})
         needSelectCard.baseCard.lifeBonus.push({baseCardId: currentCard.id, baseCardName: this.name, markupValue: 8})
+        needSelectCard.baseCard.isMockery = true;
     }
 }

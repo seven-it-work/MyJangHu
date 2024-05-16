@@ -240,14 +240,6 @@ export default class Player implements Serialization<Player> {
                     currentPlayer: this,
                     targetCard: cardObj,
                 });
-                this.cardList.forEach((v) => {
-                    v.whenOtherCardUsedTrigger({
-                        ...triggerObj,
-                        currentCard: v,
-                        currentPlayer: this,
-                        targetCard: cardObj,
-                    })
-                })
                 this._handCardMap.forEach((v) => {
                     v.whenOtherHandlerCardUsedTrigger({
                         ...triggerObj,

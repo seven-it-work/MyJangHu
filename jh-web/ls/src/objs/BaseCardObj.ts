@@ -167,6 +167,15 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
         }
         for (let i = 0; i <= currentPlayer.battleRoarExtraTriggers; i++) {
             this.baseCard.whenCardUsedTrigger(this.triggerObj2BaseCard(triggerObj));
+            // 其他战吼触发
+            currentPlayer.cardList.forEach((v) => {
+                console.log(v.baseCard.name)
+                v.whenOtherCardUsedTrigger({
+                    ...triggerObj,
+                    currentCard: v,
+                    targetCard: this,
+                })
+            })
         }
     }
 

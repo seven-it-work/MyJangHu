@@ -25,6 +25,7 @@ export default class ChiQuPuYiJiV28 extends BaseCard {
             return;
         }
         const baseCardObj = randomUtil.pickone(handCardList);
+        console.log(`(${currentPlayer.name})的【${this.name}】触发在一个友方随从失去圣盾后，在你手牌中的一张随从【${baseCardObj.baseCard.name}】获得+1/+1。`)
         baseCardObj.baseCard.attackBonus.push({
             markupValue: 1,
             baseCardName: this.name,
