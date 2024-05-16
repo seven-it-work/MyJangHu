@@ -11,7 +11,6 @@ import {serialize} from "class-transformer";
 export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> {
     id: string;
     isFreeze: boolean = false;
-    index: number;
 
     constructor(baseCard: BaseCard | undefined) {
         if (baseCard) {
@@ -309,6 +308,8 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
             return
         }
         for (let i = 0; i <= currentPlayer.endRoundExtraTriggers; i++) {
+            // 磁力效果
+            this.baseCard.magneticForceList.forEach(card => card.whenEndRound(triggerObj))
             this.baseCard.whenEndRound(this.triggerObj2BaseCard(triggerObj))
         }
     }
@@ -324,6 +325,8 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
     }
 
     whenStartRound(triggerObj: TriggerObj) {
+        // 磁力效果
+        this.baseCard.magneticForceList.forEach(card => card.whenStartRound(triggerObj))
         this.baseCard.whenStartRound(this.triggerObj2BaseCard(triggerObj))
     }
 
@@ -362,7 +365,6 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
         }
         this.id = json.id
         this.isFreeze = json.isFreeze
-        this.index = json.index
         this.baseCard = SharedCardPool.initCardDb().getByName(json.baseCard.classType).deserialize(json.baseCard);
         return this;
     }

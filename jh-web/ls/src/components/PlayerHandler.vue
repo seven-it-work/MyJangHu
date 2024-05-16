@@ -17,7 +17,7 @@
     </a-row>
     <a-modal v-model:open="isNeedSelectOpen" :title="isNeedSelectTitle" @ok="isNeedSelectOk">
       <a-row :gutter="16">
-        <a-col v-for="cardObj in Array.from(playObj.currentPlayerInfo.cardList)" :key="cardObj.id"
+        <a-col v-for="cardObj in getSelectCardList()" :key="cardObj.id"
                :style="cardObj.id===targetBaseCard?.id?'border: solid 2px #98bf21':''"
                @click="()=>targetBaseCard=cardObj">
           <Card :card-obj="cardObj">
@@ -83,6 +83,9 @@ export default defineComponent({
       this.isNeedSelectOpen = false;
       this.isNeedSelectTitle = '';
       this.openModal(this.toBeUseCard, false)
+    },
+    getSelectCardList(){
+      return this.toBeUseCard?.baseCard.needSelectFilter(this.playObj.currentPlayerInfo.cardList) || [];
     },
     selectCard(cardObj, index) {
       if (!cardObj || !cardObj.id) {

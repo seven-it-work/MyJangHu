@@ -80,6 +80,10 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
     attackBonus: Bonus[] = [];
     // 是否选中其他
     isNeedSelect: boolean = false;
+    // 选中过滤器
+    needSelectFilter(baseCardObj: BaseCardObj[]): BaseCardObj[] {
+        return baseCardObj;
+    }
 
     getLife(): number {
         // 磁力加成
