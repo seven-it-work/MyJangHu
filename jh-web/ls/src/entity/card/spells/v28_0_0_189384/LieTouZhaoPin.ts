@@ -3,7 +3,7 @@ import {TriggerObj} from "../../../Trigger";
 import BaseCardObj from "../../../../objs/BaseCardObj";
 
 export default class LieTouZhaoPin28 extends BaseCard {
-    type = '酒馆法术'
+    type = '法术'
     ethnicity = ['酒馆']
     name = "猎头招聘"
     graded = 4

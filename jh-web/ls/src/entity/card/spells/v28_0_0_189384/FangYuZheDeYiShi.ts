@@ -3,7 +3,7 @@ import BaseCardObj from "../../../../objs/BaseCardObj";
 import {TriggerObj} from "../../../Trigger";
 
 export default class FangYuZheDeYiShi28 extends BaseCard {
-    type = '酒馆法术'
+    type = '法术'
     ethnicity = ['酒馆']
     name = "防御者的仪式"
     graded = 4

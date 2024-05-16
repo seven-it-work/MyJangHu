@@ -3,7 +3,6 @@ import {TriggerObj} from "../../../Trigger";
 
 export default class KanGeErDeXueTuV28 extends BaseCard {
     name = "坎格尔的学徒"
-    ethnicity = ["中立"]
     accompanyingRace = ["机械"]
     attack = 3
     life = 6

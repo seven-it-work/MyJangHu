@@ -75,7 +75,7 @@ export default class Taverns implements Serialization<Taverns> {
             }
         })
         let cardNumber = GRADED_RULES[this.graded].cardNumber - freezeId.length;
-        const baseCardObjs = Array.from(this.currentCard.values()).filter(card => card.baseCard.type === '酒馆法术');
+        const baseCardObjs = Array.from(this.currentCard.values()).filter(card => card.baseCard.type === '法术');
         if (baseCardObjs.length <= 0) {
             const spell = triggerObj.contextObj.sharedCardPool.listSpell(this.graded, this.spellSize);
             const spellCard = new BaseCardObj(spell[0]);

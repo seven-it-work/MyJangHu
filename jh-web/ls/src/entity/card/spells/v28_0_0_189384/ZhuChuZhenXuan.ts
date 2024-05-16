@@ -4,7 +4,7 @@ import BaseCardObj from "../../../../objs/BaseCardObj";
 import {TriggerObj} from "../../../Trigger";
 
 export default class ZhuChuZhenXuan28 extends BaseCard {
-    type = '酒馆法术'
+    type = '法术'
     ethnicity = ['酒馆']
     name = "主厨甄选"
     graded = 2

@@ -4,7 +4,7 @@ import BaseCardObj from "../../../../objs/BaseCardObj";
 import randomUtils from "../../../../utils/RandomUtils";
 
 export default class LuanFaDeChaJu28 extends BaseCard {
-    type = '酒馆法术'
+    type = '法术'
     ethnicity = ['酒馆']
     name = "乱发的茶具"
     graded = 4

@@ -5,7 +5,7 @@ import {GRADED_RULES} from "../../../../objs/Taverns";
 import randomUtil from "../../../../utils/RandomUtils";
 
 export default class HaMiuErYiShiDeFaZhang28 extends BaseCard {
-    type = '酒馆法术'
+    type = '法术'
     ethnicity = ['酒馆']
     name = "哈缪尔遗失的法杖"
     graded = 6

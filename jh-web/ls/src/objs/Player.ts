@@ -153,7 +153,7 @@ export default class Player implements Serialization<Player> {
         } else {
             this.currentGoldCoin -= cardObj.baseCard.spendingGoldCoin;
         }
-        this.tavern.removeCard(cardObj, context)
+        this.tavern.removeCard(cardObj, context.sharedCardPool)
         // 酒馆加成写入
         cardObj.baseCard.attackBonus.push(...this.tavern.attackBonus)
         cardObj.baseCard.lifeBonus.push(...this.tavern.lifeBonus)

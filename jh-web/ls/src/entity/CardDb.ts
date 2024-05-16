@@ -12,6 +12,9 @@ export default class CardDb {
     }
 
     listByAccompanyingRace(accompanyingRace: String[] = []): BaseCard[] {
+        accompanyingRace.push('酒馆')
+        accompanyingRace.push('中立')
+        accompanyingRace.push('伙伴')
         return Array.from(this.cardMap.values()).filter(card => {
             for (let race of card.accompanyingRace) {
                 if (accompanyingRace.includes(race)) {

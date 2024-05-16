@@ -26,7 +26,7 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
     // 出售价格
     salePrice: number = 1;
     // 种族
-    ethnicity: string[] = ['中立'];
+    ethnicity: string[] = [];
     // 体系类别
     accompanyingRace: string[] = [];
     // 基础攻击力

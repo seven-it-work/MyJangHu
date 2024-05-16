@@ -3,7 +3,6 @@ import {TriggerObj} from "../../../Trigger";
 
 export default class FenNuBianZhiZheV28 extends BaseCard {
     name = "愤怒编织者"
-    ethnicity = ["中立"]
     accompanyingRace = ["恶魔"]
     attack = 3
     life = 1

@@ -5,7 +5,7 @@ import {GRADED_RULES} from "../../../../objs/Taverns";
 import BaseCardObj from "../../../../objs/BaseCardObj";
 
 export default class DingJianHaoJiu28 extends BaseCard {
-    type = '酒馆法术'
+    type = '法术'
     ethnicity = ['酒馆']
     name = "顶尖好酒"
     graded = 6

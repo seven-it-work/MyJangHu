@@ -130,7 +130,7 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
     listSpell(graded: number, size: number = 1, isGradedConsistent: boolean = false): BaseCard[] {
         const list = Array.from(this.pool.values())
             .filter(card => card.baseCard.isSell)
-            .filter(card => card.baseCard.type === '酒馆法术')
+            .filter(card => card.baseCard.type === '法术')
             .filter(card => {
                 if (isGradedConsistent) {
                     return card.baseCard.graded = graded;
