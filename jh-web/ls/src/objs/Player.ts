@@ -76,22 +76,22 @@ export default class Player implements Serialization<Player> {
         if (!this.isEndRound) {
             const merges = new Map<string, { index: number, form: 'handCardList' | 'cardList', baseCardObj: BaseCardObj }[]>();
             for (let i = 0; i < this.handCardList.length; i++) {
-                const merge = merges.get(this.handCardList[i].baseCard.constructor.name) || [];
+                const merge = merges.get(this.handCardList[i].baseCard.classType) || [];
                 merge.push({
                     index: i,
                     form: 'handCardList',
                     baseCardObj: this.handCardList[i],
                 })
-                merges.set(this.handCardList[i].baseCard.constructor.name, merge)
+                merges.set(this.handCardList[i].baseCard.classType, merge)
             }
             for (let i = 0; i < this.cardList.length; i++) {
-                const merge = merges.get(this.cardList[i].baseCard.constructor.name) || [];
+                const merge = merges.get(this.cardList[i].baseCard.classType) || [];
                 merge.push({
                     index: i,
                     form: 'cardList',
                     baseCardObj: this.cardList[i],
                 })
-                merges.set(this.cardList[i].baseCard.constructor.name, merge)
+                merges.set(this.cardList[i].baseCard.classType, merge)
             }
             merges.forEach((v) => {
                 for (let i = 0; i < Math.floor(v.length / 3); i++) {

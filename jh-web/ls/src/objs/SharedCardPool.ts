@@ -61,7 +61,7 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
             this.accompanyingRace = accompanyingRace;
             const baseCards: BaseCard[] = this.cardDb.listByAccompanyingRace(accompanyingRace);
             baseCards.forEach(card => {
-                this.pool.set(card.constructor.name, new SharedCardPoolData(card.graded, GRADED_RULES[card.graded].cardSize, card))
+                this.pool.set(card.classType, new SharedCardPoolData(card.graded, GRADED_RULES[card.graded].cardSize, card))
             })
         }
     }
@@ -150,6 +150,7 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
         }
         const list = Array.from(this.pool.values())
             .filter(card => card.baseCard.isSell)
+            .filter(card => card.baseCard.type === '随从')
             .filter(card => {
                 return card.remainingQuantity > 0;
             }).filter(card => {
@@ -165,14 +166,14 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
     }
 
     cardOut(baseCard: BaseCard) {
-        const newVar = this.pool.get(baseCard.constructor.name);
+        const newVar = this.pool.get(baseCard.classType);
         if (newVar) {
             newVar.remainingQuantity = Math.max(newVar.remainingQuantity - 1, 0);
         }
     }
 
     cardIn(baseCard: BaseCard) {
-        const newVar = this.pool.get(baseCard.constructor.name);
+        const newVar = this.pool.get(baseCard.classType);
         if (newVar) {
             let size = 1;
             if (baseCard.isGold) {

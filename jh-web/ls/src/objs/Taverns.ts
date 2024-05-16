@@ -60,12 +60,20 @@ export default class Taverns implements Serialization<Taverns> {
             freezeId.push(...this.freezeCardId)
         }
         this.freezeCardId = []
-        // 冻结的不移除
+        let freezeSpellSize = 0;
+        let freezeCardSize = 0;
+        // 清理，冻结的不移除
         const keys = Array.from(this.currentCard.keys());
         keys.forEach((id) => {
             const baseCardObj = this.currentCard.get(id);
             if (baseCardObj) {
                 if (freezeId.includes(baseCardObj.id)) {
+                    if (baseCardObj.baseCard.type === '法术') {
+                        freezeSpellSize++;
+                    }
+                    if (baseCardObj.baseCard.type === '随从') {
+                        freezeCardSize++;
+                    }
                     baseCardObj.isFreeze = false;
                 } else {
                     // 释放已有的
@@ -74,23 +82,23 @@ export default class Taverns implements Serialization<Taverns> {
                 }
             }
         })
-        let cardNumber = GRADED_RULES[this.graded].cardNumber - freezeId.length;
-        const baseCardObjs = Array.from(this.currentCard.values()).filter(card => card.baseCard.type === '法术');
-        if (baseCardObjs.length <= 0) {
-            const spell = triggerObj.contextObj.sharedCardPool.listSpell(this.graded, this.spellSize);
-            const spellCard = new BaseCardObj(spell[0]);
-            this.currentCard.set(spellCard.id, spellCard)
-        } else {
-            // 存在酒馆法术
-            cardNumber -= 1;
+        // 刷新随从
+        if (freezeCardSize < GRADED_RULES[this.graded].cardNumber) {
+            const baseCards: BaseCard[] = triggerObj.contextObj.sharedCardPool.refreshRandom(GRADED_RULES[this.graded].cardNumber - freezeCardSize, this.graded);
+            baseCards.forEach(card => {
+                // 刷新要锁定共享池，锁定新出的
+                triggerObj.contextObj.sharedCardPool.cardOut(card);
+                const baseCardObj = new BaseCardObj(card);
+                this.currentCard.set(baseCardObj.id, baseCardObj)
+            })
         }
-        const baseCards: BaseCard[] = triggerObj.contextObj.sharedCardPool.refreshRandom(cardNumber, this.graded);
-        baseCards.forEach(card => {
-            // 刷新要锁定共享池，锁定新出的
-            triggerObj.contextObj.sharedCardPool.cardOut(card);
-            const baseCardObj = new BaseCardObj(card);
-            this.currentCard.set(baseCardObj.id, baseCardObj)
-        })
+        // 刷新法术
+        if (freezeSpellSize < this.spellSize) {
+            triggerObj.contextObj.sharedCardPool.listSpell(this.graded, this.spellSize - freezeSpellSize).forEach(card => {
+                const spellCard = new BaseCardObj(card);
+                this.currentCard.set(spellCard.id, spellCard)
+            })
+        }
     }
 
     upgrade() {

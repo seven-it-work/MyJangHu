@@ -84,7 +84,7 @@ export default defineComponent({
       this.isNeedSelectTitle = '';
       this.openModal(this.toBeUseCard, false)
     },
-    getSelectCardList(){
+    getSelectCardList() {
       return this.toBeUseCard?.baseCard.needSelectFilter(this.playObj.currentPlayerInfo.cardList) || [];
     },
     selectCard(cardObj, index) {
@@ -115,11 +115,8 @@ export default defineComponent({
         return;
       } else {
         // 直接使用
-        this.playObj.currentPlayerInfo.useCard(cardObj, undefined, {
-          contextObj: this.playObj.contextObj,
-          currentPlayer: this.playObj.currentPlayerInfo,
-          currentCard: cardObj
-        })
+        this.tempCardList = []
+        this.useCard()
       }
     },
     useCard() {
@@ -140,6 +137,8 @@ export default defineComponent({
         this.playObj.currentPlayerInfo.useCard(this.toBeUseCard, nextCard, {
           contextObj: this.playObj.contextObj,
           needSelectCard: this.targetBaseCard,
+          currentCard: this.toBeUseCard,
+          currentPlayer: this.playObj.currentPlayerInfo,
         })
       }
       this.open = false

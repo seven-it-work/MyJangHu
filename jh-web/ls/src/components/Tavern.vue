@@ -43,7 +43,7 @@ export default defineComponent({
         }})
       </a-button>
       <a-button size="small" type="primary" danger @click="flushed">刷新({{
-          playObj.currentPlayerInfo.tavern.refreshExpenses
+          playObj.currentPlayerInfo.freeRefreshTimes>0?0:playObj.currentPlayerInfo.tavern.refreshExpenses
         }})
       </a-button>
       <a-button size="small" @click="freezeAll">

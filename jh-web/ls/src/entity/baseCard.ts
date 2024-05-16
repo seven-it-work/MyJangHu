@@ -11,7 +11,7 @@ export const baseEthnicity: string[] = ['鱼人', '机械', '恶魔', '亡灵', 
 export const ethnicity: string[] = ['中立', '伙伴', ...baseEthnicity]
 
 export default abstract class BaseCard implements Trigger, Serialization<BaseCard> {
-    classType: string = this.constructor.name
+    classType: string
 
     tempId: string = '';
     name: string = '';
@@ -126,7 +126,7 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
     /**
      * 遭受的伤害
      */
-    injuriesReceived(num: number) {
+    changeInjuriesReceived(num: number) {
         this._injuriesReceived += num;
     }
 

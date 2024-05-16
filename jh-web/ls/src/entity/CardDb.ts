@@ -7,7 +7,9 @@ export default class CardDb {
 
     constructor() {
         CardStorage.forEach((v, k) => {
-            this.cardMap.set(k, new (v)())
+            const value = new (v)();
+            value.classType = k;
+            this.cardMap.set(k, value)
         })
     }
 
