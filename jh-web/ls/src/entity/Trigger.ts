@@ -149,4 +149,9 @@ export interface Trigger {
      * 战斗结束时
      */
     whenEndFightingTrigger(result: '胜利' | '失败' | '平局', triggerObj: TriggerObj);
+
+    /**
+     * 当其他随从附加磁力时
+     */
+    whenOtherCardMagneticAdd(triggerObj: TriggerObj)
 }

@@ -15,7 +15,7 @@ export default class LieTouZhaoPin28 extends BaseCard {
         if (!currentPlayer) {
             return
         }
-        const baseCards = triggerObj.contextObj.sharedCardPool.listByDescriptionCard("战吼", currentPlayer.tavern.graded);
+        const baseCards = triggerObj.contextObj.sharedCardPool.listByWarRoarCard(currentPlayer.tavern.graded);
         if (baseCards.length <= 0) {
             return;
         }

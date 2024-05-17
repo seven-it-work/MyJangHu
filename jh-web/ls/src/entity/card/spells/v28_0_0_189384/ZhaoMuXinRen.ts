@@ -15,7 +15,7 @@ export default class ZhaoMuXinRen28 extends BaseCard {
         if (!currentPlayer) {
             return
         }
-        const baseCards = triggerObj.contextObj.sharedCardPool.listByDescriptionCard('', 1);
+        const baseCards = triggerObj.contextObj.sharedCardPool.refreshRandom(1, 1, true);
         if (baseCards.length <= 0) {
             return;
         }

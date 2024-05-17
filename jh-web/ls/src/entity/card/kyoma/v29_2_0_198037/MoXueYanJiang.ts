@@ -8,5 +8,6 @@ export default class MoXueYanJiangV29 extends BaseCard {
     graded = 3
     description = "亡语:在本局对战中,酒馆中的随从拥有+3攻击力。"
     version = ["v29.2.0.198037"]
+    isDeadLanguage = true
 }
 

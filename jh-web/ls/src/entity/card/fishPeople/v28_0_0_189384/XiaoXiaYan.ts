@@ -33,7 +33,7 @@ export default class XiaoXiaYanV28 extends BaseCard {
             }
         }
         if (pre) {
-            if (pre.baseCard.description.includes("战吼")) {
+            if (pre.baseCard.isWarRoars) {
                 console.log(`(${currentPlayer.name})的【${this.name}】触发左侧战吼：${pre.baseCard.description}`)
                 pre.whenCardUsedTrigger({
                     ...triggerObj,
@@ -42,7 +42,7 @@ export default class XiaoXiaYanV28 extends BaseCard {
             }
         }
         if (next) {
-            if (next.baseCard.description.includes("战吼")) {
+            if (next.baseCard.isWarRoars) {
                 console.log(`(${currentPlayer.name})的【${this.name}】触发右侧战吼：${next.baseCard.description}`)
                 next.whenCardUsedTrigger({
                     ...triggerObj,

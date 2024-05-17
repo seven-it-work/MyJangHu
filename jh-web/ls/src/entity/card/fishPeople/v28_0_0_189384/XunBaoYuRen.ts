@@ -9,6 +9,7 @@ export default class XunBaoYuRenV28 extends BaseCard {
     life = 3
     graded = 3
     description = "亡语：随机使你手牌中的一张随从牌获取+5/+5。"
+    isDeadLanguage = true
 
     whenDeadTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

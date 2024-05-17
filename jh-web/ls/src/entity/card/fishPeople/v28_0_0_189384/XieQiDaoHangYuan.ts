@@ -8,6 +8,7 @@ export default class XieQiDaoHangYuanV28 extends BaseCard {
     life = 4
     graded = 3
     description = "战吼：使你的其他鱼人获取+1/+1。"
+    isWarRoars = true
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

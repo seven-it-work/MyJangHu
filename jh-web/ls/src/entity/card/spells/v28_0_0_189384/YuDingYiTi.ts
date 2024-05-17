@@ -16,7 +16,7 @@ export default class YuDingYiTi28 extends BaseCard {
         if (!currentPlayer) {
             return
         }
-        const baseCards = triggerObj.contextObj.sharedCardPool.listByDescriptionCard('亡语', currentPlayer.tavern.graded);
+        const baseCards = triggerObj.contextObj.sharedCardPool.listByDeadLanguageCard( currentPlayer.tavern.graded);
         if (baseCards.length <= 0) {
             return;
         }

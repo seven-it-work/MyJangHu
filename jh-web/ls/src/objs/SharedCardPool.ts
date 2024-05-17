@@ -106,13 +106,12 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
                 return true
             }).map(data => data.baseCard);
     }
-
-    listByDescriptionCard(descriptionStr: string, graded: number | undefined = undefined, size: number = 1): BaseCard[] {
+    listByDeadLanguageCard( graded: number | undefined = undefined, size: number = 1): BaseCard[] {
         const baseCards = Array.from(this.pool.values())
             .filter(card => card.baseCard.isSell)
             .filter(card => card.baseCard.type === '随从')
             .filter(card => {
-                return card.baseCard.description.includes(descriptionStr);
+                return card.baseCard.isDeadLanguage;
             }).filter(data => {
                 if (graded) {
                     return data.baseCard.graded <= graded;
@@ -125,7 +124,24 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
         }
         return randomUtil.pick(baseCards, size);
     }
+    listByWarRoarCard( graded: number | undefined = undefined, size: number = 1): BaseCard[] {
+        const baseCards = Array.from(this.pool.values())
+            .filter(card => card.baseCard.isSell)
+            .filter(card => card.baseCard.type === '随从')
+            .filter(card => {
+                return card.baseCard.isWarRoars;
+            }).filter(data => {
+                if (graded) {
+                    return data.baseCard.graded <= graded;
+                }
+                return true
+            }).map(data => data.baseCard);
 
+        if (size === 1) {
+            return [randomUtil.pick(baseCards, size)]
+        }
+        return randomUtil.pick(baseCards, size);
+    }
 
     listSpell(graded: number, size: number = 1, isGradedConsistent: boolean = false): BaseCard[] {
         const list = Array.from(this.pool.values())

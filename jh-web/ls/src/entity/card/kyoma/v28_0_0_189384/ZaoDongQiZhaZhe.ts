@@ -10,7 +10,7 @@ export default class ZaoDongQiZhaZheV28 extends BaseCard {
     graded = 2
     description = "<b>亡语</b>：使另一个友方随从获得本随从的生命值上限。"
     version = ["v28.0.0.189384", "v29.2.0.198037"]
-
+    isDeadLanguage = true
     whenDeadTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
         if (!currentPlayer) {

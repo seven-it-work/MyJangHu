@@ -9,6 +9,7 @@ export default class XiongEDeXieNengYouLongV28 extends BaseCard {
     life = 2
     graded = 4
     description = "<b>战吼</b>：吞食酒馆中的3个随从，获得其属性值。"
+    isWarRoars = true
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

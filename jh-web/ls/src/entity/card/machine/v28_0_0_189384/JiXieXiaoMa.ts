@@ -10,7 +10,7 @@ export default class JiXieXiaoMaV28 extends BaseCard {
     graded = 1
     description = "<b>亡语</b>：召唤一个1/1的迹象马驹"
     isSell = false
-
+    isDeadLanguage = true
     whenDeadTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
         if (!currentPlayer) {

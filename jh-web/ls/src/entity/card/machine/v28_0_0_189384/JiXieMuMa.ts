@@ -9,7 +9,7 @@ export default class ZiShiYingLuZhangV28 extends BaseCard {
     life = 4
     graded = 5
     description = "<b>亡语</b>：召唤两个2/2并具有“<b>亡语</b>：召唤一个1/1的迹象马驹”的机械小马。"
-
+    isDeadLanguage = true
     whenDeadTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
         if (!currentPlayer) {

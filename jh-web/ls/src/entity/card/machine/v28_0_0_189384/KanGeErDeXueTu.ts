@@ -8,7 +8,7 @@ export default class KanGeErDeXueTuV28 extends BaseCard {
     life = 6
     graded = 5
     description = "<b>亡语</b>：召唤你本场战斗中最先死亡的2个机械。"
-
+    isDeadLanguage = true
     whenDeadTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
         if (!currentPlayer) {

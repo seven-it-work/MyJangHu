@@ -10,6 +10,7 @@ export default class XiaoGuiQiuTuV28 extends BaseCard {
     graded = 1
     description = "<b>嘲讽</b>，<b>亡语</b>：召唤一个1/1的小鬼"
     isMockery = true;
+    isDeadLanguage = true
 
     whenDeadTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

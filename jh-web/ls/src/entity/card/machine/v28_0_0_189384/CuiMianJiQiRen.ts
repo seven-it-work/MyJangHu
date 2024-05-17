@@ -19,6 +19,7 @@ export default class CuiMianJiQiRenV28 extends BaseCard {
         if (!currentCard) {
             return
         }
+        console.log(`(${currentPlayer.name})的【${this.name}】触发：在你的回合结束是，获取+1/+1。`)
         currentCard.baseCard.attackBonus.push({
             markupValue: 1,
             baseCardName: this.name,

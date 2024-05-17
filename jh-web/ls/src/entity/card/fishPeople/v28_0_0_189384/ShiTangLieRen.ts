@@ -9,6 +9,7 @@ export default class ShiTangLieRenV28 extends BaseCard {
     graded = 1
     description = "战吼：使一个友方鱼人获得+1/+1。"
     isNeedSelect = true
+    isWarRoars = true
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const needSelectCard = triggerObj.needSelectCard;

@@ -10,6 +10,7 @@ export default class ManYuChiHouV28 extends BaseCard {
     life = 2
     graded = 4
     description = "战吼：如果你控制其他任何鱼人，则发现一张鱼人。"
+    isWarRoars = true
 
     /**
      * 发现只会发现当前等级及以下的 而且有数量限制，发现一张随从池就少一张

@@ -9,6 +9,7 @@ export default class DiDiaoTiQinYuRenV28 extends BaseCard {
     life = 3
     graded = 5
     description = "亡语：召唤你手牌中生命值最高的随从，其登场仅限本场战斗。"
+    isDeadLanguage = true
 
     whenDeadTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

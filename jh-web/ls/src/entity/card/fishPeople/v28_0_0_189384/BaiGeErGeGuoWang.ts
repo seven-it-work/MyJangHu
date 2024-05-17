@@ -9,6 +9,7 @@ export default class BaiGeErGeGuoWangV28 extends BaseCard {
     life = 4
     graded = 5
     description = "战吼：使你的其他鱼人获得+2/+3。"
+    isWarRoars = true
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

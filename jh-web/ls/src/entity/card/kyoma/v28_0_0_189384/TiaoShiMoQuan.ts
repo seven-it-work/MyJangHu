@@ -11,6 +11,8 @@ export default class TiaoShiMoQuanV28 extends BaseCard {
     description = "<b>战吼</b>：随机吞噬酒馆一个随从，获取其属性值。"
     version = ["v28.0.0.189384", "v29.2.0.198037"]
 
+    isWarRoars = true
+
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
         if (!currentPlayer) {

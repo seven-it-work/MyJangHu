@@ -219,8 +219,8 @@ export default class Player implements Serialization<Player> {
             message.error({content: '最多有7个随从'});
             return
         }
-        // 如果是磁力，但是下一个不是机械，且this.cardList.length <= 7认为不能上场
-        if (cardObj.baseCard.isMagneticForce && this.cardList.length <= 7) {
+        // 如果是磁力，但是下一个不是机械，且this.cardList.length === 7认为不能上场
+        if (cardObj.baseCard.isMagneticForce && this.cardList.length === 7) {
             if (!nextCard || !nextCard.baseCard.ethnicity.includes("机械")) {
                 message.error({content: '最多有7个随从，磁力请放在机械左侧'});
                 return
@@ -231,6 +231,12 @@ export default class Player implements Serialization<Player> {
                 // 磁力判断
                 if (cardObj.baseCard.isMagneticForce && nextCard && nextCard.baseCard.ethnicity.includes("机械")) {
                     nextCard.baseCard.magneticForceList.push(cardObj.baseCard);
+                    // 磁力监控
+                    this.cardList.forEach(card => card.whenOtherCardMagneticAdd({
+                        ...triggerObj,
+                        currentCard: card,
+                        targetCard: nextCard,
+                    }))
                     // 磁力效果后，将返回卡牌池
                     triggerObj.contextObj.sharedCardPool.cardIn(cardObj.baseCard)
                     return;

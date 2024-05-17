@@ -84,6 +84,10 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
     isNeedSelect: boolean = false;
     // 法术附加能力（回合结束时）
     spellAttached: BaseCard[] = [];
+    // 是否为战吼
+    isWarRoars: boolean = false;
+    // 是否为亡语
+    isDeadLanguage: boolean = false;
 
     // 选中过滤器
     needSelectFilter(baseCardObj: BaseCardObj[]): BaseCardObj[] {
@@ -270,5 +274,9 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
     }
 
     whenEndFightingTrigger(result: "胜利" | "失败" | "平局", triggerObj: TriggerObj) {
+    }
+
+    whenOtherCardMagneticAdd(triggerObj: TriggerObj) {
+
     }
 }

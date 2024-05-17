@@ -11,6 +11,7 @@ export default class XinLingNiMoV28 extends BaseCard {
     description = "<b>战吼</b>：选择一个友方恶魔，使其吞食酒馆中的一个随从，获取其属性值。"
     isNeedSelect = true;
     version = ["v28.0.0.189384", "v29.2.0.198037"]
+    isWarRoars = true
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
