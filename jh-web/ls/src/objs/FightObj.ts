@@ -1,6 +1,7 @@
 import ContextObj from "./ContextObj";
 import randomUtil from "../utils/RandomUtils";
 import Player from "./Player";
+import {isEmpty} from "lodash";
 
 export default class FightObj {
     // 攻击发起人
@@ -201,6 +202,11 @@ export default class FightObj {
         //  这里为什么会为null
         if (!attacker) {
             debugger
+        }
+        console.log(pickList.map(card=>card.baseCard.name))
+        if (isEmpty(pickList)){
+            console.log("对方有潜行，无法攻击")
+            return
         }
         attacker.whenAttackTrigger({
             targetPlayer: defenderPlayer,

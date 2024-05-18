@@ -36,7 +36,12 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
     private _injuriesReceived: number = 0;
     // 等级
     graded: number = 1;
-    description: string = '';
+
+    getDescription():string{
+        return ''
+    }
+
+    goldDescription: string = '';
     // 复仇计数器
     otherDeadCounter: number = 0;
     // 复仇次数，达到清空otherDeadCounter
@@ -143,7 +148,6 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
      * 当其他随从死亡时触发器
      */
     whenOtherDeadTrigger(triggerObj: TriggerObj) {
-
     }
 
     /**
@@ -241,7 +245,6 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
         this.life = json.life
         this._injuriesReceived = json._injuriesReceived
         this.graded = json.graded
-        this.description = json.description
         this.otherDeadCounter = json.otherDeadCounter
         this.otherDeadMaxCounter = json.otherDeadMaxCounter
         this.isMockery = json.isMockery

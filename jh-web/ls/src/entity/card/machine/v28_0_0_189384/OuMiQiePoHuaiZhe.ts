@@ -19,6 +19,7 @@ export default class OuMiQiePoHuaiZheV28 extends BaseCard {
         if (!currentCard) {
             return
         }
+        console.log(`(${currentPlayer.name})的【${this.name}】的亡语触发：召唤六个1/1的微型机器人。每有一个放不下的机器人，便使你的机械获取+1/+1。`)
         for (let i = 0; i < 6; i++) {
             if (currentPlayer.cardListInFighting.length < 7) {
                 currentPlayer.addCard(new BaseCardObj(triggerObj.contextObj.sharedCardPool.getByName("WeiXingJiQiRen")),currentPlayer.findNextCard(currentCard),triggerObj)

@@ -81,11 +81,11 @@
         </div>
         <a-tooltip placement="bottom">
           <template #title>
-            <div v-html="cardObj.baseCard.description"></div>
+            <div v-html="cardObj.baseCard.getDescription()"></div>
           </template>
           <div style="width:160px;height:90px;">
             <p style="display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 4;overflow:hidden;"
-               v-html="cardObj.baseCard.description">
+               v-html="cardObj.baseCard.getDescription()">
             </p>
           </div>
         </a-tooltip>

@@ -16,6 +16,7 @@ export default class ShouFengQinJiQiRenV28 extends BaseCard {
         if (!currentPlayer) {
             return
         }
+        console.log(`(${currentPlayer.name})的【${this.name}】的回合开始时触发：在你的回合开始时，获取一枚额外铸币。`)
         currentPlayer.currentGoldCoin++;
     }
 }

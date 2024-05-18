@@ -29,7 +29,7 @@
         <template #renderItem="{ item }">
           <a-list-item>
             <a-list-item-meta
-                :description="item.description"
+                :description="item.getDescription()"
             >
               <template #title>
                 <router-link :to="{name: 'peopleDetail', params: {peopleId:item.id}}">
@@ -66,7 +66,7 @@
         <template #renderItem="{ item }">
           <a-list-item>
             <a-list-item-meta
-                :description="item.description"
+                :description="item.getDescription()"
             >
               <template #title>
                 <!-- todo 跳转到人物详情(管理人物交互事件)-->
@@ -174,7 +174,7 @@
         </a-select>
       </a-form-item>
       <a-form-item label="描述">
-        <a-input v-model:value="addForm.description" allowClear/>
+        <a-input v-model:value="addForm.getDescription()" allowClear/>
       </a-form-item>
       <a-form-item label="备注">
         <a-input v-model:value="addForm.remark" allowClear/>

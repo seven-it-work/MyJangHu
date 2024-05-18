@@ -19,6 +19,7 @@ export default class LiangChanXingKongHeJiV28 extends BaseCard {
         if (!currentCard) {
             return
         }
+        console.log(`(${currentPlayer.name})的【${this.name}】的亡语触发：召唤三个1/1的微型机器人。`)
         for (let i = 0; i < 3; i++) {
             currentPlayer.addCard(new BaseCardObj(triggerObj.contextObj.sharedCardPool.getByName("WeiXingJiQiRen")),currentPlayer.findNextCard(currentCard),triggerObj)
         }

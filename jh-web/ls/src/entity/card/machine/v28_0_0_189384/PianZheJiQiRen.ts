@@ -21,6 +21,7 @@ export default class PianZheJiQiRenV28 extends BaseCard {
         }
         if (currentPlayer.isEndRound) {
             if (targetCard.baseCard.ethnicity.includes("机械")) {
+                console.log(`(${currentPlayer.name})的【${this.name}】的召唤其他随从触发：在战斗阶段中，每当你召唤一个机械，便获得+2攻击力和圣盾。`)
                 this.isHolyShield = true;
                 this.attack++;
             }

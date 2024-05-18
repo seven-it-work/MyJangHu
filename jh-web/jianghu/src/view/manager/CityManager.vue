@@ -121,7 +121,7 @@ export default {
           id: record.id,
           worldId: this.$route.params.worldId,
           name: record.name,
-          description: record.description,
+          description: record.getDescription(),
           enterSceneId: record.enterSceneId,
           length: record.matrixMap.length,
           width: record.matrixMap[0].length,
@@ -267,7 +267,7 @@ export default {
           id: record.id,
           worldId: this.$route.params.worldId,
           name: record.name,
-          description: record.description,
+          description: record.getDescription(),
           enterSceneId: record.enterSceneId,
           length: record.matrixMap.length,
           width: record.matrixMap[0].length,
@@ -401,7 +401,7 @@ export default {
         <a-input v-model:value="addForm.name"/>
       </a-form-item>
       <a-form-item label="描述">
-        <a-input v-model:value="addForm.description"/>
+        <a-input v-model:value="addForm.getDescription()"/>
       </a-form-item>
       <a-form-item label="进入的默认地图id">
         <a-select

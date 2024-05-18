@@ -230,12 +230,13 @@ export default class Player implements Serialization<Player> {
             if (cardObj.baseCard.type === '随从') {
                 // 磁力判断
                 if (cardObj.baseCard.isMagneticForce && nextCard && nextCard.baseCard.ethnicity.includes("机械")) {
+                    console.log(`(${this.name})的【${nextCard.baseCard.name}】附加磁力【${cardObj.baseCard.name}】`)
                     nextCard.baseCard.magneticForceList.push(cardObj.baseCard);
                     // 磁力监控
-                    this.cardList.forEach(card => card.whenOtherCardMagneticAdd({
+                    this.cardList.filter(card => card.id !== nextCard.id).forEach(card => card.whenOtherCardMagneticAdd({
                         ...triggerObj,
                         currentCard: card,
-                        targetCard: nextCard,
+                        targetCard: cardObj,
                     }))
                     // 磁力效果后，将返回卡牌池
                     triggerObj.contextObj.sharedCardPool.cardIn(cardObj.baseCard)

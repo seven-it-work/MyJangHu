@@ -18,6 +18,7 @@ export default class DuoMianFuZhuWuRenJiV28 extends BaseCard {
         if (!currentCard) {
             return
         }
+        console.log(`(${currentPlayer.name})的【${this.name}】的回合结束时：你的随从每拥有一个磁力效果，使其获取+1/+1。`)
         currentPlayer.cardList.filter(card => card.baseCard.magneticForceList.length > 0).forEach(card => {
             card.baseCard.magneticForceList.forEach(() => {
                 card.baseCard.attackBonus.push({

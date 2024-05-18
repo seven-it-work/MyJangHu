@@ -16,9 +16,7 @@ export default class BaoFeiFeiPinHuiShouJiV28 extends BaseCard {
         return `每2个回合，在回合结束时，随机获取一张磁力机械牌。（还剩${this.roundCounter}个回合）`;
     }
 
-    set description(value: string) {
-        this._description = value;
-    }
+
 
     preRoundNumber: number = -1;
 

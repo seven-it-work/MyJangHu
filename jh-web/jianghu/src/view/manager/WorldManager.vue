@@ -82,7 +82,7 @@
             <a-input v-model:value="addForm.name"/>
           </a-form-item>
           <a-form-item label="描述">
-            <a-input v-model:value="addForm.description"/>
+            <a-input v-model:value="addForm.getDescription()"/>
           </a-form-item>
           <a-form-item label="进入的默认地图id">
             <a-select

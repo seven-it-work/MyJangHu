@@ -76,23 +76,14 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
                 // 圣盾
                 this.baseCard.isHolyShield = false;
                 this.whenHolyShieldDisappears(triggerObj)
-                if (currentPlayer.isEndRound) {
-                    currentPlayer.cardListInFighting.forEach(card => {
-                        this.whenOtherHolyShieldDisappears({
-                            ...triggerObj,
-                            currentCard: card,
-                            targetCard: this,
-                        })
+                const cardList = currentPlayer.getCardList();
+                cardList.forEach(card => {
+                    this.whenOtherHolyShieldDisappears({
+                        ...triggerObj,
+                        currentCard: card,
+                        targetCard: this,
                     })
-                } else {
-                    currentPlayer.cardList.forEach(card => {
-                        this.whenOtherHolyShieldDisappears({
-                            ...triggerObj,
-                            currentCard: card,
-                            targetCard: this,
-                        })
-                    })
-                }
+                })
                 number = 0;
                 console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】的圣盾失效`)
             }
@@ -117,6 +108,12 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
             }
             // 触发亡语
             this.whenDeadTrigger(triggerObj);
+            // 当其他随从死亡时触发器
+            currentPlayer.getCardList().forEach(card => card.whenOtherDeadTrigger({
+                ...triggerObj,
+                currentCard: card,
+                targetCard: this,
+            }));
         } else {
             this.baseCard.life += number
         }
@@ -127,10 +124,18 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
      * 当其他随从死亡时触发器
      */
     whenOtherDeadTrigger(triggerObj: TriggerObj) {
+        if (this.baseCard.otherDeadMaxCounter <= 0) {
+            return;
+        }
+        const currentPlayer = triggerObj.currentPlayer;
+        if (!currentPlayer) {
+            return
+        }
         this.baseCard.otherDeadCounter++;
+        console.log(`(${currentPlayer.name})的【${this.baseCard.name}】的复仇剩余个数${this.baseCard.otherDeadMaxCounter - this.baseCard.otherDeadCounter}`)
         if (this.baseCard.otherDeadCounter >= this.baseCard.otherDeadMaxCounter) {
-            this.baseCard.otherDeadCounter = 0;
             this.baseCard.whenOtherDeadTrigger(this.triggerObj2BaseCard(triggerObj));
+            this.baseCard.otherDeadCounter = 0;
         }
     }
 
@@ -167,7 +172,7 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
         }
         for (let i = 0; i <= currentPlayer.battleRoarExtraTriggers; i++) {
             this.baseCard.whenCardUsedTrigger(this.triggerObj2BaseCard(triggerObj));
-            if (this.baseCard.isWarRoars){
+            if (this.baseCard.isWarRoars) {
                 // 战吼监听触发
                 currentPlayer.cardList.forEach((v) => {
                     v.whenOtherCardUsedTrigger({
@@ -256,11 +261,11 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
             // 剧毒，用完就没了
             toBeHarmed = this.life;
             targetCard.baseCard.isHighlyToxic = false;
-            console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}(${targetCard.attack}/${targetCard.life})】剧毒已使用`)
+            console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}(${targetCard.attack}/${targetCard.life})】烈药已使用`)
         } else if (targetCard.baseCard.hasPoison) {
             // 毒药，能一直毒
             toBeHarmed = this.life;
-            console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}(${targetCard.attack}/${targetCard.life})】烈药触发`)
+            console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}(${targetCard.attack}/${targetCard.life})】剧毒触发`)
         } else if (targetCard.baseCard.attackHighlyToxic) {
             // 遭受攻击时，剧毒 todo 放到防御触发器里面 改 剧毒=true
             toBeHarmed = this.life;
@@ -271,10 +276,10 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
 
         if (this.baseCard.isHighlyToxic) {
             toCauseHarm = targetCard.life;
-            console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】剧毒已使用`)
+            console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】烈毒已使用`)
             this.baseCard.isHighlyToxic = false;
         } else if (this.baseCard.hasPoison) {
-            console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】烈药触发`)
+            console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】剧毒触发`)
             toCauseHarm = targetCard.life;
         } else {
             toCauseHarm = this.attack;

@@ -6,13 +6,9 @@ export default class Sanlian extends BaseCard {
     type = '法术'
     isSell = false
     graded = 1
-    private _description = `获取一个{0}的随从`
-    get description(): string {
-        return `获取一个等级为${this.graded}的随从`;
-    }
 
-    set description(value: string) {
-        this._description = `获取一个等级为${this.graded}的随从`;
+    getDescription(): string {
+        return `获取一个等级为${this.graded}的随从`;
     }
 
     name = "奖励"

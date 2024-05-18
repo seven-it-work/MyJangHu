@@ -335,7 +335,7 @@ export default {
         <a-input v-model:value="addForm.name"/>
       </a-form-item>
       <a-form-item label="描述">
-        <a-input v-model:value="addForm.description"/>
+        <a-input v-model:value="addForm.getDescription()"/>
       </a-form-item>
       <a-form-item label="备注">
         <a-input v-model:value="addForm.remark"/>

@@ -9,15 +9,17 @@ export default class NanChanDeShiShiYuRenV28 extends BaseCard {
     graded = 6
     description = "烈毒。复仇（5）：获得复生。"
     isHighlyToxic = true;
-    // 复仇计数器
-    otherDeadCounter: number = 5;
     // 复仇次数，达到清空otherDeadCounter
-    otherDeadMaxCounter: number = 0;
+    otherDeadMaxCounter: number = 5;
 
     whenOtherDeadTrigger(triggerObj: TriggerObj) {
-        this.otherDeadMaxCounter++;
-        if (this.otherDeadMaxCounter >= this.otherDeadCounter) {
-            this.otherDeadMaxCounter = 0;
+        const currentPlayer = triggerObj.currentPlayer;
+        if (!currentPlayer) {
+            return
+        }
+        if (this.otherDeadCounter >= this.otherDeadMaxCounter) {
+            console.log(`(${currentPlayer.name})的【${this.name}】复仇触发：烈毒。复仇（5）：获得复生。`)
+            super.otherDeadCounter = 0;
             this.isRebirth = true
         }
     }

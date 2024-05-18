@@ -7,7 +7,10 @@ export default class ZhaoZeQianFengV28 extends BaseCard {
     attack = 1
     life = 4
     graded = 1
-    description = "在你召唤一个鱼人后，获得+1攻击力。"
+
+    getDescription(): string {
+        return `在你召唤一个鱼人后，获得+${this.isGold ? 2 : 1}攻击力。`
+    }
 
     whenOtherSummonedTrigger(triggerObj: TriggerObj) {
         const currentCard = triggerObj.currentCard;
@@ -22,7 +25,7 @@ export default class ZhaoZeQianFengV28 extends BaseCard {
             currentCard.baseCard.attackBonus.push({
                 baseCardId: currentCard.id,
                 baseCardName: this.name,
-                markupValue: 1
+                markupValue: this.isGold ? 2 : 1
             })
         }
     }

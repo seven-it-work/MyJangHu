@@ -27,7 +27,7 @@ export default class PiaoFuGuanChaZheV28 extends BaseCard {
                 baseCardId: currentCard.id,
             })
             currentCard.baseCard.lifeBonus.push({
-                markupValue: 1,
+                markupValue: 2,
                 baseCardName: this.name,
                 baseCardId: currentCard.id,
             })
