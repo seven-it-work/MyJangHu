@@ -8,7 +8,7 @@ export default class ShengZhangYiShi28 extends BaseCard {
     name = "生长仪式"
     graded = 4
     spendingGoldCoin = 2
-    description = "将酒馆中的所有牌替换为高一级的牌。"
+    descriptionStr(){return "将酒馆中的所有牌替换为高一级的牌。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const needSelectCard = triggerObj.needSelectCard;

@@ -8,7 +8,7 @@ export default class CuXinDeTunJiZheV28 extends BaseCard {
     attack = 5
     life = 6
     graded = 4
-    description = "当你出售本随从时，使一个友方鱼人获得本随从的属性值。"
+    descriptionStr(){return "当你出售本随从时，使一个友方鱼人获得本随从的属性值。"}
 
     whenSaleCardTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
@@ -37,4 +37,3 @@ export default class CuXinDeTunJiZheV28 extends BaseCard {
         })
     }
 }
-

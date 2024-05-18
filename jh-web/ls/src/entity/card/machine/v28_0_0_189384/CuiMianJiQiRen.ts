@@ -7,7 +7,7 @@ export default class CuiMianJiQiRenV28 extends BaseCard {
     attack = 2
     life = 2
     graded = 2
-    description = "<div><b>磁力</b></div>。在你的回合结束是，获取+1/+1。"
+    descriptionStr(){return "<div><b>磁力</b></div>。在你的回合结束是，获取+1/+1。"}
     isMagneticForce = true;
 
     whenEndRound(triggerObj: TriggerObj) {
@@ -32,4 +32,3 @@ export default class CuiMianJiQiRenV28 extends BaseCard {
         })
     }
 }
-

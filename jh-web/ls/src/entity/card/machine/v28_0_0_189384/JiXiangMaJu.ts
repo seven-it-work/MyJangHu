@@ -8,7 +8,6 @@ export default class JiXiangMaJuV28 extends BaseCard {
     attack = 1
     life = 1
     graded = 1
-    description = ""
+    descriptionStr(){return ""}
     isSell = false
 }
-

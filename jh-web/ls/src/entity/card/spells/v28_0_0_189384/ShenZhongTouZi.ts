@@ -8,7 +8,7 @@ export default class ShenZhongTouZi28 extends BaseCard {
     name = "慎重投资"
     graded = 2
     spendingGoldCoin = 1
-    description = "下回合获得2枚举金币。"
+    descriptionStr(){return "下回合获得2枚举金币。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

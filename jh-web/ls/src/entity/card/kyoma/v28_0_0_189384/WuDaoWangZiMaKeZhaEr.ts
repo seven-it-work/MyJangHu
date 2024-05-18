@@ -10,10 +10,8 @@ export default class WuDaoWangZiMaKeZhaErV28 extends BaseCard {
     refreshTimes: number = 2;
     // 剩余刷新消耗生命值次数
     remainRefreshTimes: number = 2;
-    private _description = `每回合中，有2次刷新会消耗生命值，而非铸币。（还剩${this.remainRefreshTimes}次！）`
 
-
-    get description(): string {
+    descriptionStr(): string {
         return `每回合中，有2次刷新会消耗生命值，而非铸币。（还剩${this.remainRefreshTimes}次！）`;
     }
 

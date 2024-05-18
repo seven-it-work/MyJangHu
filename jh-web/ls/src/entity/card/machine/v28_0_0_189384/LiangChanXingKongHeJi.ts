@@ -8,7 +8,7 @@ export default class LiangChanXingKongHeJiV28 extends BaseCard {
     attack = 3
     life = 2
     graded = 3
-    description = "<div><b>圣盾</b></div><b>亡语</b>：召唤三个1/1的微型机器人。"
+    descriptionStr(){return "<div><b>圣盾</b></div><b>亡语</b>：召唤三个1/1的微型机器人。"}
 
     whenDeadTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
@@ -25,4 +25,3 @@ export default class LiangChanXingKongHeJiV28 extends BaseCard {
         }
     }
 }
-

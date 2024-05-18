@@ -102,7 +102,7 @@ export default defineComponent({
       this.toBeUseCard = cardObj
       if (cardObj.baseCard.isNeedSelect && checkIsNeedSelect) {
         this.isNeedSelectOpen = true;
-        this.isNeedSelectTitle = cardObj.baseCard.getDescription();
+        this.isNeedSelectTitle = cardObj.baseCard.descriptionStr();
         return
       } else if (cardObj.baseCard.type === '随从') {
         this.open = true

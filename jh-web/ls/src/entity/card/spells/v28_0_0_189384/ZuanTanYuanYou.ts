@@ -7,7 +7,7 @@ export default class ZuanTanYuanYou28 extends BaseCard {
     name = "钻探原油"
     graded = 2
     spendingGoldCoin = 3
-    description = "你的铸币上限提高1枚。"
+    descriptionStr(){return "你的铸币上限提高1枚。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

@@ -8,7 +8,7 @@ export default class XiaoGuiQiuTuV28 extends BaseCard {
     attack = 3
     life = 2
     graded = 1
-    description = "<b>嘲讽</b>，<b>亡语</b>：召唤一个1/1的小鬼"
+    descriptionStr(){return "<b>嘲讽</b>，<b>亡语</b>：召唤一个1/1的小鬼"}
     isMockery = true;
     isDeadLanguage = true
 

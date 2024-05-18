@@ -8,7 +8,7 @@ export default class JiEDeFuMoV28 extends BaseCard {
     attack = 8
     life = 5
     graded = 6
-    description = "在你的回合结束时，你的恶魔各吞食酒馆中的一个随从，获取其属性值。"
+    descriptionStr(){return "在你的回合结束时，你的恶魔各吞食酒馆中的一个随从，获取其属性值。"}
 
     version = ["v28.0.0.189384", "v29.2.0.198037"]
     whenEndRound(triggerObj: TriggerObj) {

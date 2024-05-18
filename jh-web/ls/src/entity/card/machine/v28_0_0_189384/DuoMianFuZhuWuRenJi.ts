@@ -7,7 +7,7 @@ export default class DuoMianFuZhuWuRenJiV28 extends BaseCard {
     attack = 6
     life = 7
     graded = 5
-    description = "在你的回合结束时，你的随从每拥有一个磁力效果，使其获取+1/+1。"
+    descriptionStr(){return "在你的回合结束时，你的随从每拥有一个磁力效果，使其获取+1/+1。"}
 
     whenEndRound(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
@@ -35,4 +35,3 @@ export default class DuoMianFuZhuWuRenJiV28 extends BaseCard {
         })
     }
 }
-

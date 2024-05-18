@@ -7,7 +7,7 @@ export default class ShenFenJieXiao28 extends BaseCard {
     name = "身份揭晓"
     graded = 5
     spendingGoldCoin = 3
-    description = "发现一个新的英雄技能。"
+    descriptionStr(){return "发现一个新的英雄技能。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         // todo 还没有整理英雄技能

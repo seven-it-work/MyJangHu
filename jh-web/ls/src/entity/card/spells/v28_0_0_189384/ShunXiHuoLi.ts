@@ -8,7 +8,7 @@ export default class ShunXiHuoLi28 extends BaseCard {
     name = "瞬息活力"
     graded = 3
     spendingGoldCoin = 1
-    description = "直到小个回合，使一个随从获得+5/+5。"
+    descriptionStr(){return "直到小个回合，使一个随从获得+5/+5。"}
     isNeedSelect = true
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {

@@ -7,7 +7,7 @@ export default class YiJiaoTuSiSeLaV28 extends BaseCard {
     attack = 8
     life = 5
     graded = 6
-    description = "潜行。<b>亡语</b>：召唤你在本场战斗中死亡的第一个恶魔，保留其额外效果。"
+    descriptionStr(){return "潜行。<b>亡语</b>：召唤你在本场战斗中死亡的第一个恶魔，保留其额外效果。"}
     isSneak = true;
     isDeadLanguage = true
 

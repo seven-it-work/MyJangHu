@@ -9,7 +9,7 @@ export default class LuanFaDeChaJu28 extends BaseCard {
     name = "乱发的茶具"
     graded = 4
     spendingGoldCoin = 3
-    description = "使每个类型的各一个友方随从获得+3/+3。"
+    descriptionStr(){return "使每个类型的各一个友方随从获得+3/+3。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

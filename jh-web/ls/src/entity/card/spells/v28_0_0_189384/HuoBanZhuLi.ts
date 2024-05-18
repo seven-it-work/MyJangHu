@@ -7,7 +7,7 @@ export default class HuoBanZhuLi28 extends BaseCard {
     name = "伙伴助力"
     graded = 5
     spendingGoldCoin = 3
-    description = "发现一个伙伴。"
+    descriptionStr(){return "发现一个伙伴。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

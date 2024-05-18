@@ -8,7 +8,7 @@ export default class FuZuZhiZhang28 extends BaseCard {
     name = "富足之杖"
     graded = 3
     spendingGoldCoin = 3
-    description = "在本局对战中，酒馆中的随从拥有+2/+2。"
+    descriptionStr(){return "在本局对战中，酒馆中的随从拥有+2/+2。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

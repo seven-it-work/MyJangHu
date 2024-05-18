@@ -7,7 +7,7 @@ export default class KanGeErDeXueTuV28 extends BaseCard {
     attack = 3
     life = 6
     graded = 5
-    description = "<b>亡语</b>：召唤你本场战斗中最先死亡的2个机械。"
+    descriptionStr(){return "<b>亡语</b>：召唤你本场战斗中最先死亡的2个机械。"}
     isDeadLanguage = true
 
     whenDeadTrigger(triggerObj: TriggerObj) {
@@ -32,4 +32,3 @@ export default class KanGeErDeXueTuV28 extends BaseCard {
         }
     }
 }
-

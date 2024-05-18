@@ -10,7 +10,7 @@ export default class WeiMianWangYuanJing28 extends BaseCard {
     name = "位面望远镜"
     graded = 4
     spendingGoldCoin = 4
-    description = "发现一个你的多数随从的类型随从。"
+    descriptionStr(){return "发现一个你的多数随从的类型随从。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

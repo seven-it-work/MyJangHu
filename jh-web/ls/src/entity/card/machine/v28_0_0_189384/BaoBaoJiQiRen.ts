@@ -10,7 +10,7 @@ export default class BaoBaoJiQiRenV28 extends BaseCard {
     attack = 2
     life = 2
     graded = 2
-    description = "<b>亡语</b>：随机对一个敌方随从造成4点伤害。"
+    descriptionStr(){return "<b>亡语</b>：随机对一个敌方随从造成4点伤害。"}
     isDeadLanguage = true
 
     whenDeadTrigger(triggerObj: TriggerObj) {
@@ -31,4 +31,3 @@ export default class BaoBaoJiQiRenV28 extends BaseCard {
         card.healthChange(4, triggerObj)
     }
 }
-

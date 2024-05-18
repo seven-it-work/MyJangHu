@@ -8,7 +8,7 @@ export default class ZhaoMuXinRen28 extends BaseCard {
     name = "招募新人"
     graded = 1
     spendingGoldCoin = 2
-    description = "随机获取一张等级1的随从牌。"
+    descriptionStr(){return "随机获取一张等级1的随从牌。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

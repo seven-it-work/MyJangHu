@@ -7,7 +7,7 @@ export default class SaGeLaSiDeYongShiV28 extends BaseCard {
     attack = 10
     life = 10
     graded = 7
-    description = "酒馆中的随从拥有+10/10。"
+    descriptionStr(){return "酒馆中的随从拥有+10/10。"}
     version = ["v28.0.0.189384", "v29.2.0.198037"]
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {

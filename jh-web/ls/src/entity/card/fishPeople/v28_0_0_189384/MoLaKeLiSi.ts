@@ -8,7 +8,7 @@ export default class MoLaKeLiSiV28 extends BaseCard {
     attack = 5
     life = 2
     graded = 2
-    description = "每当本随从消灭一个随从时，使你手牌中的一张随从牌获得+2/+2。"
+    descriptionStr(){return "每当本随从消灭一个随从时，使你手牌中的一张随从牌获得+2/+2。"}
 
     whenKillOneTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
@@ -37,4 +37,3 @@ export default class MoLaKeLiSiV28 extends BaseCard {
     }
 
 }
-

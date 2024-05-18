@@ -7,7 +7,7 @@ export default class Sanlian extends BaseCard {
     isSell = false
     graded = 1
 
-    getDescription(): string {
+    descriptionStr(): string {
         return `获取一个等级为${this.graded}的随从`;
     }
 

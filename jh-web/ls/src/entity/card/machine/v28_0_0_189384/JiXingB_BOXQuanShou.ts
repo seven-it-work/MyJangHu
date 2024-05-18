@@ -7,7 +7,7 @@ export default class JiXingB_BOXQuanShouV28 extends BaseCard {
     attack = 5
     life = 10
     graded = 6
-    description = "每当你对另一个随从施加磁力时，还会对本随从施加磁力。"
+    descriptionStr(){return "每当你对另一个随从施加磁力时，还会对本随从施加磁力。"}
 
     whenOtherCardMagneticAdd(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
@@ -27,4 +27,3 @@ export default class JiXingB_BOXQuanShouV28 extends BaseCard {
         console.log(`(${currentPlayer.name})的【${this.name}】附加磁力【${targetCard.baseCard.name}】`)
     }
 }
-

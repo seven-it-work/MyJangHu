@@ -37,11 +37,9 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
     // 等级
     graded: number = 1;
 
-    getDescription():string{
+    descriptionStr():string{
         return ''
     }
-
-    goldDescription: string = '';
     // 复仇计数器
     otherDeadCounter: number = 0;
     // 复仇次数，达到清空otherDeadCounter

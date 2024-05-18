@@ -8,7 +8,7 @@ export default class TiaoShiMoQuanV28 extends BaseCard {
     attack = 1
     life = 1
     graded = 1
-    description = "<b>战吼</b>：随机吞噬酒馆一个随从，获取其属性值。"
+    descriptionStr(){return "<b>战吼</b>：随机吞噬酒馆一个随从，获取其属性值。"}
     version = ["v28.0.0.189384", "v29.2.0.198037"]
 
     isWarRoars = true

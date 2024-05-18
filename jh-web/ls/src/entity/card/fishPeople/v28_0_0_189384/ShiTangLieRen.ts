@@ -7,7 +7,7 @@ export default class ShiTangLieRenV28 extends BaseCard {
     attack = 2
     life = 3
     graded = 1
-    description = "战吼：使一个友方鱼人获得+1/+1。"
+    descriptionStr(){return "战吼：使一个友方鱼人获得+1/+1。"}
     isNeedSelect = true
     isWarRoars = true
 
@@ -33,4 +33,3 @@ export default class ShiTangLieRenV28 extends BaseCard {
     }
 
 }
-

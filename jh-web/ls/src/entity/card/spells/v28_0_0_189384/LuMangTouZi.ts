@@ -7,7 +7,7 @@ export default class LuMangTouZi28 extends BaseCard {
     name = "鲁莽投资"
     graded = 3
     spendingGoldCoin = 1
-    description = "获得3枚铸币。下个回合，失去2枚铸币。"
+    descriptionStr(){return "获得3枚铸币。下个回合，失去2枚铸币。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

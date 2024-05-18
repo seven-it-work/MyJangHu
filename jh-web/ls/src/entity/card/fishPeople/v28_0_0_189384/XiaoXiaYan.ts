@@ -8,7 +8,7 @@ export default class XiaoXiaYanV28 extends BaseCard {
     attack = 8
     life = 5
     graded = 6
-    description = "在你的回合结束时，相邻的随从触发其战吼。"
+    descriptionStr(){return "在你的回合结束时，相邻的随从触发其战吼。"}
 
     whenEndRound(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
@@ -34,7 +34,7 @@ export default class XiaoXiaYanV28 extends BaseCard {
         }
         if (pre) {
             if (pre.baseCard.isWarRoars) {
-                console.log(`(${currentPlayer.name})的【${this.name}】触发左侧战吼：${pre.baseCard.getDescription()}`)
+                console.log(`(${currentPlayer.name})的【${this.name}】触发左侧战吼：${pre.baseCard.descriptionStr()}`)
                 pre.whenCardUsedTrigger({
                     ...triggerObj,
                     currentCard: pre
@@ -43,7 +43,7 @@ export default class XiaoXiaYanV28 extends BaseCard {
         }
         if (next) {
             if (next.baseCard.isWarRoars) {
-                console.log(`(${currentPlayer.name})的【${this.name}】触发右侧战吼：${next.baseCard.getDescription()}`)
+                console.log(`(${currentPlayer.name})的【${this.name}】触发右侧战吼：${next.baseCard.descriptionStr()}`)
                 next.whenCardUsedTrigger({
                     ...triggerObj,
                     currentCard: next
@@ -52,4 +52,3 @@ export default class XiaoXiaYanV28 extends BaseCard {
         }
     }
 }
-

@@ -7,7 +7,7 @@ export default class QiangGu28 extends BaseCard {
     name = "强固"
     graded = 1
     spendingGoldCoin = 1
-    description = "使一个随从获得+3生命值和嘲讽。"
+    descriptionStr(){return "使一个随从获得+3生命值和嘲讽。"}
 
     isNeedSelect = true
 

@@ -8,7 +8,7 @@ export default class YuDingYiTi28 extends BaseCard {
     name = "预定遗体"
     graded = 4
     spendingGoldCoin = 3
-    description = "发现一张亡语随从牌。"
+    descriptionStr(){return "发现一张亡语随从牌。"}
 
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {

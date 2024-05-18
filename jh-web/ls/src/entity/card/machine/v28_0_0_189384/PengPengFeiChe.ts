@@ -6,7 +6,7 @@ export default class PengPengFeiCheV28 extends BaseCard {
     attack = 12
     life = 12
     graded = 7
-    description = "<div><b>磁力</b></div>复生。圣盾。<b>嘲讽</b>。风怒。"
+    descriptionStr(){return "<div><b>磁力</b></div>复生。圣盾。<b>嘲讽</b>。风怒。"}
     isMockery: boolean = true;
     // 是否有圣盾
     isHolyShield: boolean = true;
@@ -15,4 +15,3 @@ export default class PengPengFeiCheV28 extends BaseCard {
     numberAttack = 2;
     isMagneticForce = true;
 }
-

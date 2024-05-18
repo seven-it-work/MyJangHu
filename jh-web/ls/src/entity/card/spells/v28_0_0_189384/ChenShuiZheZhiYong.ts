@@ -8,7 +8,7 @@ export default class ChenShuiZheZhiYong28 extends BaseCard {
     name = "沉睡者之拥"
     graded = 5
     spendingGoldCoin = 3
-    description = "触发一个友方随从的战吼。"
+    descriptionStr(){return "触发一个友方随从的战吼。"}
     isNeedSelect=true
 
     needSelectFilter(baseCardObj: BaseCardObj[]): BaseCardObj[] {

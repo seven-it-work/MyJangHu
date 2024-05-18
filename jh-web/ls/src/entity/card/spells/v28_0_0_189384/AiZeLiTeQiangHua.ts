@@ -7,7 +7,7 @@ export default class AiZeLiTeQiangHua28 extends BaseCard {
     name = "艾泽里特强化"
     graded = 6
     spendingGoldCoin = 4
-    description = "使你的所有随从获得+4/+4。"
+    descriptionStr(){return "使你的所有随从获得+4/+4。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

@@ -7,7 +7,7 @@ export default class NanChanDeShiShiYuRenV28 extends BaseCard {
     attack = 5
     life = 4
     graded = 6
-    description = "烈毒。复仇（5）：获得复生。"
+    descriptionStr(){return "烈毒。复仇（5）：获得复生。"}
     isHighlyToxic = true;
     // 复仇次数，达到清空otherDeadCounter
     otherDeadMaxCounter: number = 5;
@@ -24,4 +24,3 @@ export default class NanChanDeShiShiYuRenV28 extends BaseCard {
         }
     }
 }
-

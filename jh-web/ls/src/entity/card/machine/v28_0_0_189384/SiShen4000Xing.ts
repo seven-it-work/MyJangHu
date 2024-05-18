@@ -8,7 +8,7 @@ export default class OuMiQiePoHuaiZheV28 extends BaseCard {
     attack = 6
     life = 9
     graded = 6
-    description = "同时对其攻击相邻的随从造成伤害。"
+    descriptionStr(){return "同时对其攻击相邻的随从造成伤害。"}
 
     whenAttackTrigger(triggerObj: TriggerObj) {
         const targetPlayer = triggerObj.targetPlayer;
@@ -53,4 +53,3 @@ export default class OuMiQiePoHuaiZheV28 extends BaseCard {
         }
     }
 }
-

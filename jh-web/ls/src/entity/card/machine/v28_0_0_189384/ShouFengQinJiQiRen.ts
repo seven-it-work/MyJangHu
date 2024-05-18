@@ -7,7 +7,7 @@ export default class ShouFengQinJiQiRenV28 extends BaseCard {
     attack = 3
     life = 2
     graded = 3
-    description = "<div><b>磁力</b></div>。在你的回合开始时，获取一枚额外铸币。"
+    descriptionStr(){return "<div><b>磁力</b></div>。在你的回合开始时，获取一枚额外铸币。"}
 
     isMagneticForce = true;
 
@@ -20,4 +20,3 @@ export default class ShouFengQinJiQiRenV28 extends BaseCard {
         currentPlayer.currentGoldCoin++;
     }
 }
-

@@ -7,7 +7,7 @@ export default class TiKeDiAoSaoSiV28 extends BaseCard {
     attack = 4
     life = 4
     graded = 5
-    description = "在你的英雄受到伤害后，使你的其他恶魔获得+1/+1"
+    descriptionStr(){return "在你的英雄受到伤害后，使你的其他恶魔获得+1/+1"}
 
     whenPlayerInjuries(injuring: number, triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

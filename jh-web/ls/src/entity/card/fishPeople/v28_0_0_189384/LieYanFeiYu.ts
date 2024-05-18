@@ -7,7 +7,7 @@ export default class LieYanFeiYuV28 extends BaseCard {
     attack = 1
     life = 3
     graded = 2
-    description = "在你使用一张战吼随从牌后，获得+1/+1。"
+    descriptionStr(){return "在你使用一张战吼随从牌后，获得+1/+1。"}
 
     whenOtherCardUsedTrigger(triggerObj: TriggerObj) {
         const targetCard = triggerObj.targetCard;
@@ -30,4 +30,3 @@ export default class LieYanFeiYuV28 extends BaseCard {
     }
 
 }
-

@@ -9,7 +9,7 @@ export default class TaDeV28 extends BaseCard {
     attack = 2
     life = 2
     graded = 2
-    description = "当你出售本随从时，随机获取一张鱼人牌。"
+    descriptionStr(){return "当你出售本随从时，随机获取一张鱼人牌。"}
 
     /**
      * 只会获得当前等级的牌
@@ -33,4 +33,3 @@ export default class TaDeV28 extends BaseCard {
     }
 
 }
-

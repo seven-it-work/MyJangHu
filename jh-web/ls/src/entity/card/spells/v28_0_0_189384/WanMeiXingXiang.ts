@@ -7,7 +7,7 @@ export default class WanMeiXingXiang28 extends BaseCard {
     name = "完美形象"
     graded = 6
     spendingGoldCoin = 2
-    description = "将一个随从的属性值变为20/20。"
+    descriptionStr(){return "将一个随从的属性值变为20/20。"}
 
     isNeedSelect = true
 

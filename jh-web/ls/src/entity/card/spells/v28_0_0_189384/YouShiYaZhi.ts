@@ -8,7 +8,7 @@ export default class YouShiYaZhi28 extends BaseCard {
     name = "优势压制"
     graded = 5
     spendingGoldCoin = 3
-    description = "战斗开始时：随机将一个敌方随从的生命值变为1。"
+    descriptionStr(){return "战斗开始时：随机将一个敌方随从的生命值变为1。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

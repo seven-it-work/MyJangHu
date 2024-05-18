@@ -7,7 +7,7 @@ export default class JunTuanJianGongV28 extends BaseCard {
     attack = 4
     life = 2
     graded = 3
-    description = "酒馆中的随从用于+2/+1"
+    descriptionStr(){return "酒馆中的随从用于+2/+1"}
 
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {

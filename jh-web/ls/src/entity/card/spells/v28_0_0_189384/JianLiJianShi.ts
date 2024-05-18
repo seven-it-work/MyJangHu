@@ -8,7 +8,7 @@ export default class JianLiJianShi28 extends BaseCard {
     name = "尖利箭矢"
     graded = 1
     spendingGoldCoin = 1
-    description = "是一个随从获得+4攻击力。"
+    descriptionStr(){return "是一个随从获得+4攻击力。"}
     isNeedSelect = true
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {

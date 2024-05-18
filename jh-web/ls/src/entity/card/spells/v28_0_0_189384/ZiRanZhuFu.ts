@@ -9,7 +9,7 @@ export default class ZiRanZhuFu28 extends BaseCard {
     name = "自然祝福"
     graded = 3
     spendingGoldCoin = 3
-    description = "选择一个随从，使所有该类型的随从获得+3/+2。"
+    descriptionStr(){return "选择一个随从，使所有该类型的随从获得+3/+2。"}
 
     isNeedSelect = true
 

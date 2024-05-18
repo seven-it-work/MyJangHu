@@ -8,7 +8,7 @@ export default class XunBaoYuRenV28 extends BaseCard {
     attack = 3
     life = 3
     graded = 3
-    description = "亡语：随机使你手牌中的一张随从牌获取+5/+5。"
+    descriptionStr(){return "亡语：随机使你手牌中的一张随从牌获取+5/+5。"}
     isDeadLanguage = true
 
     whenDeadTrigger(triggerObj: TriggerObj) {
@@ -37,4 +37,3 @@ export default class XunBaoYuRenV28 extends BaseCard {
         })
     }
 }
-

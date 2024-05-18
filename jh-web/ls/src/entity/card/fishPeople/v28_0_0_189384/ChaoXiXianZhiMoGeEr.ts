@@ -8,7 +8,7 @@ export default class ChaoXiXianZhiMoGeErV28 extends BaseCard {
     attack = 1
     life = 10
     graded = 7
-    description = "剧毒。每当本随从消灭一个随从时，使你手牌中的张随从牌获得被消灭随从的最大属性值。"
+    descriptionStr(){return "剧毒。每当本随从消灭一个随从时，使你手牌中的张随从牌获得被消灭随从的最大属性值。"}
     hasPoison = true;
 
     // 消灭随从的最大属性值。这个是什么意思？
@@ -43,4 +43,3 @@ export default class ChaoXiXianZhiMoGeErV28 extends BaseCard {
         })
     }
 }
-

@@ -7,7 +7,7 @@ export default class DengLongHuoGuang28 extends BaseCard {
     name = "灯笼火光"
     graded = 2
     spendingGoldCoin = 2
-    description = "使一个随从获得等同于你当前等级的属性值。"
+    descriptionStr(){return "使一个随从获得等同于你当前等级的属性值。"}
     isNeedSelect=true
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {

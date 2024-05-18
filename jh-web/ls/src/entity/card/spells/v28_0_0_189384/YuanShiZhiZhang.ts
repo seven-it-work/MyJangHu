@@ -8,7 +8,7 @@ export default class YuanShiZhiZhang28 extends BaseCard {
     name = "原始之杖"
     graded = 4
     spendingGoldCoin = 3
-    description = "在本回合中，你的回合结束效果会生效两次。"
+    descriptionStr(){return "在本回合中，你的回合结束效果会生效两次。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

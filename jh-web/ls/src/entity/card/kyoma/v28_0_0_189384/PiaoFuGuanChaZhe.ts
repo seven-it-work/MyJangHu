@@ -7,7 +7,7 @@ export default class PiaoFuGuanChaZheV28 extends BaseCard {
     attack = 4
     life = 4
     graded = 4
-    description = "每当你的英雄在你的回合受到伤害，便获得+2/+2。"
+    descriptionStr(){return "每当你的英雄在你的回合受到伤害，便获得+2/+2。"}
 
     version = ["v28.0.0.189384", "v29.2.0.198037"]
 

@@ -4,4 +4,3 @@ export default class FenNuBianZhiZheV29 extends FenNuBianZhiZheV28 {
     attack = 4
     version = ["v29.2.0.198037"]
 }
-

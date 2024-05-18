@@ -10,7 +10,7 @@ export default class DingJianHaoJiu28 extends BaseCard {
     name = "顶尖好酒"
     graded = 6
     spendingGoldCoin = 2
-    description = "刷新酒馆，使其中变为酒馆法术牌。"
+    descriptionStr(){return "刷新酒馆，使其中变为酒馆法术牌。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

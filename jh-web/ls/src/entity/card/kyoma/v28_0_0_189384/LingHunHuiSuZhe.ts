@@ -7,7 +7,7 @@ export default class LingHunHuiSuZheV28 extends BaseCard {
     attack = 3
     life = 1
     graded = 2
-    description = "在你的英雄受到伤害后，回溯该伤害并使本随从获取+1生命值"
+    descriptionStr(){return "在你的英雄受到伤害后，回溯该伤害并使本随从获取+1生命值"}
 
     version = ["v28.0.0.189384", "v29.2.0.198037"]
 

@@ -7,7 +7,7 @@ export default class ShanLiangDeJieZhi28 extends BaseCard {
     name = "闪亮的戒指"
     graded = 3
     spendingGoldCoin = 2
-    description = "使你的所有随从获得+1/+1。"
+    descriptionStr(){return "使你的所有随从获得+1/+1。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

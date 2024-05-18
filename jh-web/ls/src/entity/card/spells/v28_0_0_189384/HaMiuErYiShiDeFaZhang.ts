@@ -10,7 +10,7 @@ export default class HaMiuErYiShiDeFaZhang28 extends BaseCard {
     name = "哈缪尔遗失的法杖"
     graded = 6
     spendingGoldCoin = 2
-    description = "刷新酒馆，使其中的牌变为该类型的随从。"
+    descriptionStr(){return "刷新酒馆，使其中的牌变为该类型的随从。"}
 
     isNeedSelect = true
 

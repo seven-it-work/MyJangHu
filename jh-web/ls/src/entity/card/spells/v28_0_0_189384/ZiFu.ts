@@ -8,7 +8,7 @@ export default class ZiFu28 extends BaseCard {
     name = "自负"
     graded = 2
     spendingGoldCoin = 1
-    description = "如果你在你下一场战斗中获胜，获得3枚铸币。如果平局获得1枚金币。"
+    descriptionStr(){return "如果你在你下一场战斗中获胜，获得3枚铸币。如果平局获得1枚金币。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

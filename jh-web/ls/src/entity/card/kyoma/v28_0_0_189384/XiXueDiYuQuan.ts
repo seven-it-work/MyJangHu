@@ -6,7 +6,7 @@ export default class XiXueDiYuQuanV28 extends BaseCard {
     attack = 3
     life = 3
     graded = 3
-    description = "购买本随从会消耗生命值，而非铸币"
+    descriptionStr(){return "购买本随从会消耗生命值，而非铸币"}
 
     isSpendLife: boolean = true;
 }

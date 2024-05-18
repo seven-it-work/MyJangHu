@@ -9,7 +9,7 @@ export default class ManYuChiHouV28 extends BaseCard {
     attack = 3
     life = 2
     graded = 4
-    description = "战吼：如果你控制其他任何鱼人，则发现一张鱼人。"
+    descriptionStr(){return "战吼：如果你控制其他任何鱼人，则发现一张鱼人。"}
     isWarRoars = true
 
     /**
@@ -37,4 +37,3 @@ export default class ManYuChiHouV28 extends BaseCard {
         currentPlayer.addCardInHand(new BaseCardObj(baseCard), triggerObj.contextObj.sharedCardPool)
     }
 }
-

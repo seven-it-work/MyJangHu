@@ -8,7 +8,7 @@ export default class PinMingFaJue28 extends BaseCard {
     graded = 2
     spendingGoldCoin = 3
     isSpendLife = true
-    description = "获得1枚铸币。购买本牌会消耗生命值，而非铸币。"
+    descriptionStr(){return "获得1枚铸币。购买本牌会消耗生命值，而非铸币。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

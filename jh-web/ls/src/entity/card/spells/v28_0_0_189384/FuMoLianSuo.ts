@@ -8,7 +8,7 @@ export default class FuMoLianSuo28 extends BaseCard {
     name = "附魔链索"
     graded = 1
     spendingGoldCoin = 2
-    description = "随机偷取酒馆中的一个随从。"
+    descriptionStr(){return "随机偷取酒馆中的一个随从。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

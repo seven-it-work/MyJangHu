@@ -8,7 +8,7 @@ export default class JiXieXiaoMaV28 extends BaseCard {
     attack = 2
     life = 2
     graded = 1
-    description = "<b>亡语</b>：召唤一个1/1的迹象马驹。"
+    descriptionStr(){return "<b>亡语</b>：召唤一个1/1的迹象马驹。"}
     isSell = false
     isDeadLanguage = true
     whenDeadTrigger(triggerObj: TriggerObj) {
@@ -25,4 +25,3 @@ export default class JiXieXiaoMaV28 extends BaseCard {
         currentPlayer.addCard(new BaseCardObj(baseCard), currentPlayer.findNextCard(currentCard), triggerObj)
     }
 }
-

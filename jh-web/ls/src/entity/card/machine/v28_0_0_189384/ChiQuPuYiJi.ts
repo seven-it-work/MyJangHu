@@ -8,7 +8,7 @@ export default class ChiQuPuYiJiV28 extends BaseCard {
     attack = 1
     life = 1
     graded = 2
-    description = "<div><b>圣盾</b></div>在一个友方随从失去圣盾后，在你手牌中的一张随从获得+1/+1。"
+    descriptionStr(){return "<div><b>圣盾</b></div>在一个友方随从失去圣盾后，在你手牌中的一张随从获得+1/+1。"}
     isHolyShield: boolean = true;
 
     whenOtherHolyShieldDisappears(triggerObj: TriggerObj) {
@@ -38,4 +38,3 @@ export default class ChiQuPuYiJiV28 extends BaseCard {
         })
     }
 }
-

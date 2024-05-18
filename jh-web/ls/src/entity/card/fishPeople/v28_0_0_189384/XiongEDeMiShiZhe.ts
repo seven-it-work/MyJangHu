@@ -9,7 +9,7 @@ export default class XiongEDeMiShiZheV28 extends BaseCard {
     attack = 4
     life = 3
     graded = 3
-    description = "战斗开始时：使你手牌中的一张鱼人牌获得+2/+2并召唤它，其登场仅限本场战斗。"
+    descriptionStr(){return "战斗开始时：使你手牌中的一张鱼人牌获得+2/+2并召唤它，其登场仅限本场战斗。"}
 
     whenStartFightingTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
@@ -42,4 +42,3 @@ export default class XiongEDeMiShiZheV28 extends BaseCard {
         currentPlayer.addCard(cloneDeep(baseCardObj), currentPlayer.findNextCard(currentCard), triggerObj);
     }
 }
-

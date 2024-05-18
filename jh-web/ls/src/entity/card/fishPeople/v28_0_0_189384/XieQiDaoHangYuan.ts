@@ -7,7 +7,7 @@ export default class XieQiDaoHangYuanV28 extends BaseCard {
     attack = 4
     life = 4
     graded = 3
-    description = "战吼：使你的其他鱼人获取+1/+1。"
+    descriptionStr(){return "战吼：使你的其他鱼人获取+1/+1。"}
     isWarRoars = true
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
@@ -34,4 +34,3 @@ export default class XieQiDaoHangYuanV28 extends BaseCard {
         })
     }
 }
-

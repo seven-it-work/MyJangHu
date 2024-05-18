@@ -7,7 +7,7 @@ export default class HeChangYuRenV28 extends BaseCard {
     attack = 6
     life = 6
     graded = 6
-    description = "战斗开始时：获得你手牌中所有随从牌的属性值。"
+    descriptionStr(){return "战斗开始时：获得你手牌中所有随从牌的属性值。"}
 
     whenStartFightingTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
@@ -33,4 +33,3 @@ export default class HeChangYuRenV28 extends BaseCard {
         })
     }
 }
-

@@ -8,7 +8,7 @@ export default class LieTouZhaoPin28 extends BaseCard {
     name = "猎头招聘"
     graded = 4
     spendingGoldCoin = 3
-    description = "发现一张战吼随从牌。"
+    descriptionStr(){return "发现一张战吼随从牌。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

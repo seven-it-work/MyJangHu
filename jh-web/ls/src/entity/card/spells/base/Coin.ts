@@ -6,7 +6,7 @@ export default class Coin extends BaseCard {
     type = '法术'
     isSell = false
     graded = 0
-    description = '获得1枚铸币'
+    descriptionStr(){return '获得1枚铸币'}
 
     name = "铸币"
 

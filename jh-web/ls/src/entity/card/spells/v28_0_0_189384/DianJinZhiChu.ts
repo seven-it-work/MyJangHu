@@ -8,7 +8,7 @@ export default class DianJinZhiChu28 extends BaseCard {
     name = "点金之触"
     graded = 5
     spendingGoldCoin = 5
-    description = "随机使酒馆总的一个随从变为金色。"
+    descriptionStr(){return "随机使酒馆总的一个随从变为金色。"}
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;

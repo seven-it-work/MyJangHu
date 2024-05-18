@@ -7,7 +7,7 @@ export default class ShenShengZengLi28 extends BaseCard {
     name = "神圣赠礼"
     graded = 6
     spendingGoldCoin = 5
-    description = "使一个随从获得圣盾。"
+    descriptionStr(){return "使一个随从获得圣盾。"}
 
     isNeedSelect = true
 

@@ -10,9 +10,9 @@ export default class BaoFeiFeiPinHuiShouJiV28 extends BaseCard {
     life = 7
     graded = 4
     roundCounter: number = 2;
-    private _description = `每2个回合，在回合结束时，随机获取一张磁力机械牌。（还剩${this.roundCounter}个回合）`
+    private _descriptionStr(){return `每2个回合，在回合结束时，随机获取一张磁力机械牌。（还剩${this.roundCounter}个回合）`}
 
-    get description(): string {
+    descriptionStr(): string {
         return `每2个回合，在回合结束时，随机获取一张磁力机械牌。（还剩${this.roundCounter}个回合）`;
     }
 
@@ -46,4 +46,3 @@ export default class BaoFeiFeiPinHuiShouJiV28 extends BaseCard {
         }
     }
 }
-

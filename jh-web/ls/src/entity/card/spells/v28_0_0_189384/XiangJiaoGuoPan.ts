@@ -7,7 +7,7 @@ export default class XiangJiaoGuoPan28 extends BaseCard {
     name = "香蕉果盘"
     graded = 1
     spendingGoldCoin = 1
-    description = "使一个随从+2/+2。"
+    descriptionStr(){return "使一个随从+2/+2。"}
 
     isNeedSelect = true
 

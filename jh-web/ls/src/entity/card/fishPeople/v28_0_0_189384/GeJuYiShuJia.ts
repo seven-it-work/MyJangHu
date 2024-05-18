@@ -8,7 +8,7 @@ export default class GeJuYiShuJiaV28 extends BaseCard {
     attack = 5
     life = 2
     graded = 5
-    description = "烈毒。亡语：使一个友方鱼人获得烈毒。"
+    descriptionStr(){return "烈毒。亡语：使一个友方鱼人获得烈毒。"}
     isHighlyToxic = true
 
     whenDeadTrigger(triggerObj: TriggerObj) {
@@ -25,4 +25,3 @@ export default class GeJuYiShuJiaV28 extends BaseCard {
         baseCardObj.baseCard.isHighlyToxic = true;
     }
 }
-

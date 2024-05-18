@@ -8,7 +8,7 @@ export default class FangYuZheDeYiShi28 extends BaseCard {
     name = "防御者的仪式"
     graded = 4
     spendingGoldCoin = 3
-    description = "使一个友方随从获得+8/+8和嘲讽。"
+    descriptionStr(){return "使一个友方随从获得+8/+8和嘲讽。"}
 
     isNeedSelect = true
 

@@ -7,7 +7,7 @@ export default class XieNengYuanSuV28 extends BaseCard {
     attack = 3
     life = 1
     graded = 3
-    description = "<b>战吼</b>：在本局对战的剩余时间内，酒馆中的随从拥有+1/+1."
+    descriptionStr(){return "<b>战吼</b>：在本局对战的剩余时间内，酒馆中的随从拥有+1/+1."}
     isWarRoars = true
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {

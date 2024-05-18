@@ -8,7 +8,7 @@ export default class ZhaoZeQianFengV28 extends BaseCard {
     life = 4
     graded = 1
 
-    getDescription(): string {
+    descriptionStr(): string {
         return `在你召唤一个鱼人后，获得+${this.isGold ? 2 : 1}攻击力。`
     }
 

@@ -7,7 +7,7 @@ export default class FenNuBianZhiZheV28 extends BaseCard {
     attack = 3
     life = 1
     graded = 1
-    description = "在你使用一张恶魔牌后，对你的英雄造成1点伤害，并获得+2/+1"
+    descriptionStr(){return "在你使用一张恶魔牌后，对你的英雄造成1点伤害，并获得+2/+1"}
 
 
     whenOtherCardUsedTrigger(triggerObj: TriggerObj) {

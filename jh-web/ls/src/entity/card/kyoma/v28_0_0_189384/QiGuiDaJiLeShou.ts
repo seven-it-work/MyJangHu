@@ -9,7 +9,7 @@ export default class QiGuiDaJiLeShouV28 extends BaseCard {
     attack = 4
     life = 4
     graded = 4
-    description = "<b>战吼</b>：发现一张恶魔牌，对你的英雄造成等同于其等级的伤害。"
+    descriptionStr(){return "<b>战吼</b>：发现一张恶魔牌，对你的英雄造成等同于其等级的伤害。"}
     isWarRoars=true
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {

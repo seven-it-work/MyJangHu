@@ -6,7 +6,6 @@ export default class XieNengYeZhuRenV29 extends BaseCard {
     attack = 2
     life = 6
     graded = 5
-    description = "在你施放2个法术后，吞食酒馆中的一个随从，获得其属性值（还剩2个）。"
+    descriptionStr(){return "在你施放2个法术后，吞食酒馆中的一个随从，获得其属性值（还剩2个）。"}
     version = ["v29.2.0.198037"]
 }
-

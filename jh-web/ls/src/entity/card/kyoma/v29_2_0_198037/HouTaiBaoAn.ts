@@ -6,7 +6,6 @@ export default class HouTaiBaoAnV29 extends BaseCard {
     attack = 4
     life = 4
     graded = 1
-    description = "在你的回合开始时，对你的英雄造成1点伤害。"
+    descriptionStr(){return "在你的回合开始时，对你的英雄造成1点伤害。"}
     version = ["v29.2.0.198037"]
 }
-

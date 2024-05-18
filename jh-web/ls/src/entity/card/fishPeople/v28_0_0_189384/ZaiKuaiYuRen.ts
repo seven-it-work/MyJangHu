@@ -7,7 +7,7 @@ export default class XunBaoYuRenV28 extends BaseCard {
     attack = 5
     life = 5
     graded = 4
-    description = "当本牌在你手中时，在你使用一张鱼人牌后，获得+3/+3。"
+    descriptionStr(){return "当本牌在你手中时，在你使用一张鱼人牌后，获得+3/+3。"}
 
     whenOtherHandlerCardUsedTrigger(triggerObj: TriggerObj) {
         const targetCard = triggerObj.targetCard;
@@ -24,4 +24,3 @@ export default class XunBaoYuRenV28 extends BaseCard {
         }
     }
 }
-
