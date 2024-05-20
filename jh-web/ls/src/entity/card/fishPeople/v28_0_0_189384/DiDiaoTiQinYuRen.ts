@@ -8,7 +8,15 @@ export default class DiDiaoTiQinYuRenV28 extends BaseCard {
     attack = 8
     life = 3
     graded = 5
-    descriptionStr(){return "亡语：召唤你手牌中生命值最高的随从，其登场仅限本场战斗。"}
+
+    descriptionStr() {
+        let txt = ''
+        if (this.isGold) {
+            txt = '2个'
+        }
+        return `亡语：召唤你手牌中生命值最高的${txt}随从，其登场仅限本场战斗。`
+    }
+
     isDeadLanguage = true
 
     whenDeadTrigger(triggerObj: TriggerObj) {
@@ -25,6 +33,16 @@ export default class DiDiaoTiQinYuRenV28 extends BaseCard {
         if (baseCardObjs.length <= 0) {
             return;
         }
-        currentPlayer.addCard(cloneDeep(baseCardObjs[0]), currentPlayer.findNextCard(currentCard), triggerObj)
+        const baseCardObj1 = baseCardObjs[0];
+        // 锁定
+        baseCardObj1.baseCard.isLocked = true
+        currentPlayer.addCard(cloneDeep(baseCardObj1), currentPlayer.findNextCard(currentCard), triggerObj)
+        if (this.isGold) {
+            const baseCardObj = baseCardObjs[1];
+            if (baseCardObj) {
+                baseCardObj.baseCard.isLocked = true;
+                currentPlayer.addCard(cloneDeep(baseCardObj), currentPlayer.findNextCard(currentCard), triggerObj)
+            }
+        }
     }
 }

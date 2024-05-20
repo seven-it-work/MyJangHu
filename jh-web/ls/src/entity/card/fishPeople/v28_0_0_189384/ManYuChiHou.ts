@@ -9,7 +9,15 @@ export default class ManYuChiHouV28 extends BaseCard {
     attack = 3
     life = 2
     graded = 4
-    descriptionStr(){return "战吼：如果你控制其他任何鱼人，则发现一张鱼人。"}
+
+    descriptionStr() {
+        let txt = '一张'
+        if (this.isGold) {
+            txt = '2张'
+        }
+        return `战吼：如果你控制其他任何鱼人，则发现${txt}鱼人。`
+    }
+
     isWarRoars = true
 
     /**
@@ -29,11 +37,18 @@ export default class ManYuChiHouV28 extends BaseCard {
             // 发现完了，只能发现1级鱼人
             baseCards = triggerObj.contextObj.sharedCardPool.listByEthnicity(['鱼人'], 1);
         }
-        const baseCard = randomUtil.pickone(baseCards);
-        if (!baseCard) {
+        baseCards = randomUtil.pick(baseCards, 2);
+        if (baseCards.length <= 0) {
             return;
         }
-        triggerObj.contextObj.sharedCardPool.cardOut(baseCard)
-        currentPlayer.addCardInHand(new BaseCardObj(baseCard), triggerObj.contextObj.sharedCardPool)
+        let magnification = this.isGold ? 2 : 1;
+        for (let i = 0; i < magnification; i++) {
+            const baseCard = baseCards[i];
+            if (!baseCard) {
+                return;
+            }
+            triggerObj.contextObj.sharedCardPool.cardOut(baseCard)
+            currentPlayer.addCardInHand(new BaseCardObj(baseCard), triggerObj.contextObj.sharedCardPool)
+        }
     }
 }

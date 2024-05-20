@@ -8,7 +8,14 @@ export default class CuXinDeTunJiZheV28 extends BaseCard {
     attack = 5
     life = 6
     graded = 4
-    descriptionStr(){return "当你出售本随从时，使一个友方鱼人获得本随从的属性值。"}
+
+    descriptionStr() {
+        let txt = ''
+        if (this.isGold) {
+            txt = '双倍'
+        }
+        return `当你出售本随从时，使一个友方鱼人获得本随从的${txt}属性值。`
+    }
 
     whenSaleCardTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
@@ -25,13 +32,14 @@ export default class CuXinDeTunJiZheV28 extends BaseCard {
             return;
         }
         const baseCardObj = randomUtil.pickone(baseCardObjs);
+        let magnification = this.isGold ? 2 : 1;
         baseCardObj.baseCard.attackBonus.push({
-            markupValue: currentCard.attack,
+            markupValue: currentCard.attack * magnification,
             baseCardId: currentCard.id,
             baseCardName: this.name,
         })
         baseCardObj.baseCard.lifeBonus.push({
-            markupValue: currentCard.life,
+            markupValue: currentCard.life * magnification,
             baseCardId: currentCard.id,
             baseCardName: this.name,
         })

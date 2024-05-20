@@ -7,7 +7,14 @@ export default class HeChangYuRenV28 extends BaseCard {
     attack = 6
     life = 6
     graded = 6
-    descriptionStr(){return "战斗开始时：获得你手牌中所有随从牌的属性值。"}
+
+    descriptionStr() {
+        let txt = ''
+        if (this.isGold) {
+            txt = '双倍'
+        }
+        return `战斗开始时：获得你手牌中所有随从牌的${txt}属性值。`
+    }
 
     whenStartFightingTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
@@ -18,17 +25,18 @@ export default class HeChangYuRenV28 extends BaseCard {
         if (!currentCard) {
             return
         }
-        console.log(`(${currentPlayer.name})的【${this.name}】触发：战斗开始时：获得你手牌中所有随从牌的属性值。`)
+        console.log(`(${currentPlayer.name})的【${this.name}】战斗开始时触发：${this.descriptionStr()}`)
+        let magnification = this.isGold ? 2 : 1;
         currentPlayer.handCardList.forEach(card => {
             currentCard.baseCard.attackBonus.push({
                 baseCardId: currentCard.id,
                 baseCardName: this.name,
-                markupValue: card.attack
+                markupValue: card.attack * magnification
             })
             currentCard.baseCard.lifeBonus.push({
                 baseCardId: currentCard.id,
                 baseCardName: this.name,
-                markupValue: card.life
+                markupValue: card.life * magnification
             })
         })
     }

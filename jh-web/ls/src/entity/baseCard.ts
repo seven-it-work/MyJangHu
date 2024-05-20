@@ -36,10 +36,15 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
     private _injuriesReceived: number = 0;
     // 等级
     graded: number = 1;
+    // 是否锁定(无法召唤)
+    isLocked: boolean = false
+    // 剩余锁定回合（每次回合开始时会-- 直到0）
+    lockTheRound: number = 0
 
-    descriptionStr():string{
+    descriptionStr(): string {
         return ''
     }
+
     // 复仇计数器
     otherDeadCounter: number = 0;
     // 复仇次数，达到清空otherDeadCounter

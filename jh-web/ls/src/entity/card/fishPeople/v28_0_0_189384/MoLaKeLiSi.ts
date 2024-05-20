@@ -8,7 +8,15 @@ export default class MoLaKeLiSiV28 extends BaseCard {
     attack = 5
     life = 2
     graded = 2
-    descriptionStr(){return "每当本随从消灭一个随从时，使你手牌中的一张随从牌获得+2/+2。"}
+
+    descriptionStr() {
+        let txt = '+2/+2'
+        if (this.isGold) {
+            txt = '+4/+4'
+        }
+        return `每当本随从消灭一个随从时，使你手牌中的一张随从牌获得${txt}。`
+    }
+
 
     whenKillOneTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
@@ -24,15 +32,16 @@ export default class MoLaKeLiSiV28 extends BaseCard {
             return;
         }
         const baseCardObj = randomUtil.pickone(handCardList);
+        let magnification = this.isGold ? 2 : 1;
         baseCardObj.baseCard.lifeBonus.push({
             baseCardName: this.name,
             baseCardId: currentCard.id,
-            markupValue: 2
+            markupValue: 2 * magnification
         })
         baseCardObj.baseCard.attackBonus.push({
             baseCardName: this.name,
             baseCardId: currentCard.id,
-            markupValue: 2
+            markupValue: 2 * magnification
         })
     }
 

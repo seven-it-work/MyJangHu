@@ -8,7 +8,15 @@ export default class XiaoGuiQiuTuV28 extends BaseCard {
     attack = 3
     life = 2
     graded = 1
-    descriptionStr(){return "<b>嘲讽</b>，<b>亡语</b>：召唤一个1/1的小鬼"}
+
+    descriptionStr() {
+        let txt = '1/1'
+        if (this.isGold) {
+            txt = '2/2'
+        }
+        return `<b>嘲讽</b>，<b>亡语</b>：召唤一个${txt}的小鬼。`
+    }
+
     isMockery = true;
     isDeadLanguage = true
 
@@ -21,7 +29,10 @@ export default class XiaoGuiQiuTuV28 extends BaseCard {
         if (!currentCard) {
             return
         }
-        console.log(`(${currentPlayer.name})的【${this.name}】触发：亡语：召唤一个1/1的小鬼。`)
-        currentPlayer.addCard(new BaseCardObj(triggerObj.contextObj.sharedCardPool.getByName("XiaoGui")),currentPlayer.findNextCard(currentCard),triggerObj);
+        const magnification = this.isGold ? 2 : 1;
+        const baseCardObj = new BaseCardObj(triggerObj.contextObj.sharedCardPool.getByName("XiaoGui"));
+        baseCardObj.baseCard.life = magnification
+        baseCardObj.baseCard.attack = magnification
+        currentPlayer.addCard(baseCardObj, currentPlayer.findNextCard(currentCard), triggerObj);
     }
 }

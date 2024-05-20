@@ -12,7 +12,7 @@ export default class JiXieJiaLaKeSuSiV28 extends BaseCard {
     descriptionStr(){return "<b>战吼</b>：随机获取一张机械-恶魔牌。"}
     isWarRoars = true
     /**
-     * 这个版本只有一个机械-恶魔牌，这样就能无限循环获取，导致不公平bug
+     * 这个版本只有一个机械-恶魔牌，这样就能无限循环获取,应该还有我不知道的牌，导致不公平bug
      */
     isSell = false
 

@@ -7,7 +7,13 @@ export default class JunTuanJianGongV28 extends BaseCard {
     attack = 4
     life = 2
     graded = 3
-    descriptionStr(){return "酒馆中的随从用于+2/+1"}
+    descriptionStr() {
+        let txt = '+2/+1'
+        if (this.isGold) {
+            txt = '+4/+2'
+        }
+        return `酒馆中的随从用有${txt}。`
+    }
 
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
@@ -19,13 +25,14 @@ export default class JunTuanJianGongV28 extends BaseCard {
         if (!currentCard) {
             return
         }
+        const magnification = this.isGold ? 2 : 1;
         currentPlayer.tavern.attackBonus.push({
-            markupValue: 2,
+            markupValue: 2*magnification,
             baseCardName: this.name,
             baseCardId: currentCard.id,
         })
         currentPlayer.tavern.lifeBonus.push({
-            markupValue: 1,
+            markupValue: magnification,
             baseCardName: this.name,
             baseCardId: currentCard.id,
         })

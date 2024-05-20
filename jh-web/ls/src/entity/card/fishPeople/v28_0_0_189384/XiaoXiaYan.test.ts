@@ -6,9 +6,15 @@ import ContextObj from "../../../../objs/ContextObj";
 import BaseCardObj from "../../../../objs/BaseCardObj";
 import FightObj from "../../../../objs/FightObj";
 import {cloneDeep} from "lodash";
+import randomUtil from "../../../../utils/RandomUtils";
 
 
 describe('XiaoXiaYan', () => {
+    it('should pick2', function () {
+        const pick = randomUtil.pick([1], 2);
+        console.log(pick[0])
+        console.log(pick[1])
+    });
     it('should whenEndRound', function () {
         try {
             const sharedCardPool = new SharedCardPool(['恶魔', '机械', '鱼人']);

@@ -8,7 +8,13 @@ export default class XiaoXiaYanV28 extends BaseCard {
     attack = 8
     life = 5
     graded = 6
-    descriptionStr(){return "在你的回合结束时，相邻的随从触发其战吼。"}
+    descriptionStr() {
+        let txt = ''
+        if (this.isGold) {
+            txt = '2次'
+        }
+        return `在你的回合结束时，相邻的随从触发其战吼${txt}。`
+    }
 
     whenEndRound(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
@@ -32,22 +38,28 @@ export default class XiaoXiaYanV28 extends BaseCard {
                 break
             }
         }
+        let magnification = this.isGold ? 2 : 1;
+
         if (pre) {
             if (pre.baseCard.isWarRoars) {
-                console.log(`(${currentPlayer.name})的【${this.name}】触发左侧战吼：${pre.baseCard.descriptionStr()}`)
-                pre.whenCardUsedTrigger({
-                    ...triggerObj,
-                    currentCard: pre
-                })
+                for (let i = 0; i < magnification; i++) {
+                    console.log(`(${currentPlayer.name})的【${this.name}】触发左侧战吼：${pre.baseCard.descriptionStr()}`)
+                    pre.whenCardUsedTrigger({
+                        ...triggerObj,
+                        currentCard: pre
+                    })
+                }
             }
         }
         if (next) {
             if (next.baseCard.isWarRoars) {
-                console.log(`(${currentPlayer.name})的【${this.name}】触发右侧战吼：${next.baseCard.descriptionStr()}`)
-                next.whenCardUsedTrigger({
-                    ...triggerObj,
-                    currentCard: next
-                })
+                for (let i = 0; i < magnification; i++) {
+                    console.log(`(${currentPlayer.name})的【${this.name}】触发右侧战吼：${next.baseCard.descriptionStr()}`)
+                    next.whenCardUsedTrigger({
+                        ...triggerObj,
+                        currentCard: next
+                    })
+                }
             }
         }
     }

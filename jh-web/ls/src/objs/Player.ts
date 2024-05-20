@@ -228,6 +228,12 @@ export default class Player implements Serialization<Player> {
         }
         if (this._handCardMap.delete(cardObj.id)) {
             if (cardObj.baseCard.type === '随从') {
+                if (cardObj.baseCard.isGold) {
+                    // 使用金色卡，获得三连卡
+                    const sanlian = new Sanlian();
+                    sanlian.graded = Math.min(6, this.tavern.graded + 1)
+                    this.addCardInHand(new BaseCardObj(sanlian), triggerObj.contextObj.sharedCardPool)
+                }
                 // 磁力判断
                 if (cardObj.baseCard.isMagneticForce && nextCard && nextCard.baseCard.ethnicity.includes("机械")) {
                     console.log(`(${this.name})的【${nextCard.baseCard.name}】附加磁力【${cardObj.baseCard.name}】`)
@@ -260,12 +266,6 @@ export default class Player implements Serialization<Player> {
                     currentPlayer: this,
                     currentCard: cardObj,
                 })
-                if (cardObj.baseCard.isGold) {
-                    // 使用金色卡，获得三连卡
-                    const sanlian = new Sanlian();
-                    sanlian.graded = Math.min(6, this.tavern.graded + 1)
-                    this.addCardInHand(new BaseCardObj(sanlian), triggerObj.contextObj.sharedCardPool)
-                }
             } else {
                 cardObj.whenCardUsedTrigger(triggerObj);
             }
@@ -416,11 +416,20 @@ export default class Player implements Serialization<Player> {
         this.isEndRound = false;
         this.sanLianCheck(triggerObj.contextObj.sharedCardPool);
         // 手牌影响
-        Array.from(this._handCardMap.values()).forEach(card => card.whenStartRoundHandler({
-            ...triggerObj,
-            currentCard: card,
-            currentPlayer: this,
-        }))
+        Array.from(this._handCardMap.values()).forEach(card => {
+            // 锁定计数器
+            if (card.baseCard.isLocked) {
+                card.baseCard.lockTheRound = Math.max(card.baseCard.lockTheRound - 1, 0)
+                if (card.baseCard.lockTheRound === 0) {
+                    card.baseCard.isLocked = false
+                }
+            }
+            card.whenStartRoundHandler({
+                ...triggerObj,
+                currentCard: card,
+                currentPlayer: this,
+            })
+        })
         // 战场影响
         this.cardList.forEach(card => card.whenStartRound({
             ...triggerObj,

@@ -8,7 +8,14 @@ export default class ChiQuPuYiJiV28 extends BaseCard {
     attack = 1
     life = 1
     graded = 2
-    descriptionStr(){return "<div><b>圣盾</b></div>在一个友方随从失去圣盾后，在你手牌中的一张随从获得+1/+1。"}
+
+    descriptionStr() {
+        let txt = '+1/+1'
+        if (this.isGold) {
+            txt = '+2/+2'
+        }
+        return `<div><b>圣盾</b></div>在一个友方随从失去圣盾后，在你手牌中的一张随从获得${txt}。`
+    }
     isHolyShield: boolean = true;
 
     whenOtherHolyShieldDisappears(triggerObj: TriggerObj) {
@@ -25,14 +32,14 @@ export default class ChiQuPuYiJiV28 extends BaseCard {
             return;
         }
         const baseCardObj = randomUtil.pickone(handCardList);
-        console.log(`(${currentPlayer.name})的【${this.name}】触发在一个友方随从失去圣盾后，在你手牌中的一张随从【${baseCardObj.baseCard.name}】获得+1/+1。`)
+        const magnification = this.isGold ? 2 : 1;
         baseCardObj.baseCard.attackBonus.push({
-            markupValue: 1,
+            markupValue: magnification,
             baseCardName: this.name,
             baseCardId: currentCard.id,
         })
         baseCardObj.baseCard.lifeBonus.push({
-            markupValue: 1,
+            markupValue: magnification,
             baseCardName: this.name,
             baseCardId: currentCard.id,
         })

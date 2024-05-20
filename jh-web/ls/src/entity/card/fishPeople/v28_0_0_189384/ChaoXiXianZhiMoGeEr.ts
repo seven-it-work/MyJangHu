@@ -8,7 +8,15 @@ export default class ChaoXiXianZhiMoGeErV28 extends BaseCard {
     attack = 1
     life = 10
     graded = 7
-    descriptionStr(){return "剧毒。每当本随从消灭一个随从时，使你手牌中的张随从牌获得被消灭随从的最大属性值。"}
+
+    descriptionStr() {
+        let txt = ''
+        if (this.isGold) {
+            txt = '双倍'
+        }
+        return `剧毒。每当本随从消灭一个随从时，使你手牌中的张随从牌获得被消灭随从的${txt}最大属性值。`
+    }
+
     hasPoison = true;
 
     // 消灭随从的最大属性值。这个是什么意思？
@@ -31,13 +39,14 @@ export default class ChaoXiXianZhiMoGeErV28 extends BaseCard {
             return;
         }
         const baseCardObj = randomUtil.pickone(baseCardObjs);
+        let magnification = this.isGold ? 2 : 1;
         baseCardObj.baseCard.attackBonus.push({
-            markupValue: targetCard.attack,
+            markupValue: targetCard.attack * magnification,
             baseCardId: currentCard.id,
             baseCardName: this.name,
         })
         baseCardObj.baseCard.lifeBonus.push({
-            markupValue: targetCard.baseCard.getPrimitiveLife(),
+            markupValue: targetCard.baseCard.getPrimitiveLife() * magnification,
             baseCardId: currentCard.id,
             baseCardName: this.name,
         })

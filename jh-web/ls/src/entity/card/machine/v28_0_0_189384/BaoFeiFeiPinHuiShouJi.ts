@@ -11,8 +11,12 @@ export default class BaoFeiFeiPinHuiShouJiV28 extends BaseCard {
     graded = 4
     roundCounter: number = 2;
 
-    descriptionStr(): string {
-        return `每2个回合，在回合结束时，随机获取一张磁力机械牌。（还剩${this.roundCounter}个回合）`;
+    descriptionStr() {
+        let txt = '一张'
+        if (this.isGold) {
+            txt = '2张'
+        }
+        return `每2个回合，在回合结束时，随机获取${txt}磁力机械牌。（还剩${this.roundCounter}个回合）。`
     }
 
     preRoundNumber: number = -1;
@@ -28,18 +32,20 @@ export default class BaoFeiFeiPinHuiShouJiV28 extends BaseCard {
         }
         console.log(triggerObj.contextObj.currentRound , this.preRoundNumber)
         this.roundCounter = 2 - (triggerObj.contextObj.currentRound - this.preRoundNumber)
-        console.log(`(${currentPlayer.name})的【${this.name}】触发：每2个回合，在回合结束时，随机获取一张磁力机械牌。（还剩${this.roundCounter}个回合）`)
         if (this.roundCounter <= 0 ) {
             this.preRoundNumber = triggerObj.contextObj.currentRound+1
             const baseCards = triggerObj.contextObj.sharedCardPool.listMagneticForceCard(currentPlayer.tavern.graded);
             if (baseCards.length <= 0) {
                 return;
             }
-            const baseCard = RandomUtils.pickone(baseCards);
-            console.log(`(${currentPlayer.name})的【${this.name}】触发：每2个回合，在回合结束时，随机获取一张磁力机械牌【${baseCard.name}】。`)
-            triggerObj.contextObj.sharedCardPool.cardOut(baseCard);
-            const baseCardObj = new BaseCardObj(baseCard);
-            currentPlayer.addCardInHand(baseCardObj, triggerObj.contextObj.sharedCardPool)
+            const magnification = this.isGold ? 2 : 1;
+            for (let i = 0; i < magnification; i++) {
+                const baseCard = RandomUtils.pickone(baseCards);
+                console.log(`(${currentPlayer.name})的【${this.name}】触发：每2个回合，在回合结束时，随机获取一张磁力机械牌【${baseCard.name}】。`)
+                triggerObj.contextObj.sharedCardPool.cardOut(baseCard);
+                const baseCardObj = new BaseCardObj(baseCard);
+                currentPlayer.addCardInHand(baseCardObj, triggerObj.contextObj.sharedCardPool)
+            }
         }
     }
 }

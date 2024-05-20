@@ -8,7 +8,19 @@ export default class XiongEDeXieNengYouLongV28 extends BaseCard {
     attack = 0
     life = 2
     graded = 4
-    descriptionStr(){return "<b>战吼</b>：吞食酒馆中的3个随从，获得其属性值。"}
+
+    descriptionStr() {
+        return ""
+    }
+
+    descriptionStr() {
+        let txt = ''
+        if (this.isGold) {
+            txt = '双倍'
+        }
+        return `<b>战吼</b>：吞食酒馆中的3个随从，获得其${txt}属性值。。`
+    }
+
     isWarRoars = true
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
@@ -28,13 +40,14 @@ export default class XiongEDeXieNengYouLongV28 extends BaseCard {
             }
             const pick = randomUtil.pickone(baseCardObjs);
             tavern.removeCard(pick, triggerObj.contextObj.sharedCardPool)
+            const magnification = this.isGold ? 2 : 1;
             currentCard.baseCard.attackBonus.push({
-                markupValue: pick.baseCard.attack,
+                markupValue: pick.baseCard.attack * magnification,
                 baseCardName: this.name,
                 baseCardId: currentCard.id,
             })
             currentCard.baseCard.lifeBonus.push({
-                markupValue: pick.baseCard.life,
+                markupValue: pick.baseCard.life * magnification,
                 baseCardName: this.name,
                 baseCardId: currentCard.id,
             })

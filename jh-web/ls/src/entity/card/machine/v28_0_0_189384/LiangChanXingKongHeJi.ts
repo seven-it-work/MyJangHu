@@ -8,7 +8,16 @@ export default class LiangChanXingKongHeJiV28 extends BaseCard {
     attack = 3
     life = 2
     graded = 3
-    descriptionStr(){return "<div><b>圣盾</b></div><b>亡语</b>：召唤三个1/1的微型机器人。"}
+
+    descriptionStr() {
+        let txt = '1/1'
+        if (this.isGold) {
+            txt = '2/2'
+        }
+        return "<div><b>磁力</b></div><b>亡语</b>：召唤三个${txt}的微型机器人。"
+    }
+
+    isMagneticForce = true
 
     whenDeadTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
@@ -19,9 +28,10 @@ export default class LiangChanXingKongHeJiV28 extends BaseCard {
         if (!currentCard) {
             return
         }
-        console.log(`(${currentPlayer.name})的【${this.name}】的亡语触发：召唤三个1/1的微型机器人。`)
         for (let i = 0; i < 3; i++) {
-            currentPlayer.addCard(new BaseCardObj(triggerObj.contextObj.sharedCardPool.getByName("WeiXingJiQiRen")),currentPlayer.findNextCard(currentCard),triggerObj)
+            const baseCardObj = new BaseCardObj(triggerObj.contextObj.sharedCardPool.getByName("WeiXingJiQiRen"));
+            baseCardObj.baseCard.isGold = this.isGold
+            currentPlayer.addCard(baseCardObj, currentPlayer.findNextCard(currentCard), triggerObj)
         }
     }
 }

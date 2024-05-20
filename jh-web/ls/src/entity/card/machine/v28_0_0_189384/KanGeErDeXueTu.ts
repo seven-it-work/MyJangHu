@@ -7,7 +7,11 @@ export default class KanGeErDeXueTuV28 extends BaseCard {
     attack = 3
     life = 6
     graded = 5
-    descriptionStr(){return "<b>亡语</b>：召唤你本场战斗中最先死亡的2个机械。"}
+
+    descriptionStr() {
+        return `<b>亡语</b>：召唤你本场战斗中最先死亡的${this.isGold ? 4 : 2}个机械。`
+    }
+
     isDeadLanguage = true
 
     whenDeadTrigger(triggerObj: TriggerObj) {
@@ -23,12 +27,13 @@ export default class KanGeErDeXueTuV28 extends BaseCard {
         if (baseCardObjs.length <= 0) {
             return;
         }
-        console.log(`(${currentPlayer.name})的【${this.name}】的亡语触发：召唤你本场战斗中最先死亡的2个机械。`)
-        if (baseCardObjs[0]) {
-            currentPlayer.addCard(baseCardObjs[0].getOriginalVersion(triggerObj.contextObj.sharedCardPool), currentPlayer.findNextCard(currentCard), triggerObj)
-        }
-        if (baseCardObjs[1]) {
-            currentPlayer.addCard(baseCardObjs[1].getOriginalVersion(triggerObj.contextObj.sharedCardPool), currentPlayer.findNextCard(currentCard), triggerObj)
+        const magnification = this.isGold ? 2 : 1;
+        for (let i = 0; i < magnification * 2; i++) {
+            const magnificationElement = magnification[i];
+            if (!magnificationElement) {
+                return;
+            }
+            currentPlayer.addCard(magnificationElement.getOriginalVersion(triggerObj.contextObj.sharedCardPool), currentPlayer.findNextCard(currentCard), triggerObj)
         }
     }
 }

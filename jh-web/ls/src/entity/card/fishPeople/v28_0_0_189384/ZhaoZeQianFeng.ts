@@ -22,10 +22,11 @@ export default class ZhaoZeQianFengV28 extends BaseCard {
             return
         }
         if (targetCard.baseCard.ethnicity.includes('鱼人')) {
+            const magnification = this.isGold ? 2 : 1;
             currentCard.baseCard.attackBonus.push({
                 baseCardId: currentCard.id,
                 baseCardName: this.name,
-                markupValue: this.isGold ? 2 : 1
+                markupValue: magnification
             })
         }
     }

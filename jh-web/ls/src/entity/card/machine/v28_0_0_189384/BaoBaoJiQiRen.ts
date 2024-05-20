@@ -10,7 +10,14 @@ export default class BaoBaoJiQiRenV28 extends BaseCard {
     attack = 2
     life = 2
     graded = 2
-    descriptionStr(){return "<b>亡语</b>：随机对一个敌方随从造成4点伤害。"}
+    descriptionStr() {
+        let txt = ''
+        if (this.isGold) {
+            txt = '触发两次'
+        }
+        return `<b>亡语</b>：随机对一个敌方随从造成4点伤害。${txt}。`
+    }
+
     isDeadLanguage = true
 
     whenDeadTrigger(triggerObj: TriggerObj) {
@@ -26,8 +33,10 @@ export default class BaoBaoJiQiRenV28 extends BaseCard {
         if (cardListInFighting.length <= 0) {
             return;
         }
-        const card = randomUtil.pickone(cardListInFighting)
-        console.log(`(${currentPlayer.name})的【${this.name}】触发亡语：随机对一个敌方随从【${card.baseCard.name}】造成4点伤害。`)
-        card.healthChange(4, triggerObj)
+        const magnification = this.isGold ? 2 : 1;
+        for (let i = 0; i < magnification; i++) {
+            const card = randomUtil.pickone(cardListInFighting)
+            card.healthChange(4, triggerObj)
+        }
     }
 }

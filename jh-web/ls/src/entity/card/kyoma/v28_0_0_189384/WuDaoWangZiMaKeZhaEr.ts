@@ -12,11 +12,13 @@ export default class WuDaoWangZiMaKeZhaErV28 extends BaseCard {
     remainRefreshTimes: number = 2;
 
     descriptionStr(): string {
-        return `每回合中，有2次刷新会消耗生命值，而非铸币。（还剩${this.remainRefreshTimes}次！）`;
+        const magnification = this.isGold ? 2 : 1;
+        return `每回合中，有${this.refreshTimes * magnification}次刷新会消耗生命值，而非铸币。（还剩${this.remainRefreshTimes}次！）`;
     }
 
 
     whenEndRound(triggerObj: TriggerObj) {
-        this.remainRefreshTimes = this.refreshTimes;
+        const magnification = this.isGold ? 2 : 1;
+        this.remainRefreshTimes = this.refreshTimes * magnification;
     }
 }

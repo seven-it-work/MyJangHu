@@ -8,9 +8,18 @@ export default class JiXieXiaoMaV28 extends BaseCard {
     attack = 2
     life = 2
     graded = 1
-    descriptionStr(){return "<b>亡语</b>：召唤一个1/1的迹象马驹。"}
+
+    descriptionStr() {
+        let txt = '1/1'
+        if (this.isGold) {
+            txt = '2/2'
+        }
+        return `<b>亡语</b>：召唤一个${txt}的迹象马驹。`
+    }
+
     isSell = false
     isDeadLanguage = true
+
     whenDeadTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
         if (!currentPlayer) {
@@ -21,7 +30,7 @@ export default class JiXieXiaoMaV28 extends BaseCard {
             return
         }
         const baseCard = triggerObj.contextObj.sharedCardPool.getByName("JiXiangMaJu");
-        console.log(`(${currentPlayer.name})的【${this.name}】的亡语触发：召唤一个1/1的迹象马驹。`)
+        baseCard.isGold = this.isGold
         currentPlayer.addCard(new BaseCardObj(baseCard), currentPlayer.findNextCard(currentCard), triggerObj)
     }
 }

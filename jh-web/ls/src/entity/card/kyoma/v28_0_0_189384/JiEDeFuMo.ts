@@ -8,9 +8,17 @@ export default class JiEDeFuMoV28 extends BaseCard {
     attack = 8
     life = 5
     graded = 6
-    descriptionStr(){return "在你的回合结束时，你的恶魔各吞食酒馆中的一个随从，获取其属性值。"}
+
+    descriptionStr() {
+        let txt = ''
+        if (this.isGold) {
+            txt = '双倍'
+        }
+        return `在你的回合结束时，你的恶魔各吞食酒馆中的一个随从，获取其${txt}属性值。`
+    }
 
     version = ["v28.0.0.189384", "v29.2.0.198037"]
+
     whenEndRound(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
         if (!currentPlayer) {
@@ -24,6 +32,7 @@ export default class JiEDeFuMoV28 extends BaseCard {
         if (tavern.currentCard.size <= 0) {
             return;
         }
+        const magnification = this.isGold ? 2 : 1;
         currentPlayer.cardList.filter(item => {
             return item.baseCard.ethnicity.includes("恶魔")
         }).forEach(item => {
@@ -34,12 +43,12 @@ export default class JiEDeFuMoV28 extends BaseCard {
             const pick = randomUtil.pickone(baseCardObjs);
             tavern.removeCard(pick, triggerObj.contextObj.sharedCardPool)
             item.baseCard.attackBonus.push({
-                markupValue: pick.baseCard.attack,
+                markupValue: pick.baseCard.attack * magnification,
                 baseCardName: this.name,
                 baseCardId: currentCard.id,
             })
             item.baseCard.lifeBonus.push({
-                markupValue: pick.baseCard.life,
+                markupValue: pick.baseCard.life * magnification,
                 baseCardName: this.name,
                 baseCardId: currentCard.id,
             })

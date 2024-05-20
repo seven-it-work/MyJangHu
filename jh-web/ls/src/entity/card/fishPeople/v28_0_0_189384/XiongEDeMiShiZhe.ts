@@ -9,7 +9,14 @@ export default class XiongEDeMiShiZheV28 extends BaseCard {
     attack = 4
     life = 3
     graded = 3
-    descriptionStr(){return "战斗开始时：使你手牌中的一张鱼人牌获得+2/+2并召唤它，其登场仅限本场战斗。"}
+
+    descriptionStr() {
+        let txt = '+2/+2'
+        if (this.isGold) {
+            txt = '+4/+4'
+        }
+        return `战斗开始时：使你手牌中的一张鱼人牌获得${txt}并召唤它，其登场仅限本场战斗。`
+    }
 
     whenStartFightingTrigger(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
@@ -27,14 +34,15 @@ export default class XiongEDeMiShiZheV28 extends BaseCard {
             return;
         }
         const baseCardObj = randomUtil.pickone(baseCardObjs);
-        console.log(`(${currentPlayer.name})的【${this.name}】的战斗开始时触发：使你手牌中的一张鱼人牌获得+2/+2并召唤它，其登场仅限本场战斗。`)
+        console.log(`(${currentPlayer.name})的【${this.name}】的战斗开始时触发：${this.descriptionStr()}`)
+        let magnification = this.isGold ? 2 : 1;
         baseCardObj.baseCard.attackBonus.push({
-            markupValue: 2,
+            markupValue: 2 * magnification,
             baseCardName: this.name,
             baseCardId: currentCard.id,
         })
         baseCardObj.baseCard.lifeBonus.push({
-            markupValue: 2,
+            markupValue: 2 * magnification,
             baseCardName: this.name,
             baseCardId: currentCard.id,
         })

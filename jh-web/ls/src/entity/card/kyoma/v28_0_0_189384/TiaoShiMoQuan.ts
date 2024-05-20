@@ -8,7 +8,15 @@ export default class TiaoShiMoQuanV28 extends BaseCard {
     attack = 1
     life = 1
     graded = 1
-    descriptionStr(){return "<b>战吼</b>：随机吞噬酒馆一个随从，获取其属性值。"}
+
+    descriptionStr() {
+        let txt = ''
+        if (this.isGold) {
+            txt = '双倍'
+        }
+        return `<b>战吼</b>：随机吞噬酒馆一个随从，获取其${txt}属性值。`
+    }
+
     version = ["v28.0.0.189384", "v29.2.0.198037"]
 
     isWarRoars = true
@@ -29,13 +37,14 @@ export default class TiaoShiMoQuanV28 extends BaseCard {
         }
         const pick = randomUtil.pickone(baseCardObjs);
         tavern.removeCard(pick, triggerObj.contextObj.sharedCardPool)
+        const magnification = this.isGold ? 2 : 1;
         currentCard.baseCard.attackBonus.push({
-            markupValue: pick.baseCard.attack,
+            markupValue: pick.baseCard.attack * magnification,
             baseCardName: this.name,
             baseCardId: currentCard.id,
         })
         currentCard.baseCard.lifeBonus.push({
-            markupValue: pick.baseCard.life,
+            markupValue: pick.baseCard.life * magnification,
             baseCardName: this.name,
             baseCardId: currentCard.id,
         })

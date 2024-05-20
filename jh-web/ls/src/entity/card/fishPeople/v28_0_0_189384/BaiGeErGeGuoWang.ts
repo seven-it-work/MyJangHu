@@ -8,7 +8,15 @@ export default class BaiGeErGeGuoWangV28 extends BaseCard {
     attack = 6
     life = 4
     graded = 5
-    descriptionStr(){return "战吼：使你的其他鱼人获得+2/+3。"}
+
+    descriptionStr() {
+        let txt = '+2/+3'
+        if (this.isGold) {
+            txt = '+4/+6'
+        }
+        return `战吼：使你的其他鱼人获得${txt}。`
+    }
+
     isWarRoars = true
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
@@ -27,10 +35,10 @@ export default class BaiGeErGeGuoWangV28 extends BaseCard {
         }
         baseCardObjs.forEach(card => {
             card.baseCard.attackBonus.push({
-                baseCardId: currentCard.id, baseCardName: this.name, markupValue: 2
+                baseCardId: currentCard.id, baseCardName: this.name, markupValue: this.isGold ? 4 : 2
             })
             card.baseCard.lifeBonus.push({
-                baseCardId: currentCard.id, baseCardName: this.name, markupValue: 3
+                baseCardId: currentCard.id, baseCardName: this.name, markupValue: this.isGold ? 6 : 3
             })
         })
     }

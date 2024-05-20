@@ -7,7 +7,15 @@ export default class SaGeLaSiDeYongShiV28 extends BaseCard {
     attack = 10
     life = 10
     graded = 7
-    descriptionStr(){return "酒馆中的随从拥有+10/10。"}
+
+    descriptionStr() {
+        let txt = '+10/10'
+        if (this.isGold) {
+            txt = '+20/20'
+        }
+        return `酒馆中的随从拥有${txt}。`
+    }
+
     version = ["v28.0.0.189384", "v29.2.0.198037"]
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
@@ -19,13 +27,14 @@ export default class SaGeLaSiDeYongShiV28 extends BaseCard {
         if (!currentCard) {
             return
         }
+        const magnification = this.isGold ? 2 : 1;
         currentPlayer.tavern.attackBonus.push({
-            markupValue: 10,
+            markupValue: 10 * magnification,
             baseCardName: this.name,
             baseCardId: currentCard.id,
         })
         currentPlayer.tavern.attackBonus.push({
-            markupValue: 10,
+            markupValue: 10 * magnification,
             baseCardName: this.name,
             baseCardId: currentCard.id,
         })

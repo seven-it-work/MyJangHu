@@ -7,7 +7,13 @@ export default class XieNengYuanSuV28 extends BaseCard {
     attack = 3
     life = 1
     graded = 3
-    descriptionStr(){return "<b>战吼</b>：在本局对战的剩余时间内，酒馆中的随从拥有+1/+1."}
+    descriptionStr() {
+        let txt = '+1/+1'
+        if (this.isGold) {
+            txt = '+2/+2'
+        }
+        return `<b>战吼</b>：在本局对战的剩余时间内，酒馆中的随从拥有${txt}。`
+    }
     isWarRoars = true
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
@@ -19,13 +25,14 @@ export default class XieNengYuanSuV28 extends BaseCard {
         if (!currentCard) {
             return
         }
+        const magnification = this.isGold ? 2 : 1;
         currentPlayer.tavern.attackBonus.push({
-            markupValue: 1,
+            markupValue: magnification,
             baseCardName: this.name,
             baseCardId: currentCard.id,
         })
         currentPlayer.tavern.lifeBonus.push({
-            markupValue: 1,
+            markupValue: magnification,
             baseCardName: this.name,
             baseCardId: currentCard.id,
         })

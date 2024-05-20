@@ -9,7 +9,15 @@ export default class QiGuiDaJiLeShouV28 extends BaseCard {
     attack = 4
     life = 4
     graded = 4
-    descriptionStr(){return "<b>战吼</b>：发现一张恶魔牌，对你的英雄造成等同于其等级的伤害。"}
+    descriptionStr(){return ""}
+
+    descriptionStr() {
+        let txt = '一张'
+        if (this.isGold) {
+            txt = '2张'
+        }
+        return `<b>战吼</b>：发现${txt}恶魔牌，对你的英雄造成等同于其等级的伤害。`
+    }
     isWarRoars=true
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {
@@ -20,11 +28,14 @@ export default class QiGuiDaJiLeShouV28 extends BaseCard {
         // 只能发现当前等级
         const baseCards = triggerObj.contextObj.sharedCardPool.listByEthnicity(['恶魔'], currentPlayer.tavern.graded);
         if (baseCards.length > 0) {
-            const baseCard = randomUtil.pickone(baseCards);
-            triggerObj.contextObj.sharedCardPool.cardOut(baseCard);
-            const baseCardObj = new BaseCardObj(baseCard);
-            currentPlayer.addCardInHand(baseCardObj, triggerObj.contextObj.sharedCardPool)
-            currentPlayer.changeLife(-baseCard.graded, triggerObj)
+            const magnification = this.isGold ? 2 : 1;
+            for (let i = 0; i < magnification; i++) {
+                const baseCard = randomUtil.pickone(baseCards);
+                triggerObj.contextObj.sharedCardPool.cardOut(baseCard);
+                const baseCardObj = new BaseCardObj(baseCard);
+                currentPlayer.addCardInHand(baseCardObj, triggerObj.contextObj.sharedCardPool)
+                currentPlayer.changeLife(-baseCard.graded, triggerObj)
+            }
         }
     }
 }

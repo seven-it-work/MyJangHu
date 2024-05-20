@@ -7,8 +7,13 @@ export default class DuoMianFuZhuWuRenJiV28 extends BaseCard {
     attack = 6
     life = 7
     graded = 5
-    descriptionStr(){return "在你的回合结束时，你的随从每拥有一个磁力效果，使其获取+1/+1。"}
-
+    descriptionStr() {
+        let txt = '+1/+1'
+        if (this.isGold) {
+            txt = '+2/+2'
+        }
+        return `在你的回合结束时，你的随从每拥有一个磁力效果，使其获取${txt}。`
+    }
     whenEndRound(triggerObj: TriggerObj) {
         const currentPlayer = triggerObj.currentPlayer;
         if (!currentPlayer) {
@@ -18,16 +23,16 @@ export default class DuoMianFuZhuWuRenJiV28 extends BaseCard {
         if (!currentCard) {
             return
         }
-        console.log(`(${currentPlayer.name})的【${this.name}】的回合结束时：你的随从每拥有一个磁力效果，使其获取+1/+1。`)
+        const magnification = this.isGold ? 2 : 1;
         currentPlayer.cardList.filter(card => card.baseCard.magneticForceList.length > 0).forEach(card => {
             card.baseCard.magneticForceList.forEach(() => {
                 card.baseCard.attackBonus.push({
-                    markupValue: 1,
+                    markupValue: magnification,
                     baseCardName: this.name,
                     baseCardId: currentCard.id,
                 })
                 card.baseCard.lifeBonus.push({
-                    markupValue: 1,
+                    markupValue: magnification,
                     baseCardName: this.name,
                     baseCardId: currentCard.id,
                 })
