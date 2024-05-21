@@ -17,6 +17,9 @@ export default class HouTaiBaoAnV29 extends BaseCard {
         if (!currentPlayer) {
             return
         }
-        currentPlayer.changeLife(-1,triggerObj)
+        const number = this.isGold ? 2 : 1;
+        for (let i = 0; i < number; i++) {
+            currentPlayer.changeLife(-1, triggerObj)
+        }
     }
 }
