@@ -9,6 +9,7 @@ export interface TriggerObj {
     targetCard?: BaseCardObj;
     currentCard?: BaseCardObj;
     needSelectCard?: BaseCardObj;
+    locations?: '手牌' | '场地' | '战斗中' | '死亡池'
 }
 
 export interface Trigger {
@@ -120,7 +121,7 @@ export interface Trigger {
     whenStartRoundHandler(triggerObj: TriggerObj);
 
     /**
-     * 当回合开始时
+     * 当玩家受伤时
      * (战场)
      */
     whenPlayerInjuries(injuring: number, triggerObj: TriggerObj);
@@ -154,4 +155,14 @@ export interface Trigger {
      * 当其他随从附加磁力时
      */
     whenOtherCardMagneticAdd(triggerObj: TriggerObj)
+
+    /**
+     * 当随从受伤时
+     */
+    whenHarmedTrigger(injuring: number, triggerObj: TriggerObj);
+
+    /**
+     * 当刷新酒馆时
+     */
+    whenRefreshTavern(triggerObj: TriggerObj);
 }

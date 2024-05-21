@@ -4,6 +4,4 @@ export default class WuDaoWangZiMaKeZhaErV29 extends WuDaoWangZiMaKeZhaErV28 {
     attack = 4
     life = 3
     graded = 3
-
-    version = ["v29.2.0.198037"]
 }

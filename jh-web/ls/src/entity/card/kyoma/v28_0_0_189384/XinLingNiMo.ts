@@ -44,6 +44,7 @@ export default class XinLingNiMoV28 extends BaseCard {
             return
         }
         const pick = randomUtil.pickone(baseCardObjs);
+        tavern.removeCard(pick, triggerObj.contextObj.sharedCardPool)
         const magnification = this.isGold ? 2 : 1;
         needSelectCard.baseCard.attackBonus.push({
             markupValue: pick.baseCard.attack * magnification,

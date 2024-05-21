@@ -7,5 +7,5 @@ export default class QiangNengLaoGongV29 extends BaseCard {
     life = 6
     graded = 5
     descriptionStr(){return "复仇（4）：随机获取一张机械-恶魔牌"}
-    version = ["v29.2.0.198037"]
+    // todo 完善机械-恶魔牌
 }

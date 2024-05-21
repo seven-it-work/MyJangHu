@@ -18,7 +18,7 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
     // 酒馆是否出售
     isSell: boolean = true;
 
-    type: string = '随从';
+    type: '随从' | '法术' | string = '随从';
     // 购买价格
     spendingGoldCoin: number = 3;
     // 是否可以出售
@@ -71,6 +71,14 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
     refreshTimes: number = 0;
     // 剩余刷新消耗生命值次数
     remainRefreshTimes: number = 0;
+    // 购买法术消耗生命次数
+    buySpellByLifeTimes: number = 0;
+    // 剩余购买法术消耗生命次数
+    remainBuySpellByLifeTimes: number = 0;
+    // 通用计数器
+    counter:number=0;
+    // 通用计数器重置值
+    counterResetValue:number=0;
     // 是否磁力
     isMagneticForce: boolean = false;
     // 磁力随从list
@@ -230,6 +238,10 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
 
     }
 
+    whenHarmedTrigger(injuring: number, triggerObj: TriggerObj) {
+
+    }
+
     deserialize(json: any) {
         if (typeof json === 'string') {
             json = JSON.parse(json)
@@ -284,5 +296,8 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
 
     whenOtherCardMagneticAdd(triggerObj: TriggerObj) {
 
+    }
+
+    whenRefreshTavern(triggerObj: TriggerObj) {
     }
 }

@@ -170,6 +170,16 @@ export default class Player implements Serialization<Player> {
                 contextObj: context,
                 currentPlayer: this,
                 targetCard: cardObj,
+                locations: '手牌',
+            })
+        })
+        this.cardList.forEach((v) => {
+            v.whenBuyOtherCardTrigger({
+                currentCard: v,
+                contextObj: context,
+                currentPlayer: this,
+                targetCard: cardObj,
+                locations: '场地',
             })
         })
     }
@@ -340,6 +350,8 @@ export default class Player implements Serialization<Player> {
             this.freeRefreshTimes--;
         }
         this.tavern.refresh(triggerObj)
+        // 刷新酒馆监听
+        this.cardList.forEach(card => card.whenRefreshTavern({...triggerObj, currentCard: card}))
     }
 
     canUpgradeTavern(): Boolean {
