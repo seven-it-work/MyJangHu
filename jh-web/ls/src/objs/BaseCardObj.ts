@@ -171,9 +171,9 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
         if (!currentPlayer) {
             return
         }
-        for (let i = 0; i <= currentPlayer.battleRoarExtraTriggers; i++) {
-            this.baseCard.whenCardUsedTrigger(this.triggerObj2BaseCard(triggerObj));
-            if (this.baseCard.isWarRoars) {
+        if (this.baseCard.isWarRoars) {
+            for (let i = 0; i <= currentPlayer.battleRoarExtraTriggers; i++) {
+                this.baseCard.whenCardUsedTrigger(this.triggerObj2BaseCard(triggerObj));
                 // 战吼监听触发
                 currentPlayer.cardList.forEach((v) => {
                     v.whenOtherCardUsedTrigger({
@@ -183,6 +183,14 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
                     })
                 })
             }
+        } else {
+            currentPlayer.cardList.forEach((v) => {
+                v.whenOtherCardUsedTrigger({
+                    ...triggerObj,
+                    currentCard: v,
+                    targetCard: this,
+                })
+            })
         }
     }
 
