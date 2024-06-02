@@ -32,7 +32,7 @@ export default class TaDeV28 extends BaseCard {
             // 发现完了，只能发现1级鱼人
             baseCards = triggerObj.contextObj.sharedCardPool.listByEthnicity(['鱼人'], 1);
         }
-        BaseCard = randomUtil.pick(baseCards, 2);
+        baseCards = randomUtil.pick(baseCards, 2);
         if (baseCards.length <= 0) {
             return;
         }

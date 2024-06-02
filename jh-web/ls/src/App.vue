@@ -1,5 +1,6 @@
 <template>
   <div>
+    <FileGenerator2></FileGenerator2>
     <a-textarea v-model:value="saveInfo" show-count/>
     <a-button @click="reload">读取</a-button>
     <a-button type="primary" @click="save">保存</a-button>
@@ -14,9 +15,8 @@ import SharedCardPool from "./objs/SharedCardPool";
 import Player from "./objs/Player";
 import ContextObj from "./objs/ContextObj";
 import PlayObj from "./objs/PlayObj";
-import {message} from "ant-design-vue";
 import SaveUtils from "./utils/SaveUtils";
-import {deserialize, serialize} from "class-transformer";
+import FileGenerator2 from "./views/edit/FileGenerator2.vue";
 const sharedCardPool = new SharedCardPool(['恶魔', '机械', '鱼人', '酒馆法术', '中立']);
 
 const playerList = []
@@ -32,7 +32,7 @@ const playObj = new PlayObj(playerList, sharedCardPool);
 
 export default {
   name: "App",
-  components: {Player: PlayerVue},
+  components: {FileGenerator2, Player: PlayerVue},
   data() {
     return {
       playObj,
