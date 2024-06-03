@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG27_008_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b>亡语：</b>召唤两个2/2并具有“<b>亡语：</b>召唤一个1/1的机械马驹”的机械小马。"
          }
     }
-      

@@ -160,6 +160,10 @@ export interface Trigger {
      * 当随从受伤时
      */
     whenHarmedTrigger(injuring: number, triggerObj: TriggerObj);
+    /**
+     * 当随其他从受伤时
+     */
+    whenOtherHarmedTrigger(injuring: number, triggerObj: TriggerObj);
 
     /**
      * 当刷新酒馆时

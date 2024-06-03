@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_806_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "每当一只友方野兽受到伤害时，使该受伤野兽之外的一只友方野兽永久获得+1/+2。"
          }
     }
-      

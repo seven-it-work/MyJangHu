@@ -141,6 +141,8 @@ export default {
           .replaceAll("ü","v")
           .replaceAll("（","")
           .replaceAll("）","")
+          .replaceAll("“","")
+          .replaceAll("”","")
     },
     generatingAFile(data) {
       const ethnicity=(data)=>{

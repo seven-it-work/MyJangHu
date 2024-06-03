@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_808_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b><b>嘲讽</b>。<b>复生</b></b> <b>亡语：</b>使你的随从获得+1生命值并对其造成1点伤害。"
          }
     }
-      

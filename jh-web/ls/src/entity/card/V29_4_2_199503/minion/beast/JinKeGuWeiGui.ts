@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_803_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b>战吼：</b>使你的其他野兽获得+2/+4。"
          }
     }
-      

@@ -1,25 +1,43 @@
+// 将seven替换为路径
+import BaseCard from "../../../../baseCard";
+import {TriggerObj} from "../../../../Trigger";
 
-      // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+/**
+ * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_807_battlegroundsImage.png
+ */
+export default class BianChiZheTeLiGaoLeiV29_4_2_199503 extends BaseCard {
+    name = "鞭笞者特里高雷"
+    ethnicity = ["野兽"]
+    attack = 5
+    life = 3
+    graded = 4
+    cardType = "minion"
 
-      /**
-      * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_807_battlegroundsImage.png
-      */
-      export default class BianChiZheTeLiGaoLeiV29_4_2_199503 extends BaseCard {
-         name = "鞭笞者特里高雷"
-         ethnicity = ["野兽"]
-         attack = 5
-         life = 3
-         graded = 4
-         cardType = "minion"
-
-         
-
-         descriptionStr() {
-            if(this.isGold){
-                return "每当另一只友方野兽受到伤害时，永久获得+2/+2。"
-            }
-            return "每当另一只友方野兽受到伤害时，永久获得+1/+1。"
-         }
+    descriptionStr() {
+        if (this.isGold) {
+            return "每当另一只友方野兽受到伤害时，永久获得+2/+2。"
+        }
+        return "每当另一只友方野兽受到伤害时，永久获得+1/+1。"
     }
-      
+
+    whenOtherHarmedTrigger(injuring: number, triggerObj: TriggerObj) {
+        var targetCard = triggerObj.targetCard;
+        if (!targetCard) {
+            return
+        }
+        if (!targetCard.baseCard.ethnicity.includes('野兽')) {
+            return
+        }
+        const magnification = this.isGold ? 2 : 1;
+        this.attackBonus.push({
+            baseCardId: triggerObj.currentCard?.id || targetCard.id,
+            baseCardName: this.name,
+            markupValue: magnification
+        })
+        this.lifeBonus.push({
+            baseCardId: triggerObj.currentCard?.id || targetCard.id,
+            baseCardName: this.name,
+            markupValue: magnification
+        })
+    }
+}

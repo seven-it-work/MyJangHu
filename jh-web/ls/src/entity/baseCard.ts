@@ -242,6 +242,10 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
 
     }
 
+    whenOtherHarmedTrigger(injuring: number, triggerObj: TriggerObj) {
+
+    }
+
     deserialize(json: any) {
         if (typeof json === 'string') {
             json = JSON.parse(json)

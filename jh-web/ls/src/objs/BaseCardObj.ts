@@ -90,6 +90,13 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
             console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】遭受${number}伤害`)
             this.baseCard.changeInjuriesReceived(-number);
             this.whenHarmedTrigger(number, triggerObj)
+            triggerObj.currentPlayer?.getCardList().filter(item=>item.id!==this.id).forEach(item=>{
+                item.whenOtherHarmedTrigger(number, {
+                    ...triggerObj,
+                    currentCard: item,
+                    targetCard: this,
+                })
+            })
             if (this.isSurviving()) {
                 return;
             }
@@ -421,6 +428,13 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
             return
         }
         this.baseCard.whenHarmedTrigger(injuring, this.triggerObj2BaseCard(triggerObj));
+    }
+
+    whenOtherHarmedTrigger(injuring: number, triggerObj: TriggerObj) {
+        if (injuring <= 0) {
+            return
+        }
+        this.baseCard.whenOtherHarmedTrigger(injuring, this.triggerObj2BaseCard(triggerObj));
     }
 
     whenRefreshTavern(triggerObj: TriggerObj) {

@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG26_804_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b>亡语：</b>召唤一个 / 的触手。<i>（在战斗中，在你召唤一个随从后，触手永久获得+2/+2！）</i>"
          }
     }
-      

@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG27_509_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b>亡语：</b>召唤3个熊妈妈。"
          }
     }
-      

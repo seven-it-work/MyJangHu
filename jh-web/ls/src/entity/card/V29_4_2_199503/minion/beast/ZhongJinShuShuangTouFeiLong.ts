@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG26_801_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b>嘲讽</b>。<b>亡语：</b>触发一个相邻随从的<b>战吼</b>。"
          }
     }
-      

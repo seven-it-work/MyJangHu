@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG27_084_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b>抉择：</b>使一只野兽获得+1/+1和<b>复生</b>；或者+3/+3和<b>嘲讽</b>。"
          }
     }
-      

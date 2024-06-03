@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG26_800_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b>亡语：</b>召唤两只0/1并具有<b>嘲讽</b>的豹宝宝。"
          }
     }
-      
