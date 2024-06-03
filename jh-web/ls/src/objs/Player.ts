@@ -9,6 +9,7 @@ import {Serialization} from "../utils/SaveUtils";
 import {serialize} from "class-transformer";
 import Sanlian from "../entity/card/spells/base/Sanlian.ts";
 import BaseCard from "../entity/baseCard";
+import {FlipFlop} from "../entity/FlipFlop";
 
 export default class Player implements Serialization<Player> {
 
@@ -153,35 +154,15 @@ export default class Player implements Serialization<Player> {
         } else {
             this.currentGoldCoin -= cardObj.baseCard.spendingGoldCoin;
         }
-        this.tavern.removeCard(cardObj, context.sharedCardPool)
-        // 酒馆加成写入
-        cardObj.baseCard.attackBonus.push(...this.tavern.attackBonus)
-        cardObj.baseCard.lifeBonus.push(...this.tavern.lifeBonus)
-
-        this.addCardInHand(cardObj, context.sharedCardPool)
-        cardObj.whenBuyCardTrigger({
-            currentCard: cardObj,
+        cardObj.whenPurchasing(new FlipFlop({
             contextObj: context,
-            currentPlayer: this
-        })
-        this._handCardMap.forEach((v) => {
-            v.whenBuyOtherCardTrigger({
-                currentCard: v,
-                contextObj: context,
-                currentPlayer: this,
-                targetCard: cardObj,
-                locations: '手牌',
-            })
-        })
-        this.cardList.forEach((v) => {
-            v.whenBuyOtherCardTrigger({
-                currentCard: v,
-                contextObj: context,
-                currentPlayer: this,
-                targetCard: cardObj,
-                locations: '场地',
-            })
-        })
+            currentCard: cardObj,
+            currentLocation: '酒馆',
+            currentPlayer: this,
+            targetCard: cardObj,
+            targetLocation: '酒馆',
+            targetPlayer: this
+        }))
     }
 
     canUseCard(cardObj: BaseCardObj): boolean {
@@ -224,6 +205,29 @@ export default class Player implements Serialization<Player> {
         }
     }
 
+    addCard2(cardObj: BaseCardObj, nextCard: BaseCardObj | undefined, flipFlop: FlipFlop) {
+        const cardList = this.getCardList();
+        if (cardList.length < 7) {
+            cardObj.whenSummoned(new FlipFlop({
+                ...flipFlop,
+                currentCard: cardObj
+                }
+            ))
+            if (nextCard) {
+                const nextCardIndex = cardList.findIndex((card) => card.id === nextCard.id)
+                cardList.splice(nextCardIndex, 0, cardObj);
+            } else {
+                cardList.push(cardObj)
+            }
+        }
+    }
+
+    /**
+     * 使用卡片
+     * @param cardObj
+     * @param nextCard
+     * @param triggerObj
+     */
     useCard(cardObj: BaseCardObj, nextCard: BaseCardObj | undefined, triggerObj: TriggerObj) {
         if (!this.canUseCard(cardObj)) {
             message.error({content: '最多有7个随从'});
@@ -246,6 +250,7 @@ export default class Player implements Serialization<Player> {
                 }
                 // 磁力判断
                 if (cardObj.baseCard.isMagneticForce && nextCard && nextCard.baseCard.ethnicity.includes("机械")) {
+                    // todo 磁力监控
                     console.log(`(${this.name})的【${nextCard.baseCard.name}】附加磁力【${cardObj.baseCard.name}】`)
                     nextCard.baseCard.magneticForceList.push(cardObj.baseCard);
                     // 磁力监控
@@ -258,24 +263,17 @@ export default class Player implements Serialization<Player> {
                     triggerObj.contextObj.sharedCardPool.cardIn(cardObj.baseCard)
                     return;
                 }
-                cardObj.whenCardUsedTrigger({
-                    ...triggerObj,
+                cardObj.whenUsed(new FlipFlop({
+                    otherData: {nextCard},
+                    contextObj: triggerObj.contextObj,
+                    currentCard: cardObj,
+                    currentLocation: '手牌',
                     currentPlayer: this,
                     targetCard: cardObj,
-                });
-                this._handCardMap.forEach((v) => {
-                    v.whenOtherHandlerCardUsedTrigger({
-                        ...triggerObj,
-                        currentCard: v,
-                        currentPlayer: this,
-                        targetCard: cardObj,
-                    })
-                })
-                this.addCard(cardObj, nextCard, {
-                    ...triggerObj,
-                    currentPlayer: this,
-                    currentCard: cardObj,
-                })
+                    targetLocation: '手牌',
+                    targetPlayer: this,
+                    needSelectCard: triggerObj.needSelectCard
+                }))
             } else {
                 cardObj.whenCardUsedTrigger(triggerObj);
             }
@@ -289,31 +287,11 @@ export default class Player implements Serialization<Player> {
     saleCard(cardObj: BaseCardObj, context: ContextObj) {
         if (this.cardList.map(card => card.id).includes(cardObj.id)) {
             this.cardList = this.cardList.filter(card => card.id !== cardObj.id)
-            console.log(`(${this.name})出售【${cardObj.baseCard.name}(${cardObj.attack}/${cardObj.life})】`)
             this.currentGoldCoin += cardObj.baseCard.salePrice;
             this.tavern.saleCard(cardObj, context)
-            cardObj.whenSaleCardTrigger({
-                contextObj: context,
-                currentPlayer: this,
-                targetCard: cardObj,
-            });
-            // 手牌出售监听，战场出售监听
-            this._handCardMap.forEach((v) => {
-                v.whenSaleOtherHandlerCardTrigger({
-                    currentCard: v,
-                    contextObj: context,
-                    currentPlayer: this,
-                    targetCard: cardObj,
-                })
-            })
-            this.cardList.forEach((v) => {
-                v.whenSaleOtherCardTrigger({
-                    currentCard: v,
-                    contextObj: context,
-                    currentPlayer: this,
-                    targetCard: cardObj,
-                })
-            })
+            cardObj.whenBeingSold(new FlipFlop({
+
+            }))
         }
     }
 

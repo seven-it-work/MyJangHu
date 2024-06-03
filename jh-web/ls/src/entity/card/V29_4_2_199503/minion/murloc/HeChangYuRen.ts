@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG26_354_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b>战斗开始时：</b>获得你手牌中所有随从牌的属性值。"
          }
     }
-      

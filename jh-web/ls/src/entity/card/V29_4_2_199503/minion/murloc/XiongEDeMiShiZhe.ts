@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG27_556_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b>战斗开始时：</b>使你手牌中的一张随从牌获得+2/+2并召唤它，其登场仅限本场战斗。"
          }
     }
-      

@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG25_046_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "在你的回合结束时，获得+1/+1。在本回合中你每使用过一张随从牌，重复一次。"
          }
     }
-      

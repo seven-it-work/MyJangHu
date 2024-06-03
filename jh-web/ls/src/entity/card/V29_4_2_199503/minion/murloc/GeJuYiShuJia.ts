@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG26_888_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b>烈毒</b>。<b>亡语：</b>使一个友方鱼人获得<b>烈毒</b>。"
          }
     }
-      

@@ -6,11 +6,12 @@ import {Bonus} from "../objs/Bonus";
 import {Serialization} from "../utils/SaveUtils";
 import {serialize} from "class-transformer";
 import SharedCardPool from "../objs/SharedCardPool";
+import {FlipFlop, FlipFlopFunc, Triggering} from "./FlipFlop";
 
 export const baseEthnicity: string[] = ['鱼人', '机械', '恶魔', '亡灵', '龙', '野兽', '野猪人', '纳迦']
 export const ethnicity: string[] = ['中立', '伙伴', ...baseEthnicity]
 
-export default abstract class BaseCard implements Trigger, Serialization<BaseCard> {
+export default abstract class BaseCard implements Trigger,FlipFlopFunc,Triggering, Serialization<BaseCard> {
     classType: string
 
     tempId: string = '';
@@ -303,5 +304,29 @@ export default abstract class BaseCard implements Trigger, Serialization<BaseCar
     }
 
     whenRefreshTavern(triggerObj: TriggerObj) {
+    }
+
+    whenDeath(flipFlop: FlipFlop) {
+    }
+
+    whenAttacking(flipFlop: FlipFlop) {
+    }
+
+    whenInjured(flipFlop: FlipFlop) {
+    }
+
+    whenSummoned(flipFlop: FlipFlop) {
+    }
+
+    whenUsed(flipFlop: FlipFlop) {
+    }
+
+    whenPurchasing(flipFlop: FlipFlop) {
+    }
+
+    warRoar(flipFlop: FlipFlop) {
+    }
+
+    whenBeingSold(flipFlop: FlipFlop) {
     }
 }

@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_300_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b>嘲讽</b>。每当本随从受到伤害，使你手牌中的一张随从牌获得+2/+1。"
          }
     }
-      

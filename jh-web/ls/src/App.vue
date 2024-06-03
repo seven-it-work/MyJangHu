@@ -1,6 +1,6 @@
 <template>
   <div>
-    <FileGenerator2></FileGenerator2>
+<!--    <FileGenerator2></FileGenerator2>-->
     <a-textarea v-model:value="saveInfo" show-count/>
     <a-button @click="reload">读取</a-button>
     <a-button type="primary" @click="save">保存</a-button>

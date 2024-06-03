@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BGDUO_117_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "在本随从被<b>传递</b>后，获得+4/+4。"
          }
     }
-      

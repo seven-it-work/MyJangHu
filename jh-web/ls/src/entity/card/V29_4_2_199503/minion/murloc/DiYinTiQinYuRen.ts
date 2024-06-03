@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG26_350_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b>亡语：</b>召唤你手牌中生命值最高的鱼人，其登场仅限本场战斗。"
          }
     }
-      

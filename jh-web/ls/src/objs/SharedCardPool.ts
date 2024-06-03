@@ -106,7 +106,8 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
                 return true
             }).map(data => data.baseCard);
     }
-    listByDeadLanguageCard( graded: number | undefined = undefined, size: number = 1): BaseCard[] {
+
+    listByDeadLanguageCard(graded: number | undefined = undefined, size: number = 1): BaseCard[] {
         const baseCards = Array.from(this.pool.values())
             .filter(card => card.baseCard.isSell)
             .filter(card => card.baseCard.type === '随从')
@@ -124,7 +125,8 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
         }
         return randomUtil.pick(baseCards, size);
     }
-    listByWarRoarCard( graded: number | undefined = undefined, size: number = 1): BaseCard[] {
+
+    listByWarRoarCard(graded: number | undefined = undefined, size: number = 1): BaseCard[] {
         const baseCards = Array.from(this.pool.values())
             .filter(card => card.baseCard.isSell)
             .filter(card => card.baseCard.type === '随从')
@@ -154,6 +156,9 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
                 return card.baseCard.graded <= graded
             })
             .map(card => card.baseCard)
+        if (list.length <= 0) {
+            return []
+        }
         if (size === 1) {
             return [randomUtil.pick(list, size)]
         }

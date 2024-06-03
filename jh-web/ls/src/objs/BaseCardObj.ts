@@ -7,8 +7,52 @@ import SharedCardPool from "./SharedCardPool";
 import Player from "./Player";
 import {Serialization} from "../utils/SaveUtils";
 import {serialize} from "class-transformer";
+import {FlipFlop, FlipFlopFunc, inversion} from "../entity/FlipFlop";
 
-export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> {
+function damageCalculation(flipFlop: FlipFlop) {
+    var targetCard = flipFlop.targetCard;
+    var targetPlayer = flipFlop.targetPlayer;
+    var currentCard = flipFlop.currentCard;
+    var currentPlayer = flipFlop.currentPlayer;
+    // 受到伤害
+    let currentHarmed = 0;
+    // 造成伤害
+    let targetHarmed = 0;
+    if (targetCard.baseCard.isHighlyToxic) {
+        // 剧毒，用完就没了
+        currentHarmed = currentCard.life;
+        targetCard.baseCard.isHighlyToxic = false;
+        console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}(${targetCard.attack}/${targetCard.life})】烈药已使用`)
+    } else if (targetCard.baseCard.hasPoison) {
+        // 毒药，能一直毒
+        currentHarmed = currentCard.life;
+        console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}(${targetCard.attack}/${targetCard.life})】剧毒触发`)
+    } else if (targetCard.baseCard.attackHighlyToxic) {
+        // 遭受攻击时，剧毒 todo 放到防御触发器里面 改 剧毒=true
+        currentHarmed = currentCard.life;
+        console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}(${targetCard.attack}/${targetCard.life})】遭受攻击时，剧毒`)
+    } else {
+        currentHarmed = targetCard.attack;
+    }
+
+    if (currentCard.baseCard.isHighlyToxic) {
+        targetHarmed = targetCard.life;
+        console.log(`(${currentPlayer.name})的【${currentCard.baseCard.name}(${currentCard.attack}/${currentCard.life})】烈毒已使用`)
+        currentCard.baseCard.isHighlyToxic = false;
+    } else if (currentCard.baseCard.hasPoison) {
+        console.log(`(${currentPlayer.name})的【${currentCard.baseCard.name}(${currentCard.attack}/${currentCard.life})】剧毒触发`)
+        targetHarmed = targetCard.life;
+    } else {
+        targetHarmed = currentCard.attack;
+    }
+    return {
+        currentHarmed,
+        targetHarmed
+    }
+}
+
+
+export default class BaseCardObj implements Trigger, FlipFlopFunc, Serialization<BaseCardObj> {
     id: string;
     isFreeze: boolean = false;
 
@@ -90,7 +134,7 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
             console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】遭受${number}伤害`)
             this.baseCard.changeInjuriesReceived(-number);
             this.whenHarmedTrigger(number, triggerObj)
-            triggerObj.currentPlayer?.getCardList().filter(item=>item.id!==this.id).forEach(item=>{
+            triggerObj.currentPlayer?.getCardList().filter(item => item.id !== this.id).forEach(item => {
                 item.whenOtherHarmedTrigger(number, {
                     ...triggerObj,
                     currentCard: item,
@@ -439,5 +483,152 @@ export default class BaseCardObj implements Trigger, Serialization<BaseCardObj> 
 
     whenRefreshTavern(triggerObj: TriggerObj) {
         this.baseCard.whenRefreshTavern(this.triggerObj2BaseCard(triggerObj));
+    }
+
+    whenDeath(flipFlop: FlipFlop) {
+        console.log(`(${flipFlop.currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】死亡`)
+        // 加入死亡池
+        flipFlop.currentPlayer.deadCardListInFighting.push(this)
+        // 移除
+        const findNextCard = flipFlop.currentPlayer.findNextCard(this);
+        flipFlop.currentPlayer.cardRemove(this);
+        // 先亡语
+        for (let i = 0; i <= flipFlop.currentPlayer.deadWordsExtraTriggers; i++) {
+            // 磁力效果
+            this.baseCard.magneticForceList.forEach(base => base.whenDeath(flipFlop));
+            this.baseCard.whenDeath(flipFlop)
+        }
+        // 复仇
+        this.executeCurrentOtherList(flipFlop, (item: BaseCardObj, data: FlipFlop) => item.baseCard.whenDeath(data))
+        // 复生
+        if (this.baseCard.isRebirth) {
+            const baseCardTemp = flipFlop.contextObj.sharedCardPool.getByName(this.baseCard.classType);
+            baseCardTemp.changeInjuriesReceived(this.baseCard.getPrimitiveLife() - 1);
+            baseCardTemp.isRebirth = false;
+            this.baseCard = baseCardTemp
+            // todo 调整addCard
+            flipFlop.currentPlayer.addCard(this, findNextCard, flipFlop)
+            console.log(`${flipFlop.currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】复生`)
+        }
+    }
+
+
+    whenAttacking(flipFlop: FlipFlop) {
+        console.log(`(${flipFlop.currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】对(${flipFlop.targetPlayer.name})的【${flipFlop.targetCard.baseCard.name}(${flipFlop.targetCard.attack}/${flipFlop.targetCard.life})】进行攻击`)
+        // 攻击前执行
+        this.baseCard.whenAttacking(flipFlop)
+        // 被攻击触发
+        // flipFlop.targetCard.
+        // 伤害计算
+        const damageCalculationResult = damageCalculation(flipFlop);
+        flipFlop.otherData={
+            harmed: damageCalculationResult.currentHarmed
+        }
+        this.whenInjured(flipFlop)
+        flipFlop.targetCard.whenInjured({
+            ...inversion(flipFlop),
+            otherData: {
+                harmed: damageCalculationResult.targetHarmed
+            }
+        })
+    }
+
+    changeHealth(value: number) {
+        this.baseCard.changeInjuriesReceived(value);
+    }
+
+    whenInjured(flipFlop: FlipFlop) {
+        let harmed = flipFlop.otherData?.harmed || 0;
+        if (harmed > 0) {
+            if (this.baseCard.isHolyShield) {
+                // 圣盾
+                this.baseCard.isHolyShield = false;
+                // 圣盾消失触发
+                harmed = 0;
+                console.log(`(${flipFlop.currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】的圣盾失效`)
+            }
+            console.log(`(${flipFlop.currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】遭受${harmed}伤害`)
+            // 生命值change
+            this.changeHealth(-harmed)
+            this.baseCard.whenInjured(flipFlop)
+            this.executeCurrentOtherList(flipFlop, (item: BaseCardObj, data: FlipFlop) => item.baseCard.whenInjured(data))
+            if (!this.isSurviving()) {
+                this.whenDeath(flipFlop)
+            }
+        }
+    }
+
+    whenSummoned(flipFlop: FlipFlop) {
+        console.log(`(${flipFlop.currentPlayer.name})召唤【${this.baseCard.name}(${this.attack}/${this.life})】`)
+        // 召唤触发
+        this.baseCard.whenSummoned(flipFlop);
+        this.executeCurrentOtherList(flipFlop, (item: BaseCardObj, data: FlipFlop) => item.baseCard.whenSummoned(data))
+    }
+
+    whenUsed(flipFlop: FlipFlop) {
+        console.log(`(${flipFlop.currentPlayer.name})使用【${this.baseCard.name}(${this.attack}/${this.life})】`)
+        // 法术使用
+        if (flipFlop.currentCard.isSpell()) {
+            // 酒馆法术
+        } else if (flipFlop.currentCard.isMinion()) {
+            const nextCard = flipFlop.otherData?.nextCard || undefined;
+            // 战吼
+            if (this.baseCard.isWarRoars) {
+                for (let i = 0; i <= flipFlop.currentPlayer.battleRoarExtraTriggers; i++) {
+                    console.log(`(${flipFlop.currentPlayer.name})的【${this.baseCard.name}】触发战吼：${this.baseCard.descriptionStr()}`)
+                    this.baseCard.warRoar(flipFlop)
+                }
+            }
+            // 召唤
+            flipFlop.currentPlayer.addCard2(this, nextCard, flipFlop)
+        }
+        this.baseCard.whenUsed(flipFlop)
+        this.executeCurrentOtherList(flipFlop, (item: BaseCardObj, data: FlipFlop) => item.baseCard.whenUsed(data))
+    }
+
+    private isSpell() {
+        return this.baseCard.type === '法术';
+    }
+
+    private isMinion() {
+        return this.baseCard.type === '随从';
+    }
+
+    executeCurrentOtherList(flipFlop: FlipFlop, func: Function) {
+        flipFlop.currentPlayer.getCardList().filter(item => item.id !== this.id).forEach(item => {
+            func(item,new FlipFlop( {
+                ...flipFlop,
+                currentLocation: '战场',
+                currentCard: item,
+                targetCard: this
+            }))
+        })
+        flipFlop.currentPlayer.handCardList.filter(item => item.id !== this.id).forEach(item => {
+            func(item,new FlipFlop( {
+                ...flipFlop,
+                currentLocation: '手牌',
+                currentCard: item,
+                targetCard: this
+            }))
+        })
+    }
+
+    whenPurchasing(flipFlop: FlipFlop) {
+        // 酒馆移除
+        flipFlop.currentPlayer.tavern.removeCard(this, flipFlop.contextObj.sharedCardPool)
+        // 酒馆加成写入
+        this.baseCard.attackBonus.push(...flipFlop.currentPlayer.tavern.attackBonus)
+        this.baseCard.lifeBonus.push(...flipFlop.currentPlayer.tavern.lifeBonus)
+        // 加入手牌
+        flipFlop.currentPlayer.addCardInHand(this, flipFlop.contextObj.sharedCardPool)
+        console.log(`(${flipFlop.currentPlayer.name})购买【${this.baseCard.name}(${this.attack}/${this.life})】`)
+        this.baseCard.whenPurchasing(flipFlop)
+        this.executeCurrentOtherList(flipFlop, (item: BaseCardObj, data: FlipFlop) => item.baseCard.whenPurchasing(data))
+    }
+
+    whenBeingSold(flipFlop: FlipFlop) {
+        console.log(`(${flipFlop.currentPlayer.name})出售【${this.baseCard.name}(${this.attack}/${this.life})】`)
+        this.baseCard.whenBeingSold(flipFlop)
+        this.executeCurrentOtherList(flipFlop, (item: BaseCardObj, data: FlipFlop) => item.baseCard.whenBeingSold(data))
     }
 }
