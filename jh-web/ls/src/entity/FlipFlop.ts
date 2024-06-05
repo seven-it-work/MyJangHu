@@ -14,6 +14,7 @@ export const inversion = (flipFlop: FlipFlop): FlipFlop => {
     })
 
 }
+
 export interface FlipFlopInterface {
     currentCard: BaseCardObj;
     currentPlayer: Player;
@@ -26,7 +27,8 @@ export interface FlipFlopInterface {
     // 需要选择对象
     needSelectCard?: BaseCardObj;
 }
-export class FlipFlop implements FlipFlopInterface{
+
+export class FlipFlop implements FlipFlopInterface {
 
 
     isCurrentCardIsTargetCard(): boolean {
@@ -34,17 +36,29 @@ export class FlipFlop implements FlipFlopInterface{
     }
 
 
-    constructor(data:any|undefined) {
-        this.currentCard=data.currentCard
-        this.currentPlayer=data.currentPlayer
-        this.currentLocation=data.currentLocation
-        this.targetCard=data.targetCard
-        this.targetPlayer=data.targetPlayer
-        this.targetLocation=data.targetLocation
-        this.contextObj=data.contextObj
-        this.otherData=data.otherData
-        this.needSelectCard=data.needSelectCard
+    constructor(data: FlipFlopInterface | undefined) {
+        if (data) {
+            this.currentCard = data.currentCard
+            this.currentPlayer = data.currentPlayer
+            this.currentLocation = data.currentLocation
+            this.targetCard = data.targetCard
+            this.targetPlayer = data.targetPlayer
+            this.targetLocation = data.targetLocation
+            this.contextObj = data.contextObj
+            this.otherData = data.otherData
+            this.needSelectCard = data.needSelectCard
+        }
     }
+
+    contextObj: ContextObj;
+    currentCard: BaseCardObj;
+    currentLocation: "手牌" | "战场" | "战斗" | "酒馆";
+    currentPlayer: Player;
+    needSelectCard?: BaseCardObj;
+    otherData?: any = {};
+    targetCard: BaseCardObj;
+    targetLocation: "手牌" | "战场" | "战斗" | "酒馆";
+    targetPlayer: Player;
 }
 
 export interface Triggering {
@@ -52,6 +66,11 @@ export interface Triggering {
      * 战吼
      */
     warRoar(flipFlop: FlipFlop);
+
+    /**
+     * 亡语
+     */
+    deadLanguage(flipFlop: FlipFlop);
 }
 
 export interface FlipFlopFunc {
@@ -89,5 +108,20 @@ export interface FlipFlopFunc {
      * 当被出售时
      */
     whenBeingSold(flipFlop: FlipFlop);
+
+    /**
+     * 当战斗开始时
+     */
+    whenTheBattleBegan(flipFlop: FlipFlop);
+
+    /**
+     * 当回合结束时
+     */
+    whenTheRoundIsOver(flipFlop: FlipFlop);
+
+    /**
+     * 当回合开始时
+     */
+    whenTheRoundBegin(flipFlop: FlipFlop);
 }
 

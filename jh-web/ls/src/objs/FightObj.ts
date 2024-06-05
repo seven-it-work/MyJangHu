@@ -2,6 +2,7 @@ import ContextObj from "./ContextObj";
 import randomUtil from "../utils/RandomUtils";
 import Player from "./Player";
 import {isEmpty} from "lodash";
+import {FlipFlop} from "../entity/FlipFlop";
 
 export default class FightObj {
     // 攻击发起人
@@ -14,35 +15,51 @@ export default class FightObj {
 
 
     constructor(attackerPlayer: Player, defenderPlayer: Player, contextObj: ContextObj) {
+        console.log(`第${contextObj.currentRound}回合战斗开始：${attackerPlayer.name}进攻${defenderPlayer.name}`)
         // 战斗前初始化战斗list
         attackerPlayer.initCardListInFighting()
         defenderPlayer.initCardListInFighting()
         this.attackerPlayer = attackerPlayer;
         this.defenderPlayer = defenderPlayer;
         this.contextObj = contextObj;
-        // 触发战斗开始时
-        attackerPlayer.spellAttached.forEach(card => card.whenStartFightingTrigger({
+        // 1、触发法术
+        attackerPlayer.spellAttached.forEach(card => card.whenTheBattleBegan(new FlipFlop({
             contextObj: contextObj,
+            currentCard: card,
+            currentLocation: '战斗',
             currentPlayer: attackerPlayer,
-            targetPlayer: defenderPlayer,
-        }));
-        defenderPlayer.spellAttached.forEach(card => card.whenStartFightingTrigger({
+            targetCard: card,
+            targetLocation: '战斗',
+            targetPlayer: attackerPlayer
+        })));
+        defenderPlayer.spellAttached.forEach(card => card.whenTheBattleBegan(new FlipFlop({
             contextObj: contextObj,
+            currentCard: card,
+            currentLocation: '战斗',
             currentPlayer: defenderPlayer,
-            targetPlayer: attackerPlayer,
-        }));
-        this.attackerPlayer.cardListInFighting.forEach(card => card.whenStartFightingTrigger({
+            targetCard: card,
+            targetLocation: '战斗',
+            targetPlayer: defenderPlayer
+        })));
+        // 卡片触发
+        attackerPlayer.cardListInFighting.forEach(card => card.whenTheBattleBegan(new FlipFlop({
             contextObj: contextObj,
+            currentCard: card,
+            currentLocation: '战斗',
             currentPlayer: attackerPlayer,
-            targetPlayer: defenderPlayer,
-            currentCard: card
-        }))
-        this.defenderPlayer.cardListInFighting.forEach(card => card.whenStartFightingTrigger({
+            targetCard: card,
+            targetLocation: '战斗',
+            targetPlayer: attackerPlayer
+        })));
+        defenderPlayer.cardListInFighting.forEach(card => card.whenTheBattleBegan(new FlipFlop({
             contextObj: contextObj,
+            currentCard: card,
+            currentLocation: '战斗',
             currentPlayer: defenderPlayer,
-            targetPlayer: attackerPlayer,
-            currentCard: card
-        }))
+            targetCard: card,
+            targetLocation: '战斗',
+            targetPlayer: defenderPlayer
+        })));
     }
 
     doFighting() {
@@ -208,13 +225,15 @@ export default class FightObj {
             console.log("对方有潜行，无法攻击")
             return
         }
-        attacker.whenAttackTrigger({
-            targetPlayer: defenderPlayer,
+        attacker.whenAttacking(new FlipFlop({
+            contextObj: this.contextObj,
+            currentCard: attacker,
+            currentLocation: '战斗',
             currentPlayer: attackerPlayer,
             targetCard: randomUtil.pickone(pickList),
-            currentCard: attacker,
-            contextObj: this.contextObj,
-        })
+            targetLocation: '战斗',
+            targetPlayer: defenderPlayer
+        }))
         attackerPlayer.updateCardListInFighting()
         defenderPlayer.updateCardListInFighting()
         if (isAttacker) {

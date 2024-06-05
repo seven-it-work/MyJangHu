@@ -11,7 +11,7 @@ import {FlipFlop, FlipFlopFunc, Triggering} from "./FlipFlop";
 export const baseEthnicity: string[] = ['鱼人', '机械', '恶魔', '亡灵', '龙', '野兽', '野猪人', '纳迦']
 export const ethnicity: string[] = ['中立', '伙伴', ...baseEthnicity]
 
-export default abstract class BaseCard implements Trigger,FlipFlopFunc,Triggering, Serialization<BaseCard> {
+export default abstract class BaseCard implements Trigger, FlipFlopFunc, Triggering, Serialization<BaseCard> {
     classType: string
 
     tempId: string = '';
@@ -39,8 +39,6 @@ export default abstract class BaseCard implements Trigger,FlipFlopFunc,Triggerin
     graded: number = 1;
     // 是否锁定(无法召唤)
     isLocked: boolean = false
-    // 剩余锁定回合（每次回合开始时会-- 直到0）
-    lockTheRound: number = 0
 
     descriptionStr(): string {
         return ''
@@ -63,7 +61,7 @@ export default abstract class BaseCard implements Trigger,FlipFlopFunc,Triggerin
     // 是否复生
     isRebirth: boolean = false;
     // 版本信息
-    version: string[] = ["v28.0.0.189384"]
+    // version: string[] = ["v28.0.0.189384"]
     // 是否花费生命值
     isSpendLife: boolean = false;
     // 是否潜行
@@ -77,9 +75,9 @@ export default abstract class BaseCard implements Trigger,FlipFlopFunc,Triggerin
     // 剩余购买法术消耗生命次数
     remainBuySpellByLifeTimes: number = 0;
     // 通用计数器
-    counter:number=0;
+    counter: number = 0;
     // 通用计数器重置值
-    counterResetValue:number=0;
+    counterResetValue: number = 0;
     // 是否磁力
     isMagneticForce: boolean = false;
     // 磁力随从list
@@ -105,6 +103,21 @@ export default abstract class BaseCard implements Trigger,FlipFlopFunc,Triggerin
     isWarRoars: boolean = false;
     // 是否为亡语
     isDeadLanguage: boolean = false;
+    isOtherTriggering: boolean = false;
+    /**
+     * 战斗开始时
+     */
+    atTheBeginningOfTheBattle = false
+    /**
+     * 回合结束时
+     */
+    endOfRound = false
+
+    /**
+     * 回合开始时
+     */
+    beginRound=false
+
 
     // 选中过滤器
     needSelectFilter(baseCardObj: BaseCardObj[]): BaseCardObj[] {
@@ -273,7 +286,6 @@ export default abstract class BaseCard implements Trigger,FlipFlopFunc,Triggerin
         this.attackHighlyToxic = json.attackHighlyToxic
         this.isHolyShield = json.isHolyShield
         this.isRebirth = json.isRebirth
-        this.version = json.version
         this.isSpendLife = json.isSpendLife
         this.isSneak = json.isSneak
         this.refreshTimes = json.refreshTimes
@@ -328,5 +340,21 @@ export default abstract class BaseCard implements Trigger,FlipFlopFunc,Triggerin
     }
 
     whenBeingSold(flipFlop: FlipFlop) {
+    }
+
+    deadLanguage(flipFlop: FlipFlop) {
+    }
+
+    whenTheBattleBegan(flipFlop: FlipFlop) {
+    }
+
+    showLog(flipFlop: FlipFlop){
+        console.log(`(${flipFlop.currentPlayer.name})的【${this.name}(${this.attack}/${this.life})】触发：${this.descriptionStr()}`)
+    }
+
+    whenTheRoundIsOver(flipFlop: FlipFlop) {
+    }
+
+    whenTheRoundBegin(flipFlop: FlipFlop) {
     }
 }

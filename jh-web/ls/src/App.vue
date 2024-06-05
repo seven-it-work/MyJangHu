@@ -41,9 +41,9 @@ export default {
     }
   },
   mounted() {
-    this.autoSave = setInterval(() => {
-      // this.save()
-    }, 5000)
+    // this.autoSave = setInterval(() => {
+    //   // this.save()
+    // }, 5000)
   },
   destroyed() {
     if (this.autoSave) {

@@ -179,10 +179,17 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
                     return card.baseCard.graded === graded;
                 }
                 return card.baseCard.graded <= graded
-            }).map(card => card.baseCard)
+            }).flatMap(card => {
+                const list=[]
+                for (let i = 0; i < card.remainingQuantity; i++) {
+                    list.push(card.baseCard)
+                }
+                return list
+            })
         if (cardNumber === 1) {
             return [randomUtil.pick(list, cardNumber)]
         }
+        console.log(cardNumber)
         return randomUtil.pick(list, cardNumber);
     }
 

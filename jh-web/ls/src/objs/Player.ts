@@ -57,7 +57,7 @@ export default class Player implements Serialization<Player> {
     // 姓名
     name: string;
     // 法术附加能力（回合结束时）
-    spellAttached: BaseCard[] = [];
+    spellAttached: BaseCardObj[] = [];
 
     private readonly static MAX_HAND_CARD: number = 10;
 
@@ -290,7 +290,13 @@ export default class Player implements Serialization<Player> {
             this.currentGoldCoin += cardObj.baseCard.salePrice;
             this.tavern.saleCard(cardObj, context)
             cardObj.whenBeingSold(new FlipFlop({
-
+                contextObj: context,
+                currentCard: cardObj,
+                currentLocation: '战场',
+                currentPlayer: this,
+                targetCard: cardObj,
+                targetLocation: '战场',
+                targetPlayer: this
             }))
         }
     }
@@ -369,22 +375,34 @@ export default class Player implements Serialization<Player> {
     /**
      * 结束回合
      */
-    endTheRound(triggerObj: TriggerObj) {
-        this.isEndRound = true;
+    endTheRound(contextObj: ContextObj) {
         console.log(`玩家：【${this.name}】结束当前回合`)
         // 手牌影响
-        Array.from(this._handCardMap.values()).forEach(card => card.whenEndRoundHandler({
-            ...triggerObj,
-            currentCard: card,
-            currentPlayer: this,
-        }))
+        this.handCardList.forEach(card=>{
+            card.whenTheRoundIsOver(new FlipFlop({
+                contextObj: contextObj,
+                currentCard: card,
+                currentLocation: '手牌',
+                currentPlayer: this,
+                targetCard: card,
+                targetLocation: '手牌',
+                targetPlayer: this
+            }))
+        })
         // 战场影响
-        this.cardList.forEach(card => card.whenEndRound({
-            ...triggerObj,
-            currentCard: card,
-            currentPlayer: this,
-        }))
+        this.cardList.forEach(card => {
+            card.whenTheRoundIsOver(new FlipFlop({
+                contextObj: contextObj,
+                currentCard: card,
+                currentLocation: '战场',
+                currentPlayer: this,
+                targetCard: card,
+                targetLocation: '战场',
+                targetPlayer: this
+            }))
+        })
         // 系统默认影响
+        this.isEndRound = true;
         // 1、属性计算完成后，将cardListInFighting进行赋值
         this.cardListInFighting = cloneDeep(this.cardList)
         this.deadCardListInFighting = []
@@ -393,8 +411,8 @@ export default class Player implements Serialization<Player> {
         this.currentMaxGoldCoin = Math.min(10, this.currentMaxGoldCoin + 1)
         // 2、铸币=上限值
         this.currentGoldCoin = this.getMaxGoldCoin();
-        // 刷新未冻结的随从
-        this.tavern.refresh(triggerObj, false)
+        // todo 刷新未冻结的随从
+        // this.tavern.refresh(triggerObj, false)
         // 3、酒馆升级--
         this.tavern.currentUpgradeExpenses = Math.max(0, this.tavern.currentUpgradeExpenses - 1)
     }
@@ -402,32 +420,35 @@ export default class Player implements Serialization<Player> {
     /**
      * 开始回合
      */
-    startTheRound(triggerObj: TriggerObj) {
+    startTheRound(contextObj: ContextObj) {
         this.isEndRound = false;
-        this.sanLianCheck(triggerObj.contextObj.sharedCardPool);
+        this.sanLianCheck(contextObj.sharedCardPool);
         // 手牌影响
-        Array.from(this._handCardMap.values()).forEach(card => {
-            // 锁定计数器
-            if (card.baseCard.isLocked) {
-                card.baseCard.lockTheRound = Math.max(card.baseCard.lockTheRound - 1, 0)
-                if (card.baseCard.lockTheRound === 0) {
-                    card.baseCard.isLocked = false
-                }
-            }
-            card.whenStartRoundHandler({
-                ...triggerObj,
+        this.handCardList.forEach(card => {
+            card.whenTheRoundBegin(new FlipFlop({
+                contextObj: contextObj,
                 currentCard: card,
+                currentLocation: '手牌',
                 currentPlayer: this,
-            })
+                targetCard: card,
+                targetLocation: '手牌',
+                targetPlayer: this
+            }))
         })
         // 战场影响
-        this.cardList.forEach(card => card.whenStartRound({
-            ...triggerObj,
-            currentCard: card,
-            currentPlayer: this,
-        }))
-        // 法术能力加成，由法术自己移除
-        this.spellAttached.forEach(card => card.whenStartRound(triggerObj))
+        this.cardList.forEach(card => {
+            card.whenTheRoundBegin(new FlipFlop({
+                contextObj: contextObj,
+                currentCard: card,
+                currentLocation: '战场',
+                currentPlayer: this,
+                targetCard: card,
+                targetLocation: '战场',
+                targetPlayer: this
+            }))
+        })
+        // todo 法术能力加成，由法术自己移除
+        // this.spellAttached.forEach(card => card.whenStartRound(triggerObj))
     }
 
     /**

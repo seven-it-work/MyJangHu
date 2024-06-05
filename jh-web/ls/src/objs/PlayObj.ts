@@ -32,8 +32,7 @@ export default class PlayObj implements Serialization<PlayObj> {
     }
 
     endRound() {
-        const triggerObj = {contextObj: this.contextObj};
-        this.currentPlayerInfo.endTheRound(triggerObj);
+        this.currentPlayerInfo.endTheRound(this.contextObj);
         const survivalPlayers = this.playerObjList.filter(player => player.isSurvival());
         const notEndRoundPlayers = survivalPlayers.filter(player => !player.isEndRound);
         if (notEndRoundPlayers.length > 0) {
@@ -49,6 +48,7 @@ export default class PlayObj implements Serialization<PlayObj> {
                 return
             }
             // 准备分配战斗
+            console.log("战斗准备")
             if (survivalPlayers.length % 2 != 0) {
                 survivalPlayers.push(randomUtils.pickone(this.playerObjList.filter(player => !player.isSurvival())))
             }
@@ -60,7 +60,7 @@ export default class PlayObj implements Serialization<PlayObj> {
             // 将playerObjList进行重排序，进行顺序处理
             this.playerObjList = shuffle(this.playerObjList)
             // 战斗完成
-            this.playerObjList.filter(player => player.isSurvival()).forEach(player => player.startTheRound(triggerObj))
+            this.playerObjList.filter(player => player.isSurvival()).forEach(player => player.startTheRound(this.contextObj))
         }
     }
 

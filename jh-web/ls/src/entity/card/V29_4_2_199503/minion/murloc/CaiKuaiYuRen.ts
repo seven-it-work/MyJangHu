@@ -20,11 +20,13 @@ export default class CaiKuaiYuRenV29_4_2_199503 extends BaseCard {
         return "当本牌在你手牌中时，在你使用一张鱼人牌后，获得+3/+3。"
     }
 
+    isOtherTriggering=true
+
     whenUsed(flipFlop: FlipFlop) {
         if (!flipFlop.isCurrentCardIsTargetCard()) {
             if (flipFlop.targetCard.baseCard.ethnicity.includes('鱼人')) {
                 if (flipFlop.currentLocation === '手牌') {
-                    console.log(`(${flipFlop.currentPlayer.name})的【${this.name}(${this.attack}/${this.life})】触发：${this.descriptionStr()}`)
+                    console.log(`(${flipFlop.currentPlayer.name})的【${this.name}(${this.getAttack()}/${this.getLife()})】触发：${this.descriptionStr()}`)
                     const number = this.isGold ? 3 : 3;
                     this.attackBonus.push({
                         baseCardId: flipFlop.currentCard.id, baseCardName: this.name, markupValue: number
