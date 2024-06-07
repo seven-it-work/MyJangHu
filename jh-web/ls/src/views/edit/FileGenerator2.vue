@@ -143,6 +143,7 @@ export default {
           .replaceAll("）","")
           .replaceAll("“","")
           .replaceAll("”","")
+          .replaceAll("-","")
     },
     generatingAFile(data) {
       const ethnicity=(data)=>{

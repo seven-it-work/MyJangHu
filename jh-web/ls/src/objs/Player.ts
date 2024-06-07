@@ -209,8 +209,8 @@ export default class Player implements Serialization<Player> {
         const cardList = this.getCardList();
         if (cardList.length < 7) {
             cardObj.whenSummoned(new FlipFlop({
-                ...flipFlop,
-                currentCard: cardObj
+                    ...flipFlop,
+                    currentCard: cardObj
                 }
             ))
             if (nextCard) {
@@ -378,7 +378,7 @@ export default class Player implements Serialization<Player> {
     endTheRound(contextObj: ContextObj) {
         console.log(`玩家：【${this.name}】结束当前回合`)
         // 手牌影响
-        this.handCardList.forEach(card=>{
+        this.handCardList.forEach(card => {
             card.whenTheRoundIsOver(new FlipFlop({
                 contextObj: contextObj,
                 currentCard: card,
@@ -513,5 +513,46 @@ export default class Player implements Serialization<Player> {
             return cardList[number]
         }
         return undefined
+    }
+
+    /**
+     * 寻找相邻随从
+     * @param currentCard
+     */
+    findNeighborCard(currentCard: BaseCardObj): { right: BaseCardObj | undefined, left: BaseCardObj | undefined } {
+        const cardList = this.getCardList();
+        let index = -1
+        for (let i = 0; i < cardList.length; i++) {
+            if (currentCard.id === cardList[i].id) {
+                index = i;
+                break
+            }
+        }
+        if (index === -1) {
+            return {
+                left: undefined,
+                right: undefined,
+            }
+        } else if (index === 0 && index === cardList.length - 1) {
+            return {
+                left: undefined,
+                right: undefined,
+            }
+        } else if (index === 0) {
+            return {
+                left: undefined,
+                right: cardList[index + 1],
+            }
+        } else if (index === cardList.length - 1) {
+            return {
+                left: cardList[index - 1],
+                right: undefined,
+            }
+        } else {
+            return {
+                left: cardList[index - 1],
+                right: cardList[index + 1],
+            }
+        }
     }
 }

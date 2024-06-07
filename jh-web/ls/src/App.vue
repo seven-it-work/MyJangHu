@@ -4,6 +4,7 @@
     <a-textarea v-model:value="saveInfo" show-count/>
     <a-button @click="reload">读取</a-button>
     <a-button type="primary" @click="save">保存</a-button>
+    <a-button type="primary" @click="refresh">刷新</a-button>
     <Player :play-obj="playObj"></Player>
   </div>
 </template>
@@ -56,6 +57,9 @@ export default {
     },
     reload() {
       this.playObj = SaveUtils.load(this.saveInfo);
+    },
+    refresh(){
+      window.location.reload()
     },
   },
 }

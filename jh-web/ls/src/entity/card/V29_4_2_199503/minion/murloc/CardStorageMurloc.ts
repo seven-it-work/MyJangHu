@@ -14,6 +14,8 @@ import  HeChangYuRen from "./HeChangYuRen.ts";
 import  JuEDongQiYuRen from "./JuEDongQiYuRen.ts";
 import  RongYanYuRen from "./RongYanYuRen.ts";
 import  TaDe from "./TaDe.ts";
+import  XiongEDeMiShiZhe from "./XiongEDeMiShiZhe.ts";
+import  XiaoXiaYan from "./XiaoXiaYan.ts";
 
 CardStorageMurloc.set("BaiGeErGeGuoWang", BaiGeErGeGuoWang);
 CardStorageMurloc.set("ShiTangLieRen", ShiTangLieRen);
@@ -27,5 +29,7 @@ CardStorageMurloc.set(" HeChangYuRen",  HeChangYuRen);
 CardStorageMurloc.set(" JuEDongQiYuRen",  JuEDongQiYuRen);
 CardStorageMurloc.set(" RongYanYuRen",  RongYanYuRen);
 CardStorageMurloc.set(" TaDe",  TaDe);
+CardStorageMurloc.set(" XiongEDeMiShiZhe",  XiongEDeMiShiZhe);
+CardStorageMurloc.set(" XiaoXiaYan",  XiaoXiaYan);
 
 export default CardStorageMurloc

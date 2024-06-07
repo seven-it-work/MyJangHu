@@ -7,7 +7,8 @@ import SharedCardPool from "./SharedCardPool";
 import Player from "./Player";
 import {Serialization} from "../utils/SaveUtils";
 import {serialize} from "class-transformer";
-import {FlipFlop, FlipFlopFunc, inversion} from "../entity/FlipFlop";
+import {FlipFlop, FlipFlopFunc, inversion, Triggering} from "../entity/FlipFlop";
+import randomUtil from "../utils/RandomUtils";
 
 function damageCalculation(flipFlop: FlipFlop) {
     var targetCard = flipFlop.targetCard;
@@ -51,7 +52,7 @@ function damageCalculation(flipFlop: FlipFlop) {
 }
 
 
-export default class BaseCardObj implements Trigger, FlipFlopFunc, Serialization<BaseCardObj> {
+export default class BaseCardObj implements Trigger, FlipFlopFunc, Triggering, Serialization<BaseCardObj> {
     id: string;
     isFreeze: boolean = false;
     isLock: boolean = false
@@ -494,15 +495,7 @@ export default class BaseCardObj implements Trigger, FlipFlopFunc, Serialization
         const findNextCard = flipFlop.currentPlayer.findNextCard(this);
         flipFlop.currentPlayer.cardRemove(this);
         // 先亡语
-        for (let i = 0; i <= flipFlop.currentPlayer.deadWordsExtraTriggers; i++) {
-            // 亡语
-            if (this.baseCard.isDeadLanguage) {
-                console.log(`${flipFlop.currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】触发亡语：${this.baseCard.descriptionStr()}`)
-                this.baseCard.deadLanguage(flipFlop)
-            }
-            // 磁力效果
-            this.baseCard.magneticForceList.forEach(base => base.whenDeath(flipFlop));
-        }
+        this.deadLanguage(flipFlop)
         // 复仇
         this.executeCurrentOtherList(flipFlop, (item: BaseCardObj, data: FlipFlop) => item.baseCard.whenDeath(data))
         // 复生
@@ -572,18 +565,44 @@ export default class BaseCardObj implements Trigger, FlipFlopFunc, Serialization
             // 酒馆法术
         } else if (flipFlop.currentCard.isMinion()) {
             const nextCard = flipFlop.otherData?.nextCard || undefined;
-            // 战吼
-            if (this.baseCard.isWarRoars) {
-                for (let i = 0; i <= flipFlop.currentPlayer.battleRoarExtraTriggers; i++) {
-                    console.log(`(${flipFlop.currentPlayer.name})的【${this.baseCard.name}】触发战吼：${this.baseCard.descriptionStr()}`)
-                    this.baseCard.warRoar(flipFlop)
-                }
-            }
+            this.warRoar(flipFlop)
             // 召唤
             flipFlop.currentPlayer.addCard2(this, nextCard, flipFlop)
         }
         this.baseCard.whenUsed(flipFlop)
         this.executeCurrentOtherList(flipFlop, (item: BaseCardObj, data: FlipFlop) => item.baseCard.whenUsed(data))
+    }
+
+    deadLanguage(flipFlop: FlipFlop) {
+        for (let i = 0; i <= flipFlop.currentPlayer.deadWordsExtraTriggers; i++) {
+            // 亡语
+            if (this.baseCard.isDeadLanguage) {
+                console.log(`${flipFlop.currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】触发亡语：${this.baseCard.descriptionStr()}`)
+                this.baseCard.deadLanguage(flipFlop)
+            }
+            // 磁力效果
+            this.baseCard.magneticForceList.forEach(base => base.whenDeath(flipFlop));
+        }
+    }
+
+    warRoar(flipFlop: FlipFlop) {
+        // 战吼
+        if (this.baseCard.isWarRoars) {
+            for (let i = 0; i <= flipFlop.currentPlayer.battleRoarExtraTriggers; i++) {
+                if (this.baseCard.isNeedSelect) {
+                    if (!flipFlop.needSelectCard) {
+                        // 随机选择
+                        const cardList = this.baseCard.needSelectFilter(flipFlop.currentPlayer.getCardList());
+                        if (cardList.length <= 0) {
+                            return
+                        }
+                        flipFlop.needSelectCard = randomUtil.pickone(cardList)
+                    }
+                }
+                console.log(`(${flipFlop.currentPlayer.name})的【${this.baseCard.name}】触发战吼：${this.baseCard.descriptionStr()}`)
+                this.baseCard.warRoar(flipFlop)
+            }
+        }
     }
 
     private isSpell() {
@@ -643,14 +662,14 @@ export default class BaseCardObj implements Trigger, FlipFlopFunc, Serialization
     }
 
     whenTheBattleBegan(flipFlop: FlipFlop) {
-        if (this.baseCard.atTheBeginningOfTheBattle && flipFlop.currentLocation==='战斗') {
+        if (this.baseCard.atTheBeginningOfTheBattle && flipFlop.currentLocation === '战斗') {
             console.log(`(${flipFlop.currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】战斗开始时触发：${this.baseCard.descriptionStr()}`)
             this.baseCard.whenTheBattleBegan(flipFlop)
         }
     }
 
     whenTheRoundIsOver(flipFlop: FlipFlop) {
-        if (this.baseCard.endOfRound && flipFlop.currentLocation==='战场') {
+        if (this.baseCard.endOfRound && flipFlop.currentLocation === '战场') {
             console.log(`(${flipFlop.currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】回合结束时触发：${this.baseCard.descriptionStr()}`)
             this.baseCard.whenTheRoundIsOver(flipFlop)
         }
@@ -666,7 +685,7 @@ export default class BaseCardObj implements Trigger, FlipFlopFunc, Serialization
             }
         }
         // 处理开始回合
-        if (this.baseCard.beginRound && flipFlop.currentLocation==='战场') {
+        if (this.baseCard.beginRound && flipFlop.currentLocation === '战场') {
             console.log(`(${flipFlop.currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】开始回合时触发：${this.baseCard.descriptionStr()}`)
             this.baseCard.whenTheRoundBegin(flipFlop)
         }

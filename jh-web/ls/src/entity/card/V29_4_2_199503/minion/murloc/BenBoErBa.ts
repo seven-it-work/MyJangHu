@@ -29,11 +29,11 @@ export default class BenBoErBaV29_4_2_199503 extends BaseCard {
     }
 
     warRoar(flipFlop: FlipFlop) {
-        var baseCardObjs = flipFlop.currentPlayer.getCardList().filter(item => item.baseCard.ethnicity.includes('鱼人'));
+        const baseCardObjs = flipFlop.currentPlayer.getCardList().filter(item => item.baseCard.ethnicity.includes('鱼人'));
         if (baseCardObjs.length <= 0) {
             return;
         }
-        var needSelectCard = flipFlop.needSelectCard;
+        const needSelectCard = flipFlop.needSelectCard;
         if (!needSelectCard) {
             return
         }
