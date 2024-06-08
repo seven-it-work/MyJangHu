@@ -29,10 +29,10 @@ export default class DiYinTiQinYuRenV29_4_2_199503 extends BaseCard {
             const pickElement = baseCardObjs[i];
             if (pickElement) {
                 pickElement.isLock = true
-                flipFlop.currentPlayer.addCard2(pickElement, flipFlop.currentCard, {
+                flipFlop.currentPlayer.addCard2(pickElement, flipFlop.currentCard, new FlipFlop({
                     ...flipFlop,
                     currentCard: pickElement
-                })
+                }))
             } else {
                 return
             }

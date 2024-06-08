@@ -22,7 +22,7 @@ export default class HengMingFengNiaoV29_4_2_199503 extends BaseCard {
     }
 
     whenSummoned(flipFlop: FlipFlop) {
-        var cardList = flipFlop.currentPlayer.getCardList();
+        const cardList = flipFlop.currentPlayer.getCardList().filter(card => card.baseCard.ethnicity.includes('野兽'));
         const magnification = this.isGold ? 2 : 1;
         cardList.forEach(card=>{
             card.baseCard.addBonus(flipFlop.currentCard,magnification*2,true)
@@ -30,14 +30,17 @@ export default class HengMingFengNiaoV29_4_2_199503 extends BaseCard {
     }
 
     whenDeath(flipFlop: FlipFlop) {
-
+        this.extracted(flipFlop);
     }
 
-    whenCardUsedTrigger(triggerObj: TriggerObj) {
-
+    whenBeingSold(flipFlop: FlipFlop) {
+        this.extracted(flipFlop);
     }
 
-    whenSaleCardTrigger(triggerObj: TriggerObj) {
-
+    private extracted(flipFlop: FlipFlop) {
+        const cardList = flipFlop.currentPlayer.getCardList().filter(card => card.baseCard.ethnicity.includes('野兽'));
+        cardList.forEach(card => {
+            card.baseCard.removeBonus(flipFlop.currentCard, true)
+        })
     }
 }

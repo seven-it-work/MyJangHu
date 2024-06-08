@@ -25,16 +25,16 @@ export default class XiaoXiaYanV29_4_2_199503 extends BaseCard {
     whenTheRoundIsOver(flipFlop: FlipFlop) {
         const findNeighborCard = flipFlop.currentPlayer.findNeighborCard(flipFlop.currentCard);
         if (findNeighborCard.left) {
-            findNeighborCard.left.warRoar({
+            findNeighborCard.left.warRoar(new FlipFlop({
                 ...flipFlop,
                 currentCard: findNeighborCard.left
-            })
+            }))
         }
         if (findNeighborCard.right) {
-            findNeighborCard.right.warRoar({
+            findNeighborCard.right.warRoar(new FlipFlop({
                 ...flipFlop,
                 currentCard: findNeighborCard.right
-            })
+            }))
         }
     }
 }
