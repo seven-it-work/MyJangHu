@@ -4,29 +4,46 @@ import {describe,  it} from "vitest";
 describe('CardStorage', () => {
     const version="V29_4_2_199503"
     it('自动生成卡牌代码', function () {
-        const s = "BaiGeErGeGuoWang.ts\n" +
-            "BenBoErBa.ts\n" +
-            "CaiKuaiYuRen.ts\n" +
-            "CardStorageMurloc.ts\n" +
-            "ChaoXiXianZhiMoGeEr.ts\n" +
-            "CuXinDeTunJiZhe.ts\n" +
-            "DiYinTiQinYuRen.ts\n" +
-            "FuChuShiZhang.ts\n" +
-            "GeJuYiShuJia.ts\n" +
-            "HanGuangXianZhi.ts\n" +
-            "HeChangYuRen.ts\n" +
-            "JuEDongQiYuRen.ts\n" +
-            "ManYuChiHou.ts\n" +
-            "RongYanYuRen.ts\n" +
-            "ShanQiYuYanZhe.ts\n" +
-            "ShiTangLieRen.ts\n" +
-            "TaDe.ts\n" +
-            "TanTuTiaoTiaoYu.ts\n" +
-            "XiaoXiaYan.ts\n" +
-            "XiongEDeMiShiZhe.ts\n" +
-            "XunBaoYuRen.ts\n" +
-            "YouGe_SaLongShiZhanZhe.ts\n" +
-            "ZhaoZeQianFeng.ts";
+        const s = "AoJiaoTieNiu.ts\n" +
+            "BaoBaoBao.ts\n" +
+            "BaZhuaJuGuaiDeChuShou.ts\n" +
+            "BaZhuaJuGuaiShuoChangJuanWang.ts\n" +
+            "BianChiZheTeLiGaoLei.ts\n" +
+            "BingHaoQiangLiMengLang.ts\n" +
+            "CardStorageBeast.ts\n" +
+            "DaQianXie.ts\n" +
+            "EnZuoSiDeYu.ts\n" +
+            "EZuMaTeDeChuXu.ts\n" +
+            "FengKuangDeHouZi.ts\n" +
+            "HengMingFengNiao.ts\n" +
+            "HuoBaoXiongJi.ts\n" +
+            "JiaChong.ts\n" +
+            "JianJiaoJiuXing.ts\n" +
+            "JiBianJiaChong.ts\n" +
+            "JinKeGuWeiGui.ts\n" +
+            "JiXieMaJu.ts\n" +
+            "JiXieMuMa.ts\n" +
+            "JiXieXiaoMa.ts\n" +
+            "JuDaDeJinGangYingWu.ts\n" +
+            "JuLangGeDeLin.ts\n" +
+            "KeDuoShouBaoBao.ts\n" +
+            "KuanHouDeTuoLu.ts\n" +
+            "MoRenBao.ts\n" +
+            "NuHuoFeiYang.ts\n" +
+            "ShaYuEr.ts\n" +
+            "TaMuZuo.ts\n" +
+            "WaSheng.ts\n" +
+            "WeiWuZhanJuMaiKeSiWei.ts\n" +
+            "XiongBaBa.ts\n" +
+            "XiongMaMa.ts\n" +
+            "XuanCaiZhuoTianZhe.ts\n" +
+            "YinSenJuMang.ts\n" +
+            "YinYuBaiE.ts\n" +
+            "YinYuChuE.ts\n" +
+            "YiZhongZuanDiChong.ts\n" +
+            "YouLingZhongQuan.ts\n" +
+            "YouNianLeiXiang.ts\n" +
+            "ZhongJinShuShuangTouFeiLong.ts";
         const list = s.split("\n").filter(cardName => {
             cardName=cardName.trim()
             if (cardName.includes("test.ts")) {

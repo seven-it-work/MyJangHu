@@ -24,7 +24,7 @@ export default class BianChiZheTeLiGaoLeiV29_4_2_199503 extends BaseCard {
     isOtherTriggering = true
 
     whenInjured(flipFlop: FlipFlop) {
-        var targetCard = flipFlop.targetCard;
+        const targetCard = flipFlop.targetCard;
         if (!targetCard) {
             return
         }
