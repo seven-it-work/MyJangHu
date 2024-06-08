@@ -1,6 +1,7 @@
 // 将seven替换为路径
 import BaseCard from "../../../../baseCard";
 import {TriggerObj} from "../../../../Trigger";
+import {FlipFlop} from "../../../../FlipFlop.ts";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_807_battlegroundsImage.png
@@ -20,8 +21,10 @@ export default class BianChiZheTeLiGaoLeiV29_4_2_199503 extends BaseCard {
         return "每当另一只友方野兽受到伤害时，永久获得+1/+1。"
     }
 
-    whenOtherHarmedTrigger(injuring: number, triggerObj: TriggerObj) {
-        var targetCard = triggerObj.targetCard;
+    isOtherTriggering = true
+
+    whenInjured(flipFlop: FlipFlop) {
+        var targetCard = flipFlop.targetCard;
         if (!targetCard) {
             return
         }
@@ -30,12 +33,12 @@ export default class BianChiZheTeLiGaoLeiV29_4_2_199503 extends BaseCard {
         }
         const magnification = this.isGold ? 2 : 1;
         this.attackBonus.push({
-            baseCardId: triggerObj.currentCard?.id || targetCard.id,
+            baseCardId: flipFlop.currentCard?.id || targetCard.id,
             baseCardName: this.name,
             markupValue: magnification
         })
         this.lifeBonus.push({
-            baseCardId: triggerObj.currentCard?.id || targetCard.id,
+            baseCardId: flipFlop.currentCard?.id || targetCard.id,
             baseCardName: this.name,
             markupValue: magnification
         })

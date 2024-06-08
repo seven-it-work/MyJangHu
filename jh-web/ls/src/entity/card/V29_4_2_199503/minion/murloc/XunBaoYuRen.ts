@@ -14,6 +14,7 @@ export default class XunBaoYuRenV29_4_2_199503 extends BaseCard {
     life = 3
     graded = 3
     cardType = "minion"
+    isDeadLanguage=true
 
 
     descriptionStr() {

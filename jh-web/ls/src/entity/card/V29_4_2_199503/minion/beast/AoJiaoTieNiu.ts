@@ -1,6 +1,7 @@
 // 将seven替换为路径
 import BaseCard from "../../../../baseCard";
 import {TriggerObj} from "../../../../Trigger";
+import {FlipFlop} from "../../../../FlipFlop.ts";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_878_battlegroundsImage.png
@@ -20,9 +21,10 @@ export default class AoJiaoTieNiuV29_4_2_199503 extends BaseCard {
         return "每当本随从受到伤害，获得<b>圣盾</b>。"
     }
 
-    whenHarmedTrigger(injuring: number, triggerObj: TriggerObj) {
-        if (injuring > 0) {
-            this.isHolyShield = true
+    whenInjured(flipFlop: FlipFlop) {
+        if (flipFlop.otherData || flipFlop.otherData.harmed<=0){
+            return
         }
+        this.isHolyShield = true
     }
 }

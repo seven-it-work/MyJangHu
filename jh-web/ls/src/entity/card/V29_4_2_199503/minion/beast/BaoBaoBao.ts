@@ -11,12 +11,10 @@ export default class BaoBaoBao extends BaseCard {
     life = 1
     graded = 1
     cardType = "minion"
-
     isMockery = true
     isSell = false
 
     descriptionStr() {
         return "<b>嘲讽</b>"
     }
-
 }
