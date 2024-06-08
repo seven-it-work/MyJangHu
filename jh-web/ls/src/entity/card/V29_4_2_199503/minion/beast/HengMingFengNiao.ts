@@ -22,6 +22,14 @@ export default class HengMingFengNiaoV29_4_2_199503 extends BaseCard {
     }
 
     whenSummoned(flipFlop: FlipFlop) {
+        var cardList = flipFlop.currentPlayer.getCardList();
+        const magnification = this.isGold ? 2 : 1;
+        cardList.forEach(card=>{
+            card.baseCard.addBonus(flipFlop.currentCard,magnification*2,true)
+        })
+    }
+
+    whenDeath(flipFlop: FlipFlop) {
 
     }
 

@@ -116,7 +116,7 @@ export default abstract class BaseCard implements Trigger, FlipFlopFunc, Trigger
     /**
      * 回合开始时
      */
-    beginRound=false
+    beginRound = false
 
 
     // 选中过滤器
@@ -348,7 +348,7 @@ export default abstract class BaseCard implements Trigger, FlipFlopFunc, Trigger
     whenTheBattleBegan(flipFlop: FlipFlop) {
     }
 
-    showLog(flipFlop: FlipFlop){
+    showLog(flipFlop: FlipFlop) {
         console.log(`(${flipFlop.currentPlayer.name})的【${this.name}(${this.attack}/${this.life})】触发：${this.descriptionStr()}`)
     }
 
@@ -356,5 +356,35 @@ export default abstract class BaseCard implements Trigger, FlipFlopFunc, Trigger
     }
 
     whenTheRoundBegin(flipFlop: FlipFlop) {
+    }
+
+    /**
+     * 加成
+     */
+    addBonus(currentCard: BaseCardObj, value: number, isAttack: boolean) {
+        if (isAttack) {
+            this.attackBonus.push({
+                baseCardId: currentCard.id,
+                baseCardName: currentCard.baseCard.name,
+                markupValue: value
+            })
+        } else {
+            this.lifeBonus.push({
+                baseCardId: currentCard.id,
+                baseCardName: currentCard.baseCard.name,
+                markupValue: value
+            })
+        }
+    }
+
+    /**
+     * 加成
+     */
+    removeBonus(currentCard: BaseCardObj, isAttack: boolean) {
+        if (isAttack) {
+            this.attackBonus = this.attackBonus.filter(data => data.id !== currentCard.id);
+        } else {
+            this.lifeBonus = this.lifeBonus.filter(data => data.id !== currentCard.id);
+        }
     }
 }

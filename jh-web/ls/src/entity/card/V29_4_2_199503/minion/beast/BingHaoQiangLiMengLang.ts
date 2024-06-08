@@ -13,9 +13,11 @@ export default class BingHaoQiangLiMengLangV29_4_2_199503 extends BaseCard {
     graded = 4
     cardType = "minion"
     isSell = false
+    isOtherTriggering = true
 
     descriptionStr() {
         return "在一个友方随从消灭敌人后，永久获得+1生命值。"
     }
+
     // todo 其他杀死
 }

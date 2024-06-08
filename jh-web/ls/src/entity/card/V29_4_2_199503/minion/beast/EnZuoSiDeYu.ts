@@ -12,9 +12,11 @@ export default class EnZuoSiDeYu extends BaseCard {
     graded = 1
     cardType = "minion"
     isSell = false
+    isOtherTriggering = true
 
     descriptionStr() {
         return "在一个友方<b>亡语</b>随从在战斗中死亡后，获得其<b>亡语</b>。"
     }
+
     // todo
 }
