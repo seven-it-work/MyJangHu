@@ -22,8 +22,10 @@ export default class HuoBaoXiongJiV29_4_2_199503 extends BaseCard {
 
     beginRound=true
 
-    whenBeingSold(flipFlop: FlipFlop) {
+    whenTheBattleBegan(flipFlop: FlipFlop) {
         const findNeighborCard = flipFlop.currentPlayer.findNeighborCard(flipFlop.currentCard);
+        log.console(    findNeighborCard)
+        
         const magnification = this.isGold ? 2 : 1;
         for (let i = 0; i < magnification; i++) {
             if (findNeighborCard.left){
