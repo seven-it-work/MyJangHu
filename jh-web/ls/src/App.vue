@@ -18,7 +18,7 @@ import ContextObj from "./objs/ContextObj";
 import PlayObj from "./objs/PlayObj";
 import SaveUtils from "./utils/SaveUtils";
 import FileGenerator2 from "./views/edit/FileGenerator2.vue";
-const sharedCardPool = new SharedCardPool(['恶魔', '机械', '鱼人', '酒馆法术', '中立']);
+const sharedCardPool = new SharedCardPool(['恶魔','野兽', '机械', '鱼人', '酒馆法术', '中立']);
 
 const playerList = []
 for (let i = 0; i < 2; i++) {
