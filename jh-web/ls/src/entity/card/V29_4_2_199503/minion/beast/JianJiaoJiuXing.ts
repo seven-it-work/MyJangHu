@@ -33,8 +33,8 @@ export default class JianJiaoJiuXingV29_4_2_199503 extends BaseCard {
             cardList.forEach(card => {
                 card.whenInjured(new FlipFlop({
                     ...flipFlop,
-                    currentCard: findNeighborCard.left,
-                    targetCard: flipFlop.currentCard,
+                    currentCard: card,
+                    targetCard: card,
                     otherData: {
                         harmed: 1
                     }

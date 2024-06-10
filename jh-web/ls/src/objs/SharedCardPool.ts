@@ -189,7 +189,6 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
         if (cardNumber === 1) {
             return [randomUtil.pick(list, cardNumber)]
         }
-        console.log(cardNumber)
         return randomUtil.pick(list, cardNumber);
     }
 

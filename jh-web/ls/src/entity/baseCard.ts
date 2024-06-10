@@ -7,6 +7,7 @@ import {Serialization} from "../utils/SaveUtils";
 import {serialize} from "class-transformer";
 import SharedCardPool from "../objs/SharedCardPool";
 import {FlipFlop, FlipFlopFunc, Triggering} from "./FlipFlop";
+import Player from "../objs/Player.ts";
 
 export const baseEthnicity: string[] = ['鱼人', '机械', '恶魔', '亡灵', '龙', '野兽', '野猪人', '纳迦']
 export const ethnicity: string[] = ['中立', '伙伴', ...baseEthnicity]
@@ -359,9 +360,13 @@ export default abstract class BaseCard implements Trigger, FlipFlopFunc, Trigger
     }
 
     /**
-     * 加成
+     *
+     * @param currentCard
+     * @param value
+     * @param isAttack
+     * @param player 存在时，认为时永久加成
      */
-    addBonus(currentCard: BaseCardObj, value: number, isAttack: boolean) {
+    addBonus(currentCard: BaseCardObj, value: number, isAttack: boolean, player: Player | undefined = undefined) {
         if (isAttack) {
             this.attackBonus.push({
                 baseCardId: currentCard.id,
@@ -375,6 +380,14 @@ export default abstract class BaseCard implements Trigger, FlipFlopFunc, Trigger
                 markupValue: value
             })
         }
+        if (player) {
+            // 永久加成
+            player.cardList
+                .filter(card => card.id === currentCard.id)
+                .forEach(card => {
+                    card.baseCard.addBonus(currentCard, this.isGold ? 2 : 1, true)
+                })
+        }
     }
 
     /**
@@ -382,9 +395,9 @@ export default abstract class BaseCard implements Trigger, FlipFlopFunc, Trigger
      */
     removeBonus(currentCard: BaseCardObj, isAttack: boolean) {
         if (isAttack) {
-            this.attackBonus = this.attackBonus.filter(data => data.id !== currentCard.id);
+            this.attackBonus = this.attackBonus.filter(data => data.baseCardId !== currentCard.id);
         } else {
-            this.lifeBonus = this.lifeBonus.filter(data => data.id !== currentCard.id);
+            this.lifeBonus = this.lifeBonus.filter(data => data.baseCardId !== currentCard.id);
         }
     }
 }

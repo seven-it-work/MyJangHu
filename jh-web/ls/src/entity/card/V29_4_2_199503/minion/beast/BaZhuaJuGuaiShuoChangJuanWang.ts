@@ -37,10 +37,7 @@ export default class BaZhuaJuGuaiShuoChangJuanWangV29_4_2_199503 extends BaseCar
     }
 
     whenSummoned(flipFlop: FlipFlop) {
-        debugger
-        console.log(1,flipFlop.currentCard.baseCard.name,flipFlop.isCurrentCardIsTargetCard())
         if (!flipFlop.isCurrentCardIsTargetCard() && flipFlop.currentLocation === '战斗') {
-            console.log(11111)
             this.counter++
         }
     }

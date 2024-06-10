@@ -582,13 +582,13 @@ export default class BaseCardObj implements Trigger, FlipFlopFunc, Triggering, S
                 console.log(`${flipFlop.currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】触发亡语：${this.baseCard.descriptionStr()}`)
                 this.baseCard.deadLanguage(new FlipFlop({
                     ...flipFlop,
-                    targetCard:this
+                    targetCard: this
                 }))
             }
             // 磁力效果
             this.baseCard.magneticForceList.forEach(base => base.whenDeath(new FlipFlop({
                 ...flipFlop,
-                targetCard:this
+                targetCard: this
             })));
         }
     }
@@ -622,21 +622,25 @@ export default class BaseCardObj implements Trigger, FlipFlopFunc, Triggering, S
     }
 
     executeCurrentOtherList(flipFlop: FlipFlop, func: Function) {
-        flipFlop.currentPlayer.getCardList().filter(item => item.id !== this.id && item.baseCard.isOtherTriggering).forEach(item => {
-            func(item, new FlipFlop({
-                ...flipFlop,
-                currentCard: item,
-                targetCard: this
-            }))
-        })
-        flipFlop.currentPlayer.handCardList.filter(item => item.id !== this.id && item.baseCard.isOtherTriggering).forEach(item => {
-            func(item, new FlipFlop({
-                ...flipFlop,
-                currentLocation: '手牌',
-                currentCard: item,
-                targetCard: this
-            }))
-        })
+        flipFlop.currentPlayer.getCardList()
+            .filter(item => item.id !== this.id && item.baseCard.isOtherTriggering)
+            .forEach(item => {
+                func(item, new FlipFlop({
+                    ...flipFlop,
+                    currentCard: item,
+                    targetCard: this
+                }))
+            })
+        flipFlop.currentPlayer.handCardList
+            .filter(item => item.id !== this.id && item.baseCard.isOtherTriggering)
+            .forEach(item => {
+                func(item, new FlipFlop({
+                    ...flipFlop,
+                    currentLocation: '手牌',
+                    currentCard: item,
+                    targetCard: this
+                }))
+            })
     }
 
     whenPurchasing(flipFlop: FlipFlop) {

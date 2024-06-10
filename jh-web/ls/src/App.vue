@@ -1,6 +1,6 @@
 <template>
   <div>
-<!--    <FileGenerator2></FileGenerator2>-->
+    <!--    <FileGenerator2></FileGenerator2>-->
     <a-textarea v-model:value="saveInfo" show-count/>
     <a-button @click="reload">读取</a-button>
     <a-button type="primary" @click="save">保存</a-button>
@@ -18,7 +18,8 @@ import ContextObj from "./objs/ContextObj";
 import PlayObj from "./objs/PlayObj";
 import SaveUtils from "./utils/SaveUtils";
 import FileGenerator2 from "./views/edit/FileGenerator2.vue";
-const sharedCardPool = new SharedCardPool(['恶魔','野兽', '机械', '鱼人', '酒馆法术', '中立']);
+
+const sharedCardPool = new SharedCardPool(['恶魔', '野兽', '机械', '酒馆法术', '中立']);
 
 const playerList = []
 for (let i = 0; i < 2; i++) {
@@ -58,7 +59,7 @@ export default {
     reload() {
       this.playObj = SaveUtils.load(this.saveInfo);
     },
-    refresh(){
+    refresh() {
       window.location.reload()
     },
   },

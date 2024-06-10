@@ -1,6 +1,5 @@
 // 将seven替换为路径
 import BaseCard from "../../../../baseCard";
-import {TriggerObj} from "../../../../Trigger";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG20_HERO_100_Buddy_imageFromHsJson512x.png

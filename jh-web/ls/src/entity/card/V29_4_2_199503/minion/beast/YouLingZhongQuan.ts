@@ -23,12 +23,6 @@ export default class YouLingZhongQuanV29_4_2_199503 extends BaseCard {
 
     whenInjured(flipFlop: FlipFlop) {
         this.showLog(flipFlop)
-        this.addBonus(flipFlop.currentCard, this.isGold ? 2 : 1, true)
-        // 永久加成
-        flipFlop.currentPlayer.cardList
-            .filter(card => card.id === flipFlop.currentCard.id)
-            .forEach(card => {
-                card.baseCard.addBonus(flipFlop.currentCard, this.isGold ? 2 : 1, true)
-            })
+        this.addBonus(flipFlop.currentCard, this.isGold ? 2 : 1, true, flipFlop.currentPlayer)
     }
 }

@@ -14,7 +14,6 @@ export default class YinYuBaiEV29_4_2_199503 extends BaseCard {
     graded = 2
     cardType = "minion"
 
-
     descriptionStr() {
         if (this.isGold) {
             return "每当本随从受到伤害，召唤一只4/4并具有<b>嘲讽</b>的雏鹅。"
