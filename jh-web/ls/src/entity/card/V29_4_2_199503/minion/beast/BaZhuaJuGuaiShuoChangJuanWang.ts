@@ -25,10 +25,11 @@ export default class BaZhuaJuGuaiShuoChangJuanWangV29_4_2_199503 extends BaseCar
         return `<b>亡语：</b>召唤一个 ${this.counter * 2}/${this.counter * 2} 的触手。<i>（在战斗中，在你召唤一个随从后，触手永久获得+2/+2！）</i>`
     }
 
-    whenDeath(flipFlop: FlipFlop) {
+    deadLanguage(flipFlop: FlipFlop) {
+        console.log(2,flipFlop.currentCard.baseCard.name,flipFlop.isCurrentCardIsTargetCard())
         if (flipFlop.isCurrentCardIsTargetCard()) {
             const baZhuaJuGuaiDeChuShou = flipFlop.contextObj.sharedCardPool.getByName("BaZhuaJuGuaiDeChuShou");
-            let magnification = this.isGold ? 2 : 1;
+            let magnification = this.isGold ? 4 : 2;
             baZhuaJuGuaiDeChuShou.life = this.counter * magnification
             baZhuaJuGuaiDeChuShou.attack = this.counter * magnification
             flipFlop.currentPlayer.addCard2(new BaseCardObj(baZhuaJuGuaiDeChuShou), flipFlop.currentCard, flipFlop);
@@ -36,7 +37,10 @@ export default class BaZhuaJuGuaiShuoChangJuanWangV29_4_2_199503 extends BaseCar
     }
 
     whenSummoned(flipFlop: FlipFlop) {
+        debugger
+        console.log(1,flipFlop.currentCard.baseCard.name,flipFlop.isCurrentCardIsTargetCard())
         if (!flipFlop.isCurrentCardIsTargetCard() && flipFlop.currentLocation === '战斗') {
+            console.log(11111)
             this.counter++
         }
     }

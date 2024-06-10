@@ -22,9 +22,7 @@ export default class AoJiaoTieNiuV29_4_2_199503 extends BaseCard {
     }
 
     whenInjured(flipFlop: FlipFlop) {
-        if (flipFlop.otherData || flipFlop.otherData.harmed<=0){
-            return
-        }
+        this.showLog(flipFlop)
         this.isHolyShield = true
     }
 }

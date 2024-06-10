@@ -542,9 +542,11 @@ export default class BaseCardObj implements Trigger, FlipFlopFunc, Triggering, S
             }
             console.log(`(${flipFlop.currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】遭受${harmed}伤害`)
             // 生命值change
-            this.baseCard.changeInjuriesReceived(harmed);
-            this.baseCard.whenInjured(flipFlop)
-            this.executeCurrentOtherList(flipFlop, (item: BaseCardObj, data: FlipFlop) => item.baseCard.whenInjured(data))
+            if (harmed > 0) {
+                this.baseCard.changeInjuriesReceived(harmed);
+                this.baseCard.whenInjured(flipFlop)
+                this.executeCurrentOtherList(flipFlop, (item: BaseCardObj, data: FlipFlop) => item.baseCard.whenInjured(data))
+            }
             if (!this.isSurviving()) {
                 this.whenDeath(flipFlop)
             }
@@ -578,10 +580,16 @@ export default class BaseCardObj implements Trigger, FlipFlopFunc, Triggering, S
             // 亡语
             if (this.baseCard.isDeadLanguage) {
                 console.log(`${flipFlop.currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】触发亡语：${this.baseCard.descriptionStr()}`)
-                this.baseCard.deadLanguage(flipFlop)
+                this.baseCard.deadLanguage(new FlipFlop({
+                    ...flipFlop,
+                    targetCard:this
+                }))
             }
             // 磁力效果
-            this.baseCard.magneticForceList.forEach(base => base.whenDeath(flipFlop));
+            this.baseCard.magneticForceList.forEach(base => base.whenDeath(new FlipFlop({
+                ...flipFlop,
+                targetCard:this
+            })));
         }
     }
 
@@ -617,7 +625,6 @@ export default class BaseCardObj implements Trigger, FlipFlopFunc, Triggering, S
         flipFlop.currentPlayer.getCardList().filter(item => item.id !== this.id && item.baseCard.isOtherTriggering).forEach(item => {
             func(item, new FlipFlop({
                 ...flipFlop,
-                currentLocation: '战场',
                 currentCard: item,
                 targetCard: this
             }))

@@ -200,20 +200,29 @@ export default class FightObj {
     }
 
     private doFight(isAttacker: Boolean) {
+        let checkAttackerIndex;
         let attackerPlayer: Player
         let defenderPlayer: Player
         let index;
         if (isAttacker) {
             attackerPlayer = this.attackerPlayer;
             defenderPlayer = this.defenderPlayer;
-            if (this.attackerIndex >= attackerPlayer.cardListInFighting.length) {
+            if (attackerPlayer.cardListInFighting.length === 0) {
+                return;
+            }
+            checkAttackerIndex = this.attackerIndex >= attackerPlayer.cardListInFighting.length;
+            if (checkAttackerIndex) {
                 this.attackerIndex = 0;
             }
             index = this.attackerIndex;
         } else {
             defenderPlayer = this.attackerPlayer;
             attackerPlayer = this.defenderPlayer;
-            if (this.attackerIndex >= attackerPlayer.cardListInFighting.length) {
+            if (attackerPlayer.cardListInFighting.length === 0) {
+                return;
+            }
+            checkAttackerIndex = this.attackerIndex >= attackerPlayer.cardListInFighting.length;
+            if (checkAttackerIndex) {
                 this.attackerIndex = 0;
             }
             index = this.defenderIndex;
@@ -249,7 +258,7 @@ export default class FightObj {
         } else {
             this.defenderIndex++;
         }
-        if (this.attackerIndex >= attackerPlayer.cardListInFighting.length) {
+        if (checkAttackerIndex) {
             this.attackerIndex = 0;
         }
         if (this.defenderIndex >= defenderPlayer.cardListInFighting.length) {

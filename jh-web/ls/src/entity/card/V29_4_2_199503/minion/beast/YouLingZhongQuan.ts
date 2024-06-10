@@ -1,24 +1,34 @@
+// 将seven替换为路径
+import BaseCard from "../../../../baseCard";
+import {FlipFlop} from "../../../../FlipFlop";
 
-      // 将seven替换为路径
-      import BaseCard from "../../../../baseCard";
+/**
+ * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_800_battlegroundsImage.png
+ */
+export default class YouLingZhongQuanV29_4_2_199503 extends BaseCard {
+    name = "幼龄忠犬"
+    ethnicity = ["野兽"]
+    attack = 1
+    life = 3
+    graded = 1
+    cardType = "minion"
 
-      /**
-      * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_800_battlegroundsImage.png
-      */
-      export default class YouLingZhongQuanV29_4_2_199503 extends BaseCard {
-         name = "幼龄忠犬"
-         ethnicity = ["野兽"]
-         attack = 1
-         life = 3
-         graded = 1
-         cardType = "minion"
 
-         
-
-         descriptionStr() {
-            if(this.isGold){
-                return "每当本随从受到伤害，永久获得 +2攻击力。"
-            }
-            return "每当本随从受到伤害，永久获得 +1攻击力。"
-         }
+    descriptionStr() {
+        if (this.isGold) {
+            return "每当本随从受到伤害，永久获得 +2攻击力。"
+        }
+        return "每当本随从受到伤害，永久获得 +1攻击力。"
     }
+
+    whenInjured(flipFlop: FlipFlop) {
+        this.showLog(flipFlop)
+        this.addBonus(flipFlop.currentCard, this.isGold ? 2 : 1, true)
+        // 永久加成
+        flipFlop.currentPlayer.cardList
+            .filter(card => card.id === flipFlop.currentCard.id)
+            .forEach(card => {
+                card.baseCard.addBonus(flipFlop.currentCard, this.isGold ? 2 : 1, true)
+            })
+    }
+}

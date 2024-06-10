@@ -7,8 +7,8 @@ import BaseCard from "../../../../baseCard";
 export default class YinYuChuE extends BaseCard {
     name = "银羽雏鹅"
     ethnicity = ["野兽"]
-    attack = 4
-    life = 4
+    attack = 2
+    life = 2
     graded = 1
     cardType = "minion"
     isSell = false
