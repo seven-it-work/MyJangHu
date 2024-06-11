@@ -12,7 +12,7 @@ export default class ChaoXiXianZhiMoGeErV29_4_2_199503 extends BaseCard {
     graded = 7
     cardType = "minion"
     isSell = false
-
+    hasPoison = true
 
     descriptionStr() {
         if (this.isGold) {
@@ -20,6 +20,5 @@ export default class ChaoXiXianZhiMoGeErV29_4_2_199503 extends BaseCard {
         }
         return "<b><b>剧毒</b>。</b>每当本随从攻击并消灭一个随从时，使你手牌中的一张随从牌获得被消灭随从的最大属性值。"
     }
-
-    // todo
+    // todo 消灭
 }

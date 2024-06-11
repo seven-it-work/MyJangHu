@@ -19,4 +19,6 @@ export default class KuanHouDeTuoLuV29_4_2_199503 extends BaseCard {
         }
         return "<b>亡语：</b>召唤你的队友战队中一个随从<i>（宽厚的驼鹿除外）</i>的复制，将其生命值变为1。"
     }
+
+    // 暂时不支持双人默认
 }

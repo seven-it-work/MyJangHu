@@ -64,13 +64,13 @@ export default class Player implements Serialization<Player> {
     // 场上影响区（影响随从的加成，比如哼鸣蜂鸟，一旦随从不存在，将清理对应区域。这个区域影响）
     attackBonusBattle: BonusPlayer[] = []
     // 生命加成（永久区）
-    lifeBonusPermanently: Bonus[] = [];
+    lifeBonusPermanently: BonusPlayer[] = [];
     // 攻击加成（永久区）
-    attackBonusPermanently: Bonus[] = [];
+    attackBonusPermanently: BonusPlayer[] = [];
     // 生命加成（临时区）三连临时变永久，开始回合时，清空所有临时区
-    lifeBonusTemporarily: Bonus[] = [];
+    lifeBonusTemporarily: BonusPlayer[] = [];
     // 攻击加成（临时区）
-    attackBonusTemporarily: Bonus[] = [];
+    attackBonusTemporarily: BonusPlayer[] = [];
 
 
     private readonly static MAX_HAND_CARD: number = 10;
@@ -580,13 +580,40 @@ export default class Player implements Serialization<Player> {
         this.cardList.filter(card => card.id === baseCardObj.id).forEach(card => card.baseCard.bonusPermanently(baseCardObj.baseCard))
     }
 
+    bonusAdd(b: BonusPlayer, isAttack: boolean, type: 'BonusBattle' | 'BonusPermanently' | 'BonusTemporarily') {
+        switch (type) {
+            case "BonusBattle":
+                if (isAttack) {
+                    this.attackBonusBattle.push(b)
+                } else {
+                    this.lifeBonusBattle.push(b)
+                }
+                this.changeBonusBattle();
+                break
+            case "BonusPermanently":
+                if (isAttack) {
+                    this.attackBonusPermanently.push(b)
+                } else {
+                    this.lifeBonusPermanently.push(b)
+                }
+                break
+            case "BonusTemporarily":
+                if (isAttack) {
+                    this.attackBonusTemporarily.push(b)
+                } else {
+                    this.lifeBonusTemporarily.push(b)
+                }
+                break
+        }
+    }
+
     bonusBattleAdd(b: BonusPlayer, isAttack: boolean) {
-        // 每次变化都要更新整改getCardList
         if (isAttack) {
             this.attackBonusBattle.push(b)
         } else {
             this.lifeBonusBattle.push(b)
         }
+        // 每次变化都要更新整改getCardList
         this.changeBonusBattle();
     }
 

@@ -1,6 +1,7 @@
 // 将seven替换为路径
 import BaseCard from "../../../../baseCard";
 import {FlipFlop} from "../../../../FlipFlop.ts";
+import {BonusCreatUtil} from "../../../../../objs/Bonus";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_808_battlegroundsImage.png
@@ -24,11 +25,11 @@ export default class JianJiaoJiuXingV29_4_2_199503 extends BaseCard {
     }
 
     whenDeath(flipFlop: FlipFlop) {
-        var cardList = flipFlop.currentPlayer.getCardList();
+        const cardList = flipFlop.currentPlayer.getCardList();
         const magnification = this.isGold ? 2 : 1;
         for (let i = 0; i < magnification; i++) {
             cardList.forEach(card => {
-                card.baseCard.addBonus(flipFlop.currentCard, 1, false)
+                card.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, 1), false)
             })
             cardList.forEach(card => {
                 card.whenInjured(new FlipFlop({

@@ -17,4 +17,5 @@ export default class TaMuZuoV29_4_2_199503 extends BaseCard {
         return "<b>复仇（2）：</b>使“触须”技能获得+1/+1。"
     }
 
+    // todo
 }

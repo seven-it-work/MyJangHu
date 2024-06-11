@@ -374,31 +374,26 @@ export default abstract class BaseCard implements Trigger, FlipFlopFunc, Trigger
 
     /**
      *
-     * @param currentCard
-     * @param value
+     * @param bonus
      * @param isAttack
      * @param isPermanent 是否永久区
      */
-    addBonus(currentCard: BaseCardObj, value: number, isAttack: boolean, isPermanent: boolean = false) {
-        let bonus;
+    addBonus(bonus: Bonus, isAttack: boolean, isPermanent: boolean = false) {
+        let bonusList;
         if (isAttack) {
             if (isPermanent) {
-                bonus = this.attackBonusPermanently
+                bonusList = this.attackBonusPermanently
             } else {
-                bonus = this.attackBonusTemporarily
+                bonusList = this.attackBonusTemporarily
             }
         } else {
             if (isPermanent) {
-                bonus = this.lifeBonusPermanently
+                bonusList = this.lifeBonusPermanently
             } else {
-                bonus = this.lifeBonusTemporarily
+                bonusList = this.lifeBonusTemporarily
             }
         }
-        bonus.push({
-            baseCardId: currentCard.id,
-            baseCardName: currentCard.baseCard.name,
-            markupValue: value
-        })
+        bonusList.push(bonus)
     }
 
     bonusTemporarilyClear() {

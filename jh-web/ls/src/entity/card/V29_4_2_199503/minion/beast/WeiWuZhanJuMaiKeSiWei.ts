@@ -16,4 +16,6 @@ export default class WeiWuZhanJuMaiKeSiWeiV29_4_2_199503 extends BaseCard {
     descriptionStr() {
         return "<b>战吼：</b>获取一张你的英雄技能对应的伙伴。"
     }
+
+    // todo
 }

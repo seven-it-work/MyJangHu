@@ -17,4 +17,5 @@ export default class KeDuoShouBaoBaoV29_4_2_199503 extends BaseCard {
         return "<b>战吼：刷新</b>酒馆，使其中的随从变为每个等级一个。"
     }
 
+    // todo
 }

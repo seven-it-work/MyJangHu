@@ -1,5 +1,7 @@
 // 将seven替换为路径
 import BaseCard from "../../../../baseCard";
+import {FlipFlop} from "../../../../FlipFlop";
+import {BonusCreatUtil} from "../../../../../objs/Bonus";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BGS_021_battlegroundsImage.png
@@ -14,6 +16,22 @@ export default class XiongMaMa extends BaseCard {
     isSell = false
 
     descriptionStr() {
+        if (this.isGold) {
+            return "每当你召唤一只野兽，使其获得+8/+8。"
+        }
         return "每当你召唤一只野兽，使其获得+4/+4。"
+    }
+
+    isOtherTriggering = true
+
+    whenSummoned(flipFlop: FlipFlop) {
+        if (!flipFlop.isCurrentCardIsTargetCard()) {
+            if (flipFlop.targetCard.baseCard.ethnicity.includes('野兽')) {
+                this.showLog(flipFlop)
+                var gold = this.isGold ? 2 : 1;
+                flipFlop.targetCard.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, gold * 4), true, true)
+                flipFlop.targetCard.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, gold * 4), false, true)
+            }
+        }
     }
 }

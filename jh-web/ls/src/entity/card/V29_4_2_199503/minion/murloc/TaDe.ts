@@ -33,6 +33,7 @@ export default class TaDeV29_4_2_199503 extends BaseCard {
         if (baseCards.length <= 0) {
             return;
         }
+        this.showLog(flipFlop)
         let magnification = this.isGold ? 2 : 1;
         for (let i = 0; i < magnification; i++) {
             const baseCard = baseCards[i];

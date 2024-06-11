@@ -2,6 +2,7 @@
 import BaseCard from "../../../../baseCard";
 import {FlipFlop} from "../../../../FlipFlop";
 import randomUtil from "../../../../../utils/RandomUtils";
+import {BonusCreatUtil} from "../../../../../objs/Bonus";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG27_082_battlegroundsImage.png
@@ -24,20 +25,12 @@ export default class CuXinDeTunJiZheV29_4_2_199503 extends BaseCard {
 
     whenBeingSold(flipFlop: FlipFlop) {
         if (flipFlop.isCurrentCardIsTargetCard()) {
-            console.log(`(${flipFlop.currentPlayer.name})的【${this.name}(${this.getAttack()}/${this.getLife()})】触发：${this.descriptionStr()}`)
+            this.showLog(flipFlop)
             const cardList = flipFlop.currentPlayer.getCardList();
             const baseCardObj = randomUtil.pickone(cardList);
             const number = this.isGold ? 2 : 1;
-            baseCardObj.baseCard.attackBonus.push({
-                baseCardId: flipFlop.currentCard.id,
-                baseCardName: this.name,
-                markupValue: number * flipFlop.currentCard.attack
-            })
-            baseCardObj.baseCard.lifeBonus.push({
-                baseCardId: flipFlop.currentCard.id,
-                baseCardName: this.name,
-                markupValue: number * flipFlop.currentCard.life
-            })
+            baseCardObj.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard,number * flipFlop.currentCard.attack),true,true)
+            baseCardObj.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard,number * flipFlop.currentCard.attack),false,true)
         }
     }
 }

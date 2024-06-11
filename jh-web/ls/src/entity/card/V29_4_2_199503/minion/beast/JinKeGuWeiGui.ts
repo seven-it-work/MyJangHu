@@ -1,6 +1,7 @@
 // 将seven替换为路径
 import BaseCard from "../../../../baseCard";
 import {FlipFlop} from "../../../../FlipFlop.ts";
+import {BonusCreatUtil} from "../../../../../objs/Bonus";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_803_battlegroundsImage.png
@@ -26,8 +27,8 @@ export default class JinKeGuWeiGuiV29_4_2_199503 extends BaseCard {
         flipFlop.currentPlayer.getCardList()
             .filter(card => card.baseCard.ethnicity.includes('野兽'))
             .forEach(card => {
-                card.baseCard.addBonus(card, 2 * number, true)
-                card.baseCard.addBonus(card, 4 * number, false)
+                card.baseCard.addBonus(BonusCreatUtil(card, 2 * number), true, !flipFlop.currentPlayer.isEndRound)
+                card.baseCard.addBonus(BonusCreatUtil(card, 4 * number), false, !flipFlop.currentPlayer.isEndRound)
             })
     }
 }

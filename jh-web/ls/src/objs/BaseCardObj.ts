@@ -556,9 +556,6 @@ export default class BaseCardObj implements Trigger, FlipFlopFunc, Triggering, S
     }
 
     whenSummoned(flipFlop: FlipFlop) {
-        console.log(`(${flipFlop.currentPlayer.name})召唤【${this.baseCard.name}(${this.attack}/${this.life})】`)
-        // 召唤触发
-        this.baseCard.whenSummoned(flipFlop);
         // 战场影响加成
         flipFlop.currentPlayer.attackBonusBattle.forEach(data => {
             if (data.judgmentType(this)) {
@@ -570,6 +567,31 @@ export default class BaseCardObj implements Trigger, FlipFlopFunc, Triggering, S
                 this.baseCard.bonusBattleAdd(data, false)
             }
         })
+        // 永久影响
+        flipFlop.currentPlayer.attackBonusPermanently.forEach(data => {
+            if (data.judgmentType(this)) {
+                this.baseCard.addBonus(data,true,true)
+            }
+        })
+        flipFlop.currentPlayer.lifeBonusPermanently.forEach(data => {
+            if (data.judgmentType(this)) {
+                this.baseCard.addBonus(data,false,true)
+            }
+        })
+        // 临时影响
+        flipFlop.currentPlayer.attackBonusTemporarily.forEach(data => {
+            if (data.judgmentType(this)) {
+                this.baseCard.addBonus(data,true,false)
+            }
+        })
+        flipFlop.currentPlayer.lifeBonusTemporarily.forEach(data => {
+            if (data.judgmentType(this)) {
+                this.baseCard.addBonus(data,false,false)
+            }
+        })
+        console.log(`(${flipFlop.currentPlayer.name})召唤【${this.baseCard.name}(${this.attack}/${this.life})】`)
+        // 召唤触发
+        this.baseCard.whenSummoned(flipFlop);
         this.executeCurrentOtherList(flipFlop, (item: BaseCardObj, data: FlipFlop) => item.baseCard.whenSummoned(data))
     }
 

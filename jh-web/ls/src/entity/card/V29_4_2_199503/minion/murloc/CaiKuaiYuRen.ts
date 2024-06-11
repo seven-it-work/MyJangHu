@@ -1,6 +1,7 @@
 // 将seven替换为路径
 import BaseCard from "../../../../baseCard";
 import {FlipFlop} from "../../../../FlipFlop";
+import {BonusCreatUtil} from "../../../../../objs/Bonus";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG26_137_battlegroundsImage.png
@@ -20,20 +21,16 @@ export default class CaiKuaiYuRenV29_4_2_199503 extends BaseCard {
         return "当本牌在你手牌中时，在你使用一张鱼人牌后，获得+3/+3。"
     }
 
-    isOtherTriggering=true
+    isOtherTriggering = true
 
     whenUsed(flipFlop: FlipFlop) {
         if (!flipFlop.isCurrentCardIsTargetCard()) {
             if (flipFlop.targetCard.baseCard.ethnicity.includes('鱼人')) {
                 if (flipFlop.currentLocation === '手牌') {
-                    console.log(`(${flipFlop.currentPlayer.name})的【${this.name}(${this.getAttack()}/${this.getLife()})】触发：${this.descriptionStr()}`)
-                    const number = this.isGold ? 3 : 3;
-                    this.attackBonus.push({
-                        baseCardId: flipFlop.currentCard.id, baseCardName: this.name, markupValue: number
-                    })
-                    this.lifeBonus.push({
-                        baseCardId: flipFlop.currentCard.id, baseCardName: this.name, markupValue: number
-                    })
+                    this.showLog(flipFlop)
+                    const number = this.isGold ? 2 : 1;
+                    this.addBonus(BonusCreatUtil(flipFlop.currentCard, number * 3), true, true)
+                    this.addBonus(BonusCreatUtil(flipFlop.currentCard, number * 3), false, true)
                 }
             }
         }

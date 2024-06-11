@@ -21,11 +21,15 @@ export default class NuHuoFeiYangV29_4_2_199503 extends BaseCard {
     }
 
     whenAttacking(flipFlop: FlipFlop) {
+        this.showLog(flipFlop)
         flipFlop.currentPlayer.getCardList()
             .filter(card => card.id !== flipFlop.currentCard.id)
             .forEach(card => {
                 card.whenInjured(new FlipFlop({
                     ...flipFlop,
+                    otherData: {
+                        harmed: 1,
+                    },
                     currentCard: card,
                     targetCard: card,
                 }))

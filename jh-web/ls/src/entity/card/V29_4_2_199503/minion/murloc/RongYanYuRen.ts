@@ -1,6 +1,7 @@
 // 将seven替换为路径
 import BaseCard from "../../../../baseCard";
 import {FlipFlop} from "../../../../FlipFlop";
+import {BonusCreatUtil} from "../../../../../objs/Bonus";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG25_046_battlegroundsImage.png
@@ -34,18 +35,11 @@ export default class RongYanYuRenV29_4_2_199503 extends BaseCard {
     }
 
     whenTheRoundIsOver(flipFlop: FlipFlop) {
-        if (flipFlop.currentLocation==='战场'){
+        if (flipFlop.currentLocation === '战场') {
+            this.showLog(flipFlop)
             const number = this.isGold ? 2 : 1;
-            this.attackBonus.push({
-                baseCardId: flipFlop.currentCard.id,
-                baseCardName: flipFlop.currentCard.baseCard.name,
-                markupValue: number * this.userCardNumber
-            })
-            this.lifeBonus.push({
-                baseCardId: flipFlop.currentCard.id,
-                baseCardName: flipFlop.currentCard.baseCard.name,
-                markupValue: number * this.userCardNumber
-            })
+            this.addBonus(BonusCreatUtil(flipFlop.currentCard, number * this.userCardNumber), true, true)
+            this.addBonus(BonusCreatUtil(flipFlop.currentCard, number * this.userCardNumber), false, true)
         }
         this.userCardNumber = 0
     }

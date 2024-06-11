@@ -1,6 +1,7 @@
 // 将seven替换为路径
 import BaseCard from "../../../../baseCard";
 import {FlipFlop} from "../../../../FlipFlop";
+import {BonusCreatUtil} from "../../../../../objs/Bonus";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_800_battlegroundsImage.png
@@ -22,6 +23,6 @@ export default class YouLingZhongQuanV29_4_2_199503 extends BaseCard {
 
     whenInjured(flipFlop: FlipFlop) {
         this.showLog(flipFlop)
-        this.addBonus(flipFlop.currentCard, this.isGold ? 2 : 1, true, true)
+        this.addBonus(BonusCreatUtil(flipFlop.currentCard, this.isGold ? 2 : 1), true, true)
     }
 }

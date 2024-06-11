@@ -37,6 +37,7 @@ export default class HengMingFengNiaoV29_4_2_199503 extends BaseCard {
     }
 
     whenDeath(flipFlop: FlipFlop) {
+        console.log(`(${flipFlop.currentPlayer.name})的【${this.name}(${this.attack}/${this.life})】死亡，移除加成}`)
         this.extracted(flipFlop);
     }
 

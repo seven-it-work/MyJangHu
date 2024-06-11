@@ -1,6 +1,8 @@
 // 将seven替换为路径
 import BaseCard from "../../../../baseCard";
 import {FlipFlop} from "../../../../FlipFlop.ts";
+import BaseCardObj from "../../../../../objs/BaseCardObj";
+import {BonusPlayerCreatUtil} from "../../../../../objs/Bonus";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BGS_018_battlegroundsImage.png
@@ -24,6 +26,12 @@ export default class JuLangGeDeLinV29_4_2_199503 extends BaseCard {
     isDeadLanguage = true
 
     deadLanguage(flipFlop: FlipFlop) {
-        // todo 加成（这种加成回合结束就归零）
+        const gold = this.isGold ? 2 : 1;
+        const b = BonusPlayerCreatUtil(flipFlop.currentCard, 4 * gold,
+            (baseCardObj: BaseCardObj): boolean => {
+            return baseCardObj.baseCard.ethnicity.includes('野兽');
+        });
+        flipFlop.currentPlayer.bonusAdd(b, true, "BonusTemporarily")
+        flipFlop.currentPlayer.bonusAdd(b, false, "BonusTemporarily")
     }
 }

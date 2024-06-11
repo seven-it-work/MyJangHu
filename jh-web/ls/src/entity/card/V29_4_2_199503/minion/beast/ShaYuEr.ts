@@ -17,4 +17,5 @@ export default class ShaYuErV29_4_2_199503 extends BaseCard {
         return "<b>战吼：</b>复原你的英雄技能。"
     }
 
+    // todo
 }

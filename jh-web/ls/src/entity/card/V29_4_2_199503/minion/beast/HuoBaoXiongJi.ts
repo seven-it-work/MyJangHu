@@ -1,6 +1,7 @@
 // 将seven替换为路径
 import BaseCard from "../../../../baseCard";
 import {FlipFlop} from "../../../../FlipFlop.ts";
+import {BonusCreatUtil} from "../../../../../objs/Bonus";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_990_battlegroundsImage.png
@@ -35,7 +36,7 @@ export default class HuoBaoXiongJiV29_4_2_199503 extends BaseCard {
                         harmed:1
                     }
                 }))
-                findNeighborCard.left.baseCard.addBonus(flipFlop.currentCard,4,true)
+                findNeighborCard.left.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard,4),true,false)
             }
             if (findNeighborCard.right){
                 findNeighborCard.right.whenInjured(new FlipFlop({
@@ -46,7 +47,7 @@ export default class HuoBaoXiongJiV29_4_2_199503 extends BaseCard {
                         harmed:1
                     }
                 }))
-                findNeighborCard.right.baseCard.addBonus(flipFlop.currentCard,4,true)
+                findNeighborCard.right.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard,4),true,false)
             }
         }
     }

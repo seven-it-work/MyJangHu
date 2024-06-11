@@ -1,6 +1,7 @@
 // 将seven替换为路径
 import BaseCard from "../../../../baseCard";
 import {FlipFlop} from "../../../../FlipFlop";
+import {BonusCreatUtil} from "../../../../../objs/Bonus";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BGS_030_battlegroundsImage.png
@@ -15,6 +16,9 @@ export default class BaiGeErGeGuoWangV29_4_2_199503 extends BaseCard {
     isWarRoars = true
 
     descriptionStr() {
+        if (this.isGold) {
+            return "<b>战吼：</b>使你的其他鱼人获得+4/+4。"
+        }
         return "<b>战吼：</b>使你的其他鱼人获得+2/+2。"
     }
 
@@ -25,14 +29,10 @@ export default class BaiGeErGeGuoWangV29_4_2_199503 extends BaseCard {
         if (baseCardObjs.length <= 0) {
             return;
         }
-        const number = this.isGold ? 2 : 2;
+        const number = this.isGold ? 2 : 1;
         baseCardObjs.forEach(card => {
-            card.baseCard.attackBonus.push({
-                baseCardId: flipFlop.currentCard.id, baseCardName: this.name, markupValue: number
-            })
-            card.baseCard.lifeBonus.push({
-                baseCardId: flipFlop.currentCard.id, baseCardName: this.name, markupValue: number
-            })
+            card.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, number), true, !flipFlop.currentPlayer.isEndRound)
+            card.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, number), false, !flipFlop.currentPlayer.isEndRound)
         })
     }
 }

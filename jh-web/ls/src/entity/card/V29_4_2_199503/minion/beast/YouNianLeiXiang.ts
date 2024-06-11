@@ -13,9 +13,9 @@ export default class YouNianLeiXiangV29_4_2_199503 extends BaseCard {
     cardType = "minion"
     isSell = false
 
-
     descriptionStr() {
         return "在你使用一张攻击力等同于生命值的随从牌后，获得+2/+2。"
     }
 
+    // todo
 }

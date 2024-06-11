@@ -17,4 +17,5 @@ export default class WaShengV29_4_2_199503 extends BaseCard {
         return "在你用“特邀侦探”猜中随从后，获取一张猜中的随从的原始版复制。"
     }
 
+    // todo
 }

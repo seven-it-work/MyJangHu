@@ -2,6 +2,7 @@
 import BaseCard from "../../../../baseCard";
 import {FlipFlop} from "../../../../FlipFlop";
 import BaseCardObj from "../../../../../objs/BaseCardObj";
+import {BonusCreatUtil} from "../../../../../objs/Bonus";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG24_012_battlegroundsImage.png
@@ -38,15 +39,7 @@ export default class BenBoErBaV29_4_2_199503 extends BaseCard {
             return
         }
         let magnification = this.isGold ? 8 : 4;
-        needSelectCard.baseCard.attackBonus.push({
-            baseCardId: flipFlop.currentCard.id,
-            baseCardName: this.name,
-            markupValue: magnification * baseCardObjs.length
-        })
-        needSelectCard.baseCard.lifeBonus.push({
-            baseCardId: flipFlop.currentCard.id,
-            baseCardName: this.name,
-            markupValue: magnification * baseCardObjs.length
-        })
+        needSelectCard.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, magnification * baseCardObjs.length), true, !flipFlop.currentPlayer.isEndRound)
+        needSelectCard.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, magnification * baseCardObjs.length), false, !flipFlop.currentPlayer.isEndRound)
     }
 }

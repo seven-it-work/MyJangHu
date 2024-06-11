@@ -3,6 +3,7 @@ import BaseCard from "../../../../baseCard";
 import {FlipFlop} from "../../../../FlipFlop.ts";
 import randomUtil from "../../../../../utils/RandomUtils.ts";
 import BaseCardObj from "../../../../../objs/BaseCardObj.ts";
+import {BonusCreatUtil} from "../../../../../objs/Bonus";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_806_battlegroundsImage.png
@@ -36,8 +37,8 @@ export default class XuanCaiZhuoTianZheV29_4_2_199503 extends BaseCard {
             this.showLog(flipFlop)
             const baseCardObj: BaseCardObj = randomUtil.pickone(baseCardObjs);
             const number = this.isGold ? 2 : 1;
-            baseCardObj.baseCard.addBonus(flipFlop.currentCard, number, true, true)
-            baseCardObj.baseCard.addBonus(flipFlop.currentCard, number * 2, false, true)
+            baseCardObj.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, number), true, true)
+            baseCardObj.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, number * 2), false, true)
         }
     }
 }
