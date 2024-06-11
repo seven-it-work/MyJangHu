@@ -489,6 +489,8 @@ export default class BaseCardObj implements Trigger, FlipFlopFunc, Triggering, S
 
     whenDeath(flipFlop: FlipFlop) {
         console.log(`(${flipFlop.currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】死亡`)
+        // 将其的永久加成加入到cardList中
+        flipFlop.currentPlayer.copyPerpetualBonus(this)
         // 加入死亡池
         flipFlop.currentPlayer.deadCardListInFighting.push(this)
         // 移除
@@ -503,9 +505,9 @@ export default class BaseCardObj implements Trigger, FlipFlopFunc, Triggering, S
             const baseCardTemp = flipFlop.contextObj.sharedCardPool.getByName(this.baseCard.classType);
             baseCardTemp.changeInjuriesReceived(this.baseCard.getPrimitiveLife() - 1);
             baseCardTemp.isRebirth = false;
-            this.baseCard = baseCardTemp
-            flipFlop.currentPlayer.addCard2(this, findNextCard, flipFlop)
-            console.log(`${flipFlop.currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】复生`)
+            const baseCardObj = new BaseCardObj(baseCardTemp);
+            flipFlop.currentPlayer.addCard2(baseCardObj, findNextCard, flipFlop)
+            console.log(`${flipFlop.currentPlayer.name})的【${baseCardObj.baseCard.name}(${baseCardObj.attack}/${baseCardObj.life})】复生`)
         }
     }
 
@@ -557,6 +559,17 @@ export default class BaseCardObj implements Trigger, FlipFlopFunc, Triggering, S
         console.log(`(${flipFlop.currentPlayer.name})召唤【${this.baseCard.name}(${this.attack}/${this.life})】`)
         // 召唤触发
         this.baseCard.whenSummoned(flipFlop);
+        // 战场影响加成
+        flipFlop.currentPlayer.attackBonusBattle.forEach(data => {
+            if (data.judgmentType(this)) {
+                this.baseCard.bonusBattleAdd(data, true)
+            }
+        })
+        flipFlop.currentPlayer.lifeBonusBattle.forEach(data => {
+            if (data.judgmentType(this)) {
+                this.baseCard.bonusBattleAdd(data, false)
+            }
+        })
         this.executeCurrentOtherList(flipFlop, (item: BaseCardObj, data: FlipFlop) => item.baseCard.whenSummoned(data))
     }
 
@@ -695,6 +708,8 @@ export default class BaseCardObj implements Trigger, FlipFlopFunc, Triggering, S
                 this.isLock = false
             }
         }
+        // 清理临时区加成
+        this.baseCard.bonusTemporarilyClear()
         // 处理开始回合
         if (this.baseCard.beginRound && flipFlop.currentLocation === '战场') {
             console.log(`(${flipFlop.currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】开始回合时触发：${this.baseCard.descriptionStr()}`)

@@ -36,8 +36,8 @@ export default class XuanCaiZhuoTianZheV29_4_2_199503 extends BaseCard {
             this.showLog(flipFlop)
             const baseCardObj: BaseCardObj = randomUtil.pickone(baseCardObjs);
             const number = this.isGold ? 2 : 1;
-            baseCardObj.baseCard.addBonus(flipFlop.currentCard, number, true, flipFlop.currentPlayer)
-            baseCardObj.baseCard.addBonus(flipFlop.currentCard, number * 2, false, flipFlop.currentPlayer)
+            baseCardObj.baseCard.addBonus(flipFlop.currentCard, number, true, true)
+            baseCardObj.baseCard.addBonus(flipFlop.currentCard, number * 2, false, true)
         }
     }
 }

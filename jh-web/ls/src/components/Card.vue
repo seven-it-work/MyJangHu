@@ -116,34 +116,26 @@ export default {
     },
   },
   methods: {
-    disableAttackTips(cardObj: BaseCardObj) {
+    disableAttackTips(cardObj: BaseCardObj):boolean {
       return this.disableTips(cardObj, "attack")
     },
-    disableLifeTips(cardObj: BaseCardObj) {
+    disableLifeTips(cardObj: BaseCardObj):boolean {
       return this.disableTips(cardObj, "life")
     },
-    disableTips(cardObj: BaseCardObj, type: 'life' | 'attack') {
+    disableTips(cardObj: BaseCardObj, type: 'life' | 'attack'):boolean {
       let len = cardObj.baseCard.magneticForceList.length
       if (type === 'life') {
-        len += cardObj.baseCard.lifeBonus.length
+        len += cardObj.baseCard.bonusList(false).length
         len += this.taverns?.lifeBonus.length || 0
       }
       if (type === 'attack') {
-        len += cardObj.baseCard.attackBonus.length
+        len += cardObj.baseCard.bonusList(true).length
         len += this.taverns?.attackBonus.length || 0
       }
       return len <= 0
     },
     toolTips(cardObj: BaseCardObj, type: 'life' | 'attack') {
       let bonus = []
-      const magneticForceList = cardObj.baseCard.magneticForceList.map(card => {
-        return {
-          markupValue: type === "life" ? card.life : card.attack,
-          baseCardId: card.tempId || randomUtil.guid(),
-          baseCardName: card.name,
-        }
-      })
-      bonus.push(...magneticForceList);
       if (this.taverns) {
         if (type === "attack" && this.taverns.attackBonus) {
           bonus.push(...this.taverns.attackBonus)
@@ -153,10 +145,10 @@ export default {
         }
       }
       if (type === "life") {
-        bonus.push(...cardObj.baseCard.lifeBonus)
+        bonus.push(...cardObj.baseCard.bonusList(false))
       }
       if (type === "attack") {
-        bonus.push(...cardObj.baseCard.attackBonus)
+        bonus.push(...cardObj.baseCard.bonusList(true))
       }
       const result = groupBy(bonus, (card) => {
         return card.baseCardName

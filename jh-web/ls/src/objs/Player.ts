@@ -8,8 +8,8 @@ import SharedCardPool from "./SharedCardPool";
 import {Serialization} from "../utils/SaveUtils";
 import {serialize} from "class-transformer";
 import Sanlian from "../entity/card/spells/base/Sanlian.ts";
-import BaseCard from "../entity/baseCard";
 import {FlipFlop} from "../entity/FlipFlop";
+import {Bonus, BonusPlayer} from "./Bonus";
 
 export default class Player implements Serialization<Player> {
 
@@ -58,6 +58,20 @@ export default class Player implements Serialization<Player> {
     name: string;
     // 法术附加能力（回合结束时）
     spellAttached: BaseCardObj[] = [];
+
+    // 场上影响区（影响随从的加成，比如哼鸣蜂鸟，一旦随从不存在，将清理对应区域。这个区域影响）
+    lifeBonusBattle: BonusPlayer[] = []
+    // 场上影响区（影响随从的加成，比如哼鸣蜂鸟，一旦随从不存在，将清理对应区域。这个区域影响）
+    attackBonusBattle: BonusPlayer[] = []
+    // 生命加成（永久区）
+    lifeBonusPermanently: Bonus[] = [];
+    // 攻击加成（永久区）
+    attackBonusPermanently: Bonus[] = [];
+    // 生命加成（临时区）三连临时变永久，开始回合时，清空所有临时区
+    lifeBonusTemporarily: Bonus[] = [];
+    // 攻击加成（临时区）
+    attackBonusTemporarily: Bonus[] = [];
+
 
     private readonly static MAX_HAND_CARD: number = 10;
 
@@ -487,6 +501,12 @@ export default class Player implements Serialization<Player> {
         this.endRoundExtraTriggers = json.endRoundExtraTriggers
         this.isEndRound = json.isEndRound
         this.name = json.name
+        this.lifeBonusBattle = json.lifeBonusBattle
+        this.attackBonusBattle = json.attackBonusBattle
+        this.lifeBonusPermanently = json.lifeBonusPermanently
+        this.attackBonusPermanently = json.attackBonusPermanently
+        this.lifeBonusTemporarily = json.lifeBonusTemporarily
+        this.attackBonusTemporarily = json.attackBonusTemporarily
         return this;
     }
 
@@ -554,5 +574,43 @@ export default class Player implements Serialization<Player> {
                 right: cardList[index + 1],
             }
         }
+    }
+
+    copyPerpetualBonus(baseCardObj: BaseCardObj) {
+        this.cardList.filter(card => card.id === baseCardObj.id).forEach(card => card.baseCard.bonusPermanently(baseCardObj.baseCard))
+    }
+
+    bonusBattleAdd(b: BonusPlayer, isAttack: boolean) {
+        // 每次变化都要更新整改getCardList
+        if (isAttack) {
+            this.attackBonusBattle.push(b)
+        } else {
+            this.lifeBonusBattle.push(b)
+        }
+        this.changeBonusBattle();
+    }
+
+    bonusBattleRemove(id: string, isAttack: boolean) {
+        if (isAttack) {
+            this.attackBonusBattle = this.attackBonusBattle.filter(data => data.baseCardId !== id)
+        } else {
+            this.lifeBonusBattle = this.lifeBonusBattle.filter(data => data.baseCardId !== id)
+        }
+        this.changeBonusBattle();
+    }
+
+    private changeBonusBattle() {
+        // 每次变化都要更新整改getCardList
+        const cardListTemp = this.getCardList();
+        cardListTemp.forEach(card => {
+            const attack = this.attackBonusBattle.filter(data => {
+                return data.judgmentType(card)
+            })
+            const life = this.lifeBonusBattle.filter(data => {
+                return data.judgmentType(card)
+            })
+            card.baseCard.bonusBattleCovered(attack, true)
+            card.baseCard.bonusBattleCovered(life, false)
+        })
     }
 }

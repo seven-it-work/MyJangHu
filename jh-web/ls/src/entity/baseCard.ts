@@ -2,12 +2,13 @@ import ContextObj from "../objs/ContextObj";
 import {Trigger, TriggerObj} from "./Trigger";
 import BaseCardObj from "../objs/BaseCardObj";
 import {sum} from "lodash";
-import {Bonus} from "../objs/Bonus";
+import {Bonus, BonusPlayer} from "../objs/Bonus";
 import {Serialization} from "../utils/SaveUtils";
 import {serialize} from "class-transformer";
 import SharedCardPool from "../objs/SharedCardPool";
 import {FlipFlop, FlipFlopFunc, Triggering} from "./FlipFlop";
 import Player from "../objs/Player.ts";
+import randomUtil from "../utils/RandomUtils";
 
 export const baseEthnicity: string[] = ['鱼人', '机械', '恶魔', '亡灵', '龙', '野兽', '野猪人', '纳迦']
 export const ethnicity: string[] = ['中立', '伙伴', ...baseEthnicity]
@@ -92,10 +93,23 @@ export default abstract class BaseCard implements Trigger, FlipFlopFunc, Trigger
     numberAttack: number = 1;
     // 是否金色(三连)
     isGold = false;
-    // 生命加成
+    // 生命加成 弃用
     lifeBonus: Bonus[] = [];
-    // 攻击加成
+    // 攻击加成 弃用
     attackBonus: Bonus[] = [];
+    // 生命加成（永久区）
+    private lifeBonusPermanently: Bonus[] = [];
+    // 攻击加成（永久区）
+    private attackBonusPermanently: Bonus[] = [];
+    // 生命加成（临时区）三连临时变永久，开始回合时，清空所有临时区
+    private lifeBonusTemporarily: Bonus[] = [];
+    // 攻击加成（临时区）
+    private attackBonusTemporarily: Bonus[] = [];
+    // 场上影响区（影响随从的加成，比如哼鸣蜂鸟，一旦随从不存在，将清理对应区域。这个区域影响）
+    private lifeBonusBattle: Bonus[] = []
+    // 场上影响区（影响随从的加成，比如哼鸣蜂鸟，一旦随从不存在，将清理对应区域。这个区域影响）
+    private attackBonusBattle: Bonus[] = []
+
     // 是否选中其他
     isNeedSelect: boolean = false;
     // 法术附加能力（回合结束时）
@@ -126,20 +140,13 @@ export default abstract class BaseCard implements Trigger, FlipFlopFunc, Trigger
     }
 
     getLife(): number {
-        // 磁力加成
-        const magneticAddition = sum(this.magneticForceList.map(card => card.getLife())) || 0
-        const bonus = sum(this.lifeBonus.map(bonus => bonus.markupValue)) || 0
-        let life = this.life
-        if (this.isGold) {
-            life = life * 2;
-        }
-        return life - this._injuriesReceived + magneticAddition + bonus
+        return this.getPrimitiveLife() - this._injuriesReceived
     }
 
     getPrimitiveLife(): number {
         // 磁力加成
         const magneticAddition = sum(this.magneticForceList.map(card => card.getPrimitiveLife())) || 0
-        const bonus = sum(this.lifeBonus.map(bonus => bonus.markupValue)) || 0
+        const bonus = sum([...this.lifeBonusBattle, ...this.lifeBonusPermanently, ...this.lifeBonusTemporarily].map(bonus => bonus.markupValue)) || 0
         let life = this.life
         if (this.isGold) {
             life = life * 2;
@@ -150,7 +157,7 @@ export default abstract class BaseCard implements Trigger, FlipFlopFunc, Trigger
     getAttack(): number {
         // 磁力加成
         const magneticAddition = sum(this.magneticForceList.map(card => card.getAttack())) || 0
-        const bonus = sum(this.attackBonus.map(bonus => bonus.markupValue)) || 0
+        const bonus = sum([...this.attackBonusBattle, ...this.attackBonusPermanently, ...this.attackBonusTemporarily].map(bonus => bonus.markupValue)) || 0
         let attack = this.attack
         if (this.isGold) {
             attack = attack * 2;
@@ -299,6 +306,12 @@ export default abstract class BaseCard implements Trigger, FlipFlopFunc, Trigger
         this.isGold = json.isGold
         this.lifeBonus = json.lifeBonus
         this.attackBonus = json.attackBonus
+
+        this.lifeBonusPermanently = json.lifeBonusPermanently
+        this.attackBonusPermanently = json.attackBonusPermanently
+        this.lifeBonusTemporarily = json.lifeBonusTemporarily
+        this.lifeBonusBattle = json.lifeBonusBattle
+        this.attackBonusBattle = json.attackBonusBattle
         return this;
     }
 
@@ -364,40 +377,101 @@ export default abstract class BaseCard implements Trigger, FlipFlopFunc, Trigger
      * @param currentCard
      * @param value
      * @param isAttack
-     * @param player 存在时，认为时永久加成
+     * @param isPermanent 是否永久区
      */
-    addBonus(currentCard: BaseCardObj, value: number, isAttack: boolean, player: Player | undefined = undefined) {
+    addBonus(currentCard: BaseCardObj, value: number, isAttack: boolean, isPermanent: boolean = false) {
+        let bonus;
         if (isAttack) {
-            this.attackBonus.push({
-                baseCardId: currentCard.id,
-                baseCardName: currentCard.baseCard.name,
-                markupValue: value
-            })
+            if (isPermanent) {
+                bonus = this.attackBonusPermanently
+            } else {
+                bonus = this.attackBonusTemporarily
+            }
         } else {
-            this.lifeBonus.push({
-                baseCardId: currentCard.id,
-                baseCardName: currentCard.baseCard.name,
-                markupValue: value
-            })
+            if (isPermanent) {
+                bonus = this.lifeBonusPermanently
+            } else {
+                bonus = this.lifeBonusTemporarily
+            }
         }
-        if (player) {
-            // 永久加成
-            player.cardList
-                .filter(card => card.id === currentCard.id)
-                .forEach(card => {
-                    card.baseCard.addBonus(currentCard, this.isGold ? 2 : 1, true)
-                })
-        }
+        bonus.push({
+            baseCardId: currentCard.id,
+            baseCardName: currentCard.baseCard.name,
+            markupValue: value
+        })
+    }
+
+    bonusTemporarilyClear() {
+        this.attackBonusTemporarily = []
+        this.lifeBonusTemporarily = []
     }
 
     /**
-     * 加成
+     * 一般召唤就调用这个
+     * @param bonusPlayer
+     * @param isAttack
      */
-    removeBonus(currentCard: BaseCardObj, isAttack: boolean) {
+    bonusBattleAdd(bonusPlayer: BonusPlayer, isAttack: boolean) {
+        let bonus;
         if (isAttack) {
-            this.attackBonus = this.attackBonus.filter(data => data.baseCardId !== currentCard.id);
+            bonus = this.attackBonusBattle
         } else {
-            this.lifeBonus = this.lifeBonus.filter(data => data.baseCardId !== currentCard.id);
+            bonus = this.lifeBonusBattle
         }
+        bonus.push({
+            baseCardId: bonusPlayer.baseCardId,
+            baseCardName: bonusPlayer.baseCardName,
+            markupValue: bonusPlayer.markupValue
+        })
+    }
+
+    bonusBattleCovered(bonusPlayer: BonusPlayer[], isAttack: boolean) {
+        const data = bonusPlayer.map(data => {
+            return {
+                baseCardId: data.baseCardId,
+                baseCardName: data.baseCardName,
+                markupValue: data.markupValue
+            }
+        })
+        if (isAttack) {
+            this.attackBonusBattle = data
+        } else {
+            this.lifeBonusBattle = data
+        }
+    }
+
+    bonusBattleRemove(id: string) {
+        this.attackBonusBattle = this.attackBonusBattle.filter(data => data.baseCardId !== id)
+        this.lifeBonusBattle = this.lifeBonusBattle.filter(data => data.baseCardId !== id)
+    }
+
+    bonusPermanently(base: BaseCard) {
+        this.lifeBonusPermanently = base.lifeBonusPermanently;
+        this.attackBonusPermanently = base.attackBonusPermanently
+    }
+
+    bonusList(isAttack: boolean = false): Bonus[] {
+        let bonus = []
+        if (isAttack) {
+            bonus = [
+                ...this.attackBonusPermanently,
+                ...this.attackBonusTemporarily,
+                ...this.attackBonusBattle]
+        } else {
+            bonus = [
+                ...this.lifeBonusPermanently,
+                ...this.lifeBonusTemporarily,
+                ...this.lifeBonusBattle]
+        }
+        // 磁力加成
+        const magneticForceList = this.magneticForceList.map(card => {
+            return {
+                markupValue: isAttack ? card.attack : card.life,
+                baseCardId: card.tempId || randomUtil.guid(),
+                baseCardName: card.name,
+            }
+        })
+        bonus.push(...magneticForceList);
+        return bonus;
     }
 }

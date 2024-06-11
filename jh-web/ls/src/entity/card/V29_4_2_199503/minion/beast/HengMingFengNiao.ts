@@ -1,6 +1,7 @@
 // 将seven替换为路径
 import BaseCard from "../../../../baseCard";
 import {FlipFlop} from "../../../../FlipFlop.ts";
+import BaseCardObj from "../../../../../objs/BaseCardObj";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG26_805_battlegroundsImage.png
@@ -12,7 +13,6 @@ export default class HengMingFengNiaoV29_4_2_199503 extends BaseCard {
     life = 4
     graded = 2
     cardType = "minion"
-    // todo 重新规划
 
     descriptionStr() {
         if (this.isGold) {
@@ -21,22 +21,18 @@ export default class HengMingFengNiaoV29_4_2_199503 extends BaseCard {
         return "你的其他野兽拥有+2攻击力。"
     }
 
-    isOtherTriggering = true
-
     whenSummoned(flipFlop: FlipFlop) {
         const magnification = this.isGold ? 2 : 1;
-        if (!flipFlop.isCurrentCardIsTargetCard()) {
+        if (flipFlop.isCurrentCardIsTargetCard()) {
             this.showLog(flipFlop)
-            flipFlop.targetCard.baseCard.addBonus(flipFlop.currentCard, magnification * 2, true)
-        } else {
-            // 当前随从召唤，使其他随从+攻击力
-            const cardList = flipFlop.currentPlayer.getCardList()
-                .filter(card => card.id !== flipFlop.currentCard.id)
-                .filter(card => card.baseCard.ethnicity.includes('野兽'));
-            cardList.forEach(card => {
-                card.baseCard.addBonus(flipFlop.currentCard, magnification * 2, true)
-            })
-
+            flipFlop.currentPlayer.bonusBattleAdd({
+                baseCardId: flipFlop.currentCard.id,
+                baseCardName: flipFlop.currentCard.baseCard.name,
+                markupValue: 2 * magnification,
+                judgmentType(baseCardObj: BaseCardObj): boolean {
+                    return baseCardObj.id !== this.baseCardId && baseCardObj.baseCard.ethnicity.includes('野兽');
+                }
+            }, true)
         }
     }
 
@@ -49,9 +45,6 @@ export default class HengMingFengNiaoV29_4_2_199503 extends BaseCard {
     }
 
     private extracted(flipFlop: FlipFlop) {
-        const cardList = flipFlop.currentPlayer.getCardList().filter(card => card.baseCard.ethnicity.includes('野兽'));
-        cardList.forEach(card => {
-            card.baseCard.removeBonus(flipFlop.currentCard, true)
-        })
+        flipFlop.currentPlayer.bonusBattleRemove(flipFlop.currentCard.id, true)
     }
 }

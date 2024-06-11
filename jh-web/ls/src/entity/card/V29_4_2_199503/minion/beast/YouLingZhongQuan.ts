@@ -13,7 +13,6 @@ export default class YouLingZhongQuanV29_4_2_199503 extends BaseCard {
     graded = 1
     cardType = "minion"
 
-
     descriptionStr() {
         if (this.isGold) {
             return "每当本随从受到伤害，永久获得 +2攻击力。"
@@ -23,6 +22,6 @@ export default class YouLingZhongQuanV29_4_2_199503 extends BaseCard {
 
     whenInjured(flipFlop: FlipFlop) {
         this.showLog(flipFlop)
-        this.addBonus(flipFlop.currentCard, this.isGold ? 2 : 1, true, flipFlop.currentPlayer)
+        this.addBonus(flipFlop.currentCard, this.isGold ? 2 : 1, true, true)
     }
 }
