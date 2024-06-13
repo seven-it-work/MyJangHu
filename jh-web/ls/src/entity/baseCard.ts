@@ -13,7 +13,7 @@ import randomUtil from "../utils/RandomUtils";
 export const baseEthnicity: string[] = ['鱼人', '机械', '恶魔', '亡灵', '龙', '野兽', '野猪人', '纳迦']
 export const ethnicity: string[] = ['中立', '伙伴', ...baseEthnicity]
 
-export default abstract class BaseCard implements  FlipFlopFunc, Triggering, Serialization<BaseCard> {
+export default abstract class BaseCard implements FlipFlopFunc, Triggering, Serialization<BaseCard> {
     classType: string
 
     tempId: string = '';
@@ -268,7 +268,7 @@ export default abstract class BaseCard implements  FlipFlopFunc, Triggering, Ser
     }
 
     /**
-     *
+     * 加成添加
      * @param bonus
      * @param isAttack
      * @param isPermanent 是否永久区
@@ -291,12 +291,16 @@ export default abstract class BaseCard implements  FlipFlopFunc, Triggering, Ser
         bonusList.push(bonus)
     }
 
+    /**
+     * 临时加成清空
+     */
     bonusTemporarilyClear() {
         this.attackBonusTemporarily = []
         this.lifeBonusTemporarily = []
     }
 
     /**
+     * 战场加成添加
      * 一般召唤就调用这个
      * @param bonusPlayer
      * @param isAttack
@@ -315,6 +319,11 @@ export default abstract class BaseCard implements  FlipFlopFunc, Triggering, Ser
         })
     }
 
+    /**
+     * 战场加成覆盖
+     * @param bonusPlayer
+     * @param isAttack
+     */
     bonusBattleCovered(bonusPlayer: BonusPlayer[], isAttack: boolean) {
         const data = bonusPlayer.map(data => {
             return {
@@ -330,16 +339,28 @@ export default abstract class BaseCard implements  FlipFlopFunc, Triggering, Ser
         }
     }
 
+    /**
+     * 战场加成移除
+     * @param id
+     */
     bonusBattleRemove(id: string) {
         this.attackBonusBattle = this.attackBonusBattle.filter(data => data.baseCardId !== id)
         this.lifeBonusBattle = this.lifeBonusBattle.filter(data => data.baseCardId !== id)
     }
 
+    /**
+     * 复制永久区
+     * @param base
+     */
     bonusPermanently(base: BaseCard) {
         this.lifeBonusPermanently = base.lifeBonusPermanently;
         this.attackBonusPermanently = base.attackBonusPermanently
     }
 
+    /**
+     * 获取所有加成
+     * @param isAttack
+     */
     bonusList(isAttack: boolean = false): Bonus[] {
         let bonus = []
         if (isAttack) {
@@ -363,6 +384,52 @@ export default abstract class BaseCard implements  FlipFlopFunc, Triggering, Ser
         })
         bonus.push(...magneticForceList);
         return bonus;
+    }
+
+    sanLian(baseCardObj1: BaseCard, baseCardObj2: BaseCard, baseCardObj3: BaseCard) {
+        // 三连将临时区变永久
+        this.attackBonusPermanently.push(...[
+            ...baseCardObj1.attackBonusTemporarily,
+            ...baseCardObj2.attackBonusTemporarily,
+            ...baseCardObj3.attackBonusTemporarily
+        ])
+        this.lifeBonusPermanently.push(...[
+            ...baseCardObj1.lifeBonusTemporarily,
+            ...baseCardObj2.lifeBonusTemporarily,
+            ...baseCardObj3.lifeBonusTemporarily
+        ])
+        // 永久区加成
+        this.attackBonusPermanently.push(...[
+            ...baseCardObj1.attackBonusPermanently,
+            ...baseCardObj2.attackBonusPermanently,
+            ...baseCardObj3.attackBonusPermanently
+        ])
+        this.lifeBonusPermanently.push(...[
+            ...baseCardObj1.lifeBonusPermanently,
+            ...baseCardObj2.lifeBonusPermanently,
+            ...baseCardObj3.lifeBonusPermanently
+        ])
+        // 战场区不受三连加成控制
+        // 扩展属性取其一
+        this.isMockery = baseCardObj1.isMockery || baseCardObj2.isMockery || baseCardObj3.isMockery
+        this.isHighlyToxic = baseCardObj1.isHighlyToxic || baseCardObj2.isHighlyToxic || baseCardObj3.isHighlyToxic
+        this.hasPoison = baseCardObj1.hasPoison || baseCardObj2.hasPoison || baseCardObj3.hasPoison
+        this.attackHighlyToxic = baseCardObj1.attackHighlyToxic || baseCardObj2.attackHighlyToxic || baseCardObj3.attackHighlyToxic
+        this.isHolyShield = baseCardObj1.isHolyShield || baseCardObj2.isHolyShield || baseCardObj3.isHolyShield
+        this.isRebirth = baseCardObj1.isRebirth || baseCardObj2.isRebirth || baseCardObj3.isRebirth
+        this.isSneak = baseCardObj1.isSneak || baseCardObj2.isSneak || baseCardObj3.isSneak
+        this.numberAttack = Math.max(Math.max(baseCardObj1.numberAttack, baseCardObj2.numberAttack), baseCardObj3.numberAttack)
+        // 三连初始化
+        this.isGold = true
+        this.sanLianInit()
+    }
+
+    /**
+     * 三连初始化
+     * 由子类扩展实现
+     */
+    protected sanLianInit() {
+
     }
 
     whenPlayerInjured(flipFlop: FlipFlop) {

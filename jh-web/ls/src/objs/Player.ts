@@ -160,7 +160,7 @@ export default class Player implements Serialization<Player> {
         }
         if (cardObj.baseCard.isSpendLife) {
             //  todo 生命值不够 不能购买
-            this.changeLife(-cardObj.baseCard.spendingGoldCoin, context);
+            this.changeLife(cardObj, -cardObj.baseCard.spendingGoldCoin, context);
         } else {
             this.currentGoldCoin -= cardObj.baseCard.spendingGoldCoin;
         }
@@ -308,7 +308,7 @@ export default class Player implements Serialization<Player> {
         if (baseCardObjs.length > 0) {
             const baseCardObj = baseCardObjs[0];
             baseCardObj.baseCard.remainRefreshTimes--;
-            this.changeLife(-refreshExpenses, context);
+            this.changeLife(baseCardObj, -refreshExpenses, context);
         } else {
             if (!this.canRefreshTavern()) {
                 message.error({content: '金币不足，不能刷新'});
@@ -337,7 +337,7 @@ export default class Player implements Serialization<Player> {
         this.tavern.upgrade()
     }
 
-    changeLife(changeValue: number, contextObj: ContextObj, onlyLife: Boolean = false) {
+    changeLife(card: BaseCardObj, changeValue: number, contextObj: ContextObj, onlyLife: Boolean = false) {
         if (!onlyLife) {
             if (this.currentArmor > 0) {
                 this.currentArmor += changeValue;
@@ -351,18 +351,18 @@ export default class Player implements Serialization<Player> {
         this.currentLife += changeValue;
         if (changeValue < 0) {
             console.log(`遭受${-changeValue}点伤害`)
-            this.cardList.forEach(card => card.whenPlayerInjured(new FlipFlop({
+            card.whenPlayerInjured(new FlipFlop({
                 contextObj: contextObj,
                 currentCard: card,
-                currentLocation: '战场',
                 currentPlayer: this,
+                currentLocation: '战场',
                 otherData: {
                     harmed: -changeValue
                 },
                 targetCard: card,
+                targetPlayer: this,
                 targetLocation: '战场',
-                targetPlayer: this
-            })))
+            }))
         }
     }
 

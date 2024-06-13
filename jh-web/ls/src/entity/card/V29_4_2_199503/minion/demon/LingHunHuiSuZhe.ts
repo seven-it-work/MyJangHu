@@ -29,7 +29,7 @@ export default class LingHunHuiSuZheV29_4_2_199503 extends BaseCard {
             return
         }
         // 伤害回溯，护甲如果没了，回溯变成生命值就是30+1=>31
-        flipFlop.currentPlayer.changeLife(flipFlop.otherData.harmed, flipFlop.contextObj)
+        flipFlop.currentPlayer.changeLife(flipFlop.currentCard, flipFlop.otherData.harmed, flipFlop.contextObj)
         this.addBonus(BonusCreatUtil(flipFlop.currentCard, this.isGold ? 2 : 1), false, true)
     }
 }

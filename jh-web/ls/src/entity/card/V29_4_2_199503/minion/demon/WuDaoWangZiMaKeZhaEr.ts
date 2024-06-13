@@ -15,16 +15,18 @@ export default class WuDaoWangZiMaKeZhaErV29_4_2_199503 extends BaseCard {
     life = 3
     graded = 3
     cardType = "minion"
-    // 刷新消耗生命值次数
-    refreshTimes: number = 2;
     // 剩余刷新消耗生命值次数
-    remainRefreshTimes: number = 0;
+    remainRefreshTimes: number = 2;
 
     beginRound = true
 
     whenTheRoundBegin(flipFlop: FlipFlop) {
         const magnification = this.isGold ? 2 : 1;
-        this.remainRefreshTimes = this.refreshTimes * magnification;
+        this.remainRefreshTimes = 2 * magnification;
+    }
+
+    protected sanLianInit() {
+        this.remainRefreshTimes = this.isGold ? 4 : 2
     }
 
     descriptionStr() {

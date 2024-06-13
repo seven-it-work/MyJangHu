@@ -82,29 +82,11 @@ export default class BaseCardObj implements FlipFlopFunc, Triggering, Serializat
 
     static sanLian(baseCardObj1: BaseCardObj, baseCardObj2: BaseCardObj, baseCardObj3: BaseCardObj, sharedCardPool: SharedCardPool): BaseCardObj {
         const originalVersion = baseCardObj1.getOriginalVersion(sharedCardPool);
-        originalVersion.baseCard.isGold = true;
-
-        originalVersion.baseCard.attackBonus.push(...baseCardObj1.baseCard.attackBonus)
-        originalVersion.baseCard.attackBonus.push(...baseCardObj2.baseCard.attackBonus)
-        originalVersion.baseCard.attackBonus.push(...baseCardObj3.baseCard.attackBonus)
-
-        originalVersion.baseCard.lifeBonus.push(...baseCardObj1.baseCard.lifeBonus)
-        originalVersion.baseCard.lifeBonus.push(...baseCardObj2.baseCard.lifeBonus)
-        originalVersion.baseCard.lifeBonus.push(...baseCardObj3.baseCard.lifeBonus)
-
-        originalVersion.baseCard.magneticForceList.push(...baseCardObj1.baseCard.magneticForceList)
-        originalVersion.baseCard.magneticForceList.push(...baseCardObj2.baseCard.magneticForceList)
-        originalVersion.baseCard.magneticForceList.push(...baseCardObj3.baseCard.magneticForceList)
-
-        originalVersion.baseCard.isMockery = baseCardObj1.baseCard.isMockery || baseCardObj2.baseCard.isMockery || baseCardObj3.baseCard.isMockery
-        originalVersion.baseCard.isHighlyToxic = baseCardObj1.baseCard.isHighlyToxic || baseCardObj2.baseCard.isHighlyToxic || baseCardObj3.baseCard.isHighlyToxic
-        originalVersion.baseCard.hasPoison = baseCardObj1.baseCard.hasPoison || baseCardObj2.baseCard.hasPoison || baseCardObj3.baseCard.hasPoison
-        originalVersion.baseCard.attackHighlyToxic = baseCardObj1.baseCard.attackHighlyToxic || baseCardObj2.baseCard.attackHighlyToxic || baseCardObj3.baseCard.attackHighlyToxic
-        originalVersion.baseCard.isHolyShield = baseCardObj1.baseCard.isHolyShield || baseCardObj2.baseCard.isHolyShield || baseCardObj3.baseCard.isHolyShield
-        originalVersion.baseCard.isRebirth = baseCardObj1.baseCard.isRebirth || baseCardObj2.baseCard.isRebirth || baseCardObj3.baseCard.isRebirth
-        originalVersion.baseCard.isSneak = baseCardObj1.baseCard.isSneak || baseCardObj2.baseCard.isSneak || baseCardObj3.baseCard.isSneak
-        originalVersion.baseCard.numberAttack = Math.max(Math.max(baseCardObj1.baseCard.numberAttack, baseCardObj2.baseCard.numberAttack), baseCardObj3.baseCard.numberAttack)
-
+        originalVersion.baseCard.sanLian(
+            baseCardObj1.baseCard,
+            baseCardObj2.baseCard,
+            baseCardObj3.baseCard,
+        )
         return originalVersion;
     }
 
@@ -295,9 +277,18 @@ export default class BaseCardObj implements FlipFlopFunc, Triggering, Serializat
         return this.baseCard.type === '随从';
     }
 
-    executeCurrentOtherList(flipFlop: FlipFlop, func: Function) {
+    executeCurrentOtherList(flipFlop: FlipFlop, func: Function, isCheckIsOtherTriggering: boolean = true) {
+        const checkFilter = (item: BaseCardObj) => {
+            if (item.id !== this.id) {
+                return true
+            }
+            if (isCheckIsOtherTriggering) {
+                return item.baseCard.isOtherTriggering
+            }
+            return true
+        }
         flipFlop.currentPlayer.getCardList()
-            .filter(item => item.id !== this.id && item.baseCard.isOtherTriggering)
+            .filter(item => checkFilter(item))
             .forEach(item => {
                 func(item, new FlipFlop({
                     ...flipFlop,
@@ -306,7 +297,7 @@ export default class BaseCardObj implements FlipFlopFunc, Triggering, Serializat
                 }))
             })
         flipFlop.currentPlayer.handCardList
-            .filter(item => item.id !== this.id && item.baseCard.isOtherTriggering)
+            .filter(item => checkFilter(item))
             .forEach(item => {
                 func(item, new FlipFlop({
                     ...flipFlop,
@@ -398,10 +389,12 @@ export default class BaseCardObj implements FlipFlopFunc, Triggering, Serializat
             return
         }
         // 战场上
-        flipFlop.currentPlayer.cardList.forEach(card => card.whenPlayerInjured(new FlipFlop({
-            ...flipFlop,
-            currentCard: this,
-            currentLocation: '战场'
-        })))
+        this.executeCurrentOtherList(flipFlop, (item: BaseCardObj, data: FlipFlop) => {
+            item.baseCard.whenPlayerInjured(new FlipFlop({
+                ...data,
+                currentCard: this,
+                currentLocation: '战场'
+            }))
+        }, false)
     }
 }
