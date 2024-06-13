@@ -13,7 +13,7 @@ import randomUtil from "../utils/RandomUtils";
 export const baseEthnicity: string[] = ['鱼人', '机械', '恶魔', '亡灵', '龙', '野兽', '野猪人', '纳迦']
 export const ethnicity: string[] = ['中立', '伙伴', ...baseEthnicity]
 
-export default abstract class BaseCard implements Trigger, FlipFlopFunc, Triggering, Serialization<BaseCard> {
+export default abstract class BaseCard implements  FlipFlopFunc, Triggering, Serialization<BaseCard> {
     classType: string
 
     tempId: string = '';
@@ -176,98 +176,6 @@ export default abstract class BaseCard implements Trigger, FlipFlopFunc, Trigger
         return this.getPrimitiveLife() > this._injuriesReceived;
     }
 
-
-    /**
-     * 当其他随从死亡时触发器
-     */
-    whenOtherDeadTrigger(triggerObj: TriggerObj) {
-    }
-
-    /**
-     * 当前召唤随从时触发器
-     * (战吼)
-     */
-    whenCardUsedTrigger(triggerObj: TriggerObj) {
-
-    }
-
-    /**
-     * 当前召唤随从时触发器
-     */
-    whenSummonedTrigger(triggerObj: TriggerObj) {
-
-    }
-
-    /**
-     * 当前随从死亡时触发器
-     */
-    whenDeadTrigger(triggerObj: TriggerObj) {
-
-    }
-
-    whenBuyCardTrigger(triggerObj: TriggerObj) {
-    }
-
-    whenSaleCardTrigger(triggerObj: TriggerObj) {
-    }
-
-    whenBuyOtherCardTrigger(triggerObj: TriggerObj) {
-    }
-
-    whenOtherCardUsedTrigger(triggerObj: TriggerObj) {
-    }
-
-    whenOtherSummonedTrigger(triggerObj: TriggerObj) {
-    }
-
-    whenSaleOtherCardTrigger(triggerObj: TriggerObj) {
-    }
-
-    whenOtherHandlerCardUsedTrigger(triggerObj: TriggerObj) {
-    }
-
-    whenAttackTrigger(triggerObj: TriggerObj) {
-    }
-
-    whenSaleOtherHandlerCardTrigger(triggerObj: TriggerObj) {
-    }
-
-    whenEndRound(triggerObj: TriggerObj) {
-    }
-
-    whenEndRoundHandler(triggerObj: TriggerObj) {
-    }
-
-    whenStartRound(triggerObj: TriggerObj) {
-    }
-
-    whenStartRoundHandler(triggerObj: TriggerObj) {
-    }
-
-    whenPlayerInjuries(injuring: number, triggerObj: TriggerObj) {
-    }
-
-    whenHolyShieldDisappears(triggerObj: TriggerObj) {
-    }
-
-    whenOtherHolyShieldDisappears(triggerObj: TriggerObj) {
-    }
-
-    whenDefenseTrigger(triggerObj: TriggerObj) {
-    }
-
-    whenKillOneTrigger(triggerObj: TriggerObj) {
-
-    }
-
-    whenHarmedTrigger(injuring: number, triggerObj: TriggerObj) {
-
-    }
-
-    whenOtherHarmedTrigger(injuring: number, triggerObj: TriggerObj) {
-
-    }
-
     deserialize(json: any) {
         if (typeof json === 'string') {
             json = JSON.parse(json)
@@ -317,19 +225,6 @@ export default abstract class BaseCard implements Trigger, FlipFlopFunc, Trigger
 
     serialization(): string {
         return serialize(this);
-    }
-
-    whenStartFightingTrigger(triggerObj: TriggerObj) {
-    }
-
-    whenEndFightingTrigger(result: "胜利" | "失败" | "平局", triggerObj: TriggerObj) {
-    }
-
-    whenOtherCardMagneticAdd(triggerObj: TriggerObj) {
-
-    }
-
-    whenRefreshTavern(triggerObj: TriggerObj) {
     }
 
     whenDeath(flipFlop: FlipFlop) {

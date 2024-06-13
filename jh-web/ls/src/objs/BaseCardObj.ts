@@ -52,7 +52,7 @@ function damageCalculation(flipFlop: FlipFlop) {
 }
 
 
-export default class BaseCardObj implements Trigger, FlipFlopFunc, Triggering, Serialization<BaseCardObj> {
+export default class BaseCardObj implements  FlipFlopFunc, Triggering, Serialization<BaseCardObj> {
     id: string;
     isFreeze: boolean = false;
     isLock: boolean = false
@@ -112,341 +112,6 @@ export default class BaseCardObj implements Trigger, FlipFlopFunc, Triggering, S
         return this.baseCard.isSurviving();
     }
 
-    healthChange(number: number, triggerObj: TriggerObj) {
-        const currentPlayer = triggerObj.currentPlayer;
-        if (!currentPlayer) {
-            return
-        }
-        if (number < 0) {
-            if (this.baseCard.isHolyShield) {
-                // 圣盾
-                this.baseCard.isHolyShield = false;
-                this.whenHolyShieldDisappears(triggerObj)
-                const cardList = currentPlayer.getCardList();
-                cardList.forEach(card => {
-                    this.whenOtherHolyShieldDisappears({
-                        ...triggerObj,
-                        currentCard: card,
-                        targetCard: this,
-                    })
-                })
-                number = 0;
-                console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】的圣盾失效`)
-            }
-            console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】遭受${number}伤害`)
-            this.baseCard.changeInjuriesReceived(-number);
-            this.whenHarmedTrigger(number, triggerObj)
-            triggerObj.currentPlayer?.getCardList().filter(item => item.id !== this.id).forEach(item => {
-                item.whenOtherHarmedTrigger(number, {
-                    ...triggerObj,
-                    currentCard: item,
-                    targetCard: this,
-                })
-            })
-            if (this.isSurviving()) {
-                return;
-            }
-            console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】死亡`)
-            // 加入死亡池
-            currentPlayer.deadCardListInFighting.push(this)
-            // 复生，随从原本属性
-            if (this.baseCard.isRebirth) {
-                const baseCardTemp = triggerObj.contextObj.sharedCardPool.getByName(this.baseCard.classType);
-                baseCardTemp.changeInjuriesReceived(this.baseCard.getPrimitiveLife() - 1);
-                baseCardTemp.isRebirth = false;
-                this.baseCard = baseCardTemp
-                console.log(`${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】复生`)
-            } else {
-                // 移除
-                currentPlayer.cardRemove(this);
-            }
-            // 触发亡语
-            this.whenDeadTrigger(triggerObj);
-            // 当其他随从死亡时触发器
-            currentPlayer.getCardList().forEach(card => card.whenOtherDeadTrigger({
-                ...triggerObj,
-                currentCard: card,
-                targetCard: this,
-            }));
-        } else {
-            this.baseCard.life += number
-        }
-    }
-
-
-    /**
-     * 当其他随从死亡时触发器
-     */
-    whenOtherDeadTrigger(triggerObj: TriggerObj) {
-        // if (this.baseCard.otherDeadMaxCounter <= 0) {
-        //     return;
-        // }
-        // const currentPlayer = triggerObj.currentPlayer;
-        // if (!currentPlayer) {
-        //     return
-        // }
-        // this.baseCard.otherDeadCounter++;
-        // console.log(`(${currentPlayer.name})的【${this.baseCard.name}】的复仇剩余个数${this.baseCard.otherDeadMaxCounter - this.baseCard.otherDeadCounter}`)
-        // if (this.baseCard.otherDeadCounter >= this.baseCard.otherDeadMaxCounter) {
-        //     this.baseCard.whenOtherDeadTrigger(this.triggerObj2BaseCard(triggerObj));
-        //     this.baseCard.otherDeadCounter = 0;
-        // }
-    }
-
-    private triggerObj2BaseCard(triggerObj: TriggerObj): TriggerObj {
-        return {
-            ...triggerObj,
-            currentPlayer: triggerObj.currentPlayer,
-            targetPlayer: triggerObj.targetPlayer,
-            currentCard: triggerObj.currentCard || this,
-            targetCard: triggerObj.targetCard,
-        }
-    }
-
-    whenDeadTrigger(triggerObj: TriggerObj) {
-        // const currentPlayer = triggerObj.currentPlayer;
-        // if (!currentPlayer) {
-        //     return
-        // }
-        // for (let i = 0; i <= currentPlayer.deadWordsExtraTriggers; i++) {
-        //     // 磁力效果
-        //     this.baseCard.magneticForceList.forEach(base => base.whenDeadTrigger(triggerObj));
-        //     this.baseCard.whenDeadTrigger(this.triggerObj2BaseCard(triggerObj));
-        // }
-    }
-
-    /**
-     * 当前使用随从时触发器
-     * (战吼)
-     */
-    whenCardUsedTrigger(triggerObj: TriggerObj) {
-        // const currentPlayer = triggerObj.currentPlayer;
-        // if (!currentPlayer) {
-        //     return
-        // }
-        // if (this.baseCard.isWarRoars) {
-        //     for (let i = 0; i <= currentPlayer.battleRoarExtraTriggers; i++) {
-        //         this.baseCard.whenCardUsedTrigger(this.triggerObj2BaseCard(triggerObj));
-        //         // 战吼监听触发
-        //         currentPlayer.cardList.forEach((v) => {
-        //             v.whenOtherCardUsedTrigger({
-        //                 ...triggerObj,
-        //                 currentCard: v,
-        //                 targetCard: this,
-        //             })
-        //         })
-        //     }
-        // } else {
-        //     currentPlayer.cardList.forEach((v) => {
-        //         v.whenOtherCardUsedTrigger({
-        //             ...triggerObj,
-        //             currentCard: v,
-        //             targetCard: this,
-        //         })
-        //     })
-        // }
-    }
-
-    whenSummonedTrigger(triggerObj: TriggerObj) {
-        // this.baseCard.whenSummonedTrigger(this.triggerObj2BaseCard(triggerObj))
-    }
-
-    whenBuyCardTrigger(triggerObj: TriggerObj) {
-        // this.baseCard.whenBuyCardTrigger(this.triggerObj2BaseCard(triggerObj))
-    }
-
-    whenSaleCardTrigger(triggerObj: TriggerObj) {
-        // this.baseCard.whenSaleCardTrigger(this.triggerObj2BaseCard(triggerObj))
-    }
-
-
-    whenBuyOtherCardTrigger(triggerObj: TriggerObj) {
-        // this.baseCard.whenBuyOtherCardTrigger(this.triggerObj2BaseCard(triggerObj))
-    }
-
-    whenOtherSummonedTrigger(triggerObj: TriggerObj) {
-        // this.baseCard.whenOtherSummonedTrigger(this.triggerObj2BaseCard(triggerObj))
-    }
-
-    whenSaleOtherCardTrigger(triggerObj: TriggerObj) {
-        // this.baseCard.whenSaleOtherCardTrigger(this.triggerObj2BaseCard(triggerObj))
-    }
-
-    whenSaleOtherHandlerCardTrigger(triggerObj: TriggerObj) {
-        // this.baseCard.whenSaleOtherHandlerCardTrigger(this.triggerObj2BaseCard(triggerObj))
-    }
-
-    whenOtherCardUsedTrigger(triggerObj: TriggerObj) {
-        // this.baseCard.whenOtherCardUsedTrigger(this.triggerObj2BaseCard(triggerObj))
-    }
-
-    whenOtherHandlerCardUsedTrigger(triggerObj: TriggerObj) {
-        // this.baseCard.whenOtherHandlerCardUsedTrigger(this.triggerObj2BaseCard(triggerObj))
-    }
-
-    whenAttackTrigger(triggerObj: TriggerObj) {
-        // const targetCard = triggerObj.targetCard;
-        // const currentPlayer = triggerObj.currentPlayer;
-        // const targetPlayer = triggerObj.targetPlayer;
-        // if (!targetCard) {
-        //     return
-        // }
-        // if (!currentPlayer) {
-        //     return
-        // }
-        // if (!targetPlayer) {
-        //     return
-        // }
-        // // 风怒
-        // for (let i = 0; i < this.baseCard.numberAttack; i++) {
-        //     if (this.isSurviving()) {
-        //         this.doAttack(currentPlayer, targetPlayer, targetCard, triggerObj);
-        //     }
-        // }
-    }
-
-    private doAttack(currentPlayer: Player, targetPlayer: Player, targetCard: BaseCardObj, triggerObj: TriggerObj) {
-        console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】对(${targetPlayer.name})的【${targetCard.baseCard.name}(${targetCard.attack}/${targetCard.life})】进行攻击`)
-        this.baseCard.whenAttackTrigger(this.triggerObj2BaseCard(triggerObj))
-        targetCard.whenDefenseTrigger({
-            ...triggerObj,
-            currentPlayer: targetPlayer,
-            targetPlayer: currentPlayer,
-            currentCard: targetCard,
-            targetCard: this
-        })
-        // 受到伤害
-        let toBeHarmed = 0;
-        // 造成伤害
-        let toCauseHarm = 0;
-        if (targetCard.baseCard.isHighlyToxic) {
-            // 剧毒，用完就没了
-            toBeHarmed = this.life;
-            targetCard.baseCard.isHighlyToxic = false;
-            console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}(${targetCard.attack}/${targetCard.life})】烈药已使用`)
-        } else if (targetCard.baseCard.hasPoison) {
-            // 毒药，能一直毒
-            toBeHarmed = this.life;
-            console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}(${targetCard.attack}/${targetCard.life})】剧毒触发`)
-        } else if (targetCard.baseCard.attackHighlyToxic) {
-            // 遭受攻击时，剧毒 todo 放到防御触发器里面 改 剧毒=true
-            toBeHarmed = this.life;
-            console.log(`(${targetPlayer.name})的【${targetCard.baseCard.name}(${targetCard.attack}/${targetCard.life})】遭受攻击时，剧毒`)
-        } else {
-            toBeHarmed = targetCard.attack;
-        }
-
-        if (this.baseCard.isHighlyToxic) {
-            toCauseHarm = targetCard.life;
-            console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】烈毒已使用`)
-            this.baseCard.isHighlyToxic = false;
-        } else if (this.baseCard.hasPoison) {
-            console.log(`(${currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】剧毒触发`)
-            toCauseHarm = targetCard.life;
-        } else {
-            toCauseHarm = this.attack;
-        }
-        this.healthChange(-toBeHarmed, {
-            ...triggerObj,
-            currentPlayer: currentPlayer,
-            targetPlayer: targetPlayer,
-            currentCard: this,
-            targetCard: targetCard
-        })
-        targetCard.healthChange(-toCauseHarm, {
-            ...triggerObj,
-            currentPlayer: targetPlayer,
-            targetPlayer: currentPlayer,
-            currentCard: targetCard,
-            targetCard: this
-        })
-        if (!targetCard.isSurviving()) {
-            this.whenKillOneTrigger({
-                ...triggerObj,
-                targetCard: targetCard,
-            })
-        }
-        if (!this.isSurviving()) {
-            targetCard.whenKillOneTrigger({
-                ...triggerObj,
-                currentPlayer: targetPlayer,
-                targetPlayer: currentPlayer,
-                currentCard: targetCard,
-                targetCard: this
-            })
-        }
-    }
-
-    attacking(triggerObj: TriggerObj) {
-        // this.whenAttackTrigger(triggerObj)
-    }
-
-    whenEndRound(triggerObj: TriggerObj) {
-        // const currentPlayer = triggerObj.currentPlayer;
-        // if (!currentPlayer) {
-        //     return
-        // }
-        // triggerObj = this.triggerObj2BaseCard(triggerObj);
-        // for (let i = 0; i <= currentPlayer.endRoundExtraTriggers; i++) {
-        //     // 法术附加
-        //     this.baseCard.spellAttached.forEach(card => {
-        //         card.whenEndRound({
-        //             ...triggerObj,
-        //             targetCard: this,
-        //         })
-        //     })
-        //     // 磁力效果
-        //     this.baseCard.magneticForceList.forEach(card => card.whenEndRound(triggerObj))
-        //     this.baseCard.whenEndRound(triggerObj)
-        // }
-    }
-
-    whenEndRoundHandler(triggerObj: TriggerObj) {
-        // const currentPlayer = triggerObj.currentPlayer;
-        // if (!currentPlayer) {
-        //     return
-        // }
-        // for (let i = 0; i <= currentPlayer.endRoundExtraTriggers; i++) {
-        //     this.baseCard.whenEndRoundHandler(this.triggerObj2BaseCard(triggerObj))
-        // }
-    }
-
-    whenStartRound(triggerObj: TriggerObj) {
-        // triggerObj = this.triggerObj2BaseCard(triggerObj);
-        // 磁力效果
-        // this.baseCard.magneticForceList.forEach(card => card.whenStartRound(triggerObj))
-        // this.baseCard.whenStartRound(triggerObj)
-    }
-
-    whenStartRoundHandler(triggerObj: TriggerObj) {
-        // this.baseCard.whenStartRoundHandler(this.triggerObj2BaseCard(triggerObj))
-    }
-
-    whenPlayerInjuries(injuring: number, triggerObj: TriggerObj) {
-        // this.baseCard.tempId = this.id
-        // this.baseCard.whenPlayerInjuries(injuring, this.triggerObj2BaseCard(triggerObj))
-    }
-
-    whenHolyShieldDisappears(triggerObj: TriggerObj) {
-        // this.baseCard.whenHolyShieldDisappears(this.triggerObj2BaseCard(triggerObj));
-    }
-
-    whenOtherHolyShieldDisappears(triggerObj: TriggerObj) {
-        // this.baseCard.whenOtherHolyShieldDisappears(this.triggerObj2BaseCard(triggerObj));
-    }
-
-    whenDefenseTrigger(triggerObj: TriggerObj) {
-        // this.baseCard.whenDefenseTrigger(this.triggerObj2BaseCard(triggerObj));
-    }
-
-    whenKillOneTrigger(triggerObj: TriggerObj) {
-        // this.baseCard.whenKillOneTrigger(this.triggerObj2BaseCard(triggerObj));
-    }
-
-    whenStartFightingTrigger(triggerObj: TriggerObj) {
-        // this.baseCard.whenStartFightingTrigger(this.triggerObj2BaseCard(triggerObj));
-    }
-
     deserialize(json: any) {
         if (typeof json === 'string') {
             json = JSON.parse(json)
@@ -459,32 +124,6 @@ export default class BaseCardObj implements Trigger, FlipFlopFunc, Triggering, S
 
     serialization(): string {
         return serialize(this);
-    }
-
-    whenEndFightingTrigger(result: "胜利" | "失败" | "平局", triggerObj: TriggerObj) {
-        // this.baseCard.whenEndFightingTrigger(result, triggerObj);
-    }
-
-    whenOtherCardMagneticAdd(triggerObj: TriggerObj) {
-        // this.baseCard.whenOtherCardMagneticAdd(this.triggerObj2BaseCard(triggerObj))
-    }
-
-    whenHarmedTrigger(injuring: number, triggerObj: TriggerObj) {
-        // if (injuring <= 0) {
-        //     return
-        // }
-        // this.baseCard.whenHarmedTrigger(injuring, this.triggerObj2BaseCard(triggerObj));
-    }
-
-    whenOtherHarmedTrigger(injuring: number, triggerObj: TriggerObj) {
-        // if (injuring <= 0) {
-        // return
-        // }
-        // this.baseCard.whenOtherHarmedTrigger(injuring, this.triggerObj2BaseCard(triggerObj));
-    }
-
-    whenRefreshTavern(triggerObj: TriggerObj) {
-        // this.baseCard.whenRefreshTavern(this.triggerObj2BaseCard(triggerObj));
     }
 
     whenDeath(flipFlop: FlipFlop) {
@@ -570,23 +209,23 @@ export default class BaseCardObj implements Trigger, FlipFlopFunc, Triggering, S
         // 永久影响
         flipFlop.currentPlayer.attackBonusPermanently.forEach(data => {
             if (data.judgmentType(this)) {
-                this.baseCard.addBonus(data,true,true)
+                this.baseCard.addBonus(data, true, true)
             }
         })
         flipFlop.currentPlayer.lifeBonusPermanently.forEach(data => {
             if (data.judgmentType(this)) {
-                this.baseCard.addBonus(data,false,true)
+                this.baseCard.addBonus(data, false, true)
             }
         })
         // 临时影响
         flipFlop.currentPlayer.attackBonusTemporarily.forEach(data => {
             if (data.judgmentType(this)) {
-                this.baseCard.addBonus(data,true,false)
+                this.baseCard.addBonus(data, true, false)
             }
         })
         flipFlop.currentPlayer.lifeBonusTemporarily.forEach(data => {
             if (data.judgmentType(this)) {
-                this.baseCard.addBonus(data,false,false)
+                this.baseCard.addBonus(data, false, false)
             }
         })
         console.log(`(${flipFlop.currentPlayer.name})召唤【${this.baseCard.name}(${this.attack}/${this.life})】`)
@@ -737,5 +376,10 @@ export default class BaseCardObj implements Trigger, FlipFlopFunc, Triggering, S
             console.log(`(${flipFlop.currentPlayer.name})的【${this.baseCard.name}(${this.attack}/${this.life})】开始回合时触发：${this.baseCard.descriptionStr()}`)
             this.baseCard.whenTheRoundBegin(flipFlop)
         }
+    }
+
+    lock(number: number = 1) {
+        this.isLock = true;
+        this.remainingUnlockRounds += number
     }
 }
