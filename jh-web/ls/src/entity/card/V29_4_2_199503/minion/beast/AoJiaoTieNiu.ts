@@ -1,6 +1,5 @@
 // 将seven替换为路径
 import BaseCard from "../../../../baseCard";
-import {TriggerObj} from "../../../../Trigger";
 import {FlipFlop} from "../../../../FlipFlop.ts";
 
 /**

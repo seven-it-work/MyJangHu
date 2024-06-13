@@ -159,12 +159,8 @@ export default class Player implements Serialization<Player> {
             return;
         }
         if (cardObj.baseCard.isSpendLife) {
-            this.changeLife(-cardObj.baseCard.spendingGoldCoin, {
-                currentCard: cardObj,
-                contextObj: context,
-                currentPlayer: this
-            });
-            //  todo 死亡判断
+            //  todo 生命值不够 不能购买
+            this.changeLife(-cardObj.baseCard.spendingGoldCoin, context);
         } else {
             this.currentGoldCoin -= cardObj.baseCard.spendingGoldCoin;
         }
@@ -193,31 +189,6 @@ export default class Player implements Serialization<Player> {
         this.cardListInFighting = cloneDeep(this.cardList)
     }
 
-    addCard(cardObj: BaseCardObj, nextCard: BaseCardObj | undefined, triggerObj: TriggerObj) {
-        const cardList = this.getCardList();
-        if (cardList.length < 7) {
-            // 召唤触发器
-            cardObj.whenSummonedTrigger({
-                ...triggerObj,
-                currentPlayer: this,
-                currentCard: cardObj,
-            })
-            cardList.forEach(card => {
-                card.whenOtherSummonedTrigger({
-                    ...triggerObj,
-                    currentPlayer: this,
-                    currentCard: card,
-                    targetCard: cardObj
-                })
-            })
-            if (nextCard) {
-                const nextCardIndex = cardList.findIndex((card) => card.id === nextCard.id)
-                cardList.splice(nextCardIndex, 0, cardObj);
-            } else {
-                cardList.push(cardObj)
-            }
-        }
-    }
 
     addCard2(cardObj: BaseCardObj, nextCard: BaseCardObj | undefined, flipFlop: FlipFlop) {
         const cardList = this.getCardList();
@@ -268,11 +239,11 @@ export default class Player implements Serialization<Player> {
                     console.log(`(${this.name})的【${nextCard.baseCard.name}】附加磁力【${cardObj.baseCard.name}】`)
                     nextCard.baseCard.magneticForceList.push(cardObj.baseCard);
                     // 磁力监控
-                    this.cardList.filter(card => card.id !== nextCard.id).forEach(card => card.whenOtherCardMagneticAdd({
-                        ...triggerObj,
-                        currentCard: card,
-                        targetCard: cardObj,
-                    }))
+                    // this.cardList.filter(card => card.id !== nextCard.id).forEach(card => card.whenOtherCardMagneticAdd({
+                    //     ...triggerObj,
+                    //     currentCard: card,
+                    //     targetCard: cardObj,
+                    // }))
                     // 磁力效果后，将返回卡牌池
                     triggerObj.contextObj.sharedCardPool.cardIn(cardObj.baseCard)
                     return;
@@ -289,7 +260,8 @@ export default class Player implements Serialization<Player> {
                     needSelectCard: triggerObj.needSelectCard
                 }))
             } else {
-                cardObj.whenCardUsedTrigger(triggerObj);
+                // todo 法术的使用 怎么搞
+                // cardObj.whenCardUsedTrigger(triggerObj);
             }
         }
     }
@@ -336,7 +308,7 @@ export default class Player implements Serialization<Player> {
         if (baseCardObjs.length > 0) {
             const baseCardObj = baseCardObjs[0];
             baseCardObj.baseCard.remainRefreshTimes--;
-            this.changeLife(-refreshExpenses, triggerObj);
+            this.changeLife(-refreshExpenses, context);
         } else {
             if (!this.canRefreshTavern()) {
                 message.error({content: '金币不足，不能刷新'});
@@ -349,7 +321,7 @@ export default class Player implements Serialization<Player> {
         }
         this.tavern.refresh(triggerObj)
         // 刷新酒馆监听
-        this.cardList.forEach(card => card.whenRefreshTavern({...triggerObj, currentCard: card}))
+        // this.cardList.forEach(card => card.whenRefreshTavern({...triggerObj, currentCard: card}))
     }
 
     canUpgradeTavern(): Boolean {
@@ -365,7 +337,7 @@ export default class Player implements Serialization<Player> {
         this.tavern.upgrade()
     }
 
-    changeLife(changeValue: number, triggerObj: TriggerObj, onlyLife: Boolean = false) {
+    changeLife(changeValue: number, contextObj: ContextObj, onlyLife: Boolean = false) {
         if (!onlyLife) {
             if (this.currentArmor > 0) {
                 this.currentArmor += changeValue;
@@ -378,11 +350,19 @@ export default class Player implements Serialization<Player> {
         }
         this.currentLife += changeValue;
         if (changeValue < 0) {
-            this.cardList.forEach(card => card.whenPlayerInjuries(-changeValue, {
-                ...triggerObj,
+            console.log(`遭受${-changeValue}点伤害`)
+            this.cardList.forEach(card => card.whenPlayerInjured(new FlipFlop({
+                contextObj: contextObj,
                 currentCard: card,
+                currentLocation: '战场',
                 currentPlayer: this,
-            }))
+                otherData: {
+                    harmed: -changeValue
+                },
+                targetCard: card,
+                targetLocation: '战场',
+                targetPlayer: this
+            })))
         }
     }
 

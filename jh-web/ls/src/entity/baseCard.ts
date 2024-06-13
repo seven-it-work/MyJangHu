@@ -364,4 +364,7 @@ export default abstract class BaseCard implements  FlipFlopFunc, Triggering, Ser
         bonus.push(...magneticForceList);
         return bonus;
     }
+
+    whenPlayerInjured(flipFlop: FlipFlop) {
+    }
 }

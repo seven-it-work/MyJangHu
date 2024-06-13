@@ -152,7 +152,7 @@ export default class FightObj {
         if (attackerPlayer.cardListInFighting.length !== 0) {
             const sum = attackerPlayer.cardListInFighting.map(card => card.baseCard.graded).reduce((sum, num) => sum + num, 0);
             console.log(`${attackerPlayer.name}与${defenderPlayer.name}战斗结束，${attackerPlayer.name}获胜`)
-            defenderPlayer.changeLife(-sum, {contextObj: contextObj});
+            defenderPlayer.changeLife(-sum, contextObj);
             // 结算时的法术附加
             attackerPlayer.spellAttached.forEach(card => card.whenEndFightingTrigger('胜利', {
                 contextObj: contextObj,
@@ -168,7 +168,7 @@ export default class FightObj {
         } else if (defenderPlayer.cardListInFighting.length !== 0) {
             const sum = defenderPlayer.cardListInFighting.map(card => card.baseCard.graded).reduce((sum, num) => sum + num, 0);
             console.log(`${attackerPlayer.name}与${defenderPlayer.name}战斗结束，${defenderPlayer.name}获胜`)
-            attackerPlayer.changeLife(-sum, {contextObj: contextObj});
+            attackerPlayer.changeLife(-sum, contextObj);
             // 结算时的法术附加
             attackerPlayer.spellAttached.forEach(card => card.whenEndFightingTrigger('失败', {
                 contextObj: contextObj,

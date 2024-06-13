@@ -52,7 +52,7 @@ function damageCalculation(flipFlop: FlipFlop) {
 }
 
 
-export default class BaseCardObj implements  FlipFlopFunc, Triggering, Serialization<BaseCardObj> {
+export default class BaseCardObj implements FlipFlopFunc, Triggering, Serialization<BaseCardObj> {
     id: string;
     isFreeze: boolean = false;
     isLock: boolean = false
@@ -381,5 +381,27 @@ export default class BaseCardObj implements  FlipFlopFunc, Triggering, Serializa
     lock(number: number = 1) {
         this.isLock = true;
         this.remainingUnlockRounds += number
+    }
+
+    whenPlayerInjured(flipFlop: FlipFlop) {
+        if (!flipFlop.otherData) {
+            return;
+        }
+        if (!flipFlop.otherData.harmed) {
+            return;
+        }
+        if (flipFlop.otherData.harmed <= 0) {
+            return;
+        }
+        // 只在你的回合生效
+        if (flipFlop.currentPlayer.isEndRound) {
+            return
+        }
+        // 战场上
+        flipFlop.currentPlayer.cardList.forEach(card => card.whenPlayerInjured(new FlipFlop({
+            ...flipFlop,
+            currentCard: this,
+            currentLocation: '战场'
+        })))
     }
 }

@@ -163,4 +163,8 @@ export default class Taverns implements Serialization<Taverns> {
             currentCard: JSON.parse(serialize(this.currentCard))
         });
     }
+
+    getCardList(type: '随从'): BaseCardObj[] {
+        return [...this.currentCard.values()].filter(card => card.baseCard.type === type);
+    }
 }

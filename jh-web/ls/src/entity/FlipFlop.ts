@@ -23,7 +23,10 @@ export interface FlipFlopInterface {
     targetPlayer: Player;
     targetLocation: '手牌' | '战场' | '战斗' | '酒馆'
     contextObj: ContextObj;
-    otherData?: any;
+    otherData?: {
+        harmed?: number,
+        nextCard?: BaseCardObj,
+    };
     // 需要选择对象
     needSelectCard?: BaseCardObj;
 }
@@ -55,7 +58,10 @@ export class FlipFlop implements FlipFlopInterface {
     currentLocation: "手牌" | "战场" | "战斗" | "酒馆";
     currentPlayer: Player;
     needSelectCard?: BaseCardObj;
-    otherData?: any = {};
+    otherData?: {
+        harmed?: number,
+        nextCard?: BaseCardObj,
+    } = {};
     targetCard: BaseCardObj;
     targetLocation: "手牌" | "战场" | "战斗" | "酒馆";
     targetPlayer: Player;
@@ -88,6 +94,11 @@ export interface FlipFlopFunc {
      * 当受伤时
      */
     whenInjured(flipFlop: FlipFlop);
+
+    /**
+     * 当玩家受伤时
+     */
+    whenPlayerInjured(flipFlop: FlipFlop);
 
     /**
      * 当召唤时
