@@ -3,6 +3,7 @@ import BaseCard from "../../../../baseCard";
 import {FlipFlop} from "../../../../FlipFlop";
 import randomUtil from "../../../../../utils/RandomUtils";
 import BaseCardObj from "../../../../../objs/BaseCardObj";
+import {BonusCreatUtil} from "../../../../../objs/Bonus";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG27_556_battlegroundsImage.png
@@ -31,16 +32,9 @@ export default class XiongEDeMiShiZheV29_4_2_199503 extends BaseCard {
         }
         const baseCardObj: BaseCardObj = randomUtil.pickone(baseCardObjs);
         const number = this.isGold ? 2 : 1;
-        baseCardObj.baseCard.attackBonus.push({
-            baseCardId: flipFlop.currentCard.id,
-            baseCardName: this.name,
-            markupValue: 2 * number
-        })
-        baseCardObj.baseCard.lifeBonus.push({
-            baseCardId: flipFlop.currentCard.id,
-            baseCardName: this.name,
-            markupValue: 2 * number
-        })
+        baseCardObj.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, 2 * number), true, true)
+        baseCardObj.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, 2 * number), false, true)
+        baseCardObj.lock()
         flipFlop.currentPlayer.addCard2(baseCardObj, flipFlop.currentCard, flipFlop)
     }
 }

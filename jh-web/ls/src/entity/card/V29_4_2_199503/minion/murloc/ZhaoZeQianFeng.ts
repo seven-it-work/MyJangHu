@@ -1,6 +1,7 @@
 // 将seven替换为路径
 import BaseCard from "../../../../baseCard";
 import {FlipFlop} from "../../../../FlipFlop.ts";
+import {BonusCreatUtil} from "../../../../../objs/Bonus";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG22_401_battlegroundsImage.png
@@ -27,6 +28,6 @@ export default class ZhaoZeQianFengV29_4_2_199503 extends BaseCard {
             return
         }
         let magnification = this.isGold ? 2 : 1;
-        this.attackBonus.push({baseCardId: flipFlop.currentCard.id, baseCardName: this.name, markupValue: magnification})
+        this.addBonus(BonusCreatUtil(flipFlop.currentCard, magnification), true, !flipFlop.currentPlayer.isEndRound)
     }
 }

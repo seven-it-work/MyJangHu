@@ -3,6 +3,7 @@ import BaseCard from "../../../../baseCard";
 import {FlipFlop} from "../../../../FlipFlop.ts";
 import randomUtil from "../../../../../utils/RandomUtils.ts";
 import BaseCardObj from "../../../../../objs/BaseCardObj.ts";
+import {BonusCreatUtil} from "../../../../../objs/Bonus";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG26_360_battlegroundsImage.png
@@ -25,21 +26,13 @@ export default class XunBaoYuRenV29_4_2_199503 extends BaseCard {
     }
 
     whenDeath(flipFlop: FlipFlop) {
-        var handCardList = flipFlop.currentPlayer.handCardList;
+        const handCardList = flipFlop.currentPlayer.handCardList;
         if (handCardList.length <= 0) {
             return
         }
-        var baseCardObj: BaseCardObj = randomUtil.pickone(handCardList);
+        const baseCardObj: BaseCardObj = randomUtil.pickone(handCardList);
         let magnification = this.isGold ? 2 : 1;
-        baseCardObj.baseCard.attackBonus.push({
-            baseCardId: flipFlop.currentCard.id,
-            baseCardName: this.name,
-            markupValue: magnification * 5
-        })
-        baseCardObj.baseCard.lifeBonus.push({
-            baseCardId: flipFlop.currentCard.id,
-            baseCardName: this.name,
-            markupValue: magnification * 5
-        })
+        baseCardObj.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard,magnification*5),true,true)
+        baseCardObj.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard,magnification*5),false,true)
     }
 }

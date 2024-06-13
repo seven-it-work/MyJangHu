@@ -33,7 +33,6 @@ class SharedCardPoolData implements Serialization<SharedCardPoolData> {
         this.graded = json.graded
         this.remainingQuantity = json.remainingQuantity
         SharedCardPool.initCardDb()
-        this.baseCard = SharedCardPool.initCardDb().getByName(json.baseCard.classType)
         return this;
     }
 
@@ -180,7 +179,7 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
                 }
                 return card.baseCard.graded <= graded
             }).flatMap(card => {
-                const list=[]
+                const list = []
                 for (let i = 0; i < card.remainingQuantity; i++) {
                     list.push(card.baseCard)
                 }
@@ -219,13 +218,19 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
             json = JSON.parse(json)
         }
         this.accompanyingRace = json.accompanyingRace
+        this.cardDb = SharedCardPool.initCardDb()
         Object.keys(json.pool).forEach(k => {
-            this.pool.set(k, new SharedCardPoolData(undefined, undefined, undefined).deserialize(json.pool[k]))
+            this.pool.set(k, new SharedCardPoolData(undefined, undefined, this.cardDb.getByName(k)).deserialize(json.pool[k]))
         })
         return this;
     }
 
     serialization(): string {
-        return serialize(this);
+        const parse = JSON.parse(serialize(this));
+        delete parse.cardDb
+        Object.values(parse.pool).forEach(v => {
+            delete v.baseCard
+        })
+        return JSON.stringify(parse);
     }
 }
