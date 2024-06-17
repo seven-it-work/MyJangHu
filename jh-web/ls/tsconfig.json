@@ -26,7 +26,8 @@
     "src/**/*.vue",
     "../../../../users/y30016814/scoop/apps/webstorm/2022.3/installed/plugins/javascript-impl/jsLanguageServicesImpl/external/lib.es5.d.ts",
     "../../../../users/y30016814/scoop/apps/webstorm/2022.3/installed/plugins/javascript-impl/jsLanguageServicesImpl/external/lib.es5.d.ts",
-    "../../../../users/y30016814/scoop/apps/webstorm/2022.3/installed/plugins/javascript-impl/jsLanguageServicesImpl/external/lib.es5.d.ts"
+    "../../../../users/y30016814/scoop/apps/webstorm/2022.3/installed/plugins/javascript-impl/jsLanguageServicesImpl/external/lib.es5.d.ts",
+    "node_modules/vitest/globals.d.ts"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

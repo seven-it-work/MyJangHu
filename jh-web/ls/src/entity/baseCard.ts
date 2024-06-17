@@ -434,4 +434,10 @@ export default abstract class BaseCard implements FlipFlopFunc, Triggering, Seri
 
     whenPlayerInjured(flipFlop: FlipFlop) {
     }
+
+    whenIncreasedAttack(flipFlop: FlipFlop) {
+    }
+
+    whenIncreasedLife(flipFlop: FlipFlop) {
+    }
 }

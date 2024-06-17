@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG20_102_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "在<b>鲜血宝石</b>被用于本随从后，直到下个回合，获得<b>圣盾</b>。"
          }
     }
-      

@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG28_585_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "在你的回合开始时，弃掉一张法术牌以获得4枚铸币。"
          }
     }
-      

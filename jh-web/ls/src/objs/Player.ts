@@ -3,7 +3,6 @@ import ContextObj from "./ContextObj";
 import Taverns from "./Taverns";
 import {message} from 'ant-design-vue';
 import {cloneDeep, groupBy} from "lodash";
-import {TriggerObj} from "../entity/Trigger";
 import SharedCardPool from "./SharedCardPool";
 import {Serialization} from "../utils/SaveUtils";
 import {serialize} from "class-transformer";
@@ -71,7 +70,8 @@ export default class Player implements Serialization<Player> {
     lifeBonusTemporarily: BonusPlayer[] = [];
     // 攻击加成（临时区）
     attackBonusTemporarily: BonusPlayer[] = [];
-
+    // 鲜血宝石
+    bloodGems: { attack: number, life: number } = {attack: 0, life: 0,}
 
     private readonly static MAX_HAND_CARD: number = 10;
 
@@ -80,6 +80,10 @@ export default class Player implements Serialization<Player> {
     }
 
     addCardInHand(baseCardObj: BaseCardObj, sharedCardPool: SharedCardPool) {
+        // 大于10张不在加入了
+        if (this._handCardMap.size >= 10) {
+            return
+        }
         this._handCardMap.set(baseCardObj.id, baseCardObj);
         // 三连判定
         if (baseCardObj.baseCard.type === '随从' && !baseCardObj.baseCard.isGold) {
@@ -160,7 +164,7 @@ export default class Player implements Serialization<Player> {
         }
         if (cardObj.baseCard.isSpendLife) {
             //  todo 生命值不够 不能购买
-            this.changeLife(cardObj, -cardObj.baseCard.spendingGoldCoin, context);
+            this.changeLife(-cardObj.baseCard.spendingGoldCoin, context);
         } else {
             this.currentGoldCoin -= cardObj.baseCard.spendingGoldCoin;
         }
@@ -211,9 +215,10 @@ export default class Player implements Serialization<Player> {
      * 使用卡片
      * @param cardObj
      * @param nextCard
-     * @param triggerObj
+     * @param contextObj
+     * @param needSelectCard
      */
-    useCard(cardObj: BaseCardObj, nextCard: BaseCardObj | undefined, triggerObj: TriggerObj) {
+    useCard(cardObj: BaseCardObj, nextCard: BaseCardObj | undefined, contextObj: ContextObj, needSelectCard: BaseCardObj | undefined = undefined) {
         if (!this.canUseCard(cardObj)) {
             message.error({content: '最多有7个随从'});
             return
@@ -231,7 +236,7 @@ export default class Player implements Serialization<Player> {
                     // 使用金色卡，获得三连卡
                     const sanlian = new Sanlian();
                     sanlian.graded = Math.min(6, this.tavern.graded + 1)
-                    this.addCardInHand(new BaseCardObj(sanlian), triggerObj.contextObj.sharedCardPool)
+                    this.addCardInHand(new BaseCardObj(sanlian), contextObj.sharedCardPool)
                 }
                 // 磁力判断
                 if (cardObj.baseCard.isMagneticForce && nextCard && nextCard.baseCard.ethnicity.includes("机械")) {
@@ -245,19 +250,19 @@ export default class Player implements Serialization<Player> {
                     //     targetCard: cardObj,
                     // }))
                     // 磁力效果后，将返回卡牌池
-                    triggerObj.contextObj.sharedCardPool.cardIn(cardObj.baseCard)
+                    contextObj.sharedCardPool.cardIn(cardObj.baseCard)
                     return;
                 }
                 cardObj.whenUsed(new FlipFlop({
                     otherData: {nextCard},
-                    contextObj: triggerObj.contextObj,
+                    contextObj: contextObj,
                     currentCard: cardObj,
                     currentLocation: '手牌',
                     currentPlayer: this,
                     targetCard: cardObj,
                     targetLocation: '手牌',
                     targetPlayer: this,
-                    needSelectCard: triggerObj.needSelectCard
+                    needSelectCard: needSelectCard
                 }))
             } else {
                 // todo 法术的使用 怎么搞
@@ -308,7 +313,7 @@ export default class Player implements Serialization<Player> {
         if (baseCardObjs.length > 0) {
             const baseCardObj = baseCardObjs[0];
             baseCardObj.baseCard.remainRefreshTimes--;
-            this.changeLife(baseCardObj, -refreshExpenses, context);
+            this.changeLife(-refreshExpenses, context);
         } else {
             if (!this.canRefreshTavern()) {
                 message.error({content: '金币不足，不能刷新'});
@@ -337,7 +342,7 @@ export default class Player implements Serialization<Player> {
         this.tavern.upgrade()
     }
 
-    changeLife(card: BaseCardObj, changeValue: number, contextObj: ContextObj, onlyLife: Boolean = false) {
+    changeLife(changeValue: number, contextObj: ContextObj, onlyLife: Boolean = false) {
         if (!onlyLife) {
             if (this.currentArmor > 0) {
                 this.currentArmor += changeValue;
@@ -351,18 +356,25 @@ export default class Player implements Serialization<Player> {
         this.currentLife += changeValue;
         if (changeValue < 0) {
             console.log(`遭受${-changeValue}点伤害`)
-            card.whenPlayerInjured(new FlipFlop({
-                contextObj: contextObj,
-                currentCard: card,
-                currentPlayer: this,
-                currentLocation: '战场',
-                otherData: {
-                    harmed: -changeValue
-                },
-                targetCard: card,
-                targetPlayer: this,
-                targetLocation: '战场',
-            }))
+            // 只有战场上的有效
+            if (this.isEndRound) {
+                return
+            } else {
+                this.cardList.forEach(card => {
+                    card.whenPlayerInjured(new FlipFlop({
+                        contextObj: contextObj,
+                        currentCard: card,
+                        currentPlayer: this,
+                        currentLocation: '战场',
+                        otherData: {
+                            harmed: -changeValue
+                        },
+                        targetCard: card,
+                        targetPlayer: this,
+                        targetLocation: '战场',
+                    }))
+                })
+            }
         }
     }
 
@@ -618,6 +630,22 @@ export default class Player implements Serialization<Player> {
             })
             card.baseCard.bonusBattleCovered(attack, true)
             card.baseCard.bonusBattleCovered(life, false)
+        })
+    }
+
+    findCardInCardList(id: string): BaseCardObj | undefined {
+        return this.cardList.filter(card => card.id === id)[0];
+    }
+
+    bloodGemsAdd(isAttack: boolean, number: number) {
+        if (isAttack) {
+            this.bloodGems.attack += number;
+        } else {
+            this.bloodGems.life += number;
+        }
+        this.handCardList.filter(card => card.baseCard.classType === 'XianXueBaoShi').forEach(card => {
+            card.baseCard.life = this.bloodGems.life;
+            card.baseCard.attack = this.bloodGems.attack;
         })
     }
 }

@@ -26,7 +26,6 @@ export default class BaZhuaJuGuaiShuoChangJuanWangV29_4_2_199503 extends BaseCar
     }
 
     deadLanguage(flipFlop: FlipFlop) {
-        console.log(2,flipFlop.currentCard.baseCard.name,flipFlop.isCurrentCardIsTargetCard())
         if (flipFlop.isCurrentCardIsTargetCard()) {
             const baZhuaJuGuaiDeChuShou = flipFlop.contextObj.sharedCardPool.getByName("BaZhuaJuGuaiDeChuShou");
             let magnification = this.isGold ? 4 : 2;
@@ -38,7 +37,8 @@ export default class BaZhuaJuGuaiShuoChangJuanWangV29_4_2_199503 extends BaseCar
 
     whenSummoned(flipFlop: FlipFlop) {
         if (!flipFlop.isCurrentCardIsTargetCard() && flipFlop.currentLocation === '战斗') {
-            this.counter++
+            const baseCard = flipFlop.currentPlayer.findCardInCardList(flipFlop.currentCard.id)?.baseCard;
+            baseCard && baseCard.counter++
         }
     }
 }

@@ -153,50 +153,26 @@ export default class FightObj {
             const sum = attackerPlayer.cardListInFighting.map(card => card.baseCard.graded).reduce((sum, num) => sum + num, 0);
             console.log(`${attackerPlayer.name}与${defenderPlayer.name}战斗结束，${attackerPlayer.name}获胜`)
             defenderPlayer.changeLife(-sum, contextObj);
-            // 结算时的法术附加
-            attackerPlayer.spellAttached.forEach(card => card.whenEndFightingTrigger('胜利', {
-                contextObj: contextObj,
-                currentPlayer: attackerPlayer,
-                targetPlayer: defenderPlayer,
-            }))
-            // 结算时的法术附加
-            defenderPlayer.spellAttached.forEach(card => card.whenEndFightingTrigger('失败', {
-                contextObj: contextObj,
-                currentPlayer: defenderPlayer,
-                targetPlayer: attackerPlayer,
-            }))
         } else if (defenderPlayer.cardListInFighting.length !== 0) {
             const sum = defenderPlayer.cardListInFighting.map(card => card.baseCard.graded).reduce((sum, num) => sum + num, 0);
             console.log(`${attackerPlayer.name}与${defenderPlayer.name}战斗结束，${defenderPlayer.name}获胜`)
             attackerPlayer.changeLife(-sum, contextObj);
-            // 结算时的法术附加
-            attackerPlayer.spellAttached.forEach(card => card.whenEndFightingTrigger('失败', {
-                contextObj: contextObj,
-                currentPlayer: attackerPlayer,
-                targetPlayer: defenderPlayer,
-            }))
-            // 结算时的法术附加
-            defenderPlayer.spellAttached.forEach(card => card.whenEndFightingTrigger('胜利', {
-                contextObj: contextObj,
-                currentPlayer: defenderPlayer,
-                targetPlayer: attackerPlayer,
-            }))
         } else {
             // 平局
             console.log(`${attackerPlayer.name}与${defenderPlayer.name}战斗结束，平局`)
-            // 结算时的法术附加
-            attackerPlayer.spellAttached.forEach(card => card.whenEndFightingTrigger('平局', {
-                contextObj: contextObj,
-                currentPlayer: attackerPlayer,
-                targetPlayer: defenderPlayer,
-            }))
-            // 结算时的法术附加
-            defenderPlayer.spellAttached.forEach(card => card.whenEndFightingTrigger('平局', {
-                contextObj: contextObj,
-                currentPlayer: defenderPlayer,
-                targetPlayer: attackerPlayer,
-            }))
         }
+        // 结算时的法术附加
+        // attackerPlayer.spellAttached.forEach(card => card.whenEndFightingTrigger('胜利', {
+        //     contextObj: contextObj,
+        //     currentPlayer: attackerPlayer,
+        //     targetPlayer: defenderPlayer,
+        // }))
+        // 结算时的法术附加
+        // defenderPlayer.spellAttached.forEach(card => card.whenEndFightingTrigger('失败', {
+        //     contextObj: contextObj,
+        //     currentPlayer: defenderPlayer,
+        //     targetPlayer: attackerPlayer,
+        // }))
     }
 
     private doFight(isAttacker: Boolean) {
@@ -237,7 +213,6 @@ export default class FightObj {
         if (!attacker) {
             debugger
         }
-        console.log(pickList.map(card => card.baseCard.name))
         if (isEmpty(pickList)) {
             console.log("对方有潜行，无法攻击")
             return

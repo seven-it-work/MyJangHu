@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG28_633_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "在你施放2个法术后，吞食酒馆中的一个随从，获得其属性值。<i>（还剩 个！）</i>"
          }
     }
-      

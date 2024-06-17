@@ -134,5 +134,17 @@ export interface FlipFlopFunc {
      * 当回合开始时
      */
     whenTheRoundBegin(flipFlop: FlipFlop);
+
+    /**
+     * 当攻击力增加时（不论永久还是临时）
+     * targetCard 影响的来源
+     */
+    whenIncreasedAttack(flipFlop: FlipFlop);
+
+    /**
+     * 当生命值增加时（不论永久还是临时）
+     * targetCard 影响的来源
+     */
+    whenIncreasedLife(flipFlop: FlipFlop);
 }
 

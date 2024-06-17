@@ -9,6 +9,7 @@ import {Serialization} from "../utils/SaveUtils";
 import {serialize} from "class-transformer";
 import {FlipFlop, FlipFlopFunc, inversion, Triggering} from "../entity/FlipFlop";
 import randomUtil from "../utils/RandomUtils";
+import {Bonus, BonusCreatUtil} from "./Bonus";
 
 function damageCalculation(flipFlop: FlipFlop) {
     var targetCard = flipFlop.targetCard;
@@ -374,6 +375,10 @@ export default class BaseCardObj implements FlipFlopFunc, Triggering, Serializat
         this.remainingUnlockRounds += number
     }
 
+    /**
+     * 不存在其他监听，这是已经触发受伤了。在受伤前去循环
+     * @param flipFlop
+     */
     whenPlayerInjured(flipFlop: FlipFlop) {
         if (!flipFlop.otherData) {
             return;
@@ -389,12 +394,34 @@ export default class BaseCardObj implements FlipFlopFunc, Triggering, Serializat
             return
         }
         // 战场上
-        this.executeCurrentOtherList(flipFlop, (item: BaseCardObj, data: FlipFlop) => {
-            item.baseCard.whenPlayerInjured(new FlipFlop({
-                ...data,
-                currentCard: this,
-                currentLocation: '战场'
-            }))
-        }, false)
+        this.baseCard.whenPlayerInjured(new FlipFlop({
+            ...flipFlop,
+            currentCard: this,
+            currentLocation: '战场'
+        }))
+    }
+
+    whenIncreasedAttack(flipFlop: FlipFlop) {
+        this.baseCard.whenIncreasedAttack(flipFlop)
+    }
+
+    whenIncreasedLife(flipFlop: FlipFlop) {
+        this.baseCard.whenIncreasedLife(flipFlop)
+    }
+
+    /**
+     * 加成添加
+     * @param flipFlop target 为影响来源
+     * @param value
+     * @param isAttack
+     * @param isPermanent 是否永久区
+     */
+    addBonus(flipFlop: FlipFlop, value: number, isAttack: boolean, isPermanent: boolean = false) {
+        if (isAttack) {
+            this.whenIncreasedAttack(flipFlop)
+        } else {
+            this.whenIncreasedLife(flipFlop)
+        }
+        this.baseCard.addBonus(BonusCreatUtil(flipFlop.targetCard,value))
     }
 }

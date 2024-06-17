@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_160_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "每当本随从受到伤害，获取一张<b>鲜血宝石</b>。<i>（每场战斗限3次。）</i> 每当本随从受到伤害，获取一张<b>鲜血宝石</b>。<i>（还剩 次！）</i>"
          }
     }
-      

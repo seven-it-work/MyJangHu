@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG20_301_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "当你出售本随从时，获取2张<b>鲜血宝石</b>。"
          }
     }
-      

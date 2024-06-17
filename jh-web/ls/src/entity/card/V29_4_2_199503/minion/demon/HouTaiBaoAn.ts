@@ -17,7 +17,7 @@ export default class HouTaiBaoAnV29_4_2_199503 extends BaseCard {
     warRoar(flipFlop: FlipFlop) {
         const number = this.isGold ? 2 : 1;
         for (let i = 0; i < number; i++) {
-            flipFlop.currentPlayer.changeLife(flipFlop.currentCard, -1, flipFlop.contextObj, false)
+            flipFlop.currentPlayer.changeLife( -1, flipFlop.contextObj, false)
         }
     }
 
