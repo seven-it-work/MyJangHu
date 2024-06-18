@@ -13,6 +13,8 @@ export default class XianXueBaoShi extends BaseCard {
     graded = 1
     cardType = "spell"
     isSell = false
+    isNeedSelect = true
+    type = '法术'
 
     descriptionStr() {
         return `使一个随从获得+${this.attack}/+${this.life}。`
@@ -22,7 +24,13 @@ export default class XianXueBaoShi extends BaseCard {
         if (!flipFlop.needSelectCard) {
             return
         }
-        flipFlop.needSelectCard.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, this.attack), true, true)
-        flipFlop.needSelectCard.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, this.life), false, true)
+        flipFlop.needSelectCard.addBonus(new FlipFlop({
+            ...flipFlop,
+            targetCard: flipFlop.currentCard
+        }), this.attack, true, true)
+        flipFlop.needSelectCard.addBonus(new FlipFlop({
+            ...flipFlop,
+            targetCard: flipFlop.currentCard
+        }), this.life, false, true)
     }
 }

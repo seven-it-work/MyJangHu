@@ -16,7 +16,7 @@ export default class BaoShiZouSiShangV29_4_2_199503 extends BaseCard {
     isWarRoars = true
 
     warRoar(flipFlop: FlipFlop) {
-        var number = this.isGold ? 2 : 1;
+        const number = this.isGold ? 2 : 1;
         const xianXueBaoShi = flipFlop.contextObj.sharedCardPool.getByName("XianXueBaoShi");
         xianXueBaoShi.life = flipFlop.currentPlayer.bloodGems.life
         xianXueBaoShi.attack = flipFlop.currentPlayer.bloodGems.attack

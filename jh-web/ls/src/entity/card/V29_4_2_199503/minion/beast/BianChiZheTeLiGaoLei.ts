@@ -32,7 +32,7 @@ export default class BianChiZheTeLiGaoLeiV29_4_2_199503 extends BaseCard {
             return
         }
         const magnification = this.isGold ? 2 : 1;
-        this.addBonus(BonusCreatUtil(flipFlop.currentCard,magnification),true,true)
-        this.addBonus(BonusCreatUtil(flipFlop.currentCard,magnification),false,true)
+        flipFlop.currentCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}),magnification,true,true)
+        flipFlop.currentCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}),magnification,false,true)
     }
 }

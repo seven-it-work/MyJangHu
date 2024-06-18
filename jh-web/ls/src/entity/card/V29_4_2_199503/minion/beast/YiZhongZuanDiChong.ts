@@ -28,8 +28,8 @@ export default class YiZhongZuanDiChongV29_4_2_199503 extends BaseCard {
         flipFlop.currentPlayer.getCardList()
             .filter(card => card.baseCard.ethnicity.includes('野兽'))
             .forEach(card => {
-                card.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, number), true, true)
-                card.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, number), false, true)
+                card.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), number, true, true)
+                card.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), number, false, true)
             })
     }
 }

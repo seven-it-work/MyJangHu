@@ -26,7 +26,7 @@ export default class PiaoFuGuanChaZheV29_4_2_199503 extends BaseCard {
 
     whenPlayerInjured(flipFlop: FlipFlop) {
         const number = this.isGold ? 2 : 1;
-        this.addBonus(BonusCreatUtil(flipFlop.currentCard, 2 * number), true, true)
-        this.addBonus(BonusCreatUtil(flipFlop.currentCard, 2 * number), false, true)
+        flipFlop.currentCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), 2 * number, true, true)
+        flipFlop.currentCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), 2 * number, false, true)
     }
 }

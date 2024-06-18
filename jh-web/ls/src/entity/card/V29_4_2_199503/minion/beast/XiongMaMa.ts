@@ -29,8 +29,8 @@ export default class XiongMaMa extends BaseCard {
             if (flipFlop.targetCard.baseCard.ethnicity.includes('野兽')) {
                 this.showLog(flipFlop)
                 var gold = this.isGold ? 2 : 1;
-                flipFlop.targetCard.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, gold * 4), true, true)
-                flipFlop.targetCard.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, gold * 4), false, true)
+                flipFlop.targetCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), gold * 4, true, true)
+                flipFlop.targetCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), gold * 4, false, true)
             }
         }
     }

@@ -34,7 +34,7 @@ export default class TiaoShiMoQuanV29_4_2_199503 extends BaseCard {
         const baseCardObj = randomUtil.pickone(cardList);
         flipFlop.currentPlayer.tavern.removeCard(baseCardObj, flipFlop.contextObj.sharedCardPool)
         const number = this.isGold ? 2 : 1;
-        this.addBonus(BonusCreatUtil(flipFlop.currentCard, baseCardObj.life * number), false, true)
-        this.addBonus(BonusCreatUtil(flipFlop.currentCard, baseCardObj.attack * number), true, true)
+        flipFlop.currentCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), baseCardObj.life * number, false, true)
+        flipFlop.currentCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), baseCardObj.attack * number, true, true)
     }
 }

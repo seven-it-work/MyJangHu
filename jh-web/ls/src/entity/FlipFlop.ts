@@ -146,5 +146,15 @@ export interface FlipFlopFunc {
      * targetCard 影响的来源
      */
     whenIncreasedLife(flipFlop: FlipFlop);
+
+    /**
+     * 法术使用监听
+     */
+    whenSpellUse(flipFlop: FlipFlop);
+
+    /**
+     * 复仇监听器
+     */
+    whenVengeance(flipFlop: FlipFlop);
 }
 

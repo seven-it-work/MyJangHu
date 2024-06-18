@@ -27,8 +27,8 @@ export default class JinKeGuWeiGuiV29_4_2_199503 extends BaseCard {
         flipFlop.currentPlayer.getCardList()
             .filter(card => card.baseCard.ethnicity.includes('野兽'))
             .forEach(card => {
-                card.baseCard.addBonus(BonusCreatUtil(card, 2 * number), true, !flipFlop.currentPlayer.isEndRound)
-                card.baseCard.addBonus(BonusCreatUtil(card, 4 * number), false, !flipFlop.currentPlayer.isEndRound)
+                card.addBonus(new FlipFlop({...flipFlop,targetCard:card}), 2 * number, true, !flipFlop.currentPlayer.isEndRound)
+                card.addBonus(new FlipFlop({...flipFlop,targetCard:card}), 4 * number, false, !flipFlop.currentPlayer.isEndRound)
             })
     }
 }

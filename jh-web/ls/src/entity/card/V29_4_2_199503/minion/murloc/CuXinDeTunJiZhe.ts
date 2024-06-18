@@ -29,8 +29,8 @@ export default class CuXinDeTunJiZheV29_4_2_199503 extends BaseCard {
             const cardList = flipFlop.currentPlayer.getCardList();
             const baseCardObj = randomUtil.pickone(cardList);
             const number = this.isGold ? 2 : 1;
-            baseCardObj.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard,number * flipFlop.currentCard.attack),true,true)
-            baseCardObj.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard,number * flipFlop.currentCard.attack),false,true)
+            baseCardObj.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}),number * flipFlop.currentCard.attack,true,true)
+            baseCardObj.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}),number * flipFlop.currentCard.attack,false,true)
         }
     }
 }

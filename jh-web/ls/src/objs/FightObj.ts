@@ -148,14 +148,18 @@ export default class FightObj {
 
     }
 
+    private static getRemainingEntourage(player: Player):string[] {
+        return player.getCardList().map(card => `【(${card.baseCard.graded}级)${card.baseCard.name}(${card.attack}/${card.life})】`)
+    }
+
     private static battleSettlement(attackerPlayer: Player, defenderPlayer: Player, contextObj: ContextObj) {
         if (attackerPlayer.cardListInFighting.length !== 0) {
             const sum = attackerPlayer.cardListInFighting.map(card => card.baseCard.graded).reduce((sum, num) => sum + num, 0);
-            console.log(`${attackerPlayer.name}与${defenderPlayer.name}战斗结束，${attackerPlayer.name}获胜`)
+            console.log(`${attackerPlayer.name}与${defenderPlayer.name}战斗结束，${attackerPlayer.name}获胜 ${FightObj.getRemainingEntourage(attackerPlayer)}`)
             defenderPlayer.changeLife(-sum, contextObj);
         } else if (defenderPlayer.cardListInFighting.length !== 0) {
             const sum = defenderPlayer.cardListInFighting.map(card => card.baseCard.graded).reduce((sum, num) => sum + num, 0);
-            console.log(`${attackerPlayer.name}与${defenderPlayer.name}战斗结束，${defenderPlayer.name}获胜`)
+            console.log(`${attackerPlayer.name}与${defenderPlayer.name}战斗结束，${defenderPlayer.name}获胜 ${FightObj.getRemainingEntourage(defenderPlayer)}`)
             attackerPlayer.changeLife(-sum, contextObj);
         } else {
             // 平局

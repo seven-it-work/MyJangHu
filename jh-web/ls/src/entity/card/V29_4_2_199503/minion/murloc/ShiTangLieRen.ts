@@ -31,7 +31,7 @@ export default class ShiTangLieRenV29_4_2_199503 extends BaseCard {
             return
         }
         let magnification = this.isGold ? 2 : 1;
-        this.addBonus(BonusCreatUtil(flipFlop.currentCard, magnification), true, !flipFlop.currentPlayer.isEndRound)
-        this.addBonus(BonusCreatUtil(flipFlop.currentCard, magnification), false, !flipFlop.currentPlayer.isEndRound)
+        flipFlop.currentCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), magnification, true, !flipFlop.currentPlayer.isEndRound)
+        flipFlop.currentCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), magnification, false, !flipFlop.currentPlayer.isEndRound)
     }
 }

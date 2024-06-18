@@ -41,8 +41,8 @@ export default class XinLingNiMoV29_4_2_199503 extends BaseCard {
         const pick = randomUtil.pickone(baseCardObjs);
         tavern.removeCard(pick, flipFlop.contextObj.sharedCardPool)
         const magnification = this.isGold ? 2 : 1;
-        needSelectCard.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, pick.attack * magnification), true, true)
-        needSelectCard.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, pick.life * magnification), false, true)
+        needSelectCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), pick.attack * magnification, true, true)
+        needSelectCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), pick.life * magnification, false, true)
     }
 
     descriptionStr() {

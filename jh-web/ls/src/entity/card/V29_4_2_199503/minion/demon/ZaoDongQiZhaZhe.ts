@@ -35,7 +35,7 @@ export default class ZaoDongQiZhaZheV29_4_2_199503 extends BaseCard {
         }
         for (let i = 0; i < number; i++) {
             const baseCardObj = randomUtil.pickone(cardList);
-            baseCardObj.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, this.getPrimitiveLife()), false, false)
+            baseCardObj.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), this.getPrimitiveLife(), false, false)
         }
     }
 }

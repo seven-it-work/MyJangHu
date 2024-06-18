@@ -31,11 +31,11 @@ export default class HeChangYuRenV29_4_2_199503 extends BaseCard {
         const handCardList = flipFlop.currentPlayer.handCardList;
         const number = this.isGold ? 2 : 1;
         this.showLog(flipFlop)
-        this.addBonus(BonusCreatUtil(flipFlop.currentCard,
+        flipFlop.currentCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}),
             handCardList.map(card => card.attack)
-                .reduce((v1, v2) => v1 + v2, 0) * number), true, false)
-        this.addBonus(BonusCreatUtil(flipFlop.currentCard,
+                .reduce((v1, v2) => v1 + v2, 0) * number, true, false)
+        flipFlop.currentCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}),
             handCardList.map(card => card.life)
-                .reduce((v1, v2) => v1 + v2, 0) * number), false, false)
+                .reduce((v1, v2) => v1 + v2, 0) * number, false, false)
     }
 }

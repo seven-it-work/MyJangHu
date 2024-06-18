@@ -16,7 +16,7 @@ export default class XiongEDeMiShiZheV29_4_2_199503 extends BaseCard {
     graded = 3
     cardType = "minion"
 
-    beginRound = true
+    atTheBeginningOfTheBattle = true
 
     descriptionStr() {
         if (this.isGold) {
@@ -25,15 +25,15 @@ export default class XiongEDeMiShiZheV29_4_2_199503 extends BaseCard {
         return "<b>战斗开始时：</b>使你手牌中的一张随从牌获得+2/+2并召唤它，其登场仅限本场战斗。"
     }
 
-    whenTheRoundBegin(flipFlop: FlipFlop) {
+    whenTheBattleBegan(flipFlop: FlipFlop) {
         const baseCardObjs = flipFlop.currentPlayer.handCardList.filter(card => !card.isLock)
         if (baseCardObjs.length <= 0) {
             return
         }
         const baseCardObj: BaseCardObj = randomUtil.pickone(baseCardObjs);
         const number = this.isGold ? 2 : 1;
-        baseCardObj.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, 2 * number), true, true)
-        baseCardObj.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, 2 * number), false, true)
+        baseCardObj.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), 2 * number, true, true)
+        baseCardObj.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), 2 * number, false, true)
         baseCardObj.lock()
         flipFlop.currentPlayer.addCard2(baseCardObj, flipFlop.currentCard, flipFlop)
     }

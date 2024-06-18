@@ -31,8 +31,8 @@ export default class BaiGeErGeGuoWangV29_4_2_199503 extends BaseCard {
         }
         const number = this.isGold ? 2 : 1;
         baseCardObjs.forEach(card => {
-            card.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, number), true, !flipFlop.currentPlayer.isEndRound)
-            card.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, number), false, !flipFlop.currentPlayer.isEndRound)
+            card.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), number, true, !flipFlop.currentPlayer.isEndRound)
+            card.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), number, false, !flipFlop.currentPlayer.isEndRound)
         })
     }
 }

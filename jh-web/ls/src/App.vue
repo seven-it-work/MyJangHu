@@ -19,16 +19,17 @@ import PlayObj from "./objs/PlayObj";
 import SaveUtils from "./utils/SaveUtils";
 import FileGenerator2 from "./views/edit/FileGenerator2.vue";
 
-const sharedCardPool = new SharedCardPool(['恶魔', '机械', '酒馆法术', '中立']);
+const sharedCardPool = new SharedCardPool(['野兽', '恶魔', '鱼人', '野猪人', '酒馆法术', '中立']);
 
 const playerList = []
 for (let i = 0; i < 2; i++) {
   const taverns = new Taverns();
   const player = new Player("玩家" + i, taverns);
   player.currentGoldCoin = 999
+  player.currentArmor = 99
   playerList.push(player)
   // 初始刷新
-  taverns.refresh({contextObj: new ContextObj(sharedCardPool)})
+  taverns.refresh(new ContextObj(sharedCardPool))
 }
 const playObj = new PlayObj(playerList, sharedCardPool);
 

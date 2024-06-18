@@ -2,7 +2,7 @@ import ContextObj from "../objs/ContextObj";
 import {Trigger, TriggerObj} from "./Trigger";
 import BaseCardObj from "../objs/BaseCardObj";
 import {sum} from "lodash";
-import {Bonus, BonusPlayer} from "../objs/Bonus";
+import {Bonus, BonusPlayer, BonusProperty} from "../objs/Bonus";
 import {Serialization} from "../utils/SaveUtils";
 import {serialize} from "class-transformer";
 import SharedCardPool from "../objs/SharedCardPool";
@@ -109,6 +109,8 @@ export default abstract class BaseCard implements FlipFlopFunc, Triggering, Seri
     private lifeBonusBattle: Bonus[] = []
     // 场上影响区（影响随从的加成，比如哼鸣蜂鸟，一旦随从不存在，将清理对应区域。这个区域影响）
     private attackBonusBattle: Bonus[] = []
+    // 回合结束时属性处理器（塑造、加成等）
+    bonusProperty: BonusProperty[] = []
 
     // 是否选中其他
     isNeedSelect: boolean = false;
@@ -325,12 +327,8 @@ export default abstract class BaseCard implements FlipFlopFunc, Triggering, Seri
      * @param isAttack
      */
     bonusBattleCovered(bonusPlayer: BonusPlayer[], isAttack: boolean) {
-        const data = bonusPlayer.map(data => {
-            return {
-                baseCardId: data.baseCardId,
-                baseCardName: data.baseCardName,
-                markupValue: data.markupValue
-            }
+        const data: Bonus[] = bonusPlayer.map(data => {
+            return {...data}
         })
         if (isAttack) {
             this.attackBonusBattle = data
@@ -439,5 +437,11 @@ export default abstract class BaseCard implements FlipFlopFunc, Triggering, Seri
     }
 
     whenIncreasedLife(flipFlop: FlipFlop) {
+    }
+
+    whenSpellUse(flipFlop: FlipFlop) {
+    }
+
+    whenVengeance(flipFlop: FlipFlop) {
     }
 }

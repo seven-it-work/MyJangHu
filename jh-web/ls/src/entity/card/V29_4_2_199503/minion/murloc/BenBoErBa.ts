@@ -39,7 +39,7 @@ export default class BenBoErBaV29_4_2_199503 extends BaseCard {
             return
         }
         let magnification = this.isGold ? 8 : 4;
-        needSelectCard.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, magnification * baseCardObjs.length), true, !flipFlop.currentPlayer.isEndRound)
-        needSelectCard.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, magnification * baseCardObjs.length), false, !flipFlop.currentPlayer.isEndRound)
+        needSelectCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), magnification * baseCardObjs.length, true, !flipFlop.currentPlayer.isEndRound)
+        needSelectCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), magnification * baseCardObjs.length, false, !flipFlop.currentPlayer.isEndRound)
     }
 }

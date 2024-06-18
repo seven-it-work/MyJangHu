@@ -53,7 +53,7 @@ export default class Taverns implements Serialization<Taverns> {
         return this.freezeCardId.length >= this.currentCard.size;
     }
 
-    refresh(triggerObj: TriggerObj, isClearAll = true) {
+    refresh(contextObj: ContextObj, isClearAll = true) {
         const freezeId = []
         if (!isClearAll) {
             // 冻结随从不刷新
@@ -77,24 +77,24 @@ export default class Taverns implements Serialization<Taverns> {
                     baseCardObj.isFreeze = false;
                 } else {
                     // 释放已有的
-                    triggerObj.contextObj.sharedCardPool.cardIn(baseCardObj.baseCard);
-                    this.removeCard(baseCardObj, triggerObj.contextObj.sharedCardPool);
+                    contextObj.sharedCardPool.cardIn(baseCardObj.baseCard);
+                    this.removeCard(baseCardObj, contextObj.sharedCardPool);
                 }
             }
         })
         // 刷新随从
         if (freezeCardSize < GRADED_RULES[this.graded].cardNumber) {
-            const baseCards: BaseCard[] = triggerObj.contextObj.sharedCardPool.refreshRandom(GRADED_RULES[this.graded].cardNumber - freezeCardSize, this.graded);
+            const baseCards: BaseCard[] = contextObj.sharedCardPool.refreshRandom(GRADED_RULES[this.graded].cardNumber - freezeCardSize, this.graded);
             baseCards.forEach(card => {
                 // 刷新要锁定共享池，锁定新出的
-                triggerObj.contextObj.sharedCardPool.cardOut(card);
+                contextObj.sharedCardPool.cardOut(card);
                 const baseCardObj = new BaseCardObj(card);
                 this.currentCard.set(baseCardObj.id, baseCardObj)
             })
         }
         // 刷新法术
         if (freezeSpellSize < this.spellSize) {
-            triggerObj.contextObj.sharedCardPool.listSpell(this.graded, this.spellSize - freezeSpellSize).forEach(card => {
+            contextObj.sharedCardPool.listSpell(this.graded, this.spellSize - freezeSpellSize).forEach(card => {
                 const spellCard = new BaseCardObj(card);
                 this.currentCard.set(spellCard.id, spellCard)
             })

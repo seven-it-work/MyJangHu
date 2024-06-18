@@ -9,7 +9,7 @@ import {Serialization} from "../utils/SaveUtils";
 import {serialize} from "class-transformer";
 import {FlipFlop, FlipFlopFunc, inversion, Triggering} from "../entity/FlipFlop";
 import randomUtil from "../utils/RandomUtils";
-import {Bonus, BonusCreatUtil} from "./Bonus";
+import {Bonus, BonusCreatUtil, BonusPlayer} from "./Bonus";
 
 function damageCalculation(flipFlop: FlipFlop) {
     var targetCard = flipFlop.targetCard;
@@ -117,11 +117,11 @@ export default class BaseCardObj implements FlipFlopFunc, Triggering, Serializat
         flipFlop.currentPlayer.deadCardListInFighting.push(this)
         // 移除
         const findNextCard = flipFlop.currentPlayer.findNextCard(this);
-        flipFlop.currentPlayer.cardRemove(this);
+        flipFlop.currentPlayer.cardCardListRemove(this);
         // 先亡语
         this.deadLanguage(flipFlop)
         // 复仇
-        this.executeCurrentOtherList(flipFlop, (item: BaseCardObj, data: FlipFlop) => item.baseCard.whenDeath(data))
+        this.executeCurrentOtherList(flipFlop, (item: BaseCardObj, data: FlipFlop) => item.baseCard.whenVengeance(data), false)
         // 复生
         if (this.baseCard.isRebirth) {
             const baseCardTemp = flipFlop.contextObj.sharedCardPool.getByName(this.baseCard.classType);
@@ -181,34 +181,34 @@ export default class BaseCardObj implements FlipFlopFunc, Triggering, Serializat
         // 战场影响加成
         flipFlop.currentPlayer.attackBonusBattle.forEach(data => {
             if (data.judgmentType(this)) {
-                this.baseCard.bonusBattleAdd(data, true)
+                this.addBonusBattle(flipFlop, data, true)
             }
         })
         flipFlop.currentPlayer.lifeBonusBattle.forEach(data => {
             if (data.judgmentType(this)) {
-                this.baseCard.bonusBattleAdd(data, false)
+                this.addBonusBattle(flipFlop, data, false)
             }
         })
         // 永久影响
         flipFlop.currentPlayer.attackBonusPermanently.forEach(data => {
             if (data.judgmentType(this)) {
-                this.baseCard.addBonus(data, true, true)
+                this.addBonusPlayer(flipFlop, data, true)
             }
         })
         flipFlop.currentPlayer.lifeBonusPermanently.forEach(data => {
             if (data.judgmentType(this)) {
-                this.baseCard.addBonus(data, false, true)
+                this.addBonusPlayer(flipFlop, data, true)
             }
         })
         // 临时影响
         flipFlop.currentPlayer.attackBonusTemporarily.forEach(data => {
             if (data.judgmentType(this)) {
-                this.baseCard.addBonus(data, true, false)
+                this.addBonusPlayer(flipFlop, data, false)
             }
         })
         flipFlop.currentPlayer.lifeBonusTemporarily.forEach(data => {
             if (data.judgmentType(this)) {
-                this.baseCard.addBonus(data, false, false)
+                this.addBonusPlayer(flipFlop, data, false)
             }
         })
         console.log(`(${flipFlop.currentPlayer.name})召唤【${this.baseCard.name}(${this.attack}/${this.life})】`)
@@ -222,6 +222,12 @@ export default class BaseCardObj implements FlipFlopFunc, Triggering, Serializat
         // 法术使用
         if (flipFlop.currentCard.isSpell()) {
             // 酒馆法术
+            // 法术使用监听
+            this.executeCurrentOtherList(flipFlop, (item: BaseCardObj, data: FlipFlop) => item.baseCard.whenSpellUse(new FlipFlop({
+                ...data,
+                currentCard: item,
+                targetCard: this,
+            })), false)
         } else if (flipFlop.currentCard.isMinion()) {
             const nextCard = flipFlop.otherData?.nextCard || undefined;
             this.warRoar(flipFlop)
@@ -270,21 +276,21 @@ export default class BaseCardObj implements FlipFlopFunc, Triggering, Serializat
         }
     }
 
-    private isSpell() {
+    isSpell() {
         return this.baseCard.type === '法术';
     }
 
-    private isMinion() {
+    isMinion() {
         return this.baseCard.type === '随从';
     }
 
     executeCurrentOtherList(flipFlop: FlipFlop, func: Function, isCheckIsOtherTriggering: boolean = true) {
         const checkFilter = (item: BaseCardObj) => {
-            if (item.id !== this.id) {
-                return true
-            }
             if (isCheckIsOtherTriggering) {
                 return item.baseCard.isOtherTriggering
+            }
+            if (item.id !== this.id) {
+                return true
             }
             return true
         }
@@ -422,6 +428,34 @@ export default class BaseCardObj implements FlipFlopFunc, Triggering, Serializat
         } else {
             this.whenIncreasedLife(flipFlop)
         }
-        this.baseCard.addBonus(BonusCreatUtil(flipFlop.targetCard,value))
+        this.baseCard.addBonus(BonusCreatUtil(flipFlop.targetCard, value), isAttack, isPermanent)
+    }
+
+    addBonusBattle(flipFlop: FlipFlop, bonusPlayer: BonusPlayer, isAttack: boolean) {
+        if (isAttack) {
+            this.whenIncreasedAttack(flipFlop)
+        } else {
+            this.whenIncreasedLife(flipFlop)
+        }
+        this.baseCard.bonusBattleAdd(bonusPlayer, isAttack)
+    }
+
+    addBonusPlayer(flipFlop: FlipFlop, bonusPlayer: BonusPlayer, isAttack: boolean) {
+        this.addBonus(new FlipFlop({
+            ...flipFlop,
+            targetCard: new BaseCardObj(flipFlop.contextObj.sharedCardPool.getByName(bonusPlayer.classType))
+        }), bonusPlayer.markupValue, isAttack, false)
+    }
+
+    whenSpellUse(flipFlop: FlipFlop) {
+        this.baseCard.whenSpellUse(flipFlop)
+    }
+
+    whenVengeance(flipFlop: FlipFlop) {
+        this.baseCard.otherDeadCounter++;
+        if (this.baseCard.otherDeadCounter >= this.baseCard.otherDeadMaxCounter) {
+            this.baseCard.whenVengeance(flipFlop);
+            this.baseCard.otherDeadCounter = 0;
+        }
     }
 }

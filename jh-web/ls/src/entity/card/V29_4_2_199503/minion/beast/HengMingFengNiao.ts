@@ -2,6 +2,7 @@
 import BaseCard from "../../../../baseCard";
 import {FlipFlop} from "../../../../FlipFlop.ts";
 import BaseCardObj from "../../../../../objs/BaseCardObj";
+import {BonusPlayerCreatUtil} from "../../../../../objs/Bonus";
 
 /**
  * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG26_805_battlegroundsImage.png
@@ -25,14 +26,11 @@ export default class HengMingFengNiaoV29_4_2_199503 extends BaseCard {
         const magnification = this.isGold ? 2 : 1;
         if (flipFlop.isCurrentCardIsTargetCard()) {
             this.showLog(flipFlop)
-            flipFlop.currentPlayer.bonusBattleAdd({
-                baseCardId: flipFlop.currentCard.id,
-                baseCardName: flipFlop.currentCard.baseCard.name,
-                markupValue: 2 * magnification,
-                judgmentType(baseCardObj: BaseCardObj): boolean {
-                    return baseCardObj.id !== this.baseCardId && baseCardObj.baseCard.ethnicity.includes('野兽');
-                }
-            }, true)
+            flipFlop.currentPlayer.bonusBattleAdd(
+                BonusPlayerCreatUtil(flipFlop.currentCard, 2 * magnification, (baseCardObj: BaseCardObj) => {
+                        return baseCardObj.id !== flipFlop.currentCard.id && baseCardObj.baseCard.ethnicity.includes('野兽');
+                    }
+                ), true)
         }
     }
 

@@ -25,14 +25,14 @@ export default class XunBaoYuRenV29_4_2_199503 extends BaseCard {
         return "<b>亡语：</b>随机使你手牌中的一张随从牌获得+5/+5。"
     }
 
-    whenDeath(flipFlop: FlipFlop) {
+    deadLanguage(flipFlop: FlipFlop) {
         const handCardList = flipFlop.currentPlayer.handCardList;
         if (handCardList.length <= 0) {
             return
         }
         const baseCardObj: BaseCardObj = randomUtil.pickone(handCardList);
         let magnification = this.isGold ? 2 : 1;
-        baseCardObj.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard,magnification*5),true,true)
-        baseCardObj.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard,magnification*5),false,true)
+        baseCardObj.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}),magnification*5,true,true)
+        baseCardObj.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}),magnification*5,false,true)
     }
 }

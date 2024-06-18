@@ -71,7 +71,7 @@ export default class Player implements Serialization<Player> {
     // 攻击加成（临时区）
     attackBonusTemporarily: BonusPlayer[] = [];
     // 鲜血宝石
-    bloodGems: { attack: number, life: number } = {attack: 0, life: 0,}
+    bloodGems: { attack: number, life: number } = {attack: 1, life: 1,}
 
     private readonly static MAX_HAND_CARD: number = 10;
 
@@ -88,6 +88,12 @@ export default class Player implements Serialization<Player> {
         // 三连判定
         if (baseCardObj.baseCard.type === '随从' && !baseCardObj.baseCard.isGold) {
             this.sanLianCheck(sharedCardPool);
+        }
+    }
+
+    removeCardInHand(baseCardObj: BaseCardObj) {
+        if (this._handCardMap.delete(baseCardObj.id)) {
+            // todo show
         }
     }
 
@@ -265,8 +271,17 @@ export default class Player implements Serialization<Player> {
                     needSelectCard: needSelectCard
                 }))
             } else {
-                // todo 法术的使用 怎么搞
-                // cardObj.whenCardUsedTrigger(triggerObj);
+                cardObj.whenUsed(new FlipFlop({
+                    otherData: {nextCard},
+                    contextObj: contextObj,
+                    currentCard: cardObj,
+                    currentLocation: '手牌',
+                    currentPlayer: this,
+                    targetCard: cardObj,
+                    targetLocation: '手牌',
+                    targetPlayer: this,
+                    needSelectCard: needSelectCard
+                }))
             }
         }
     }
@@ -324,8 +339,8 @@ export default class Player implements Serialization<Player> {
         if (this.freeRefreshTimes > 0) {
             this.freeRefreshTimes--;
         }
-        this.tavern.refresh(triggerObj)
-        // 刷新酒馆监听
+        this.tavern.refresh(context)
+        // todo 刷新酒馆监听
         // this.cardList.forEach(card => card.whenRefreshTavern({...triggerObj, currentCard: card}))
     }
 
@@ -407,6 +422,11 @@ export default class Player implements Serialization<Player> {
                 targetPlayer: this
             }))
         })
+        this.cardList.forEach(card => {
+            card.baseCard.bonusProperty.forEach(bonus => {
+                bonus.endRoundImpactMethod && bonus.endRoundImpactMethod(card)
+            })
+        })
         // 系统默认影响
         this.isEndRound = true;
         // 1、属性计算完成后，将cardListInFighting进行赋值
@@ -417,8 +437,8 @@ export default class Player implements Serialization<Player> {
         this.currentMaxGoldCoin = Math.min(10, this.currentMaxGoldCoin + 1)
         // 2、铸币=上限值
         this.currentGoldCoin = this.getMaxGoldCoin();
-        // todo 刷新未冻结的随从
-        // this.tavern.refresh(triggerObj, false)
+        // 刷新未冻结的随从
+        this.tavern.refresh(contextObj, false)
         // 3、酒馆升级--
         this.tavern.currentUpgradeExpenses = Math.max(0, this.tavern.currentUpgradeExpenses - 1)
     }
@@ -453,6 +473,11 @@ export default class Player implements Serialization<Player> {
                 targetPlayer: this
             }))
         })
+        this.cardList.forEach(card => {
+            card.baseCard.bonusProperty.forEach(bonus => {
+                bonus.startRoundImpactMethod && bonus.startRoundImpactMethod(card)
+            })
+        })
         // todo 法术能力加成，由法术自己移除
         // this.spellAttached.forEach(card => card.whenStartRound(triggerObj))
     }
@@ -460,7 +485,7 @@ export default class Player implements Serialization<Player> {
     /**
      * 移除卡片
      */
-    cardRemove(baseCardObj: BaseCardObj) {
+    cardCardListRemove(baseCardObj: BaseCardObj) {
         if (this.isEndRound) {
             this.cardListInFighting = this.cardListInFighting.filter(card => card.id !== baseCardObj.id);
         } else {

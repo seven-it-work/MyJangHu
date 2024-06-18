@@ -38,8 +38,8 @@ export default class RongYanYuRenV29_4_2_199503 extends BaseCard {
         if (flipFlop.currentLocation === '战场') {
             this.showLog(flipFlop)
             const number = this.isGold ? 2 : 1;
-            this.addBonus(BonusCreatUtil(flipFlop.currentCard, number * this.userCardNumber), true, true)
-            this.addBonus(BonusCreatUtil(flipFlop.currentCard, number * this.userCardNumber), false, true)
+            flipFlop.currentCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), number * this.userCardNumber, true, true)
+            flipFlop.currentCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), number * this.userCardNumber, false, true)
         }
         this.userCardNumber = 0
     }

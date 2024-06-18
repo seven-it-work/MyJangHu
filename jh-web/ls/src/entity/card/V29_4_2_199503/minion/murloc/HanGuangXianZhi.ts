@@ -27,6 +27,6 @@ export default class HanGuangXianZhiV29_4_2_199503 extends BaseCard {
     warRoar(flipFlop: FlipFlop) {
         const cardList = flipFlop.currentPlayer.getCardList();
         const number = this.isGold ? 2 : 1;
-        cardList.forEach(card => card.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, number * 2), false, !flipFlop.currentPlayer.isEndRound))
+        cardList.forEach(card => card.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), number * 2, false, !flipFlop.currentPlayer.isEndRound))
     }
 }

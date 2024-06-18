@@ -29,8 +29,8 @@ export default class CaiKuaiYuRenV29_4_2_199503 extends BaseCard {
                 if (flipFlop.currentLocation === '手牌') {
                     this.showLog(flipFlop)
                     const number = this.isGold ? 2 : 1;
-                    this.addBonus(BonusCreatUtil(flipFlop.currentCard, number * 3), true, true)
-                    this.addBonus(BonusCreatUtil(flipFlop.currentCard, number * 3), false, true)
+                    flipFlop.currentCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), number * 3, true, true)
+                    flipFlop.currentCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), number * 3, false, true)
                 }
             }
         }

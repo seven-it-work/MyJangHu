@@ -29,8 +29,8 @@ export default class TiKeDiAoSiV29_4_2_199503 extends BaseCard {
         const number = this.isGold ? 2 : 1;
         this.showLog(flipFlop)
         baseCardObjs.forEach(card => {
-            card.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, number), true, true)
-            card.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, number), false, true)
+            card.addBonus(new FlipFlop({...flipFlop, targetCard: flipFlop.currentCard}), number, true, true)
+            card.addBonus(new FlipFlop({...flipFlop, targetCard: flipFlop.currentCard}), number, false, true)
         })
     }
 }

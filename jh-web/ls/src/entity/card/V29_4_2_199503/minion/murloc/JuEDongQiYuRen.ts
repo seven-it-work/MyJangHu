@@ -32,7 +32,7 @@ export default class JuEDongQiYuRenV29_4_2_199503 extends BaseCard {
         const baseCardObj: BaseCardObj = randomUtil.pickone(handCardList);
         this.showLog(flipFlop)
         const number = this.isGold ? 2 : 1;
-        baseCardObj.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, 2 * number), true, true)
-        baseCardObj.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, 1 * number), false, true)
+        baseCardObj.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), 2 * number, true, true)
+        baseCardObj.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), 1 * number, false, true)
     }
 }

@@ -21,7 +21,8 @@ export default class HuoBaoXiongJiV29_4_2_199503 extends BaseCard {
         return "<b>战斗开始时：</b>对相邻随从造成1点伤害并使其获得+4攻击力。"
     }
 
-    beginRound=true
+    atTheBeginningOfTheBattle=true
+
 
     whenTheBattleBegan(flipFlop: FlipFlop) {
         const findNeighborCard = flipFlop.currentPlayer.findNeighborCard(flipFlop.currentCard);
@@ -36,7 +37,7 @@ export default class HuoBaoXiongJiV29_4_2_199503 extends BaseCard {
                         harmed:1
                     }
                 }))
-                findNeighborCard.left.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard,4),true,false)
+                findNeighborCard.left.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}),4,true,false)
             }
             if (findNeighborCard.right){
                 findNeighborCard.right.whenInjured(new FlipFlop({
@@ -47,7 +48,7 @@ export default class HuoBaoXiongJiV29_4_2_199503 extends BaseCard {
                         harmed:1
                     }
                 }))
-                findNeighborCard.right.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard,4),true,false)
+                findNeighborCard.right.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}),4,true,false)
             }
         }
     }

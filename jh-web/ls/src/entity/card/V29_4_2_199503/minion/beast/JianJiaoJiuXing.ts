@@ -24,12 +24,12 @@ export default class JianJiaoJiuXingV29_4_2_199503 extends BaseCard {
         return "<b><b>嘲讽</b>。<b>复生</b></b> <b>亡语：</b>使你的随从获得+1生命值并对其造成1点伤害。"
     }
 
-    whenDeath(flipFlop: FlipFlop) {
+    deadLanguage(flipFlop: FlipFlop) {
         const cardList = flipFlop.currentPlayer.getCardList();
         const magnification = this.isGold ? 2 : 1;
         for (let i = 0; i < magnification; i++) {
             cardList.forEach(card => {
-                card.baseCard.addBonus(BonusCreatUtil(flipFlop.currentCard, 1), false)
+                card.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), 1, false)
             })
             cardList.forEach(card => {
                 card.whenInjured(new FlipFlop({

@@ -134,12 +134,7 @@ export default defineComponent({
         }
       }
       if (this.toBeUseCard) {
-        this.playObj.currentPlayerInfo.useCard(this.toBeUseCard, nextCard, {
-          contextObj: this.playObj.contextObj,
-          needSelectCard: this.targetBaseCard,
-          currentCard: this.toBeUseCard,
-          currentPlayer: this.playObj.currentPlayerInfo,
-        })
+        this.playObj.currentPlayerInfo.useCard(this.toBeUseCard, nextCard, this.playObj.contextObj, this.targetBaseCard)
       }
       this.open = false
     }
