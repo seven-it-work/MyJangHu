@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG26_149_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "每当你对另一个随从施加<b>磁力</b>时，还会对本随从施加<b>磁力</b>。"
          }
     }
-      

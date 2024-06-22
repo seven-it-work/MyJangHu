@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG28_555_battlegroundsImage.png
@@ -13,7 +13,7 @@
          graded = 5
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             if(this.isGold){
@@ -22,4 +22,3 @@
             return "在本局对战中，你每施放一个酒馆法术，便拥有+2/+2<i>（无论本随从在哪）</i>。"
          }
     }
-      

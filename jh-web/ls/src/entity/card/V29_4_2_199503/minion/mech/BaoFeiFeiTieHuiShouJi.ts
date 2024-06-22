@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG26_148_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b>亡语：</b>随机获取一张<b>磁力</b>机械牌。"
          }
     }
-      

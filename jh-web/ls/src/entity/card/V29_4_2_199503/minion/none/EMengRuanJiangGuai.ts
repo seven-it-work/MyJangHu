@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG20_HERO_301_Buddy_imageFromHsJson512x.png
@@ -13,11 +13,10 @@
          graded = 3
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             return "当你“吞噬”本随从时，将它的属性值吐到额外1个随从身上。"
         }
-        
+
     }
-      

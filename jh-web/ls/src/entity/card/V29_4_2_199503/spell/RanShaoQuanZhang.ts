@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/DMF_004t6_image.png
@@ -20,4 +20,3 @@
         }
         
     }
-      

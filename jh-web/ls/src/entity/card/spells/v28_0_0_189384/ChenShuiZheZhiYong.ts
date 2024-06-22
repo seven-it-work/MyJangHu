@@ -12,7 +12,7 @@ export default class ChenShuiZheZhiYong28 extends BaseCard {
     isNeedSelect=true
 
     needSelectFilter(baseCardObj: BaseCardObj[]): BaseCardObj[] {
-        return baseCardObj.filter(card => card.baseCard.isWarRoars);
+        return baseCardObj.filter(card => card.location === '战场').filter(card => card.baseCard.isWarRoars);
     }
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {

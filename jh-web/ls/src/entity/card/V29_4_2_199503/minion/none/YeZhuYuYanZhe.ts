@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG20_203_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b>嘲讽</b>。在你使用一张野猪人后，获取一张<b>鲜血宝石</b>。"
          }
     }
-      

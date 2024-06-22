@@ -26,7 +26,7 @@ export default class BenBoErBaV29_4_2_199503 extends BaseCard {
     }
 
     needSelectFilter(baseCardObj: BaseCardObj[]): BaseCardObj[] {
-        return super.needSelectFilter(baseCardObj).filter(item => item.baseCard.ethnicity.includes('鱼人'));
+        return super.needSelectFilter(baseCardObj).filter(card => card.location === '战场').filter(item => item.baseCard.ethnicity.includes('鱼人'));
     }
 
     warRoar(flipFlop: FlipFlop) {
@@ -39,7 +39,13 @@ export default class BenBoErBaV29_4_2_199503 extends BaseCard {
             return
         }
         let magnification = this.isGold ? 8 : 4;
-        needSelectCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), magnification * baseCardObjs.length, true, !flipFlop.currentPlayer.isEndRound)
-        needSelectCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), magnification * baseCardObjs.length, false, !flipFlop.currentPlayer.isEndRound)
+        needSelectCard.addBonus(new FlipFlop({
+            ...flipFlop,
+            targetCard: flipFlop.currentCard
+        }), magnification * baseCardObjs.length, true, !flipFlop.currentPlayer.isEndRound)
+        needSelectCard.addBonus(new FlipFlop({
+            ...flipFlop,
+            targetCard: flipFlop.currentCard
+        }), magnification * baseCardObjs.length, false, !flipFlop.currentPlayer.isEndRound)
     }
 }

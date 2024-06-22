@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG28_403_battlegroundsImage.png
@@ -13,7 +13,7 @@
          graded = 3
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             if(this.isGold){
@@ -22,4 +22,3 @@
             return "<b><b>圣盾</b>。复仇（4）：</b>随机使一个友方随从获得<b><b>圣盾</b>。</b>"
          }
     }
-      

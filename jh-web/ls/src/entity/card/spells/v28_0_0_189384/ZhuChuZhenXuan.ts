@@ -15,7 +15,7 @@ export default class ZhuChuZhenXuan28 extends BaseCard {
 
 
     needSelectFilter(baseCardObj: BaseCardObj[]): BaseCardObj[] {
-        return baseCardObj.filter(card => baseEthnicity.some(str => card.baseCard.ethnicity.includes(str)));
+        return baseCardObj.filter(card => card.location === '战场' || card.location === '酒馆').filter(card => baseEthnicity.some(str => card.baseCard.ethnicity.includes(str)));
     }
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {

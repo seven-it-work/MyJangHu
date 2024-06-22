@@ -9,12 +9,15 @@ export default class ZiRanZhuFu28 extends BaseCard {
     name = "自然祝福"
     graded = 3
     spendingGoldCoin = 3
-    descriptionStr(){return "选择一个随从，使所有该类型的随从获得+3/+2。"}
+
+    descriptionStr() {
+        return "选择一个随从，使所有该类型的随从获得+3/+2。"
+    }
 
     isNeedSelect = true
 
     needSelectFilter(baseCardObj: BaseCardObj[]): BaseCardObj[] {
-        return baseCardObj.filter(card => baseEthnicity.some(str => card.baseCard.ethnicity.includes(str)));
+        return baseCardObj.filter(card => card.location === '战场' || card.location === '酒馆').filter(card => baseEthnicity.some(str => card.baseCard.ethnicity.includes(str)));
     }
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {

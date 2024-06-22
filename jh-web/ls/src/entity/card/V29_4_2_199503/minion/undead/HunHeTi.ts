@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/TB_BaconShop_HERO_33_Buddy_imageFromHsJson512x.png
@@ -13,11 +13,10 @@
          graded = 3
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             return "每当你的融合怪获得属性值时，本随从也会获得。"
         }
-        
+
     }
-      

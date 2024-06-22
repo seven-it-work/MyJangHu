@@ -22,7 +22,7 @@ export default class ShiTangLieRenV29_4_2_199503 extends BaseCard {
     }
 
     needSelectFilter(baseCardObj: BaseCardObj[]): BaseCardObj[] {
-        return super.needSelectFilter(baseCardObj).filter(item => item.baseCard.ethnicity.includes('鱼人'));
+        return super.needSelectFilter(baseCardObj).filter(card => card.location === '战场').filter(item => item.baseCard.ethnicity.includes('鱼人'));
     }
 
     warRoar(flipFlop: FlipFlop) {
@@ -31,7 +31,13 @@ export default class ShiTangLieRenV29_4_2_199503 extends BaseCard {
             return
         }
         let magnification = this.isGold ? 2 : 1;
-        flipFlop.currentCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), magnification, true, !flipFlop.currentPlayer.isEndRound)
-        flipFlop.currentCard.addBonus(new FlipFlop({...flipFlop,targetCard:flipFlop.currentCard}), magnification, false, !flipFlop.currentPlayer.isEndRound)
+        flipFlop.currentCard.addBonus(new FlipFlop({
+            ...flipFlop,
+            targetCard: flipFlop.currentCard
+        }), magnification, true, !flipFlop.currentPlayer.isEndRound)
+        flipFlop.currentCard.addBonus(new FlipFlop({
+            ...flipFlop,
+            targetCard: flipFlop.currentCard
+        }), magnification, false, !flipFlop.currentPlayer.isEndRound)
     }
 }

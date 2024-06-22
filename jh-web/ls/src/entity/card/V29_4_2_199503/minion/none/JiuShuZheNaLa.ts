@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG28_551_battlegroundsImage.png
@@ -13,7 +13,7 @@
          graded = 6
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             if(this.isGold){
@@ -22,4 +22,3 @@
             return "每当你施放一个酒馆法术时，使每个类型的各一个友方随从获得+2/+2。"
          }
     }
-      

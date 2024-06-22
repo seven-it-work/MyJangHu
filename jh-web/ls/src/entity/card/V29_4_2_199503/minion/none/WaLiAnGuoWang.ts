@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG27_508_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "当你出售本随从时，<b>发现</b>两个等级6 的随从。"
          }
     }
-      

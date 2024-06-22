@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/TB_BaconShop_HERO_70_Buddy_imageFromHsJson512x.png
@@ -13,11 +13,10 @@
          graded = 3
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             return "在你的回合开始时，获取生命值最低的对手的战队中的一个原始版随从。"
         }
-        
+
     }
-      

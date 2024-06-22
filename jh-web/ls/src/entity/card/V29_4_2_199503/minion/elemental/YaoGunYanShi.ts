@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG26_535_battlegroundsImage.png
@@ -13,7 +13,7 @@
          graded = 6
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             if(this.isGold){
@@ -22,4 +22,3 @@
             return "在你使用一张元素牌后，使你的随从获得+2攻击力。<i>（下回合切换为生命值！）</i> 在你使用一张元素牌后，使你的随从获得+2生命值。<i>（下回合切换为攻击力！）</i>"
          }
     }
-      

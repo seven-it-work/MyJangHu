@@ -10,12 +10,15 @@ export default class HaMiuErYiShiDeFaZhang28 extends BaseCard {
     name = "哈缪尔遗失的法杖"
     graded = 6
     spendingGoldCoin = 2
-    descriptionStr(){return "刷新酒馆，使其中的牌变为该类型的随从。"}
+
+    descriptionStr() {
+        return "刷新酒馆，使其中的牌变为该类型的随从。"
+    }
 
     isNeedSelect = true
 
     needSelectFilter(baseCardObj: BaseCardObj[]): BaseCardObj[] {
-        return super.needSelectFilter(baseCardObj).filter(card => card.baseCard.ethnicity.length > 0);
+        return super.needSelectFilter(baseCardObj).filter(card => card.location === '战场' || card.location === '酒馆').filter(card => card.baseCard.ethnicity.length > 0);
     }
 
     whenCardUsedTrigger(triggerObj: TriggerObj) {

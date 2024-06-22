@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_877_battlegroundsImage.png
@@ -13,7 +13,7 @@
          graded = 3
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             if(this.isGold){
@@ -22,4 +22,3 @@
             return "<b>亡语：</b>在本局对战中，酒馆中的随从拥有+2攻击力。"
          }
     }
-      

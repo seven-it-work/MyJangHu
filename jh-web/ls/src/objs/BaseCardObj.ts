@@ -58,6 +58,7 @@ export default class BaseCardObj implements FlipFlopFunc, Triggering, Serializat
     isFreeze: boolean = false;
     isLock: boolean = false
     remainingUnlockRounds: number = 0;
+    location: '手牌' | '战场' | '酒馆';
 
     constructor(baseCard: BaseCard | undefined) {
         if (baseCard) {
@@ -263,7 +264,14 @@ export default class BaseCardObj implements FlipFlopFunc, Triggering, Serializat
                 if (this.baseCard.isNeedSelect) {
                     if (!flipFlop.needSelectCard) {
                         // 随机选择
-                        const cardList = this.baseCard.needSelectFilter(flipFlop.currentPlayer.getCardList());
+                        flipFlop.currentPlayer.getCardList().forEach(card => card.location = '战场')
+                        flipFlop.currentPlayer.handCardList.forEach(card => card.location = '战场')
+                        Array.from(flipFlop.currentPlayer.tavern.currentCard.values()).forEach(card => card.location = '战场')
+                        const cardList = this.baseCard.needSelectFilter([
+                            ...flipFlop.currentPlayer.getCardList(),
+                            ...flipFlop.currentPlayer.handCardList,
+                            ...Array.from(flipFlop.currentPlayer.tavern.currentCard.values())
+                        ]);
                         if (cardList.length <= 0) {
                             return
                         }
@@ -272,6 +280,10 @@ export default class BaseCardObj implements FlipFlopFunc, Triggering, Serializat
                 }
                 console.log(`(${flipFlop.currentPlayer.name})的【${this.baseCard.name}】触发战吼：${this.baseCard.descriptionStr()}`)
                 this.baseCard.warRoar(flipFlop)
+                this.executeCurrentOtherList(flipFlop, (item: BaseCardObj, data: FlipFlop) => item.warRoarHook(new FlipFlop({
+                    ...data,
+                    targetCard: flipFlop.currentCard
+                })))
             }
         }
     }
@@ -457,5 +469,9 @@ export default class BaseCardObj implements FlipFlopFunc, Triggering, Serializat
             this.baseCard.whenVengeance(flipFlop);
             this.baseCard.otherDeadCounter = 0;
         }
+    }
+
+    warRoarHook(flipFlop: FlipFlop) {
+        this.baseCard.warRoarHook(flipFlop)
     }
 }

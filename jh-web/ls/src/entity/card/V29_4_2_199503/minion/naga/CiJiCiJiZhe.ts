@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG27_024_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "每当你施放一个法术，直到下回合，从<b>圣盾</b>，<b>风怒</b>或<b>烈毒</b>中获得一种。"
          }
     }
-      

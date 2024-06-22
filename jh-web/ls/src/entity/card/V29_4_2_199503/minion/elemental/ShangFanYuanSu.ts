@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BGS_115_battlegroundsImage.png
@@ -13,11 +13,10 @@
          graded = 2
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             return "当你出售 本随从时，获取一张3/3的元素牌。"
         }
-        
+
     }
-      

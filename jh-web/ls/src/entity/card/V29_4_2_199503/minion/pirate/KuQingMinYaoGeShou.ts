@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG26_814_battlegroundsImage.png
@@ -13,7 +13,7 @@
          graded = 4
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             if(this.isGold){
@@ -22,4 +22,3 @@
             return "<b>战吼：</b>在本回合中，每花一枚铸币，使一个海盗获得+1生命值。"
          }
     }
-      

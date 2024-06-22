@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG25_007_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b>亡语：</b>在本局对战中，你的亡灵拥有+1攻击力<i>（无论它们在哪）</i>。"
          }
     }
-      

@@ -3,6 +3,7 @@ import randomUtil from "../utils/RandomUtils";
 import Player from "./Player";
 import {isEmpty} from "lodash";
 import {FlipFlop} from "../entity/FlipFlop";
+import {target} from "happy-dom/lib/PropertySymbol";
 
 export default class FightObj {
     // 攻击发起人
@@ -148,7 +149,7 @@ export default class FightObj {
 
     }
 
-    private static getRemainingEntourage(player: Player):string[] {
+    private static getRemainingEntourage(player: Player): string[] {
         return player.getCardList().map(card => `【(${card.baseCard.graded}级)${card.baseCard.name}(${card.attack}/${card.life})】`)
     }
 
@@ -179,7 +180,15 @@ export default class FightObj {
         // }))
     }
 
+    private isOver() {
+        return this.attackerPlayer.cardListInFighting.length <= 0 || this.defenderPlayer.cardListInFighting.length <= 0
+    }
+
     private doFight(isAttacker: Boolean) {
+        // 是否结束判断
+        if (this.isOver()) {
+            return;
+        }
         let checkAttackerIndex;
         let attackerPlayer: Player
         let defenderPlayer: Player

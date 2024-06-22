@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG23_009_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "每回合施放在本随从身上的第一个<b>塑造法术</b>附加效果永久有效。"
          }
     }
-      

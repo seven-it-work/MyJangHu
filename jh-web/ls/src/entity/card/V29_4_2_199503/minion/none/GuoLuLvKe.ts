@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BGDUO_114_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "每回合中你的队伍第一次<b>传递</b>时，获得+1/+2。"
          }
     }
-      

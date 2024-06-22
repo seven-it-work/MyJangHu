@@ -22,7 +22,7 @@ export default class XinLingNiMoV29_4_2_199503 extends BaseCard {
     isNeedSelect = true;
 
     needSelectFilter(baseCardObj: BaseCardObj[]): BaseCardObj[] {
-        return super.needSelectFilter(baseCardObj).filter(card => card.baseCard.ethnicity.includes('恶魔'));
+        return super.needSelectFilter(baseCardObj).filter(card => card.location === '战场').filter(card => card.baseCard.ethnicity.includes('恶魔'));
     }
 
     isWarRoars = true

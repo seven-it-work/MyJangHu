@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_888_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "每当本随从攻击时，获得+2/+1。"
          }
     }
-      

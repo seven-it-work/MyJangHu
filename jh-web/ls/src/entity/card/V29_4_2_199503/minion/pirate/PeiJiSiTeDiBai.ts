@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG25_032_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "在一张卡牌被置入你的手牌后，使另一个友方海盗获得+1/+1。"
          }
     }
-      

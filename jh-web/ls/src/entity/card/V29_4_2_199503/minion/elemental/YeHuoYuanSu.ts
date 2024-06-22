@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BGS_126_battlegroundsImage.png
@@ -13,11 +13,10 @@
          graded = 3
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             return "在本随从攻击并消灭一个随从后，对一个相邻的随从造成超过目标生命值的伤害。"
         }
-        
+
     }
-      

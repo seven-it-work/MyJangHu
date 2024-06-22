@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/TB_BaconShop_HERO_49_Buddy_imageFromHsJson512x.png
@@ -13,11 +13,10 @@
          graded = 5
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             return "在你购买一张牌后，在酒馆中添加一张相同等级的牌。"
         }
-        
+
     }
-      

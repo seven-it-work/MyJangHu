@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_813_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b><b>圣盾</b>。</b>相邻的龙可永久保留战斗阶段受到的你的附加效果。"
          }
     }
-      

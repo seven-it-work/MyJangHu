@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG23_001_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "每回合一次：当你施放法术时，获得+2生命值。"
          }
     }
-      

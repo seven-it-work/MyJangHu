@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG27_021_battlegroundsImage.png
@@ -13,7 +13,7 @@
          graded = 7
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             if(this.isGold){
@@ -22,4 +22,3 @@
             return "<b>磁力</b> <b>复生</b>。<b>圣盾</b>。<b>嘲讽</b>。<b>风怒</b>"
          }
     }
-      

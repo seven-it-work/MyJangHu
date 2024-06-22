@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/TB_BaconShop_HERO_17_Buddy_imageFromHsJson512x.png
@@ -13,11 +13,10 @@
          graded = 4
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             return "<b>亡语：</b>在本场战斗中每有一个你的机械死亡，随机对一个敌方随从造成2点伤害。"
         }
-        
+
     }
-      

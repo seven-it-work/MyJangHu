@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_844_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "每当本随从受到伤害，使每个类型的各一个友方随从永久获得+1/+1。<i>（每场战斗限两次。）</i>"
          }
     }
-      

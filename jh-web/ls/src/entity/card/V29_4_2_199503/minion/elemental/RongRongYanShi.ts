@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BGS_127_battlegroundsImage.png
@@ -13,11 +13,10 @@
          graded = 1
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             return "在你使用一张元素牌后，获得+1生命值。"
         }
-        
+
     }
-      

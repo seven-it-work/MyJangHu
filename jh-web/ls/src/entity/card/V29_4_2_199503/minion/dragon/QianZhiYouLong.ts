@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_810_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b>战斗开始时：</b>使你最左边的龙获得+1/+2和<b>风怒</b>。"
          }
     }
-      

@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/TB_BaconShop_HERO_25_Buddy_imageFromHsJson512x.png
@@ -13,11 +13,10 @@
          graded = 4
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             return "每当你的英雄即将受到伤害时，改为本随从获得+2/+2。<i>（本回合还剩2次。）</i>"
         }
-        
+
     }
-      

@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/TB_BaconShop_HERO_41_Buddy_imageFromHsJson512x.png
@@ -13,11 +13,10 @@
          graded = 1
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             return "<b>嘲讽</b>。<b>亡语：</b>使你最右边的随从变为金色。"
         }
-        
+
     }
-      

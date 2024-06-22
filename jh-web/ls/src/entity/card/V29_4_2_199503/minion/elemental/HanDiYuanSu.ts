@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG28_556_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "在每次<b>刷新</b>后，酒馆额外提供一张酒馆法术牌。"
          }
     }
-      

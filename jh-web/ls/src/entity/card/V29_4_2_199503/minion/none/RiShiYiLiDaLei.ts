@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/TB_BaconShop_HERO_08_Buddy_imageFromHsJson512x.png
@@ -13,12 +13,11 @@
          graded = 2
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             return "你的第一个攻击的
 随从拥有仅在一次攻击中有效的“攻击时<b>免疫</b>”。"
         }
-        
+
     }
-      

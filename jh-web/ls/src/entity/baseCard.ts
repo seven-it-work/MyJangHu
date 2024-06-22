@@ -444,4 +444,7 @@ export default abstract class BaseCard implements FlipFlopFunc, Triggering, Seri
 
     whenVengeance(flipFlop: FlipFlop) {
     }
+
+    warRoarHook(flipFlop: FlipFlop) {
+    }
 }

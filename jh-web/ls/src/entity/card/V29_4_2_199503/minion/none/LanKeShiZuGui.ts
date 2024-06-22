@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG24_018_battlegroundsImage.png
@@ -13,7 +13,7 @@
          graded = 5
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             if(this.isGold){
@@ -22,4 +22,3 @@
             return "如果你输掉了上一场战斗，出售本随从可以获得5枚铸币。"
          }
     }
-      

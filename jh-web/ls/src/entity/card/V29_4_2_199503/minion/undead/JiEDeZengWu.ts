@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG25_014_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b>复仇（1)：</b>永久获得+1/+2。"
          }
     }
-      

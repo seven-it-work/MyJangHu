@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BGDUO_125_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "<b>战斗开始时：</b>变形成为你的队友生命值最高的随从的复制。"
          }
     }
-      

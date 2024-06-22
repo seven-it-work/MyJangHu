@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG22_HERO_200_Buddy_imageFromHsJson512x.png
@@ -13,11 +13,10 @@
          graded = 4
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             return "在你使用一张机械牌后，获得+2/+2。"
         }
-        
+
     }
-      

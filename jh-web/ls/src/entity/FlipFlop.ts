@@ -74,6 +74,11 @@ export interface Triggering {
     warRoar(flipFlop: FlipFlop);
 
     /**
+     * 战吼监听
+     */
+    warRoarHook(flipFlop: FlipFlop);
+
+    /**
      * 亡语
      */
     deadLanguage(flipFlop: FlipFlop);

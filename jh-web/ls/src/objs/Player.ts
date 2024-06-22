@@ -6,7 +6,6 @@ import {cloneDeep, groupBy} from "lodash";
 import SharedCardPool from "./SharedCardPool";
 import {Serialization} from "../utils/SaveUtils";
 import {serialize} from "class-transformer";
-import Sanlian from "../entity/card/spells/base/Sanlian.ts";
 import {FlipFlop} from "../entity/FlipFlop";
 import {Bonus, BonusPlayer} from "./Bonus";
 
@@ -131,7 +130,7 @@ export default class Player implements Serialization<Player> {
                         }
                     }
                     // 给一张三连和升级牌
-                    console.log("给一张三连和升级牌")
+                    console.log("你合成了金色随从")
                     const baseCardObj = BaseCardObj.sanLian(cardObj[0], cardObj[1], cardObj[2], sharedCardPool);
                     this.addCardInHand(baseCardObj, sharedCardPool)
                 }
@@ -239,8 +238,9 @@ export default class Player implements Serialization<Player> {
         if (this._handCardMap.delete(cardObj.id)) {
             if (cardObj.baseCard.type === '随从') {
                 if (cardObj.baseCard.isGold) {
+                    console.log("获取金色奖励")
                     // 使用金色卡，获得三连卡
-                    const sanlian = new Sanlian();
+                    const sanlian = contextObj.sharedCardPool.getByName("Sanlian");
                     sanlian.graded = Math.min(6, this.tavern.graded + 1)
                     this.addCardInHand(new BaseCardObj(sanlian), contextObj.sharedCardPool)
                 }

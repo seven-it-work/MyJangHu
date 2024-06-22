@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG24_HERO_100_Buddy_imageFromHsJson512x.png
@@ -13,11 +13,10 @@
          graded = 3
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             return "<b>战吼：</b><b>发现</b>一个<b>任务</b>。完成该任务即可获取一袋8枚装的铸币。"
         }
-        
+
     }
-      

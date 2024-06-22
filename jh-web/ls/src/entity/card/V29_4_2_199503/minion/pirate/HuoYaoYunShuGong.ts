@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG26_810_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "在你花掉4枚铸币后，使你的海盗获得+1攻击力。<i>（还剩 枚！）</i>"
          }
     }
-      

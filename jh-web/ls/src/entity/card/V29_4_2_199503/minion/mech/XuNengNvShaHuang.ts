@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG28_741_battlegroundsImage.png
@@ -13,7 +13,7 @@
          graded = 5
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             if(this.isGold){
@@ -22,4 +22,3 @@
             return "<b>圣盾</b>。每当你施放一个酒馆法术时，使你具有<b>圣盾</b>的随从获得+2攻击力。"
          }
     }
-      

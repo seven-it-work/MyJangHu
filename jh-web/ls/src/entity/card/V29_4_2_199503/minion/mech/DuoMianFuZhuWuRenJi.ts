@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG26_152_battlegroundsImage.png
@@ -22,4 +22,3 @@
             return "在你的回合结束时，你的随从每拥有一个<b>磁力</b>效果，使其获得+2/+1。"
          }
     }
-      

@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/TB_BaconShop_HERO_14_Buddy_imageFromHsJson512x.png
@@ -13,11 +13,10 @@
          graded = 2
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             return "<b>战吼：</b>每有一个不同的友方随从类型，便获得1枚铸币。"
         }
-        
+
     }
-      

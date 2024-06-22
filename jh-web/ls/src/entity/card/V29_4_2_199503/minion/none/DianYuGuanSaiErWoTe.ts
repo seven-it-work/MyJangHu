@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG21_HERO_010_Buddy_battlegroundsImage.png
@@ -13,11 +13,10 @@
          graded = 4
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             return "在你的回合开始时，获取一张下一个对手的伙伴。"
         }
-        
+
     }
-      

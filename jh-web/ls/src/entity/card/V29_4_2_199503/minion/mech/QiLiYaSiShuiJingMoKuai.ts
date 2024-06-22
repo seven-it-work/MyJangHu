@@ -1,6 +1,6 @@
 
       // 将seven替换为路径
-      import BaseCard from "seven/baseCard.ts";
+      import BaseCard from "../../../../baseCard.ts";
 
       /**
       * https://battlegrounds.oss.gamerhub.cn/all_images/29.4.2.199503/BG29_100t_battlegroundsImage.png
@@ -13,11 +13,10 @@
          graded = 2
          cardType = "minion"
 
-         
+
 
          descriptionStr() {
             return "<b>复生</b> <i>可以与任意奇利亚斯模块三连。</i>"
         }
-        
+
     }
-      
