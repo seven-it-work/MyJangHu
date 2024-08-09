@@ -39,6 +39,9 @@ export default {
   <span style="margin-left: 10px">
     <router-link to="/game">游戏</router-link>
   </span>
+  <span style="margin-left: 10px">
+    <router-link to="/game2">youxi</router-link>
+  </span>
 </template>
 
 <style scoped>

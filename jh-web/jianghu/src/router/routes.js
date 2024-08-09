@@ -42,6 +42,13 @@ const routes = [
                 ]
             },
             {
+                path: '/game2',
+                name: 'game2',
+                title: '游戏',
+                component: () => import('@/view/game2/index.vue'),
+                children: []
+            },
+            {
                 path: '/manager',
                 name: 'manager',
                 title: '管理',

@@ -3,6 +3,9 @@ import CardStorageBeast from "./minion/beast/CardStorageBeast.ts";
 import CardStorageDemon from "./minion/demon/CardStorageKyoma.ts";
 import CardStorageSpell from "./spell/CardStorageSpell";
 import CardStorageQuilboar from "./minion/quilboar/CardStorageQuilboar";
+import CardStorageTavern from "./tavern/CardStorageTavern";
+
+
 
 const CardStorage = new Map<String, any>();
 
@@ -20,6 +23,9 @@ CardStorageSpell.forEach((v, k) => {
     CardStorage.set(k, v)
 })
 CardStorageQuilboar.forEach((v, k) => {
+    CardStorage.set(k, v)
+})
+CardStorageTavern.forEach((v, k) => {
     CardStorage.set(k, v)
 })
 

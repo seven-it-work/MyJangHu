@@ -63,6 +63,7 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
                 this.pool.set(card.classType, new SharedCardPoolData(card.graded, GRADED_RULES[card.graded].cardSize, card))
             })
         }
+        console.log(this.pool)
     }
 
     listByEthnicity(ethnicity: string[], graded: number | undefined = undefined, isMatchAll = false, checkRemainingQuantity: boolean = false): BaseCard[] {
@@ -155,6 +156,7 @@ export default class SharedCardPool implements Serialization<SharedCardPool> {
                 return card.baseCard.graded <= graded
             })
             .map(card => card.baseCard)
+        console.log(list)
         if (list.length <= 0) {
             return []
         }

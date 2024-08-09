@@ -1,4 +1,5 @@
 import Chance from 'chance'
+
 const BASE_STR = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
 
 export const randomStr = {
@@ -177,11 +178,23 @@ export const randomColor = {
     createBgAndTextColorHex() {
         let c = [Math.round(Math.random() * 255), Math.round(Math.random() * 255), Math.round(Math.random() * 255)]
         let bgColor = this.rgb2Hex(c)
-        let color = this.rgb2Hex([(255 - c[0]),(255 - c[1]),(255 - c[2])])
+        let color = this.rgb2Hex([(255 - c[0]), (255 - c[1]), (255 - c[2])])
         return {
             bgColor: bgColor,
             color: color
         }
+    }
+}
+
+export const probability = {
+    calculateTheProbability(number) {
+        if (number >= 1) {
+            return true;
+        }
+        if (number <= 0) {
+            return false;
+        }
+        return number * 100 > randomNumber.randomInt(0, 100);
     }
 }
 

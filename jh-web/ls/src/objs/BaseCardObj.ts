@@ -224,11 +224,7 @@ export default class BaseCardObj implements FlipFlopFunc, Triggering, Serializat
         if (flipFlop.currentCard.isSpell()) {
             // 酒馆法术
             // 法术使用监听
-            this.executeCurrentOtherList(flipFlop, (item: BaseCardObj, data: FlipFlop) => item.baseCard.whenSpellUse(new FlipFlop({
-                ...data,
-                currentCard: item,
-                targetCard: this,
-            })), false)
+            flipFlop.currentCard.whenSpellUse(flipFlop)
         } else if (flipFlop.currentCard.isMinion()) {
             const nextCard = flipFlop.otherData?.nextCard || undefined;
             this.warRoar(flipFlop)
