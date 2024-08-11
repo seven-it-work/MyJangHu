@@ -4,12 +4,13 @@ export interface BaseSkill {
     type: "attack" | "gridBlock" | "dodge" | "runAway",
     key: string,
     name: string,
+    aiCanUsed: boolean;
 
     executionAction(playerObj: PlayerObj, targetPlayerObj: PlayerObj): number,
 }
 
 export const percentageCalculation = (molecules: number, denominator: number, decimalPlace: number = 1): string => {
-    return (molecules / denominator*100).toFixed(decimalPlace);
+    return (molecules / denominator * 100).toFixed(decimalPlace);
 }
 
 export const defaultSkills = (): Map<string, BaseSkill> => {
@@ -26,6 +27,7 @@ export class HandAttack implements BaseSkill {
     type: "attack" | "gridBlock" | "dodge" = "attack";
     key: string = "HandAttack";
     name: string = "手部攻击";
+    aiCanUsed: boolean = true;
 
     /**
      * 臂力影响伤害
@@ -50,6 +52,8 @@ export class FootAttack implements BaseSkill {
     executionAction(playerObj: PlayerObj, targetPlayerObj: PlayerObj): number {
         return playerObj.property.footStrength;
     }
+
+    aiCanUsed: boolean = true;
 }
 
 export class GridBlock implements BaseSkill {
@@ -65,6 +69,8 @@ export class GridBlock implements BaseSkill {
     executionAction(playerObj: PlayerObj, targetPlayerObj: PlayerObj): number {
         return playerObj.property.fixedForce;
     }
+
+    aiCanUsed: boolean = true;
 }
 
 export class Dodge implements BaseSkill {
@@ -80,6 +86,8 @@ export class Dodge implements BaseSkill {
     executionAction(playerObj: PlayerObj, targetPlayerObj: PlayerObj): number {
         return playerObj.property.agility;
     }
+
+    aiCanUsed: boolean = true;
 }
 
 export class RunAway implements BaseSkill {
@@ -95,4 +103,6 @@ export class RunAway implements BaseSkill {
     executionAction(playerObj: PlayerObj, targetPlayerObj: PlayerObj): number {
         return playerObj.property.agility;
     }
+
+    aiCanUsed: boolean = false;
 }

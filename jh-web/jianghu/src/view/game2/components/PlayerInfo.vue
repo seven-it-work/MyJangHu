@@ -8,13 +8,13 @@
       <a-col :span="18">
         <!--            这里是变化值-->
         <a-row :gutter="18">
-          <a-col :span="4">生命：</a-col>
+          <a-col :span="4">生命：<span v-if="isDebug">{{ playerObj.property.health.toFixed(2) }}</span></a-col>
           <a-col :span="8">
             <a-progress :percent="percentageCalculation(playerObj.property.health,playerObj.property.maxHealth)"
                         status="active"
                         :stroke-color="{'0%': '#108ee9','100%': '#87d068',}"/>
           </a-col>
-          <a-col :span="4">生命：</a-col>
+          <a-col :span="4">生命：<span v-if="isDebug">{{ playerObj.property.health }}</span></a-col>
           <a-col :span="8">
             <a-progress :percent="percentageCalculation(playerObj.property.health,playerObj.property.maxHealth)"
                         status="active"
@@ -29,7 +29,7 @@
         <a-row>
           <a-col :span="8">
             <a-row>
-              <a-col :span="8">臂力：</a-col>
+              <a-col :span="8">臂力：<span v-if="isDebug">{{ playerObj.property.armStrength }}</span></a-col>
               <a-col :span="16">
                 <a-progress style="float: right" :showInfo="false"
                             :percent="percentageCalculationLevel(playerObj.property.armStrength)"
@@ -40,7 +40,7 @@
           </a-col>
           <a-col :span="8">
             <a-row>
-              <a-col :span="8">脚力：</a-col>
+              <a-col :span="8">脚力：<span v-if="isDebug">{{ playerObj.property.footStrength }}</span></a-col>
               <a-col :span="16">
                 <a-progress style="float: right" :showInfo="false"
                             :percent="percentageCalculationLevel(playerObj.property.footStrength)"
@@ -51,7 +51,7 @@
           </a-col>
           <a-col :span="8">
             <a-row>
-              <a-col :span="8">敏捷：</a-col>
+              <a-col :span="8">敏捷：<span v-if="isDebug">{{ playerObj.property.agility }}</span></a-col>
               <a-col :span="16">
                 <a-progress style="float: right" :showInfo="false"
                             :percent="percentageCalculationLevel(playerObj.property.agility)"
@@ -62,7 +62,7 @@
           </a-col>
           <a-col :span="8">
             <a-row>
-              <a-col :span="8">定力：</a-col>
+              <a-col :span="8">定力：<span v-if="isDebug">{{ playerObj.property.fixedForce }}</span></a-col>
               <a-col :span="16">
                 <a-progress style="float: right" :showInfo="false"
                             :percent="percentageCalculationLevel(playerObj.property.fixedForce)"
@@ -82,9 +82,15 @@
 <script>
 import {percentageCalculation} from "@/view/game2/objs/baseSkill";
 import {levelColorUtil, percentageCalculationLevel} from "@/view/game2/objs/playerObj";
+import {isDebug} from "@/view/game2/store.js";
 
 export default {
   name: "PlayerInfo",
+  methods: {
+    isDebug() {
+      return isDebug
+    }
+  },
   props: {
     playerObj: Object
   },

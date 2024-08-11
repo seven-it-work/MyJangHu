@@ -11,16 +11,7 @@
 
     <PlayerInfo :player-obj="player.playerObj"></PlayerInfo>
 
-    <a-row style="padding: 20px" :gutter="16">
-      <a-col :span="20">
-        <div style="height: 150px;overflow-y: scroll">
-          <div v-for="logItem in player.logs" v-html="logItem.html"></div>
-        </div>
-      </a-col>
-      <a-col :span="4">
-        <div>按钮组</div>
-      </a-col>
-    </a-row>
+    <footPage></footPage>
   </div>
 
   <!--openRouteCard弹窗-->
@@ -41,10 +32,11 @@ import {mapState} from "vuex";
 import {randomPlayerObj} from "@/view/game2/objs/playerObj";
 import PlayerInfo from "@/view/game2/components/PlayerInfo.vue";
 import {randomRouteCard} from "@/view/game2/objs/routeCard";
-
+import dayjs from "dayjs";
+import FootPage from "@/view/game2/components/footPage.vue";
 export default {
   name: "index.vue",
-  components: {PlayerInfo, Fighting},
+  components: {FootPage, PlayerInfo, Fighting},
   data() {
     return {
       openRouteCard: false,
@@ -57,9 +49,16 @@ export default {
     }),
   },
   methods: {
+    dayjs,
     endRoute() {
       this.openRouteCard = false
       this.selectRouteCard = {};
+      // todo 刷新route
+      this.player.nextRouteCardList = [
+        randomRouteCard(),
+        randomRouteCard(),
+        randomRouteCard(),
+      ]
     },
     selectRouteCardData(item) {
       this.openRouteCard = true
@@ -67,7 +66,11 @@ export default {
     }
   },
   created() {
-    this.player.playerObj = randomPlayerObj();
+    const playerObj = randomPlayerObj();
+    playerObj.property.health = 100;
+    playerObj.property.maxHealth = 100;
+    playerObj.property.armStrength=20
+    this.player.playerObj = playerObj;
     this.player.nextRouteCardList = [
       randomRouteCard(),
       randomRouteCard(),

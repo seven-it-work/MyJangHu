@@ -102,7 +102,7 @@ export const randomNumber = {
      * @returns {number} 随机结果
      */
     randomInt: (min = 1, max = Number.MAX_VALUE) => {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+        return randomUtil.integer({min: min, max: max})
     },
     /**
      * 获取从min到max的随机小数，包含[min,max]

@@ -1,4 +1,7 @@
 import {createStore} from 'vuex'
+import dayjs from "dayjs";
+
+export const isDebug = true;
 
 const store = createStore({
     state() {
@@ -34,10 +37,7 @@ const store = createStore({
                         }
                     },
                 },
-                logs: [{
-                    time: '2024-8-7 15:26:59',
-                    html: "<div>测试日志</div>"
-                }],
+                logs: [],
                 nextRouteCardList: [
                     {
                         id: "1",
@@ -75,7 +75,15 @@ const store = createStore({
             }
         }
     },
-    mutations: {}
+    mutations: {
+        log(state, html) {
+            console.log(html)
+            state.player.logs.push({
+                time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+                html: html
+            })
+        }
+    }
 })
 
 export default store
