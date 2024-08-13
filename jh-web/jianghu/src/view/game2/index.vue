@@ -34,6 +34,8 @@ import PlayerInfo from "@/view/game2/components/PlayerInfo.vue";
 import {randomRouteCard} from "@/view/game2/objs/routeCard";
 import dayjs from "dayjs";
 import FootPage from "@/view/game2/components/footPage.vue";
+import {XiangLongShiBaZhang} from "@/view/game2/objs/baseSkill";
+
 export default {
   name: "index.vue",
   components: {FootPage, PlayerInfo, Fighting},
@@ -69,7 +71,8 @@ export default {
     const playerObj = randomPlayerObj();
     playerObj.property.health = 100;
     playerObj.property.maxHealth = 100;
-    playerObj.property.armStrength=20
+    playerObj.property.armStrength = 20
+    playerObj.property.skillMap.set("XiangLongShiBaZhang",new XiangLongShiBaZhang())
     this.player.playerObj = playerObj;
     this.player.nextRouteCardList = [
       randomRouteCard(),

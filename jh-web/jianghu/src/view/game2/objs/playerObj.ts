@@ -116,8 +116,12 @@ export const randomPlayerObj = (level = "1"): PlayerObj => {
         sex: randomBool() ? "男" : '女',
         skillMap: defaultSkills(),
     });
-    playerObj.currentRoundProperties = {}
-    playerObj.previousRoundProperties = {}
+    playerObj.currentRoundProperties = {
+        skill: undefined,
+    }
+    playerObj.previousRoundProperties = {
+        skill: undefined,
+    }
     return playerObj;
 }
 
@@ -130,15 +134,19 @@ export class PlayerObj {
     property: Property;
 
     // 当前回合属性
-    currentRoundProperties: {};
+    currentRoundProperties: {
+        skill: BaseSkill,
+    };
 
     // 上一回合属性
-    previousRoundProperties: {};
+    previousRoundProperties: {
+        skill: BaseSkill,
+    };
 
 
     executing(targetPlayerObj: PlayerObj): "RunAwaySuccess" | undefined {
-        const currentSkill = this.currentRoundProperties.skill;
-        const targetCurrentSkill = targetPlayerObj.currentRoundProperties.skill;
+        const currentSkill: BaseSkill = this.currentRoundProperties.skill;
+        const targetCurrentSkill: BaseSkill = targetPlayerObj.currentRoundProperties.skill;
         store.commit("log", `<span style="color: cornflowerblue">${this.property.name}</span>进行${currentSkill.name}，<span style="color: peru">${targetPlayerObj.property.name}</span>选则进行${targetCurrentSkill.name}`)
         const targetType = targetCurrentSkill.type;
         let successRate = 0;
@@ -167,7 +175,7 @@ export class PlayerObj {
                 switch (targetType) {
                     case "attack":
                         this.property.health -= skillNumber;
-                        store.commit("log", `<span style="color: cornflowerblue">${this.property.name}</span>遭受${skillNumber}伤害`)
+                        store.commit("log", `<span style="color: cornflowerblue">${this.property.name}</span>遭受${injuring}伤害`)
                         break;
                     case "dodge":
                         // 躲避成功率=(躲避方-攻击方)/(躲避方+攻击方)/2
@@ -193,7 +201,7 @@ export class PlayerObj {
                 }
                 if (injuring > 0) {
                     targetPlayerObj.property.health -= injuring;
-                    store.commit("log", `<span style="color: peru">${targetPlayerObj.property.name}</span>遭受${skillNumber}伤害`)
+                    store.commit("log", `<span style="color: peru">${targetPlayerObj.property.name}</span>遭受${injuring}伤害`)
                 }
                 break;
             case "gridBlock":

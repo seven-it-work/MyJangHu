@@ -21,13 +21,21 @@ export default {
       logs: state => state.player.logs,
     }),
   },
+  methods: {
+    scrollIt() {
+      setTimeout(() => {
+        const logDom = this.$refs.logDom;
+        logDom.scrollTop = logDom.scrollHeight
+      }, 200)
+    }
+  },
+  mounted() {
+    this.scrollIt();
+  },
   watch: {
     "logs.length": {
       handler() {
-        setTimeout(() => {
-          const logDom = this.$refs.logDom;
-          logDom.scrollTop = logDom.scrollHeight
-        }, 200)
+        this.scrollIt()
       }
     }
   },

@@ -3,6 +3,9 @@ import dayjs from "dayjs";
 
 export const isDebug = true;
 
+
+
+
 const store = createStore({
     state() {
         return {
@@ -77,7 +80,7 @@ const store = createStore({
     },
     mutations: {
         log(state, html) {
-            console.log(html)
+            // console.log(html)
             state.player.logs.push({
                 time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
                 html: html

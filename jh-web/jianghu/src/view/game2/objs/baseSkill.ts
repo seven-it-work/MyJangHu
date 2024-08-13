@@ -39,6 +39,24 @@ export class HandAttack implements BaseSkill {
     }
 }
 
+export class XiangLongShiBaZhang extends HandAttack {
+    name = "降龙十八掌"
+
+    /**
+     * 对目标造成连续18次伤害
+     * @param playerObj
+     * @param targetPlayerObj
+     */
+    executionAction(playerObj: PlayerObj, targetPlayerObj: PlayerObj): number {
+        let injuring = 0;
+        for (let i = 1; i <= 18; i++) {
+            injuring += playerObj.property.armStrength * i / 10
+        }
+        console.log(injuring)
+        return injuring;
+    }
+}
+
 export class FootAttack implements BaseSkill {
     type: "attack" | "gridBlock" | "dodge" = "attack";
     key: string = "FootAttack";
