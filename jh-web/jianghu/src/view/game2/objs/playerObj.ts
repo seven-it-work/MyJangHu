@@ -3,6 +3,7 @@ import {probability, randomBool, randomNumber} from "@/random";
 import store from "@/view/game2/store"
 import dayjs from "dayjs";
 import {getName} from "random_chinese_fantasy_names";
+import Status from "@/view/game2/objs/status";
 
 const level_color = {
     0: "#252a34",
@@ -53,29 +54,14 @@ export const levelColorUtil = {
 export interface Property {
     name: string,
     sex: '男' | '女',
-    health: number,
-    maxHealth: number,
-    /**
-     * 臂力
-     * 影响造成的攻击
-     */
-    armStrength: number,
-    /**
-     * 脚力
-     * 影响造成的攻击
-     */
-    footStrength: number,
-    /**
-     * 敏捷
-     * 影响躲避
-     */
+    level: number,
+    hp: number,
+    physique: number,
+    mp: number,
+    power: number,
+    stamina: number,
     agility: number,
-    /**
-     * 定力
-     * 影响格挡
-     */
-    fixedForce: number,
-    skillMap: Map<string, BaseSkill>,
+    shenFa: number,
 }
 
 const level_map = {
@@ -110,8 +96,8 @@ export const randomPlayerObj = (level = "1"): PlayerObj => {
         armStrength: randomNumber.randomInt(levelMapElement.armStrength.min, levelMapElement.armStrength.max),
         fixedForce: randomNumber.randomInt(levelMapElement.fixedForce.min, levelMapElement.fixedForce.max),
         footStrength: randomNumber.randomInt(levelMapElement.footStrength.min, levelMapElement.footStrength.max),
-        health,
-        maxHealth: health,
+        hp: health,
+        maxHp: health,
         name: name,
         sex: randomBool() ? "男" : '女',
         skillMap: defaultSkills(),
@@ -131,113 +117,124 @@ export class PlayerObj {
         this.property = property;
     }
 
+
+    /**
+     * 初始值100+ 等级x2 +（体质x10）
+     */
+    getMaxHp(): number {
+        let number = (this.property.level || 0) * 2 + (this.property.physique || 0) * 10;
+        const weakness = this.status['Weakness'];
+        number = number * (1 - weakness?.injuring() || 0);
+        return 100 + number
+    }
+
+    /**
+     * 初始值50+ 等级x1.5 +（天赋x5）
+     */
+    getMaxMp(): number {
+        return 50 + (this.property.level || 0) * 1.5 + (this.property.physique || 0) * 5
+    }
+
+    /**
+     * 自身攻击力（力量x2+武功等级x5）
+     * 攻击力=武器攻击力+人物自身攻击力
+     */
+    getAtk(): number {
+        let selfAttackPower = this.property.power * 2 + this.martialArt?.level * 5;
+        const weakness = this.status['Weakness'];
+        const atk = this.status['Atk'];
+        selfAttackPower = selfAttackPower * (1 - (weakness?.injuring() || 0) + (atk?.injuring() || 0));
+        return this.weaponry?.num + selfAttackPower
+    }
+
+
+    /**
+     * 自身防御（耐力x2+内功等级x5）
+     * 攻击力=装备防御力+人物自身防御力
+     */
+    getDef(): number {
+        let number = this.property.stamina * 2 + this.internalSkill?.level * 5;
+        const def = this.status['def'];
+        number = number * (1 + (def?.injuring() || 0));
+        return this.armor?.num + number
+    }
+
+    /**
+     * 暴击率
+     * 初始值 (5+敏捷x0.5)%
+     */
+    getCrit(): number {
+        // 状态影响
+        let number = (5 + this.property.agility * 0.5) * 100;
+        const data = this.status['Curse'];
+        number = number * (1 - ((data?.injuring() || 0) / 100));
+        return number
+    }
+
+    /**
+     * 闪避率
+     * 初始值 (5+身法x0.5)%
+     */
+    getEva(): number {
+        return (5 + this.property.shenFa * 0.5) * 100
+    }
+
+    /**
+     * 攻击力 * (攻击力 / ( 攻击力 + 敌方防御力))
+     */
+    damageCaused(target: PlayerObj): number {
+        return this.getAtk() * (this.getAtk() / (this.getAtk() + target.getDef()));
+    }
+
+    restoresHealth(vale: number) {
+        this.property.hp = Math.max(this.property.hp + vale, this.getMaxHp())
+    }
+
+
     property: Property;
+    /**
+     * 武器
+     */
+    weaponry: any;
+    /**
+     * 防具
+     */
+    armor: any;
+    /**
+     * 武学
+     */
+    martialArt: any;
+    /**
+     * 内功
+     */
+    internalSkill: any;
 
-    // 当前回合属性
-    currentRoundProperties: {
-        skill: BaseSkill,
-    };
+    status: Map<string, Status> = new Map();
 
-    // 上一回合属性
-    previousRoundProperties: {
-        skill: BaseSkill,
-    };
-
-
-    executing(targetPlayerObj: PlayerObj): "RunAwaySuccess" | undefined {
-        const currentSkill: BaseSkill = this.currentRoundProperties.skill;
-        const targetCurrentSkill: BaseSkill = targetPlayerObj.currentRoundProperties.skill;
-        store.commit("log", `<span style="color: cornflowerblue">${this.property.name}</span>进行${currentSkill.name}，<span style="color: peru">${targetPlayerObj.property.name}</span>选则进行${targetCurrentSkill.name}`)
-        const targetType = targetCurrentSkill.type;
-        let successRate = 0;
-        // 他人skill数值
-        const skillNumber = targetCurrentSkill.executionAction(targetPlayerObj, this);
-        switch (currentSkill.type) {
-            case "runAway":
-                // 成功率=(逃跑方)/(逃跑方+攻击方)/3
-                successRate = (this.property.agility) / (skillNumber + this.property.agility) / 3;
-                if (probability.calculateTheProbability(successRate)) {
-                    store.commit("log", `<span style="color: peru">${targetPlayerObj.property.name}</span>逃跑成功`)
-                    return "RunAwaySuccess";
-                } else {
-                    store.commit("log", `<span style="color: cornflowerblue">${this.property.name}</span>逃跑失败`)
-                    switch (targetType) {
-                        case "attack":
-                            let injuring = targetCurrentSkill.executionAction(targetPlayerObj, this);
-                            this.property.health -= injuring
-                            store.commit("log", `<span style="color: cornflowerblue">${this.property.name}</span>遭受${injuring}伤害`)
-                            break;
-                    }
-                }
-                break;
-            case "attack":
-                let injuring = currentSkill.executionAction(this, targetPlayerObj);
-                switch (targetType) {
-                    case "attack":
-                        this.property.health -= skillNumber;
-                        store.commit("log", `<span style="color: cornflowerblue">${this.property.name}</span>遭受${injuring}伤害`)
-                        break;
-                    case "dodge":
-                        // 躲避成功率=(躲避方-攻击方)/(躲避方+攻击方)/2
-                        successRate = (skillNumber - this.property.agility) / (skillNumber + this.property.agility) / 2;
-                        if (probability.calculateTheProbability(successRate)) {
-                            injuring = 0;
-                            store.commit("log", `<span style="color: peru">${targetPlayerObj.property.name}</span>躲避成功`)
-                        } else {
-                            store.commit("log", `<span style="color: peru">${targetPlayerObj.property.name}</span>躲避失败`)
-                        }
-                        break;
-                    case "gridBlock":
-                        // 格挡成功率=(格挡方)/(格挡方+攻击方)/1.5
-                        successRate = skillNumber / (skillNumber + this.property.agility) / 1.5;
-                        if (probability.calculateTheProbability(successRate)) {
-                            // 格挡成功后，重新计算造成伤害，消耗伤害比=格挡值/(伤害+格挡值)
-                            injuring = skillNumber / (skillNumber + injuring) * injuring
-                            store.commit("log", `<span style="color: peru">${targetPlayerObj.property.name}</span>格挡成功`)
-                        } else {
-                            store.commit("log", `<span style="color: peru">${targetPlayerObj.property.name}</span>格挡失败`)
-                        }
-                        break;
-                }
-                if (injuring > 0) {
-                    targetPlayerObj.property.health -= injuring;
-                    store.commit("log", `<span style="color: peru">${targetPlayerObj.property.name}</span>遭受${injuring}伤害`)
-                }
-                break;
-            case "gridBlock":
-                switch (targetType) {
-                    case "attack":
-                        let injuring = targetCurrentSkill.executionAction(targetPlayerObj, this);
-                        const gridBlockValue = currentSkill.executionAction(this, targetPlayerObj);
-                        successRate = gridBlockValue / (gridBlockValue + injuring) / 1.5;
-                        if (probability.calculateTheProbability(successRate)) {
-                            // 格挡成功后，重新计算造成伤害，消耗伤害比=格挡值/(伤害+格挡值)
-                            injuring = gridBlockValue / (gridBlockValue + injuring) * injuring;
-                            store.commit("log", `<span style="color: cornflowerblue">${this.property.name}</span>格挡成功`)
-                        } else {
-                            store.commit("log", `<span style="color: cornflowerblue">${this.property.name}</span>格挡失败`)
-                        }
-                        this.property.health -= injuring
-                        store.commit("log", `<span style="color: cornflowerblue">${this.property.name}</span>遭受${injuring}伤害`)
-                        break;
+    addStatus(status: Status) {
+        const oldStatus = this.status.get(status.type);
+        // 中毒、灼烧只叠加强度
+        switch (status.type) {
+            case "Poisoning":
+            case "Scorching":
+                if (oldStatus) {
+                    status.intensity += oldStatus.intensity;
                 }
                 break
-            case "dodge":
-                switch (targetType) {
-                    case "attack":
-                        const injuring = targetCurrentSkill.executionAction(targetPlayerObj, this);
-                        const dodgeValue = currentSkill.executionAction(this, targetPlayerObj);
-                        // 躲避成功率=(躲避方-攻击方)/(躲避方+攻击方)/2
-                        successRate = (dodgeValue - injuring) / (dodgeValue + injuring) / 2;
-                        if (probability.calculateTheProbability(successRate)) {
-                            // 躲避成功
-                            store.commit("log", `<span style="color: cornflowerblue">${this.property.name}</span>躲避成功`)
-                        } else {
-                            store.commit("log", `<span style="color: cornflowerblue">${this.property.name}</span>躲避失败`)
-                        }
-                        break;
-                }
+            default:
+                break
         }
+        this.status.set(status.type, status);
+    }
+
+    /**
+     * 清理负面状态
+     */
+    cleanNegativeStatus() {
+        const statuses = Array.from(this.status.values());
+        statuses.filter(data => data.isBegative).forEach(data => {
+            this.status.delete(data.type)
+        })
     }
 }
 

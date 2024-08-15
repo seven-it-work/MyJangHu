@@ -6,7 +6,7 @@ import Antd from 'ant-design-vue';
 import router from "@/router/index.js";
 // import store from "@/vuex/store";
 import {people, city, world, scene} from "@/http/api.js";
-import store from "@/view/game2/store.js";
+import store from "@/view/game2/store.ts";
 
 const api = {people, city, world, scene}
 

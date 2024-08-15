@@ -10,6 +10,7 @@ export interface BaseSkill {
 }
 
 export const percentageCalculation = (molecules: number, denominator: number, decimalPlace: number = 1): string => {
+    console.log(molecules,denominator)
     return (molecules / denominator * 100).toFixed(decimalPlace);
 }
 

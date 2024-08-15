@@ -9,7 +9,9 @@
       </a-col>
     </a-row>
 
-    <PlayerInfo :player-obj="player.playerObj"></PlayerInfo>
+    <div v-for="item in player.playerObjList">
+      <PlayerInfo :player-obj="item"></PlayerInfo>
+    </div>
 
     <footPage></footPage>
   </div>
@@ -69,16 +71,16 @@ export default {
   },
   created() {
     const playerObj = randomPlayerObj();
-    playerObj.property.health = 100;
-    playerObj.property.maxHealth = 100;
-    playerObj.property.armStrength = 20
-    playerObj.property.skillMap.set("XiangLongShiBaZhang",new XiangLongShiBaZhang())
-    this.player.playerObj = playerObj;
-    this.player.nextRouteCardList = [
-      randomRouteCard(),
-      randomRouteCard(),
-      randomRouteCard(),
-    ]
+    playerObj.property.hp = 100;
+    // playerObj.property.maxHp = 100;
+    // playerObj.property.armStrength = 20
+    // playerObj.property.skillMap.set("XiangLongShiBaZhang",new XiangLongShiBaZhang())
+    this.player.playerObjList.push(playerObj);
+    // this.player.nextRouteCardList = [
+    //   randomRouteCard(),
+    //   randomRouteCard(),
+    //   randomRouteCard(),
+    // ]
   }
 }
 </script>
