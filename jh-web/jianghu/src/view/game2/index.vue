@@ -10,7 +10,90 @@
     </a-row>
 
     <div v-for="item in player.playerObjList">
-      <PlayerInfo :player-obj="item"></PlayerInfo>
+      <a-row>
+        <a-col :span="6">
+          <PlayerInfo :player-obj="item"></PlayerInfo>
+        </a-col>
+        <a-col :span="18">
+          <a-row style="padding: 20px" :gutter="16">
+            <a-col :span="6">
+              <a-avatar :size="40">{{ item.property.name }}</a-avatar>
+              <div>装备(完善中...)</div>
+            </a-col>
+            <a-col :span="18">
+              <!--这里是固定值，当大于多少时 颜色可以不一样-->
+              <a-row>
+                <a-col :span="8">
+                  <a-row>
+                    <a-col :span="8">敏捷：<span v-if="isDebug">{{ item.property.agility }}</span></a-col>
+                    <a-col :span="16">
+                      <a-progress style="float: right" :showInfo="false"
+                                  :percent="percentageCalculationLevel(item.property.agility)"
+                                  status="active"
+                                  :stroke-color="levelColorUtil.getLevelColor(item.property.agility)"/>
+                    </a-col>
+                  </a-row>
+                </a-col>
+                <a-col :span="8">
+                  <a-row>
+                    <a-col :span="8">身法：<span v-if="isDebug">{{ item.property.shenFa }}</span></a-col>
+                    <a-col :span="16">
+                      <a-progress style="float: right" :showInfo="false"
+                                  :percent="percentageCalculationLevel(item.property.shenFa)"
+                                  status="active"
+                                  :stroke-color="levelColorUtil.getLevelColor(item.property.shenFa)"/>
+                    </a-col>
+                  </a-row>
+                </a-col>
+                <a-col :span="8">
+                  <a-row>
+                    <a-col :span="8">力量：<span v-if="isDebug">{{ item.property.power }}</span></a-col>
+                    <a-col :span="16">
+                      <a-progress style="float: right" :showInfo="false"
+                                  :percent="percentageCalculationLevel(item.property.power)"
+                                  status="active"
+                                  :stroke-color="levelColorUtil.getLevelColor(item.property.power)"/>
+                    </a-col>
+                  </a-row>
+                </a-col>
+                <a-col :span="8">
+                  <a-row>
+                    <a-col :span="8">耐力：<span v-if="isDebug">{{ item.property.stamina }}</span></a-col>
+                    <a-col :span="16">
+                      <a-progress style="float: right" :showInfo="false"
+                                  :percent="percentageCalculationLevel(item.property.stamina)"
+                                  status="active"
+                                  :stroke-color="levelColorUtil.getLevelColor(item.property.stamina)"/>
+                    </a-col>
+                  </a-row>
+                </a-col>
+                <a-col :span="8">
+                  <a-row>
+                    <a-col :span="8">体质：<span v-if="isDebug">{{ item.property.physique }}</span></a-col>
+                    <a-col :span="16">
+                      <a-progress style="float: right" :showInfo="false"
+                                  :percent="percentageCalculationLevel(item.property.physique)"
+                                  status="active"
+                                  :stroke-color="levelColorUtil.getLevelColor(item.property.physique)"/>
+                    </a-col>
+                  </a-row>
+                </a-col>
+                <a-col :span="8">
+                  <a-row>
+                    <a-col :span="8">天赋：<span v-if="isDebug">{{ item.property.gifted }}</span></a-col>
+                    <a-col :span="16">
+                      <a-progress style="float: right" :showInfo="false"
+                                  :percent="percentageCalculationLevel(item.property.gifted)"
+                                  status="active"
+                                  :stroke-color="levelColorUtil.getLevelColor(item.property.gifted)"/>
+                    </a-col>
+                  </a-row>
+                </a-col>
+              </a-row>
+            </a-col>
+          </a-row>
+        </a-col>
+      </a-row>
     </div>
 
     <footPage></footPage>
@@ -31,12 +114,13 @@
 
 import Fighting from "@/view/game2/routecard/fighting.vue";
 import {mapState} from "vuex";
-import {randomPlayerObj} from "@/view/game2/objs/playerObj";
+import {levelColorUtil, percentageCalculationLevel, randomPlayerObj} from "@/view/game2/objs/playerObj";
 import PlayerInfo from "@/view/game2/components/PlayerInfo.vue";
 import {randomRouteCard} from "@/view/game2/objs/routeCard";
 import dayjs from "dayjs";
 import FootPage from "@/view/game2/components/footPage.vue";
-import {XiangLongShiBaZhang} from "@/view/game2/objs/baseSkill";
+import {percentageCalculation, XiangLongShiBaZhang} from "@/view/game2/objs/baseSkill";
+import {isDebug} from "@/view/game2/store";
 
 export default {
   name: "index.vue",
@@ -45,12 +129,18 @@ export default {
     return {
       openRouteCard: false,
       selectRouteCard: {},
+      percentageCalculation,
+      percentageCalculationLevel,
+      levelColorUtil,
     }
   },
   computed: {
     ...mapState({
       player: state => state.player,
     }),
+    isDebug() {
+      return isDebug
+    }
   },
   methods: {
     dayjs,
@@ -72,9 +162,9 @@ export default {
   created() {
     const playerObj = randomPlayerObj();
     playerObj.property.hp = 100;
-    // playerObj.property.maxHp = 100;
-    // playerObj.property.armStrength = 20
-    // playerObj.property.skillMap.set("XiangLongShiBaZhang",new XiangLongShiBaZhang())
+    // item.property.maxHp = 100;
+    // item.property.armStrength = 20
+    // item.property.skillMap.set("XiangLongShiBaZhang",new XiangLongShiBaZhang())
     this.player.playerObjList.push(playerObj);
     // this.player.nextRouteCardList = [
     //   randomRouteCard(),

@@ -2,10 +2,10 @@ import {createStore} from 'vuex'
 import dayjs from "dayjs";
 import {PlayerObj} from "@/view/game2/objs/playerObj";
 
-export const isDebug = false;
+export const isDebug = true;
 
 const store = createStore({
-    state():{
+    state(): {
         player: {
             playerObjList: PlayerObj[],
             logs: any[],

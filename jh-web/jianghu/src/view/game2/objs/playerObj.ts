@@ -1,7 +1,5 @@
-import {BaseSkill, defaultSkills, percentageCalculation} from "@/view/game2/objs/baseSkill";
-import {probability, randomBool, randomNumber} from "@/random";
-import store from "@/view/game2/store"
-import dayjs from "dayjs";
+import {percentageCalculation} from "@/view/game2/objs/baseSkill";
+import {randomBool, randomList} from "@/random";
 import {getName} from "random_chinese_fantasy_names";
 import Status from "@/view/game2/objs/status";
 
@@ -62,55 +60,38 @@ export interface Property {
     stamina: number,
     agility: number,
     shenFa: number,
+    gifted: number,
 }
 
-const level_map = {
-    1: {
-        agility: {min: 1, max: 5},
-        armStrength: {min: 1, max: 10},
-        fixedForce: {min: 1, max: 5},
-        footStrength: {min: 1, max: 10},
-        health: {min: 20, max: 50},
-    },
-    2: {
-        agility: {min: 2, max: 6},
-        armStrength: {min: 2, max: 12},
-        fixedForce: {min: 2, max: 6},
-        footStrength: {min: 2, max: 12},
-        health: {min: 30, max: 60},
-    },
-    3: {
-        agility: {min: 3, max: 8},
-        armStrength: {min: 3, max: 15},
-        fixedForce: {min: 3, max: 8},
-        footStrength: {min: 3, max: 15},
-        health: {min: 30, max: 80},
-    },
-}
-export const randomPlayerObj = (level = "1"): PlayerObj => {
+export const randomPlayerObj = (level = 1): PlayerObj => {
     const name = getName(1)[0]
-    const levelMapElement = level_map[level];
-    const health = randomNumber.randomInt(levelMapElement.health.min, levelMapElement.health.max);
-    const playerObj = new PlayerObj({
-        agility: randomNumber.randomInt(levelMapElement.agility.min, levelMapElement.agility.max),
-        armStrength: randomNumber.randomInt(levelMapElement.armStrength.min, levelMapElement.armStrength.max),
-        fixedForce: randomNumber.randomInt(levelMapElement.fixedForce.min, levelMapElement.fixedForce.max),
-        footStrength: randomNumber.randomInt(levelMapElement.footStrength.min, levelMapElement.footStrength.max),
-        hp: health,
-        maxHp: health,
+    const skillPoint = level * 5;
+    const propertyInfo: Property = {
+        agility: 0,
+        hp: 0,
+        level: level,
+        mp: 0,
         name: name,
+        physique: 0,
+        power: 0,
         sex: randomBool() ? "男" : '女',
-        skillMap: defaultSkills(),
-    });
-    playerObj.currentRoundProperties = {
-        skill: undefined,
+        shenFa: 0,
+        stamina: 0,
+        gifted: 0,
     }
-    playerObj.previousRoundProperties = {
-        skill: undefined,
+    const type = ['physique', 'power', 'agility', 'shenFa', 'stamina', 'gifted']
+    // 随机增加点数
+    for (let i = 0; i < skillPoint; i++) {
+        const randomFormList = randomList.randomFormList(type);
+        propertyInfo[randomFormList] += 1;
     }
-    return playerObj;
+    return new PlayerObj(propertyInfo);
 }
 
+/**
+ * 初始技能点5个
+ * 每次升级有5个技能点
+ */
 export class PlayerObj {
 
     constructor(property: Property) {
@@ -132,7 +113,7 @@ export class PlayerObj {
      * 初始值50+ 等级x1.5 +（天赋x5）
      */
     getMaxMp(): number {
-        return 50 + (this.property.level || 0) * 1.5 + (this.property.physique || 0) * 5
+        return 50 + (this.property.level || 0) * 1.5 + (this.property.gifted || 0) * 5
     }
 
     /**
